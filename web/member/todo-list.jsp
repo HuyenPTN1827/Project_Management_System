@@ -15,13 +15,14 @@
         <style>
             body {
                 overflow-x: hidden;
+                padding-bottom: 40px;
             }
         </style>
     </head>
     <body>
         <jsp:include page="../component/header-admin.jsp"></jsp:include>
 
-        <div class="row">
+        <div class="row" style="padding: 10px 0px 10px 0px">
             <div class="container">
                 <h2 class="text-center">List of Todos</h2>
                 <hr>

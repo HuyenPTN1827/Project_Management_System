@@ -11,11 +11,17 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Register</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <style>
+            body {
+                overflow-x: hidden;
+                padding-bottom: 40px;
+            }
+        </style>
     </head>
     <body>
         <jsp:include page="../component/header-guest.jsp"></jsp:include>
 
-            <div class="container">
+            <div class="container" style="padding: 10px 0px 10px 0px">
                 <h2>User Register Form</h2>
 
                 <div class="col-md-6 col-md-offset-3">
@@ -35,7 +41,7 @@
                         <input type="password" class="form-control" id="password"
                                placeholder="Enter the Password" name="password" required/>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="uname">Full Name:</label>
                         <input type="text" class="form-control" id="uname"
@@ -47,7 +53,7 @@
                         <input type="text" class="form-control" id="uname"
                                placeholder="Enter the Email" name="email" required/>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="uname">Mobile:</label>
                         <input type="text" class="form-control" id="uname"

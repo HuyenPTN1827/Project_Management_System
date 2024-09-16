@@ -11,17 +11,23 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Login</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <style>
+            body {
+                overflow-x: hidden;
+                padding-bottom: 40px;
+            }
+        </style>
     </head>
     <body>
         <jsp:include page="../component/header-guest.jsp"></jsp:include>
 
-            <div class="container col-md-8 col-md-offset-3" style="overflow: auto">
+            <div class="container col-md-8 col-md-offset-3" style="overflow: auto; padding: 10px 0px 10px 0px">
                 <h1>Login Form</h1>
-                
+
                 <div class="alert alert-success center" role="alert">
                     <p>${NOTIFICATION}</p>
             </div>
-            
+
             <form action="<%=request.getContextPath()%>/login" method="post">
                 <div class="form-group">
                     <label for="uname">Username/Email:</label>
