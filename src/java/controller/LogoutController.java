@@ -9,6 +9,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -27,7 +28,7 @@ public class LogoutController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.sendRedirect("login");
+//        response.sendRedirect("login");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -42,7 +43,16 @@ public class LogoutController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+       // Lấy session hiện tại
+        HttpSession session = request.getSession(false); // Không tạo session mới nếu không có session
+
+        if (session != null) {
+            // Hủy session để đăng xuất người dùng
+            session.invalidate();
+        }
+
+        // Chuyển hướng về trang đăng nhập sau khi đăng xuất
+        response.sendRedirect("login");
     }
 
     /**

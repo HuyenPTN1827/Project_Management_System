@@ -99,6 +99,19 @@
         <servlet-name>DeleteUserController</servlet-name>
         <url-pattern>/user-management/delete-user</url-pattern>
     </servlet-mapping>
+    <filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>filter.AuthenticationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/todo-list</url-pattern>
+        <url-pattern>/add-todo</url-pattern>
+        <url-pattern>/update-todo</url-pattern>
+        <url-pattern>/delete-todo</url-pattern>
+        <url-pattern>/user-management</url-pattern>
+    
+    </filter-mapping>
     <session-config>
         <session-timeout>
             30

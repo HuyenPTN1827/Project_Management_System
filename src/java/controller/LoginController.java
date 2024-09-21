@@ -47,6 +47,7 @@ public class LoginController extends HttpServlet {
     private void authenticate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String usernameOrEmail = request.getParameter("usernameOrEmail");
         String password = request.getParameter("password");
+
         User user = new User();
         user.setUsername(usernameOrEmail);
         user.setEmail(usernameOrEmail);
@@ -56,15 +57,18 @@ public class LoginController extends HttpServlet {
             if (userService.loginValidate(user)) {
 //                RequestDispatcher dispatcher = request.getRequestDispatcher("member/todo-list.jsp");
 //                dispatcher.forward(request, response);
+                HttpSession session = request.getSession();
+                session.setAttribute("user", user);//lưu đối tượng user vào session
                 response.sendRedirect("todo-list");
             } else {
                 HttpSession session = request.getSession();
                 session.setAttribute("NOTIFICATION", "Login Failed!");
-                session.setAttribute("user", usernameOrEmail);
+//                session.setAttribute("user", usernameOrEmail);
                 response.sendRedirect("login");
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
+  
 }
