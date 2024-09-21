@@ -4,8 +4,6 @@
  */
 package controller.todo;
 
-import context.TodoDAO;
-import context.TodoDAOImpl;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -14,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import model.Todo;
+import service.TodoService;
 
 /**
  *
@@ -22,10 +21,11 @@ import model.Todo;
 public class ListController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private TodoDAO todoDao;
+    private TodoService todoService;
 
-    public void init() {
-        todoDao = new TodoDAOImpl();
+    @Override
+    public void init() throws ServletException {
+        this.todoService = new TodoService();
     }
 
     /**
@@ -39,7 +39,7 @@ public class ListController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Todo> listTodo = todoDao.selectAllTodos();
+        List<Todo> listTodo = todoService.getAllTodos();
         request.setAttribute("listTodo", listTodo);
         RequestDispatcher dispatcher = request.getRequestDispatcher("member/todo-list.jsp");
         dispatcher.forward(request, response);

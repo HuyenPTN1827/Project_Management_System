@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.todo;
+package controller.admin.user;
 
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import service.TodoService;
+import service.UserService;
 
 /**
  *
@@ -21,19 +21,19 @@ import service.TodoService;
 public class DeleteController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private TodoService todoService;
+    private UserService userService;
 
     @Override
     public void init() throws ServletException {
-        this.todoService = new TodoService();
+        this.userService = new UserService();
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            Long id = Long.parseLong(request.getParameter("id"));
-            todoService.deleteTodo(id);
-            response.sendRedirect("todo-list");
+            int id = Integer.parseInt(request.getParameter("id"));
+            userService.deleteUser(id);
+            response.sendRedirect("../user-management");
         } catch (SQLException ex) {
             Logger.getLogger(DeleteController.class.getName()).log(Level.SEVERE, null, ex);
         }

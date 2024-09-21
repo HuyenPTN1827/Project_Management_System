@@ -4,7 +4,6 @@
  */
 package controller;
 
-import context.UserDAOImpl;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -12,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.User;
+import service.UserService;
 
 /**
  *
@@ -20,10 +20,11 @@ import model.User;
 public class LoginController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private UserDAOImpl userDao;
+    private UserService userService;
 
-    public void init() {
-        userDao = new UserDAOImpl();
+    @Override
+    public void init() throws ServletException {
+        this.userService = new UserService();
     }
 
     @Override
@@ -52,7 +53,7 @@ public class LoginController extends HttpServlet {
         user.setPassword(password);
 
         try {
-            if (userDao.loginValidate(user)) {
+            if (userService.loginValidate(user)) {
 //                RequestDispatcher dispatcher = request.getRequestDispatcher("member/todo-list.jsp");
 //                dispatcher.forward(request, response);
                 response.sendRedirect("todo-list");

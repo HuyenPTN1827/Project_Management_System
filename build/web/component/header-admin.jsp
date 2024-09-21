@@ -16,7 +16,7 @@
                    class="nav-link">Todos</a></li>
         </ul>
         <ul class="navbar-nav">
-            <li><a href="<%=request.getContextPath()%>/user-list"
+            <li><a href="<%=request.getContextPath()%>/user-management"
                    class="nav-link">Users</a></li>
         </ul>
 

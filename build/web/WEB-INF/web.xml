@@ -32,20 +32,24 @@
         <servlet-class>controller.LogoutController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>UserListController</servlet-name>
-        <servlet-class>controller.user.ListController</servlet-class>
+        <servlet-name>AdminController</servlet-name>
+        <servlet-class>controller.admin.AdminController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>UpdateUserController</servlet-name>
-        <servlet-class>controller.user.UpdateController</servlet-class>
+        <servlet-name>UserListController</servlet-name>
+        <servlet-class>controller.admin.user.ListController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>CreateUserController</servlet-name>
-        <servlet-class>controller.user.CreateController</servlet-class>
+        <servlet-class>controller.admin.user.CreateController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>DeleteController</servlet-name>
-        <servlet-class>controller.user.DeleteController</servlet-class>
+        <servlet-name>UpdateUserController</servlet-name>
+        <servlet-class>controller.admin.user.UpdateController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteUserController</servlet-name>
+        <servlet-class>controller.admin.user.DeleteController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>RegisterController</servlet-name>
@@ -76,20 +80,24 @@
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>UserListController</servlet-name>
-        <url-pattern>/user-list</url-pattern>
+        <servlet-name>AdminController</servlet-name>
+        <url-pattern>/admin</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>UpdateUserController</servlet-name>
-        <url-pattern>/update-user</url-pattern>
+        <servlet-name>UserListController</servlet-name>
+        <url-pattern>/user-management</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>CreateUserController</servlet-name>
-        <url-pattern>/add-user</url-pattern>
+        <url-pattern>/user-management/add-user</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>DeleteController</servlet-name>
-        <url-pattern>/delete-user</url-pattern>
+        <servlet-name>UpdateUserController</servlet-name>
+        <url-pattern>/user-management/update-user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteUserController</servlet-name>
+        <url-pattern>/user-management/delete-user</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

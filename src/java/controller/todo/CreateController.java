@@ -4,8 +4,6 @@
  */
 package controller.todo;
 
-import context.TodoDAO;
-import context.TodoDAOImpl;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -17,6 +15,7 @@ import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Todo;
+import service.TodoService;
 
 /**
  *
@@ -25,10 +24,11 @@ import model.Todo;
 public class CreateController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private TodoDAO todoDao;
+    private TodoService todoService;
 
-    public void init() {
-        todoDao = new TodoDAOImpl();
+    @Override
+    public void init() throws ServletException {
+        this.todoService = new TodoService();
     }
 
     @Override
@@ -53,7 +53,7 @@ public class CreateController extends HttpServlet {
             t.setTargetDate(targetDate);
             t.setStatus(status);
             
-            todoDao.insertTodo(t);
+            todoService.insertTodo(t);
             response.sendRedirect("todo-list");
         } catch (SQLException ex) {
             Logger.getLogger(CreateController.class.getName()).log(Level.SEVERE, null, ex);

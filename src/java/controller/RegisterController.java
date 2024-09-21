@@ -4,7 +4,6 @@
  */
 package controller;
 
-import context.UserDAOImpl;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -12,6 +11,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.User;
+import service.UserService;
 
 /**
  *
@@ -20,10 +20,11 @@ import model.User;
 public class RegisterController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private UserDAOImpl userDao;
+    private UserService userService;
 
-    public void init() {
-        userDao = new UserDAOImpl();
+    @Override
+    public void init() throws ServletException {
+        this.userService = new UserService();
     }
 
     @Override
@@ -58,7 +59,7 @@ public class RegisterController extends HttpServlet {
         user.setMobile(mobile);
 
         try {
-            int result = userDao.registerUser(user);
+            int result = userService.registerUser(user);
             if (result == 1) {
                 request.setAttribute("NOTIFICATION", "User Register Successfully!");
             }

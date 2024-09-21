@@ -28,7 +28,7 @@
                     <hr>
 
                     <div class="container text-left">
-                        <a href="<%=request.getContextPath()%>/add-user" class="btn btn-success">Add User</a>
+                        <a href="<%=request.getContextPath()%>/user-management/add-user" class="btn btn-success">Add User</a>
                 </div>
                 <br>
 
@@ -59,9 +59,9 @@
                                     </c:if>
                                 </td>
                                 <td>
-                                    <a href="update-user?id=<c:out value='${user.userId}'/>">Edit</a>
+                                    <a href="<%=request.getContextPath()%>/user-management/update-user?id=<c:out value='${user.userId}'/>">Edit</a>
                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                    <a href="delete-user?id=<c:out value='${user.userId}'/>">Delete</a>
+                                    <a href="<%=request.getContextPath()%>/user-management/delete-user?id=<c:out value='${user.userId}'/>">Delete</a>
 
                                     <!--<button (click)="updateUser(user.id)" class="btn btn-success">Update</button>
                                     <button (click)="deleteUser(user.id)" class="btn btn-warning">Delete</button>-->

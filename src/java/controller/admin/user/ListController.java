@@ -2,41 +2,38 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.user;
+package controller.admin.user;
 
-import context.UserDAO;
-import context.UserDAOImpl;
+import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
+import model.User;
+import service.UserService;
 
 /**
  *
  * @author kelma
  */
-public class DeleteController extends HttpServlet {
+public class ListController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private UserDAO userDao;
+    private UserService userService;
 
-    public void init() {
-        userDao = new UserDAOImpl();
+    @Override
+    public void init() throws ServletException {
+        this.userService = new UserService();
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            int id = Integer.parseInt(request.getParameter("id"));
-            userDao.deleteUser(id);
-            response.sendRedirect("user-list");
-        } catch (SQLException ex) {
-            Logger.getLogger(DeleteController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        List<User> listUser = userService.getAllUsers();
+        request.setAttribute("listUser", listUser);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("admin/user-list.jsp");
+        dispatcher.forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
