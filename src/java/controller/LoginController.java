@@ -55,10 +55,9 @@ public class LoginController extends HttpServlet {
 
         try {
             if (userService.loginValidate(user)) {
-//                RequestDispatcher dispatcher = request.getRequestDispatcher("member/todo-list.jsp");
-//                dispatcher.forward(request, response);
                 HttpSession session = request.getSession();
                 session.setAttribute("user", user);//lưu đối tượng user vào session
+                session.setMaxInactiveInterval(1 * 60);
                 response.sendRedirect("todo-list");
             } else {
                 HttpSession session = request.getSession();
