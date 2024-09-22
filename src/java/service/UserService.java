@@ -14,12 +14,13 @@ import model.User;
  * @author kelma
  */
 public class UserService {
+
     private UserDAO userDAO;
 
     public UserService() {
         this.userDAO = new UserDAO();
     }
-    
+
     // Đăng ký người dùng mới
     public int registerUser(User user) throws ClassNotFoundException {
         // Có thể thêm logic kiểm tra trước khi gọi DAO
@@ -46,7 +47,7 @@ public class UserService {
     public User getUserById(int id) {
         return userDAO.selectUserByID(id);
     }
-    
+
     // Admin thêm thông tin người dùng mới
     public int insertUser(User user) throws SQLException {
         return userDAO.insertUser(user);
@@ -60,5 +61,14 @@ public class UserService {
     // Xóa người dùng
     public boolean deleteUser(int id) throws SQLException {
         return userDAO.deleteUser(id);
+    }
+
+    //lấy vai trò người dùng
+    public String getUserRole(User user) {
+        User foundUser = userDAO.selectUserByUsername(user.getUsername());
+        if (foundUser != null) {
+            return foundUser.getRole(); // Lấy role của user
+        }
+        return null; // Trả về null nếu không tìm thấy user
     }
 }

@@ -55,19 +55,29 @@ public class LoginController extends HttpServlet {
 
         try {
             if (userService.loginValidate(user)) {
+                String role = userService.getUserRole(user);
+
                 HttpSession session = request.getSession();
-                session.setAttribute("user", user);//lưu đối tượng user vào session
-                session.setMaxInactiveInterval(1 * 60);
-                response.sendRedirect("todo-list");
+                session.setAttribute("user", user);
+                session.setAttribute("userRole", role); // Lưu vai trò vào sessio
+                session.setMaxInactiveInterval(1 * 60); // Thiết lập thời gian hết hạn là 1 phút
+
+                // Chuyển hướng người dùng tùy theo vai trò
+                if ("admin".equalsIgnoreCase(role)) {
+                    response.sendRedirect(request.getContextPath() + "/user-management"); // Đường dẫn đến user-management
+                } else if ("member".equalsIgnoreCase(role)) {
+                    response.sendRedirect(request.getContextPath() + "/todo-list"); // Đường dẫn đến todo-list
+                } else {
+                    response.sendRedirect(request.getContextPath() + "/member/unauthorized.jsp"); // Trang lỗi truy cập
+                }
             } else {
                 HttpSession session = request.getSession();
                 session.setAttribute("NOTIFICATION", "Login Failed!");
-//                session.setAttribute("user", usernameOrEmail);
-                response.sendRedirect("login");
+                response.sendRedirect(request.getContextPath() + "/login"); // Đường dẫn đến trang đăng nhập
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
-  
+
 }

@@ -12,33 +12,62 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 
-
 import java.io.IOException;
+import model.User;
+
 /**
  *
  * @author Admin
  */
-public class AuthenticationFilter implements Filter{
-    
-    
+public class AuthenticationFilter implements Filter {
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         // Khởi tạo filter, nếu cần
     }
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
 
-        // Kiểm tra xem người dùng đã đăng nhập hay chưa
-        // Ví dụ: nếu không có session user, chuyển hướng tới login
-        if (httpRequest.getSession().getAttribute("user") == null) {
+        // Kiểm tra người dùng đã đăng nhập hay chưa
+        Object userObject = httpRequest.getSession().getAttribute("user");
+        if (userObject == null) {
             httpRequest.getRequestDispatcher("/member/login.jsp").forward(request, response);
             return;
         }
 
-        // Nếu đã đăng nhập, cho phép tiếp tục đến servlet tiếp theo
-        chain.doFilter(request, response);
+        // Đã đăng nhập, kiểm tra quyền hạn
+        User user = (User) userObject; // Ép kiểu đối tượng user từ session
+        String userRole = (String) httpRequest.getSession().getAttribute("userRole"); // Lấy vai trò từ session
+
+        // Lấy URL hiện tại để kiểm tra quyền truy cập
+        String currentURL = httpRequest.getRequestURI();
+
+        System.out.println("Current URL: " + currentURL);
+        System.out.println("User Role: " + userRole);
+        // Kiểm tra quyền truy cập dựa trên vai trò
+        if (currentURL.contains("/user-management")) {
+            if ("admin".equalsIgnoreCase(userRole)) {
+                // Nếu là admin, cho phép truy cập
+                chain.doFilter(request, response);
+            } else {
+                // Nếu không phải admin, chuyển hướng đến trang lỗi
+                httpRequest.getRequestDispatcher("/member/unauthorized.jsp").forward(request, response);
+            }
+        } else if (currentURL.contains("/todo-list")) {
+            if ("member".equalsIgnoreCase(userRole) || "admin".equalsIgnoreCase(userRole)) {
+                // Nếu là user hoặc admin, cho phép truy cập
+                chain.doFilter(request, response);
+            } else {
+                // Nếu không có quyền, chuyển hướng đến trang lỗi
+                httpRequest.getRequestDispatcher("/member/unauthorized.jsp").forward(request, response);
+            }
+        } else {
+            // Nếu không thuộc các đường dẫn cần kiểm tra quyền, cho phép tiếp tục
+            chain.doFilter(request, response);
+        }
     }
 
     @Override

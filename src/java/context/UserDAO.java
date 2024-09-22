@@ -127,7 +127,7 @@ public class UserDAO {
 
     public int insertUser(User user) throws SQLException {
         int result = 0;
-        
+
         try ( Connection cnt = DBContext.getConnection();  PreparedStatement stm = cnt.prepareStatement(INSERT_USER_BY_ADMIN_SQL);) {
             stm.setString(1, user.getUsername());
             stm.setString(2, user.getPassword());
@@ -169,5 +169,31 @@ public class UserDAO {
             rowDeleted = stm.executeUpdate() > 0;
         }
         return rowDeleted;
+    }
+
+    public User selectUserByUsername(String username) {
+        User user = null;
+        String query = "SELECT * FROM pms.user WHERE username = ? OR email = ?";
+
+        try ( Connection cnt = DBContext.getConnection();  PreparedStatement stm = cnt.prepareStatement(query)) {
+            stm.setString(1, username);
+            stm.setString(2, username); // Có thể kiểm tra theo cả username và email
+
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                user = new User();
+                user.setUserId(rs.getInt("userId"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setFullname(rs.getString("fullname"));
+                user.setEmail(rs.getString("email"));
+                user.setMobile(rs.getString("mobile"));
+                user.setRole(rs.getString("role")); // Lấy vai trò
+                user.setStatus(rs.getBoolean("status"));
+            }
+        } catch (SQLException e) {
+            DBContext.printSQLException(e);
+        }
+        return user;
     }
 }
