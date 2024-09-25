@@ -41,7 +41,7 @@ public class TodoDAO {
     public List<Todo> selectAllTodos() {
         List<Todo> todo = new ArrayList<>();
 
-        try ( Connection cnt = DBContext.getConnection();  PreparedStatement stm = cnt.prepareStatement(SELECT_ALL_TODOS_SQL);) {
+        try ( Connection cnt = BaseDAO.getConnection();  PreparedStatement stm = cnt.prepareStatement(SELECT_ALL_TODOS_SQL);) {
 
             System.out.println(stm);
 
@@ -64,7 +64,7 @@ public class TodoDAO {
                 todo.add(t);
             }
         } catch (SQLException e) {
-            DBContext.printSQLException(e);
+            BaseDAO.printSQLException(e);
         }
         return todo;
     }
@@ -72,7 +72,7 @@ public class TodoDAO {
     public Todo selectTodoByID(Long id) {
         Todo todo = null;
 
-        try ( Connection cnt = DBContext.getConnection();  PreparedStatement stm = cnt.prepareStatement(SELECT_TODO_BY_ID_SQL);) {
+        try ( Connection cnt = BaseDAO.getConnection();  PreparedStatement stm = cnt.prepareStatement(SELECT_TODO_BY_ID_SQL);) {
             stm.setLong(1, id);
 
             System.out.println(stm);
@@ -94,7 +94,7 @@ public class TodoDAO {
 //                todo.getUser().add(u);
             }
         } catch (SQLException e) {
-            DBContext.printSQLException(e);
+            BaseDAO.printSQLException(e);
         }
         return todo;
     }
@@ -102,16 +102,16 @@ public class TodoDAO {
     public int insertTodo(Todo todo) throws SQLException {
         int result = 0;
         
-        try ( Connection cnt = DBContext.getConnection();  PreparedStatement stm = cnt.prepareStatement(INSERT_TODO_SQL);) {
+        try ( Connection cnt = BaseDAO.getConnection();  PreparedStatement stm = cnt.prepareStatement(INSERT_TODO_SQL);) {
             stm.setString(1, todo.getTitle());
             stm.setString(2, todo.getDescription());
-            stm.setDate(3, DBContext.getSQLDate(todo.getTargetDate()));
+            stm.setDate(3, BaseDAO.getSQLDate(todo.getTargetDate()));
             stm.setBoolean(4, todo.isStatus());
             stm.setInt(5, 1);
 
             result = stm.executeUpdate();
         } catch (SQLException e) {
-            DBContext.printSQLException(e);
+            BaseDAO.printSQLException(e);
         }
         return result;
     }
@@ -119,10 +119,10 @@ public class TodoDAO {
     public boolean updateTodo(Todo todo) throws SQLException {
         boolean rowUpdated;
 
-        try ( Connection cnt = DBContext.getConnection();  PreparedStatement stm = cnt.prepareStatement(UPDATE_TODO_SQL);) {
+        try ( Connection cnt = BaseDAO.getConnection();  PreparedStatement stm = cnt.prepareStatement(UPDATE_TODO_SQL);) {
             stm.setString(1, todo.getTitle());
             stm.setString(2, todo.getDescription());
-            stm.setDate(3, DBContext.getSQLDate(todo.getTargetDate()));
+            stm.setDate(3, BaseDAO.getSQLDate(todo.getTargetDate()));
             stm.setBoolean(4, todo.isStatus());
             stm.setInt(5, 1);
             stm.setLong(6, todo.getId());
@@ -135,7 +135,7 @@ public class TodoDAO {
     public boolean deleteTodo(Long id) throws SQLException {
         boolean rowDeleted;
 
-        try ( Connection cnt = DBContext.getConnection();  PreparedStatement stm = cnt.prepareStatement(DELETE_TODO_BY_ID_SQL);) {
+        try ( Connection cnt = BaseDAO.getConnection();  PreparedStatement stm = cnt.prepareStatement(DELETE_TODO_BY_ID_SQL);) {
             stm.setLong(1, id);
             rowDeleted = stm.executeUpdate() > 0;
         }

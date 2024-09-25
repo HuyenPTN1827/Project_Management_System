@@ -5,6 +5,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  *
@@ -13,63 +14,45 @@ import java.io.Serializable;
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private int userId;
-    private String username;
-    private String password;
-    private String fullname;
+    private int id;
+    private String full_name;
     private String email;
     private String mobile;
+    private String password;
     private String notes;
-    private String role;
-    private boolean status;
-    private Todo todo;
+    private int status;
+    private Role role;
+    private ArrayList<Role> roles = new ArrayList<>();
+    private ArrayList<Department> depts = new ArrayList<>();
 
     public User() {
     }
 
-    public User(int userId, String username, String password, String fullname, String email, String mobile, String notes, String role, boolean status, Todo todo) {
-        this.userId = userId;
-        this.username = username;
-        this.password = password;
-        this.fullname = fullname;
+    public User(int id, String full_name, String email, String mobile, String password, String notes, int status, Role role) {
+        this.id = id;
+        this.full_name = full_name;
         this.email = email;
         this.mobile = mobile;
-        this.notes = notes;
-        this.role = role;
-        this.status = status;
-        this.todo = todo;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
         this.password = password;
+        this.notes = notes;
+        this.status = status;
+        this.role = role;
     }
 
-    public String getFullname() {
-        return fullname;
+    public int getId() {
+        return id;
     }
 
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getFull_name() {
+        return full_name;
+    }
+
+    public void setFull_name(String full_name) {
+        this.full_name = full_name;
     }
 
     public String getEmail() {
@@ -88,6 +71,14 @@ public class User implements Serializable {
         this.mobile = mobile;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getNotes() {
         return notes;
     }
@@ -96,27 +87,36 @@ public class User implements Serializable {
         this.notes = notes;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public boolean isStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
-    public Todo getTodo() {
-        return todo;
+    public Role getRole() {
+        return role;
     }
 
-    public void setTodo(Todo todo) {
-        this.todo = todo;
+    public void setRole(Role role) {
+        this.role = role;
     }
+
+    public ArrayList<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(ArrayList<Role> roles) {
+        this.roles = roles;
+    }
+
+    public ArrayList<Department> getDepts() {
+        return depts;
+    }
+
+    public void setDepts(ArrayList<Department> depts) {
+        this.depts = depts;
+    }
+
 }

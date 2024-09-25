@@ -11,48 +11,50 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import model.User;
+import model.Department;
+import model.Role;
 
 /**
  *
  * @author kelma
  */
 public class UserDAO {
+//    Queries của Member
 
-    private static final String INSERT_USER_SQL = "INSERT INTO pms.user (username, "
-            + "password, fullname, email, mobile)\n"
-            + "VALUES (?, ?, ?, ?, ?)";
-    private static final String SELECT_USER_BY_UNAME_PASS = "SELECT * FROM pms.user \n"
-            + "WHERE (username = ? OR email = ?) "
-            + "AND password = ?";
-    private static final String UPDATE_USER_SQL = "UPDATE pms.user "
-            + "SET username = ?, password = ?, fullname = ?, email = ?, mobile = ?, "
-            + "role = ?, status = ?\n"
-            + "WHERE userId = ?";
-    private static final String DELETE_USER_SQL = "DELETE FROM pms.user WHERE userId = ?";
-    private static final String SELECT_ALL_USERS_SQL = "SELECT userId, username, "
-            + "email, mobile, role, status\n"
-            + "FROM pms.user ORDER BY userId DESC;";
+    private static final String REGISTER_USER_SQL = "INSERT INTO pms.user (full_name, "
+            + "email, mobile, password) VALUES (?, ?, ?, ?);";
+    private static final String LOGIN_USER_SQL = "SELECT * FROM pms.user "
+            + "WHERE email = ? AND password = ?;";
+
+//    Queries của Admin
+    private static final String SELECT_ALL_USERS_SQL = """
+                                                       SELECT u.id, u.full_name, u.email, u.mobile, u.department_id, 
+                                                       d.code, u.role_id, r.role_name, u.status
+                                                       FROM pms.user u
+                                                       INNER JOIN pms.department d ON u.department_id = d.id
+                                                       INNER JOIN pms.role r ON u.role_id = r.id
+                                                       ORDER BY u.id DESC;""";
     private static final String SELECT_USER_BY_ID_SQL = "SELECT * FROM pms.user WHERE userId = ?";
-    private static final String INSERT_USER_BY_ADMIN_SQL = "INSERT INTO pms.user "
-            + "(username, password, fullname, email, mobile, role)\n"
-            + "VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String INSERT_USER_SQL = "INSERT INTO pms.user (full_name, "
+            + "email, mobile, password, status, role_id, department_id)\n"
+            + "VALUES (?, ?, ?, ?, ?, ?, ?);";
+    private static final String UPDATE_USER_SQL = "UPDATE pms.user SET status = ?, "
+            + "role_id = ?, department_id = ? WHERE id = ?;";
+    private static final String DELETE_USER_SQL = "DELETE FROM pms.user WHERE id = ?;";
 
+//    Member
     public int registerUser(User user) throws ClassNotFoundException {
         int result = 0;
 
-        try ( Connection cnt = DBContext.getConnection();  PreparedStatement stm = cnt.prepareStatement(INSERT_USER_SQL)) {
-            stm.setString(1, user.getUsername());
-            stm.setString(2, user.getPassword());
-            stm.setString(3, user.getFullname());
-            stm.setString(4, user.getEmail());
-            stm.setString(5, user.getMobile());
-
-            System.out.println(stm);
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(REGISTER_USER_SQL)) {
+            stm.setString(1, user.getFull_name());
+            stm.setString(2, user.getEmail());
+            stm.setString(3, user.getMobile());
+            stm.setString(4, user.getPassword());
 
             result = stm.executeUpdate();
-
         } catch (SQLException e) {
-            DBContext.printSQLException(e);
+            BaseDAO.printSQLException(e);
         }
         return result;
     }
@@ -60,139 +62,183 @@ public class UserDAO {
     public boolean loginValidate(User user) throws ClassNotFoundException {
         boolean status = false;
 
-        try ( Connection cnt = DBContext.getConnection();  PreparedStatement stm = cnt.prepareStatement(SELECT_USER_BY_UNAME_PASS)) {
-            stm.setString(1, user.getUsername());
-            stm.setString(2, user.getEmail());
-            stm.setString(3, user.getPassword());
-
-            System.out.println(stm);
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(LOGIN_USER_SQL)) {
+            stm.setString(1, user.getEmail());
+            stm.setString(2, user.getPassword());
 
             ResultSet rs = stm.executeQuery();
             status = rs.next();
         } catch (SQLException e) {
-            DBContext.printSQLException(e);
+            BaseDAO.printSQLException(e);
         }
         return status;
     }
 
+//    Admin
     public List<User> selectAllUsers() {
         List<User> user = new ArrayList<>();
 
-        try ( Connection cnt = DBContext.getConnection();  PreparedStatement stm = cnt.prepareStatement(SELECT_ALL_USERS_SQL);) {
-
-            System.out.println(stm);
-
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(SELECT_ALL_USERS_SQL);) {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 User u = new User();
-                u.setUserId(rs.getInt("userId"));
-                u.setUsername(rs.getString("username"));
+                u.setId(rs.getInt("id"));
+                u.setFull_name(rs.getString("full_name"));
                 u.setEmail(rs.getString("email"));
                 u.setMobile(rs.getString("mobile"));
-                u.setRole(rs.getString("role"));
-                u.setStatus(rs.getBoolean("status"));
+                u.setStatus(rs.getInt("status"));
+
+                Department d = new Department();
+                d.setId(rs.getInt("id"));
+                d.setCode(rs.getString("code"));
+//                d.setUsers(u);
+                u.getDepts().add(d);
+
+                Role r = new Role();
+                r.setId(rs.getInt("id"));
+                r.setRole_name(rs.getString("role_name"));
+//                r.setUsers(u);
+                u.getRoles().add(r);
 
                 user.add(u);
             }
         } catch (SQLException e) {
-            DBContext.printSQLException(e);
+            BaseDAO.printSQLException(e);
         }
         return user;
     }
 
-    public User selectUserByID(int id) {
+//    public User selectUserByID(int id) {
+//        User user = null;
+//
+//        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(SELECT_USER_BY_ID_SQL);) {
+//            stm.setInt(1, id);
+//
+//            ResultSet rs = stm.executeQuery();
+//            while (rs.next()) {
+//                user = new User();
+//                user.setUserId(rs.getInt("userId"));
+//                user.setUsername(rs.getString("username"));
+//                user.setPassword(rs.getString("password"));
+//                user.setFullname(rs.getString("fullname"));
+//                user.setEmail(rs.getString("email"));
+//                user.setMobile(rs.getString("mobile"));
+//                user.setNotes(rs.getString("notes"));
+//                user.setRole(rs.getString("role"));
+//                user.setStatus(rs.getBoolean("status"));
+//            }
+//        } catch (SQLException e) {
+//            BaseDAO.printSQLException(e);
+//        }
+//        return user;
+//    }
+//
+//    public int insertUser(User user) throws SQLException {
+//        int result = 0;
+//
+//        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(INSERT_USER_BY_ADMIN_SQL);) {
+//            stm.setString(1, user.getUsername());
+//            stm.setString(2, user.getPassword());
+//            stm.setString(3, user.getFullname());
+//            stm.setString(4, user.getEmail());
+//            stm.setString(5, user.getMobile());
+//            stm.setString(6, user.getRole());
+//
+//            result = stm.executeUpdate();
+//        } catch (SQLException e) {
+//            BaseDAO.printSQLException(e);
+//        }
+//        return result;
+//    }
+//
+//    public boolean updateUser(User user) throws SQLException {
+//        boolean rowUpdated;
+//
+//        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(UPDATE_USER_SQL);) {
+//            stm.setString(1, user.getUsername());
+//            stm.setString(2, user.getPassword());
+//            stm.setString(3, user.getFullname());
+//            stm.setString(4, user.getEmail());
+//            stm.setString(5, user.getMobile());
+//            stm.setString(6, user.getRole());
+//            stm.setBoolean(7, user.isStatus());
+//            stm.setInt(8, user.getUserId());
+//
+//            rowUpdated = stm.executeUpdate() > 0;
+//        }
+//
+//        return rowUpdated;
+//    }
+//
+//    public boolean deleteUser(int id) throws SQLException {
+//        boolean rowDeleted;
+//        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(DELETE_USER_SQL);) {
+//            stm.setInt(1, id);
+//            rowDeleted = stm.executeUpdate() > 0;
+//        }
+//        return rowDeleted;
+//    }
+//
+//    public User selectUserByUsername(String username) {
+//        User user = null;
+//        String query = "SELECT * FROM pms.user WHERE username = ? OR email = ?";
+//
+//        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(query)) {
+//            stm.setString(1, username);
+//            stm.setString(2, username); // Có thể kiểm tra theo cả username và email
+//
+//            ResultSet rs = stm.executeQuery();
+//            if (rs.next()) {
+//                user = new User();
+//                user.setUserId(rs.getInt("userId"));
+//                user.setUsername(rs.getString("username"));
+//                user.setPassword(rs.getString("password"));
+//                user.setFullname(rs.getString("fullname"));
+//                user.setEmail(rs.getString("email"));
+//                user.setMobile(rs.getString("mobile"));
+//                user.setRole(rs.getString("role")); // Lấy vai trò
+//                user.setStatus(rs.getBoolean("status"));
+//            }
+//        } catch (SQLException e) {
+//            BaseDAO.printSQLException(e);
+//        }
+//        return user;
+//    }
+    public User selectUserByEmail(String email) {
         User user = null;
-
-        try ( Connection cnt = DBContext.getConnection();  PreparedStatement stm = cnt.prepareStatement(SELECT_USER_BY_ID_SQL);) {
-            stm.setInt(1, id);
-
-            ResultSet rs = stm.executeQuery();
-            while (rs.next()) {
-                user = new User();
-                user.setUserId(rs.getInt("userId"));
-                user.setUsername(rs.getString("username"));
-                user.setPassword(rs.getString("password"));
-                user.setFullname(rs.getString("fullname"));
-                user.setEmail(rs.getString("email"));
-                user.setMobile(rs.getString("mobile"));
-                user.setNotes(rs.getString("notes"));
-                user.setRole(rs.getString("role"));
-                user.setStatus(rs.getBoolean("status"));
-            }
-        } catch (SQLException e) {
-            DBContext.printSQLException(e);
-        }
-        return user;
-    }
-
-    public int insertUser(User user) throws SQLException {
-        int result = 0;
-
-        try ( Connection cnt = DBContext.getConnection();  PreparedStatement stm = cnt.prepareStatement(INSERT_USER_BY_ADMIN_SQL);) {
-            stm.setString(1, user.getUsername());
-            stm.setString(2, user.getPassword());
-            stm.setString(3, user.getFullname());
-            stm.setString(4, user.getEmail());
-            stm.setString(5, user.getMobile());
-            stm.setString(6, user.getRole());
-
-            result = stm.executeUpdate();
-        } catch (SQLException e) {
-            DBContext.printSQLException(e);
-        }
-        return result;
-    }
-
-    public boolean updateUser(User user) throws SQLException {
-        boolean rowUpdated;
-
-        try ( Connection cnt = DBContext.getConnection();  PreparedStatement stm = cnt.prepareStatement(UPDATE_USER_SQL);) {
-            stm.setString(1, user.getUsername());
-            stm.setString(2, user.getPassword());
-            stm.setString(3, user.getFullname());
-            stm.setString(4, user.getEmail());
-            stm.setString(5, user.getMobile());
-            stm.setString(6, user.getRole());
-            stm.setBoolean(7, user.isStatus());
-            stm.setInt(8, user.getUserId());
-
-            rowUpdated = stm.executeUpdate() > 0;
-        }
-
-        return rowUpdated;
-    }
-
-    public boolean deleteUser(int id) throws SQLException {
-        boolean rowDeleted;
-        try ( Connection cnt = DBContext.getConnection();  PreparedStatement stm = cnt.prepareStatement(DELETE_USER_SQL);) {
-            stm.setInt(1, id);
-            rowDeleted = stm.executeUpdate() > 0;
-        }
-        return rowDeleted;
-    }
-
-    public User selectUserByUsername(String username) {
-        User user = null;
-        String query = "SELECT * FROM pms.user WHERE username = ? OR email = ?";
-
-        try ( Connection cnt = DBContext.getConnection();  PreparedStatement stm = cnt.prepareStatement(query)) {
-            stm.setString(1, username);
-            stm.setString(2, username); // Có thể kiểm tra theo cả username và email
+        String query = """
+                       SELECT u.id, u.full_name, u.email, u.mobile, u.password, u.notes, 
+                       u.status, u.department_id, d.code, u.role_id, r.role_name, u.status
+                       FROM pms.user u
+                       INNER JOIN pms.department d ON u.department_id = d.id
+                       INNER JOIN pms.role r ON u.role_id = r.id
+                       WHERE u.email = ?;""";
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(query)) {
+            stm.setString(1, email);
 
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 user = new User();
-                user.setUserId(rs.getInt("userId"));
-                user.setUsername(rs.getString("username"));
-                user.setPassword(rs.getString("password"));
-                user.setFullname(rs.getString("fullname"));
+                user.setId(rs.getInt("userId"));
+                user.setFull_name(rs.getString("fullname"));
                 user.setEmail(rs.getString("email"));
                 user.setMobile(rs.getString("mobile"));
-                user.setRole(rs.getString("role")); // Lấy vai trò
-                user.setStatus(rs.getBoolean("status"));
+                user.setPassword(rs.getString("password"));
+                user.setStatus(rs.getInt("status"));
+                
+                Department dept = new Department();
+                dept.setId(rs.getInt("id"));
+                dept.setCode(rs.getString("code"));
+                user.getDepts().add(dept);
+                
+                // Lấy vai trò
+                Role role = new Role();
+                role.setId(rs.getInt("id"));
+                role.setRole_name(rs.getString("role_name"));
+                user.getRoles().add(role);
             }
         } catch (SQLException e) {
-            DBContext.printSQLException(e);
+            BaseDAO.printSQLException(e);
         }
         return user;
     }
