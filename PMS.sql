@@ -26,23 +26,20 @@ DROP TABLE IF EXISTS `allocation`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `allocation` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `start_date` date DEFAULT NULL,
+  `start_date` date NOT NULL,
   `end_date` date DEFAULT NULL,
+  `effort_rate` int NOT NULL DEFAULT '0',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `project_role` int DEFAULT NULL,
-  `effort_rate` int DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL,
   `user_id` int DEFAULT NULL,
   `project_id` int DEFAULT NULL,
-  `team_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  KEY `project_id` (`project_id`),
-  KEY `project_role` (`project_role`),
-  KEY `team_id` (`team_id`),
-  CONSTRAINT `allocation_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `allocation_ibfk_2` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`),
-  CONSTRAINT `allocation_ibfk_3` FOREIGN KEY (`project_role`) REFERENCES `role` (`id`),
-  CONSTRAINT `allocation_ibfk_4` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`)
+  KEY `allocation_ibfk_3` (`user_id`),
+  KEY `allocation_ibfk_1` (`project_id`),
+  KEY `allocation_ibfk_2` (`project_role`),
+  CONSTRAINT `allocation_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `allocation_ibfk_2` FOREIGN KEY (`project_role`) REFERENCES `setting` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `allocation_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -67,10 +64,12 @@ CREATE TABLE `department` (
   `code` varchar(50) NOT NULL,
   `name` varchar(255) NOT NULL,
   `details` text,
-  `parent` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `parent` int DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  KEY `department_ibfk_1_idx` (`parent`),
+  CONSTRAINT `department_ibfk_1` FOREIGN KEY (`parent`) REFERENCES `department` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -79,35 +78,95 @@ CREATE TABLE `department` (
 
 LOCK TABLES `department` WRITE;
 /*!40000 ALTER TABLE `department` DISABLE KEYS */;
-INSERT INTO `department` VALUES (1,'IT','IT Support',NULL,NULL,1),(2,'HR','Human Resources',NULL,NULL,1);
+INSERT INTO `department` VALUES (1,'EM','Executive Management',NULL,NULL,1),(2,'HR','Human Resources',NULL,1,1),(3,'F&A','Finance and Accounting',NULL,1,1),(4,'S&M','Sales and Marketing',NULL,1,1),(5,'IT','Information Technology',NULL,1,1),(6,'R&D','Research and Development',NULL,1,1),(7,'OP','Operations',NULL,1,1),(8,'LD','Legal',NULL,1,1),(9,'Admin','Administrative ',NULL,1,1),(10,'CS','Customer Service',NULL,4,1);
 /*!40000 ALTER TABLE `department` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `domain`
+-- Table structure for table `dept_user`
 --
 
-DROP TABLE IF EXISTS `domain`;
+DROP TABLE IF EXISTS `dept_user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `domain` (
+CREATE TABLE `dept_user` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `code` varchar(50) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `details` text,
-  `status` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `user_id` int DEFAULT NULL,
+  `dept_id` int DEFAULT NULL,
+  `start_date` date NOT NULL,
+  `end_date` date DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '0',
+  `role_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `dept_user_ibfk_1_idx` (`user_id`),
+  KEY `dept_user_ibfk_2_idx` (`dept_id`),
+  KEY `dept_user_ibfk_3_idx` (`role_id`),
+  CONSTRAINT `dept_user_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `dept_user_ibfk_2` FOREIGN KEY (`dept_id`) REFERENCES `department` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `dept_user_ibfk_3` FOREIGN KEY (`role_id`) REFERENCES `setting` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `domain`
+-- Dumping data for table `dept_user`
 --
 
-LOCK TABLES `domain` WRITE;
-/*!40000 ALTER TABLE `domain` DISABLE KEYS */;
-INSERT INTO `domain` VALUES (1,'BC','Blockchain',NULL,1),(2,'BD','Big data',NULL,1),(3,'IOT','Internet of Things',NULL,1),(4,'AD','Android',NULL,1),(5,'CC','Cloud Computing',NULL,0),(6,'DM','Data Mining',NULL,0),(7,'AI','Artificial Intelligence',NULL,1),(8,'IS','Information Security',NULL,1);
-/*!40000 ALTER TABLE `domain` ENABLE KEYS */;
+LOCK TABLES `dept_user` WRITE;
+/*!40000 ALTER TABLE `dept_user` DISABLE KEYS */;
+INSERT INTO `dept_user` VALUES (1,1,5,'2024-10-04',NULL,1,1),(2,2,2,'2024-10-04',NULL,0,7);
+/*!40000 ALTER TABLE `dept_user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `eval_criteria`
+--
+
+DROP TABLE IF EXISTS `eval_criteria`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `eval_criteria` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `weight` decimal(10,2) DEFAULT NULL,
+  `phase_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `eval_criteria_ibfk_1_idx` (`phase_id`),
+  CONSTRAINT `eval_criteria_ibfk_1` FOREIGN KEY (`phase_id`) REFERENCES `project_phase` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `eval_criteria`
+--
+
+LOCK TABLES `eval_criteria` WRITE;
+/*!40000 ALTER TABLE `eval_criteria` DISABLE KEYS */;
+/*!40000 ALTER TABLE `eval_criteria` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `issue`
+--
+
+DROP TABLE IF EXISTS `issue`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `issue` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `project_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `issue_ibfk_1_idx` (`project_id`),
+  CONSTRAINT `issue_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `issue`
+--
+
+LOCK TABLES `issue` WRITE;
+/*!40000 ALTER TABLE `issue` DISABLE KEYS */;
+/*!40000 ALTER TABLE `issue` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -119,19 +178,19 @@ DROP TABLE IF EXISTS `milestone`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `milestone` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `code` varchar(50) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `priority` int DEFAULT NULL,
+  `code` varchar(50) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `priority` int NOT NULL,
   `details` text,
-  `end_date` date DEFAULT NULL,
-  `status` int DEFAULT NULL,
+  `deadline` date NOT NULL,
+  `status` int NOT NULL DEFAULT '1',
   `project_id` int DEFAULT NULL,
-  `project_phase_id` int DEFAULT NULL,
+  `phase_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `project_id` (`project_id`),
-  KEY `project_phase_id` (`project_phase_id`),
-  CONSTRAINT `milestone_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`),
-  CONSTRAINT `milestone_ibfk_2` FOREIGN KEY (`project_phase_id`) REFERENCES `projectphase` (`id`)
+  KEY `milestone_ibfk_1` (`project_id`),
+  KEY `milestone_ibfk_2` (`phase_id`),
+  CONSTRAINT `milestone_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `milestone_ibfk_2` FOREIGN KEY (`phase_id`) REFERENCES `project_phase` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -145,29 +204,31 @@ LOCK TABLES `milestone` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `milestone_workpackage`
+-- Table structure for table `milestone_package`
 --
 
-DROP TABLE IF EXISTS `milestone_workpackage`;
+DROP TABLE IF EXISTS `milestone_package`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `milestone_workpackage` (
-  `milestone_id` int NOT NULL,
-  `work_package_id` int NOT NULL,
-  PRIMARY KEY (`milestone_id`,`work_package_id`),
-  KEY `work_package_id` (`work_package_id`),
-  CONSTRAINT `milestone_workpackage_ibfk_1` FOREIGN KEY (`milestone_id`) REFERENCES `milestone` (`id`),
-  CONSTRAINT `milestone_workpackage_ibfk_2` FOREIGN KEY (`work_package_id`) REFERENCES `workpackage` (`id`)
+CREATE TABLE `milestone_package` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `milestone_id` int DEFAULT NULL,
+  `package_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `milestone_package_ibfk_1` (`milestone_id`),
+  KEY `milestone_package_ibfk_2` (`package_id`),
+  CONSTRAINT `milestone_package_ibfk_1` FOREIGN KEY (`milestone_id`) REFERENCES `milestone` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `milestone_package_ibfk_2` FOREIGN KEY (`package_id`) REFERENCES `work_package` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `milestone_workpackage`
+-- Dumping data for table `milestone_package`
 --
 
-LOCK TABLES `milestone_workpackage` WRITE;
-/*!40000 ALTER TABLE `milestone_workpackage` DISABLE KEYS */;
-/*!40000 ALTER TABLE `milestone_workpackage` ENABLE KEYS */;
+LOCK TABLES `milestone_package` WRITE;
+/*!40000 ALTER TABLE `milestone_package` DISABLE KEYS */;
+/*!40000 ALTER TABLE `milestone_package` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -179,19 +240,21 @@ DROP TABLE IF EXISTS `project`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `project` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `biz_term` varchar(50) DEFAULT NULL,
-  `code` varchar(50) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
+  `biz_term` int DEFAULT NULL,
+  `code` varchar(50) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `details` text,
-  `start_date` date DEFAULT NULL,
-  `status` int DEFAULT NULL,
-  `domain_id` int DEFAULT NULL,
+  `start_date` date NOT NULL,
+  `status` int NOT NULL DEFAULT '1',
+  `type_id` int DEFAULT NULL,
   `department_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `domain_id` (`domain_id`),
-  KEY `department_id` (`department_id`),
-  CONSTRAINT `project_ibfk_1` FOREIGN KEY (`domain_id`) REFERENCES `domain` (`id`),
-  CONSTRAINT `project_ibfk_2` FOREIGN KEY (`department_id`) REFERENCES `department` (`id`)
+  KEY `project_ibfk_2_idx` (`biz_term`),
+  KEY `project_ibfk_1` (`type_id`),
+  KEY `project_ibfk_2` (`department_id`),
+  CONSTRAINT `project_ibfk_1` FOREIGN KEY (`type_id`) REFERENCES `project_type` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `project_ibfk_2` FOREIGN KEY (`department_id`) REFERENCES `department` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `project_ibfk_3` FOREIGN KEY (`biz_term`) REFERENCES `setting` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -205,59 +268,118 @@ LOCK TABLES `project` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `projectphase`
+-- Table structure for table `project_criteria`
 --
 
-DROP TABLE IF EXISTS `projectphase`;
+DROP TABLE IF EXISTS `project_criteria`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `projectphase` (
+CREATE TABLE `project_criteria` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
-  `priority` int DEFAULT NULL,
-  `details` text,
-  `final_phase` tinyint(1) DEFAULT NULL,
-  `completion_rate` int DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL,
-  `domain_id` int DEFAULT NULL,
+  `milestone_id` int DEFAULT NULL,
+  `project_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `domain_id` (`domain_id`),
-  CONSTRAINT `projectphase_ibfk_1` FOREIGN KEY (`domain_id`) REFERENCES `domain` (`id`)
+  KEY `project_criteria_ibfk_1_idx` (`milestone_id`),
+  KEY `project_criteria_ibfk_2_idx` (`project_id`),
+  CONSTRAINT `project_criteria_ibfk_1` FOREIGN KEY (`milestone_id`) REFERENCES `milestone` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `project_criteria_ibfk_2` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `projectphase`
+-- Dumping data for table `project_criteria`
 --
 
-LOCK TABLES `projectphase` WRITE;
-/*!40000 ALTER TABLE `projectphase` DISABLE KEYS */;
-/*!40000 ALTER TABLE `projectphase` ENABLE KEYS */;
+LOCK TABLES `project_criteria` WRITE;
+/*!40000 ALTER TABLE `project_criteria` DISABLE KEYS */;
+/*!40000 ALTER TABLE `project_criteria` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `role`
+-- Table structure for table `project_phase`
 --
 
-DROP TABLE IF EXISTS `role`;
+DROP TABLE IF EXISTS `project_phase`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `role` (
+CREATE TABLE `project_phase` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `role_name` varchar(50) NOT NULL,
-  `description` text,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `name` varchar(255) NOT NULL,
+  `priority` int NOT NULL,
+  `details` text,
+  `final_phase` tinyint(1) NOT NULL DEFAULT '0',
+  `completion_rate` int NOT NULL DEFAULT '0',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `type_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `project_phase_ibfk_1` (`type_id`),
+  CONSTRAINT `project_phase_ibfk_1` FOREIGN KEY (`type_id`) REFERENCES `project_type` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `role`
+-- Dumping data for table `project_phase`
 --
 
-LOCK TABLES `role` WRITE;
-/*!40000 ALTER TABLE `role` DISABLE KEYS */;
-INSERT INTO `role` VALUES (1,'Admin',NULL),(2,'Dept Manager',NULL),(3,'PMO Manager',NULL),(4,'Project QA',NULL),(5,'Project Manager',NULL),(6,'Team Leader',NULL),(7,'Member',NULL);
-/*!40000 ALTER TABLE `role` ENABLE KEYS */;
+LOCK TABLES `project_phase` WRITE;
+/*!40000 ALTER TABLE `project_phase` DISABLE KEYS */;
+/*!40000 ALTER TABLE `project_phase` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `project_type`
+--
+
+DROP TABLE IF EXISTS `project_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `project_type` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `code` varchar(50) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `details` text,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `project_type`
+--
+
+LOCK TABLES `project_type` WRITE;
+/*!40000 ALTER TABLE `project_type` DISABLE KEYS */;
+INSERT INTO `project_type` VALUES (1,'WF','Waterfall',NULL,1),(2,'AG','Agile ',NULL,1),(3,'SC','Scrum',NULL,1),(4,'VM','V-Model',NULL,1),(5,'SM','Spiral',NULL,0),(6,'IM','Incremental',NULL,1),(7,'DO','DevOps',NULL,0);
+/*!40000 ALTER TABLE `project_type` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `setting`
+--
+
+DROP TABLE IF EXISTS `setting`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `setting` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `type` varchar(50) NOT NULL,
+  `value` varchar(255) NOT NULL,
+  `priority` int NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `description` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `setting`
+--
+
+LOCK TABLES `setting` WRITE;
+/*!40000 ALTER TABLE `setting` DISABLE KEYS */;
+INSERT INTO `setting` VALUES (1,'Admin','User Role','Admin',1,1,NULL),(2,'PMO Manager','User Role','PMO Manager',2,1,NULL),(3,'Dept Manager','User Role','Dept Manager',3,1,NULL),(4,'Project Manager','User Role','Project Manager',4,1,NULL),(5,'Project QA','User Role','Project QA',5,1,NULL),(6,'Team Leader','User Role','Team Leader',6,1,NULL),(7,'Member','User Role','Member',7,1,NULL);
+/*!40000 ALTER TABLE `setting` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -269,13 +391,13 @@ DROP TABLE IF EXISTS `team`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `team` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
-  `topic` varchar(255) DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `topic` varchar(255) NOT NULL,
   `details` text,
   `project_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `project_id` (`project_id`),
-  CONSTRAINT `team_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`)
+  KEY `team_ibfk_1` (`project_id`),
+  CONSTRAINT `team_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -289,6 +411,34 @@ LOCK TABLES `team` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `team_member`
+--
+
+DROP TABLE IF EXISTS `team_member`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `team_member` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `team_id` int DEFAULT NULL,
+  `user_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `team_member_ibfk_1_idx` (`team_id`),
+  KEY `team_member_ibfk_2_idx` (`user_id`),
+  CONSTRAINT `team_member_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `team_member_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `team_member`
+--
+
+LOCK TABLES `team_member` WRITE;
+/*!40000 ALTER TABLE `team_member` DISABLE KEYS */;
+/*!40000 ALTER TABLE `team_member` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `timesheet`
 --
 
@@ -297,17 +447,23 @@ DROP TABLE IF EXISTS `timesheet`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `timesheet` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `task` varchar(255) DEFAULT NULL,
-  `process` varchar(255) DEFAULT NULL,
-  `task_duration` decimal(10,2) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL,
-  `user_id` int DEFAULT NULL,
+  `task` varchar(255) NOT NULL,
+  `process` varchar(255) NOT NULL,
+  `task_duration` decimal(10,2) NOT NULL,
+  `status` tinyint(1) NOT NULL,
   `project_id` int DEFAULT NULL,
+  `package_id` int DEFAULT NULL,
+  `user_id` int DEFAULT NULL,
+  `related_team` int DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  KEY `project_id` (`project_id`),
-  CONSTRAINT `timesheet_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `timesheet_ibfk_2` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`)
+  KEY `timesheet_ibfk_3_idx` (`package_id`),
+  KEY `timesheet_ibfk_4_idx` (`related_team`),
+  KEY `timesheet_ibfk_1` (`user_id`),
+  KEY `timesheet_ibfk_2` (`project_id`),
+  CONSTRAINT `timesheet_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `timesheet_ibfk_2` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `timesheet_ibfk_3` FOREIGN KEY (`package_id`) REFERENCES `work_package` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `timesheet_ibfk_4` FOREIGN KEY (`related_team`) REFERENCES `team` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -331,19 +487,17 @@ CREATE TABLE `user` (
   `id` int NOT NULL AUTO_INCREMENT,
   `full_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
   `email` varchar(255) NOT NULL,
-  `mobile` varchar(20) DEFAULT NULL,
+  `mobile` varchar(10) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `notes` text,
-  `status` int NOT NULL DEFAULT '1',
-  `role_id` int NOT NULL DEFAULT '7',
-  `department_id` int NOT NULL DEFAULT '2',
+  `status` int NOT NULL DEFAULT '3',
+  `role_id` int DEFAULT NULL,
+  `avatar` longtext,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
-  KEY `role_id` (`role_id`),
-  KEY `department_id` (`department_id`),
-  CONSTRAINT `department_id` FOREIGN KEY (`department_id`) REFERENCES `department` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `role_id` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `user_ibfk_1` (`role_id`),
+  CONSTRAINT `user_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `setting` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -352,70 +506,73 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'Admin','admin@gmail.com','012345678','123',NULL,1,1,1),(2,'Phạm Ngọc Huyền','huyenptnhe160769@gmail.com','035523054','123',NULL,1,7,2),(3,'Lương Minh Quang','quanglm@gmail.com','123456789','123',NULL,1,7,2),(4,'Member 1','member1@gmail.com','234567890','123',NULL,0,7,2),(5,'Đỗ Hải Long','longdh@gmail.com','','123',NULL,1,7,2);
+INSERT INTO `user` VALUES (1,'Admin','admin@gmail.com','0904235978','123',NULL,1,1,NULL),(2,'Phạm Ngọc Huyền','huyenptnhe160769@gmail.com','0355235054','123',NULL,3,7,NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `user_domain`
+-- Table structure for table `user_type`
 --
 
-DROP TABLE IF EXISTS `user_domain`;
+DROP TABLE IF EXISTS `user_type`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user_domain` (
-  `user_id` int NOT NULL,
-  `domain_id` int NOT NULL,
-  PRIMARY KEY (`user_id`,`domain_id`),
-  KEY `domain_id` (`domain_id`),
-  CONSTRAINT `user_domain_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `user_domain_ibfk_2` FOREIGN KEY (`domain_id`) REFERENCES `domain` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `user_type` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int DEFAULT NULL,
+  `type_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_type_ibfk_1` (`user_id`),
+  KEY `user_type_ibfk_2` (`type_id`),
+  CONSTRAINT `user_type_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `user_type_ibfk_2` FOREIGN KEY (`type_id`) REFERENCES `project_type` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `user_domain`
+-- Dumping data for table `user_type`
 --
 
-LOCK TABLES `user_domain` WRITE;
-/*!40000 ALTER TABLE `user_domain` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user_domain` ENABLE KEYS */;
+LOCK TABLES `user_type` WRITE;
+/*!40000 ALTER TABLE `user_type` DISABLE KEYS */;
+INSERT INTO `user_type` VALUES (1,2,6);
+/*!40000 ALTER TABLE `user_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `workpackage`
+-- Table structure for table `work_package`
 --
 
-DROP TABLE IF EXISTS `workpackage`;
+DROP TABLE IF EXISTS `work_package`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `workpackage` (
+CREATE TABLE `work_package` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) DEFAULT NULL,
+  `title` varchar(255) NOT NULL,
   `details` text,
-  `scope_type` int DEFAULT NULL,
-  `complexity` varchar(50) DEFAULT NULL,
-  `estimated_effort` int DEFAULT NULL,
-  `deadline` date DEFAULT NULL,
-  `status` int DEFAULT NULL,
-  `completed_rate` int DEFAULT NULL,
+  `scope_type` int NOT NULL,
+  `complexity` varchar(50) NOT NULL,
+  `estimated_effort` int NOT NULL DEFAULT '0',
+  `deadline` date NOT NULL,
+  `status` int NOT NULL DEFAULT '1',
+  `completed_rate` int NOT NULL DEFAULT '0',
   `project_id` int DEFAULT NULL,
   `user_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `project_id` (`project_id`),
-  KEY `user_id` (`user_id`),
-  CONSTRAINT `workpackage_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`),
-  CONSTRAINT `workpackage_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+  KEY `workpackage_ibfk_1` (`project_id`),
+  KEY `workpackage_ibfk_2` (`user_id`),
+  CONSTRAINT `work_package_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `work_package_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `workpackage`
+-- Dumping data for table `work_package`
 --
 
-LOCK TABLES `workpackage` WRITE;
-/*!40000 ALTER TABLE `workpackage` DISABLE KEYS */;
-/*!40000 ALTER TABLE `workpackage` ENABLE KEYS */;
+LOCK TABLES `work_package` WRITE;
+/*!40000 ALTER TABLE `work_package` DISABLE KEYS */;
+/*!40000 ALTER TABLE `work_package` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -435,4 +592,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-26  0:11:11
+-- Dump completed on 2024-10-04  2:03:27
