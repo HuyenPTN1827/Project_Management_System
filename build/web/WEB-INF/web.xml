@@ -1,24 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+    <servlet>
+        <servlet-name>SettingController</servlet-name>
+        <servlet-class>controller.SettingController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DepartmentController</servlet-name>
+        <servlet-class>controller.DepartmentController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <servlet-class>controller.ProjectTypeController</servlet-class>
+    </servlet>
     <servlet-mapping>
-        <servlet-name>AccessController</servlet-name>
+        <servlet-name>AuthenticationController</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>UserController</servlet-name>
-        <servlet-class>controller.admin.UserController</servlet-class>
+        <servlet-class>controller.UserController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>AccessController</servlet-name>
-        <servlet-class>controller.AccessController</servlet-class>
+        <servlet-name>AuthenticationController</servlet-name>
+        <servlet-class>controller.AuthenticationController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>UserController</servlet-name>
         <url-pattern>/user-management</url-pattern>
     </servlet-mapping>
-    
+    <servlet-mapping>
+        <servlet-name>UserController</servlet-name>
+        <url-pattern>/add-user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserController</servlet-name>
+        <url-pattern>/insert-user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserController</servlet-name>
+        <url-pattern>/edit-user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserController</servlet-name>
+        <url-pattern>/update-user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserController</servlet-name>
+        <url-pattern>/change-status-user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SettingController</servlet-name>
+        <url-pattern>/setting-management</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DepartmentController</servlet-name>
+        <url-pattern>/department-management</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <url-pattern>/project-type-management</url-pattern>
+    </servlet-mapping>
     <welcome-file-list>
         <welcome-file>/WEB-INF/member/login.jsp</welcome-file>
-        <!--<welcome-file>/WEB-INF/admin/user-list.jsp</welcome-file>-->
+        <!--<welcome-file>user-management</welcome-file>-->
     </welcome-file-list>
 </web-app>

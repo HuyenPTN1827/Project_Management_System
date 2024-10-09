@@ -10,14 +10,26 @@ package model;
  */
 public class Department {
 
-    private static final long serialVersionUID = 1L;
     private int id;
     private String code;
     private String name;
     private String details;
-    private String parent;
+    private int parent;
     private boolean status;
     private User users;
+
+    public Department() {
+    }
+
+    public Department(int id, String code, String name, String details, int parent, boolean status, User users) {
+        this.id = id;
+        this.code = code;
+        this.name = name;
+        this.details = details;
+        this.parent = parent;
+        this.status = status;
+        this.users = users;
+    }
 
     public int getId() {
         return id;
@@ -51,11 +63,11 @@ public class Department {
         this.details = details;
     }
 
-    public String getParent() {
+    public int getParent() {
         return parent;
     }
 
-    public void setParent(String parent) {
+    public void setParent(int parent) {
         this.parent = parent;
     }
 
@@ -74,5 +86,5 @@ public class Department {
     public void setUsers(User users) {
         this.users = users;
     }
-    
+
 }

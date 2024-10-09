@@ -25,131 +25,198 @@
             <div class="container col-md-5" style="padding: 10px 0px 10px 0px">
                 <div class="card">
                     <div class="card-body">
+
+                    <c:if test="${user == null}">
+                        <form action="insert-user" method="post">
+                            <caption>
+                                <h2>Add New User</h2>
+                            </caption>
+
+                            <c:if test="${not empty errorMessages}">
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        <c:forEach items="${errorMessages}" var="error" >
+                                            <li>${error}</li>
+                                            </c:forEach>
+                                    </ul>
+                                </div>
+                            </c:if>
+
+                            <fieldset class="form-group">
+                                <label>Full Name*:</label>
+                                <input type="text" name="fullname" class="form-control" 
+                                       value="${fullname}" required/>
+                            </fieldset>
+
+                            <fieldset class="form-group">
+                                <label>Email*:</label>
+                                <input type="text" name="email" class="form-control" 
+                                       value="${email}" required/>
+                            </fieldset>
+
+                            <fieldset class="form-group">
+                                <label>Mobile:</label>
+                                <input type="text" name="mobile" class="form-control"
+                                       value="${mobile}"/>
+                            </fieldset>
+
+                            <fieldset class="form-group">
+                                <label>Password*:</label>
+                                <input type="password" name="password" class="form-control" required/>
+                            </fieldset>
+
+                            <fieldset class="form-group">
+                                <label>Department:</label>
+                                <select name="dept" class="form-control">
+                                    <option value="">Choose Department</option>
+                                    <c:forEach items="${dept}" var="d">
+                                        <option 
+                                            <c:if test="${deptId eq d.id}">
+                                                selected="selected"
+                                            </c:if>
+                                            value=${d.id}>${d.name}
+                                        </option>
+                                    </c:forEach>
+                                </select>
+                            </fieldset>
+
+                            <fieldset class="form-group">
+                                <label>Role:</label>
+                                <select name="role" class="form-control">
+                                    <option value="">Choose Role</option>
+                                    <c:forEach items="${role}" var="r">
+                                        <option 
+                                            <c:if test="${roleId eq r.id}">
+                                                selected="selected"
+                                            </c:if>
+                                            value=${r.id}>${r.value}
+                                        </option>
+                                    </c:forEach>
+                                </select>
+                            </fieldset>
+
+                            <fieldset class="form-group">
+                                <label>Notes:</label>
+                                <input type="text" name="notes" class="form-control"/>
+                            </fieldset>
+
+                            <!--<input class="btn btn-secondary" type="button" value="Cancel" onclick="history.back()">-->
+                            <a href="<%=request.getContextPath()%>/user-management" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-success">Save</button>
+                        </form>
+                    </c:if>
+
                     <c:if test="${user != null}">
                         <form action="update-user" method="post">
-                        </c:if>
-                        <c:if test="${user == null}">
-                            <form action="add-user" method="post">
-                            </c:if>
-
                             <caption>
-                                <h2>
-                                    <c:if test="${user != null}">Edit User</c:if>
-                                    <c:if test="${user == null}">Add New User</c:if>
-                                    </h2>
-                                </caption>
+                                <h2>Edit User</h2>
+                            </caption>
 
-                            <c:if test="${user != null}">
-                                <input type="hidden" name="id" value="<c:out value="${user.userId}"/>"/>
+                            <c:if test="${not empty errorMessages}">
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        <c:forEach items="${errorMessages}" var="error" >
+                                            <li>${error}</li>
+                                            </c:forEach>
+                                    </ul>
+                                </div>
                             </c:if>
 
+                            <input type="hidden" name="id" value="${user.id}"/>
+
                             <fieldset class="form-group">
-                                <label>Username:</label>
-                                <input type="text" name="username" value="<c:out value="${user.username}"/>"
+                                <label>Full Name*:</label>
+                                <input type="text" name="fullname" value="${user.full_name}"
                                        class="form-control" required/>
                             </fieldset>
 
                             <fieldset class="form-group">
-                                <label>Password:</label>
-                                <input type="password" name="password" value="<c:out value="${user.password}"/>"
-                                       class="form-control" required/>
-                            </fieldset>
-
-                            <fieldset class="form-group">
-                                <label>Full Name:</label>
-                                <input type="text" name="fullname" value="<c:out value="${user.fullname}"/>"
-                                       class="form-control" required/>
-                            </fieldset>
-
-                            <fieldset class="form-group">
-                                <label>Email:</label>
-                                <input type="text" name="email" value="<c:out value="${user.email}"/>"
+                                <label>Email*:</label>
+                                <input type="text" name="email" value="${user.email}"
                                        class="form-control" required/>
                             </fieldset>
 
                             <fieldset class="form-group">
                                 <label>Mobile:</label>
-                                <input type="text" name="mobile" value="<c:out value="${user.mobile}"/>"
+                                <input type="text" name="mobile" value="${user.mobile}"
                                        class="form-control"/>
                             </fieldset>
 
-                            <!--                            <fieldset class="form-group">
-                                                            <label>Notes:</label>
-                                                            <input type="text" name="notes" value="<c:out value="${user.notes}"/>"
-                                                                   class="form-control"/>
-                                                        </fieldset>-->
+
+                            <input type="hidden" name="password" value="${user.password}"/>
 
                             <fieldset class="form-group">
-                                <label>User Role</label>
-                                <select name="role" class="form-control" required>
-                                    <option value="" disabled selected hidden>Choose Role</option>
-
-                                    <option 
-                                        <c:if test="${user.role eq 'Dept Manager'}">
-                                            selected="selected"
-                                        </c:if>
-                                        value="Dept Manager">Dept Manager
-                                    </option>
-
-                                    <option 
-                                        <c:if test="${user.role eq 'PMO Manager'}">
-                                            selected="selected"
-                                        </c:if>
-                                        value="PMO Manager">PMO Manager
-                                    </option>
-
-                                    <option 
-                                        <c:if test="${user.role eq 'Project QA'}">
-                                            selected="selected"
-                                        </c:if>
-                                        value="Project QA">Project QA
-                                    </option>
-
-                                    <option 
-                                        <c:if test="${user.role eq 'Project Manager'}">
-                                            selected="selected"
-                                        </c:if>
-                                        value="Project Manager">Project Manager
-                                    </option>
-
-                                    <option 
-                                        <c:if test="${user.role eq 'Team Leader'}">
-                                            selected="selected"
-                                        </c:if>
-                                        value="Team Leader">Team Leader
-                                    </option>
-
-                                    <option 
-                                        <c:if test="${user.role eq 'Member'}">
-                                            selected="selected"
-                                        </c:if>
-                                        value="Member">Member
-                                    </option>
+                                <label>Department:</label>
+                                <select name="dept" class="form-control">
+                                    <option value="" disabled hidden selected>Choose Department</option>
+                                    <c:forEach items="${dept}" var="d">
+                                        <option 
+                                            <c:if test="${user.dept.id eq d.id}">
+                                                selected="selected"
+                                            </c:if>
+                                            value=${d.id}>${d.name}
+                                        </option>
+                                    </c:forEach>
                                 </select>
                             </fieldset>
 
-                            <c:if test="${user != null}">
+                            <fieldset class="form-group">
+                                <label>Role:</label>
+                                <select name="role" class="form-control">
+                                    <option value="" disabled hidden selected>Choose Role</option>
+                                    <c:forEach items="${role}" var="r">
+                                        <option 
+                                            <c:if test="${user.setting.id eq r.id}">
+                                                selected="selected"
+                                            </c:if>
+                                            value=${r.id}>${r.value}
+                                        </option>
+                                    </c:forEach>
+                                </select>
+                            </fieldset>
+
+                            <fieldset class="form-group">
+                                <label>Notes:</label>
+                                <input type="text" name="notes" value="${user.notes}"
+                                       class="form-control"/>
+                            </fieldset>
+
+                            <c:if test="${user.status eq '3'}">
                                 <fieldset class="form-group">
-                                    <label>User Status</label>
-                                    <select name="status" class="form-control">
-                                        <option 
-                                            <c:if test="${user.status eq 'false'}">
-                                                selected="selected"
-                                            </c:if>
-                                            value="false">Deactivate
-                                        </option>
-                                        <option 
-                                            <c:if test="${user.status eq 'true'}">
-                                                selected="selected"
-                                            </c:if>
-                                            value="true">Activate
-                                        </option>
-                                    </select>
+                                    <label>Status*:</label>
+                                    <input type="text" value="Unverified"
+                                           class="form-control" readonly/>
+                                    <input type="text" name="status" value="3"
+                                           class="form-control" hidden/>
                                 </fieldset>
                             </c:if>
 
+                            <c:if test="${user.status ne '3'}">
+                                <fieldset class="form-group">
+                                    <label>Status*:</label>
+                                    <select name="status" class="form-control">
+                                        <option 
+                                            <c:if test="${user.status eq '1'}">
+                                                selected="selected"
+                                            </c:if>
+                                            value="1">Active
+                                        </option>
+                                        <option 
+                                            <c:if test="${user.status eq '0'}">
+                                                selected="selected"
+                                            </c:if>
+                                            value="0">Inactive
+                                        </option>
+                                    </select>
+                                </fieldset>
+                            </c:if>  
+                            <!--                                <input class="btn btn-secondary" type="button" value="Cancel" onclick="history.back()">-->
+                            <a href="<%=request.getContextPath()%>/user-management" class="btn btn-secondary">Cancel</a>
+                            <button type="reset" class="btn btn-primary">Reset</button>
                             <button type="submit" class="btn btn-success">Save</button>
                         </form>
+                    </c:if>
+
                 </div>
             </div>
         </div>

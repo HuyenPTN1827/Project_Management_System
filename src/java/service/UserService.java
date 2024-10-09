@@ -4,9 +4,9 @@
  */
 package service;
 
-import java.sql.SQLException;
-
 import context.UserDAO;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import model.User;
 
@@ -28,42 +28,12 @@ public class UserService extends BaseServive {
         return userDAO.registerUser(user);
     }
 
-//    // Xác thực đăng nhập
-//    public boolean loginValidate(User user) throws ClassNotFoundException {
-//        // Có thể thêm logic kiểm tra trước khi gọi DAO
-//        return userDAO.loginValidate(user);
-//    }
+    // Xác thực đăng nhập
     public User loginValidate(User user) throws ClassNotFoundException {
         return userDAO.loginValidate(user);
     }
 
-    // Lấy tất cả người dùng
-    public List<User> getAllUsers() {
-        return userDAO.selectAllUsers();
-    }
-//
-//    // Lấy thông tin người dùng qua ID
-//    public User getUserById(int id) {
-//        return userDAO.selectUserByID(id);
-//    }
-//
-//    // Admin thêm thông tin người dùng mới
-//    public int insertUser(User user) throws SQLException {
-//        return userDAO.insertUser(user);
-//    }
-//
-//    // Cập nhật thông tin người dùng
-//    public boolean updateUser(User user) throws SQLException {
-//        return userDAO.updateUser(user);
-//    }
-//
-//    // Xóa người dùng
-//    public boolean deleteUser(int id) throws SQLException {
-//        return userDAO.deleteUser(id);
-//    }
-//
     //lấy vai trò người dùng
-
     public String getUserRole(User user) {
         User foundUser = userDAO.selectUserByEmail(user.getEmail());
         if (foundUser != null) {
@@ -113,4 +83,61 @@ public class UserService extends BaseServive {
         return userDAO.updatePassword(userId, newPassword);
     }
 
+    // HuyenPTNHE160769
+    // 26/09/2024
+    // Admin get all users
+    public List<User> getAllUsers(String keyword, Integer deptId, Integer roleId, Integer status) {
+        return userDAO.selectAllUsers(keyword, deptId, roleId, status);
+    }
+
+    // HuyenPTNHE160769
+    // 26/09/2024
+    // Admin get an user information by id
+    public User getUserById(int id) {
+        return userDAO.selectUserByID(id);
+    }
+
+    // HuyenPTNHE160769
+    // 27/09/2024
+    // Admin add new user information
+    public int insertUser(User user, Integer deptId, Integer roleId) throws SQLException {
+        return userDAO.insertUser(user, deptId, roleId);
+    }
+
+    // HuyenPTNHE160769
+    // 27/09/2024
+    // Admin update an user information
+    public boolean updateUser(User user, Integer deptId, Integer roleId) throws SQLException {
+        return userDAO.updateUser(user, deptId, roleId);
+    }
+
+    // HuyenPTNHE160769
+    // 26/09/2024
+    // Admin change status of an user
+    public boolean changeStatusUser(User user) throws SQLException {
+        return userDAO.changeStatusUser(user);
+    }
+
+    // HuyenPTNHE160769
+    // 28/09/2024
+    // Validate user information
+    public List<String> validateUser(User user) {
+        List<String> errors = new ArrayList<>();
+
+        // Validate email format
+        if (!validateEmail(user.getEmail())) {
+            errors.add("Invalid email format.");
+        }
+        // Validate Vietnamese phone number
+        if (!validateMobile(user.getMobile())) {
+            errors.add("Invalid mobile number format. Must start with 03, 05, "
+                    + "07, 08, or 09 and be 10 digits long.");
+        }
+        // Validate password 
+        if (!validatePassword(user.getPassword())) {
+            errors.add("Password must include at least 6 characters, one uppercase letter, "
+                    + "one lowercase letter, one digit, and one special character.");
+        }
+        return errors;
+    }
 }

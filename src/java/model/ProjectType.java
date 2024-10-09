@@ -8,9 +8,8 @@ package model;
  *
  * @author kelma
  */
-public class Domain {
+public class ProjectType {
 
-    private static final long serialVersionUID = 1L;
     private int id;
     private String code;
     private String name;

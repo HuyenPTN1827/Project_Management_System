@@ -20,7 +20,7 @@ import service.UserService;
  *
  * @author kelma
  */
-public class AccessController extends HttpServlet {
+public class AuthenticationController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     private UserService userService;
@@ -46,10 +46,8 @@ public class AccessController extends HttpServlet {
                 login(request, response);
             case "/logout" ->
                 logout(request, response);
-//            default -> {
-//                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/login.jsp");
-//                dispatcher.forward(request, response);
-//            }
+            default -> {
+            }
         }
     }
 
@@ -115,7 +113,7 @@ public class AccessController extends HttpServlet {
                 request.setAttribute("NOTIFICATION", "User Register Successfully!");
             }
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(AccessController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AuthenticationController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/guest/register.jsp");

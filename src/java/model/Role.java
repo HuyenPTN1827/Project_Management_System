@@ -10,7 +10,6 @@ package model;
  */
 public class Role {
 
-    private static final long serialVersionUID = 1L;
     private int id;
     private String role_name;
     private String description;
