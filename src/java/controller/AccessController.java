@@ -127,6 +127,40 @@ public class AccessController extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
+//    private void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
+//        String email = request.getParameter("email");
+//        String password = request.getParameter("password");
+//
+//        User user = new User();
+//        user.setEmail(email);
+//        user.setPassword(password);
+//
+//        try {
+//            if (userService.loginValidate(user)) {
+//                String role = userService.getUserRole(user);
+//
+//                HttpSession session = request.getSession();
+//                session.setAttribute("user", user);
+//                session.setAttribute("userRole", role); // Lưu vai trò vào sessio
+//                session.setMaxInactiveInterval(1 * 60); // Thiết lập thời gian hết hạn là 1 phút
+//
+//                // Chuyển hướng người dùng tùy theo vai trò
+//                if ("admin".equalsIgnoreCase(role)) {
+//                    response.sendRedirect(request.getContextPath() + "/user-management"); // Đường dẫn đến user-management
+//                } else if ("member".equalsIgnoreCase(role)) {
+//                    response.sendRedirect(request.getContextPath() + "/todo-list"); // Đường dẫn đến todo-list
+//                } else {
+//                    response.sendRedirect(request.getContextPath() + "/member/unauthorized.jsp"); // Trang lỗi truy cập
+//                }
+//            } else {
+//                HttpSession session = request.getSession();
+//                session.setAttribute("NOTIFICATION", "Login Failed!");
+//                response.sendRedirect(request.getContextPath() + "/login"); // Đường dẫn đến trang đăng nhập
+//            }
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//    }
     private void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
@@ -136,26 +170,26 @@ public class AccessController extends HttpServlet {
         user.setPassword(password);
 
         try {
-            if (userService.loginValidate(user)) {
-                String role = userService.getUserRole(user);
+            User foundUser = userService.loginValidate(user);
+            if (foundUser != null) {
+                String role = foundUser.getRole() != null ? foundUser.getRole().getRole_name() : null;
 
                 HttpSession session = request.getSession();
-                session.setAttribute("user", user);
-                session.setAttribute("userRole", role); // Lưu vai trò vào sessio
-                session.setMaxInactiveInterval(1 * 60); // Thiết lập thời gian hết hạn là 1 phút
+                session.setAttribute("user", foundUser);
+                session.setAttribute("userRole", role);
+                session.setMaxInactiveInterval(1 * 60);
 
-                // Chuyển hướng người dùng tùy theo vai trò
                 if ("admin".equalsIgnoreCase(role)) {
-                    response.sendRedirect(request.getContextPath() + "/user-management"); // Đường dẫn đến user-management
+                    response.sendRedirect(request.getContextPath() + "/user-management");
                 } else if ("member".equalsIgnoreCase(role)) {
-                    response.sendRedirect(request.getContextPath() + "/todo-list"); // Đường dẫn đến todo-list
+                    response.sendRedirect(request.getContextPath() + "/member-dashboard");
                 } else {
-                    response.sendRedirect(request.getContextPath() + "/member/unauthorized.jsp"); // Trang lỗi truy cập
+                    response.sendRedirect(request.getContextPath() + "/member/unauthorized.jsp");
                 }
             } else {
                 HttpSession session = request.getSession();
                 session.setAttribute("NOTIFICATION", "Login Failed!");
-                response.sendRedirect(request.getContextPath() + "/login"); // Đường dẫn đến trang đăng nhập
+                response.sendRedirect(request.getContextPath() + "/login");
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

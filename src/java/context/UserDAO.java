@@ -19,8 +19,8 @@ import model.Role;
  * @author kelma
  */
 public class UserDAO {
-//    Queries của Member
 
+//    Queries của Member
     private static final String REGISTER_USER_SQL = "INSERT INTO pms.user (full_name, "
             + "email, mobile, password) VALUES (?, ?, ?, ?);";
     private static final String LOGIN_USER_SQL = "SELECT * FROM pms.user "
@@ -59,19 +59,36 @@ public class UserDAO {
         return result;
     }
 
-    public boolean loginValidate(User user) throws ClassNotFoundException {
-        boolean status = false;
-
+//    public boolean loginValidate(User user) throws ClassNotFoundException {
+//        boolean status = false;
+//
+//        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(LOGIN_USER_SQL)) {
+//            stm.setString(1, user.getEmail());
+//            stm.setString(2, user.getPassword());
+//
+//            ResultSet rs = stm.executeQuery();
+//            status = rs.next();
+//        } catch (SQLException e) {
+//            BaseDAO.printSQLException(e);
+//        }
+//        return status;
+//    }
+    public User loginValidate(User user) throws ClassNotFoundException {
+        User foundUser = null;
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(LOGIN_USER_SQL)) {
             stm.setString(1, user.getEmail());
             stm.setString(2, user.getPassword());
 
             ResultSet rs = stm.executeQuery();
-            status = rs.next();
+            if (rs.next()) {
+                // Giả sử bạn đã có một phương thức để lấy thông tin người dùng từ ID
+                int userId = rs.getInt("id"); // Lấy ID người dùng
+                foundUser = selectUserByID(userId); // Lấy thông tin người dùng
+            }
         } catch (SQLException e) {
             BaseDAO.printSQLException(e);
         }
-        return status;
+        return foundUser; // Trả về người dùng đã tìm thấy hoặc null
     }
 
 //    Admin
@@ -219,18 +236,18 @@ public class UserDAO {
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 user = new User();
-                user.setId(rs.getInt("userId"));
-                user.setFull_name(rs.getString("fullname"));
+                user.setId(rs.getInt("id"));
+                user.setFull_name(rs.getString("full_name"));
                 user.setEmail(rs.getString("email"));
                 user.setMobile(rs.getString("mobile"));
                 user.setPassword(rs.getString("password"));
                 user.setStatus(rs.getInt("status"));
-                
+
                 Department dept = new Department();
                 dept.setId(rs.getInt("id"));
                 dept.setCode(rs.getString("code"));
                 user.getDepts().add(dept);
-                
+
                 // Lấy vai trò
                 Role role = new Role();
                 role.setId(rs.getInt("id"));
@@ -242,4 +259,98 @@ public class UserDAO {
         }
         return user;
     }
+
+    public User selectUserByID(int id) {
+        User user = null;
+        String sql = "SELECT * FROM user WHERE id = ?"; // Thay đổi tên bảng nếu cần
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+
+            if (rs.next()) {
+                user = new User();
+                user.setId(rs.getInt("id"));
+                user.setFull_name(rs.getString("full_name"));
+                user.setEmail(rs.getString("email"));
+                user.setMobile(rs.getString("mobile"));
+                user.setPassword(rs.getString("password"));
+                user.setNotes(rs.getString("notes"));
+                user.setStatus(rs.getInt("status"));
+
+                // Lấy vai trò của người dùng (nếu có)
+                int roleId = rs.getInt("role_id"); // Thay đổi tên trường nếu cần
+                Role role = selectRoleByID(roleId); // Phương thức để lấy thông tin vai trò
+                user.setRole(role);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+
+        return user;
+    }
+
+// Thêm phương thức này để lấy vai trò nếu cần
+    private Role selectRoleByID(int roleId) {
+
+        Role role = null;
+        String sql = "SELECT * FROM role WHERE id = ?";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
+            stm.setInt(1, roleId);
+            ResultSet rs = stm.executeQuery();
+
+            if (rs.next()) {
+                role = new Role();
+                role.setId(rs.getInt("id"));
+                role.setRole_name(rs.getString("role_name"));
+                role.setDescription(rs.getString("description"));
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+
+        return role;
+    }
+
+//BachHD
+//28/9
+//updateMember
+// Phương thức cập nhật thông tin người dùng vào cơ sở dữ liệu
+    public boolean updateMember(User user) {
+        String query = "UPDATE user SET full_name = ?, email = ?, mobile = ? WHERE id = ?";
+
+        try (Connection conn = BaseDAO.getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
+
+            ps.setString(1, user.getFull_name());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getMobile());
+            ps.setInt(4, user.getId());
+            System.out.println("User ID: " + user.getId());
+
+            int rowsUpdated = ps.executeUpdate();
+            return rowsUpdated > 0;  // Nếu có ít nhất 1 dòng bị ảnh hưởng thì trả về true
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;  // Trả về false nếu có lỗi
+    }
+
+//BachHD
+//28/9
+//updatepassword
+    public boolean updatePassword(int userId, String newPassword) {
+        String sql = "UPDATE pms.user SET password = ? WHERE id = ?"; // Đã sửa tên bảng
+        try (Connection conn = BaseDAO.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, newPassword);
+            stmt.setInt(2, userId);
+            return stmt.executeUpdate() > 0; // Trả về true nếu có bản ghi được cập nhật
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+            return false;
+        }
+    }
+
 }

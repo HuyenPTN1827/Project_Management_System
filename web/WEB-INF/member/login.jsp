@@ -42,6 +42,9 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">Submit</button>
+<!--                5/10
+                BachHD-->
+                <button type="button" class="btn btn-link" onclick="location.href='<%=request.getContextPath()%>/forgotpassword'">Quên mật khẩu?</button>
             </form>
         </div>
 

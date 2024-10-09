@@ -4,6 +4,8 @@
  */
 package service;
 
+import java.sql.SQLException;
+
 import context.UserDAO;
 import java.util.List;
 import model.User;
@@ -12,7 +14,8 @@ import model.User;
  *
  * @author kelma
  */
-public class UserService extends BaseServive{
+public class UserService extends BaseServive {
+
     private UserDAO userDAO;
 
     public UserService() {
@@ -25,9 +28,12 @@ public class UserService extends BaseServive{
         return userDAO.registerUser(user);
     }
 
-    // Xác thực đăng nhập
-    public boolean loginValidate(User user) throws ClassNotFoundException {
-        // Có thể thêm logic kiểm tra trước khi gọi DAO
+//    // Xác thực đăng nhập
+//    public boolean loginValidate(User user) throws ClassNotFoundException {
+//        // Có thể thêm logic kiểm tra trước khi gọi DAO
+//        return userDAO.loginValidate(user);
+//    }
+    public User loginValidate(User user) throws ClassNotFoundException {
         return userDAO.loginValidate(user);
     }
 
@@ -57,6 +63,7 @@ public class UserService extends BaseServive{
 //    }
 //
     //lấy vai trò người dùng
+
     public String getUserRole(User user) {
         User foundUser = userDAO.selectUserByEmail(user.getEmail());
         if (foundUser != null) {
@@ -64,4 +71,46 @@ public class UserService extends BaseServive{
         }
         return null; // Trả về null nếu không tìm thấy user
     }
+
+    public User selectUserByEmail(String email) {
+        return userDAO.selectUserByEmail(email);
+    }
+
+    //BachHD
+    //28/9
+    //updateMember
+    public boolean updateMember(User user) {
+        return userDAO.updateMember(user);
+    }
+
+    //    BachHD
+    //    28/09/2024        
+    //     xử lý yêu cầu đổi mật khẩu của người dùng
+    public boolean changePassword(User user, String oldPassword, String newPassword) {
+        // Kiểm tra nếu user là null
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
+
+        String currentPassword = user.getPassword();
+        System.out.println("Current Password: " + currentPassword);
+
+        // Kiểm tra nếu currentPassword là null
+        if (currentPassword == null) {
+            throw new IllegalStateException("Current password is not set for user");
+        }
+
+        // So sánh mật khẩu
+        if (!currentPassword.equals(oldPassword)) {
+            return false; // Mật khẩu cũ không khớp
+        }
+
+        // Cập nhật mật khẩu mới vào cơ sở dữ liệu
+        return userDAO.updatePassword(user.getId(), newPassword); // Gọi phương thức updatePassword
+    }
+
+    public boolean updatePassword(int userId, String newPassword) {
+        return userDAO.updatePassword(userId, newPassword);
+    }
+
 }
