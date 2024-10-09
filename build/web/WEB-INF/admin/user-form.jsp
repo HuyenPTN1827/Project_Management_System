@@ -89,7 +89,7 @@
                                             <c:if test="${roleId eq r.id}">
                                                 selected="selected"
                                             </c:if>
-                                            value=${r.id}>${r.value}
+                                            value=${r.id}>${r.name}
                                         </option>
                                     </c:forEach>
                                 </select>
@@ -169,7 +169,7 @@
                                             <c:if test="${user.setting.id eq r.id}">
                                                 selected="selected"
                                             </c:if>
-                                            value=${r.id}>${r.value}
+                                            value=${r.id}>${r.name}
                                         </option>
                                     </c:forEach>
                                 </select>

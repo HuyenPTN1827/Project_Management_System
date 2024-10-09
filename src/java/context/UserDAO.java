@@ -217,7 +217,7 @@ public class UserDAO {
         List<User> user = new ArrayList<>();
 
         String sql = """
-                     SELECT u.id, u.full_name, u.email, u.mobile, d.id, d.code, s.id, s.value, u.status
+                     SELECT u.id, u.full_name, u.email, u.mobile, d.id, d.code, s.id, s.name, u.status
                      FROM pms.user u
                      LEFT JOIN pms.dept_user du ON u.id = du.user_id AND du.end_date IS NULL
                      LEFT JOIN pms.department d ON du.dept_id = d.id
@@ -275,7 +275,7 @@ public class UserDAO {
 
                 Setting r = new Setting();
                 r.setId(rs.getInt("s.id"));
-                r.setValue(rs.getString("s.value"));
+                r.setName(rs.getString("s.name"));
                 u.getSettings().add(r);
 
                 user.add(u);
@@ -293,7 +293,7 @@ public class UserDAO {
         User u = null;
 
         String sql = """
-                     SELECT u.id, u.full_name, u.email, u.mobile, u.password, d.id, d.name, s.id, s.value, u.notes, u.status
+                     SELECT u.id, u.full_name, u.email, u.mobile, u.password, d.id, d.name, s.id, s.name, u.notes, u.status
                      FROM pms.user u
                      LEFT JOIN pms.dept_user du ON u.id = du.user_id AND du.end_date IS NULL
                      LEFT JOIN pms.department d ON du.dept_id = d.id
@@ -320,7 +320,7 @@ public class UserDAO {
 
                 Setting s = new Setting();
                 s.setId(rs.getInt("s.id"));
-                s.setValue(rs.getString("s.value"));
+                s.setName(rs.getString("s.name"));
                 u.setSetting(s);
             }
         } catch (SQLException e) {

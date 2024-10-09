@@ -69,7 +69,7 @@ CREATE TABLE `department` (
   PRIMARY KEY (`id`),
   KEY `department_ibfk_1_idx` (`parent`),
   CONSTRAINT `department_ibfk_1` FOREIGN KEY (`parent`) REFERENCES `department` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -78,7 +78,7 @@ CREATE TABLE `department` (
 
 LOCK TABLES `department` WRITE;
 /*!40000 ALTER TABLE `department` DISABLE KEYS */;
-INSERT INTO `department` VALUES (1,'EM','Executive Management',NULL,NULL,1),(2,'HR','Human Resources',NULL,1,1),(3,'F&A','Finance and Accounting',NULL,1,1),(4,'S&M','Sales and Marketing',NULL,1,1),(5,'IT','Information Technology',NULL,1,1),(6,'R&D','Research and Development',NULL,1,1),(7,'OP','Operations',NULL,1,1),(8,'LD','Legal',NULL,1,1),(9,'Admin','Administrative ',NULL,1,1),(10,'CS','Customer Service',NULL,4,1);
+INSERT INTO `department` VALUES (1,'EM','Executive Management',NULL,NULL,1),(2,'HR','Human Resources',NULL,1,1),(3,'F&A','Finance and Accounting',NULL,1,1),(4,'S&M','Sales and Marketing',NULL,1,1),(5,'IT','Information Technology',NULL,1,1),(6,'R&D','Research and Development',NULL,1,1),(7,'OP','Operations',NULL,1,1),(8,'Legal','Legal',NULL,1,1),(9,'Admin','Administrative ',NULL,1,1),(10,'CS','Customer Service',NULL,4,1),(11,'Test1','Test 1','AAA',2,0);
 /*!40000 ALTER TABLE `department` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -93,7 +93,7 @@ CREATE TABLE `dept_user` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int DEFAULT NULL,
   `dept_id` int DEFAULT NULL,
-  `start_date` date NOT NULL,
+  `start_date` date DEFAULT NULL,
   `end_date` date DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
   `role_id` int DEFAULT NULL,
@@ -104,7 +104,7 @@ CREATE TABLE `dept_user` (
   CONSTRAINT `dept_user_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `dept_user_ibfk_2` FOREIGN KEY (`dept_id`) REFERENCES `department` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `dept_user_ibfk_3` FOREIGN KEY (`role_id`) REFERENCES `setting` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -113,7 +113,7 @@ CREATE TABLE `dept_user` (
 
 LOCK TABLES `dept_user` WRITE;
 /*!40000 ALTER TABLE `dept_user` DISABLE KEYS */;
-INSERT INTO `dept_user` VALUES (1,1,5,'2024-10-04',NULL,1,1),(2,2,2,'2024-10-04',NULL,0,7);
+INSERT INTO `dept_user` VALUES (1,1,5,'2024-10-04',NULL,1,NULL),(2,2,2,'2024-10-04','2024-10-06',0,NULL),(3,2,2,'2024-10-10',NULL,1,NULL);
 /*!40000 ALTER TABLE `dept_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -340,7 +340,7 @@ CREATE TABLE `project_type` (
   `details` text,
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -349,7 +349,7 @@ CREATE TABLE `project_type` (
 
 LOCK TABLES `project_type` WRITE;
 /*!40000 ALTER TABLE `project_type` DISABLE KEYS */;
-INSERT INTO `project_type` VALUES (1,'WF','Waterfall',NULL,1),(2,'AG','Agile ',NULL,1),(3,'SC','Scrum',NULL,1),(4,'VM','V-Model',NULL,1),(5,'SM','Spiral',NULL,0),(6,'IM','Incremental',NULL,1),(7,'DO','DevOps',NULL,0);
+INSERT INTO `project_type` VALUES (1,'WF','Waterfall',NULL,1),(2,'AG','Agile ',NULL,1),(3,'SC','Scrum',NULL,1),(4,'VM','V-Model',NULL,1),(5,'SM','Spiral',NULL,0),(6,'IM','Incremental',NULL,1),(7,'DO','DevOps',NULL,0),(10,'Test1','Test 1','AAA',0);
 /*!40000 ALTER TABLE `project_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -364,12 +364,12 @@ CREATE TABLE `setting` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   `type` varchar(50) NOT NULL,
-  `value` varchar(255) NOT NULL,
+  `value` int NOT NULL,
   `priority` int NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1',
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -378,7 +378,7 @@ CREATE TABLE `setting` (
 
 LOCK TABLES `setting` WRITE;
 /*!40000 ALTER TABLE `setting` DISABLE KEYS */;
-INSERT INTO `setting` VALUES (1,'Admin','User Role','Admin',1,1,NULL),(2,'PMO Manager','User Role','PMO Manager',2,1,NULL),(3,'Dept Manager','User Role','Dept Manager',3,1,NULL),(4,'Project Manager','User Role','Project Manager',4,1,NULL),(5,'Project QA','User Role','Project QA',5,1,NULL),(6,'Team Leader','User Role','Team Leader',6,1,NULL),(7,'Member','User Role','Member',7,1,NULL);
+INSERT INTO `setting` VALUES (1,'Admin','User Role',1,1,1,NULL),(2,'PMO Manager','User Role',2,2,1,NULL),(3,'Dept Manager','User Role',3,3,1,NULL),(4,'Project Manager','User Role',4,4,1,NULL),(5,'Project QA','User Role',5,5,1,NULL),(6,'Team Leader','User Role',6,6,1,NULL),(7,'Member','User Role',7,7,1,NULL),(14,'Test 1','Defect',1,3,0,'AAAA');
 /*!40000 ALTER TABLE `setting` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -497,7 +497,7 @@ CREATE TABLE `user` (
   UNIQUE KEY `email` (`email`),
   KEY `user_ibfk_1` (`role_id`),
   CONSTRAINT `user_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `setting` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -506,7 +506,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'Admin','admin@gmail.com','0904235978','123',NULL,1,1,NULL),(2,'Phạm Ngọc Huyền','huyenptnhe160769@gmail.com','0355235054','123',NULL,3,7,NULL);
+INSERT INTO `user` VALUES (1,'Admin','admin@gmail.com','0904235978','123',NULL,1,1,NULL),(2,'Phạm Ngọc Huyền','huyenptnhe160769@gmail.com','0355235054','123','',1,7,NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -592,4 +592,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-04  2:03:27
+-- Dump completed on 2024-10-10  1:36:36
