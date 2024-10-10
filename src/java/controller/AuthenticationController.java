@@ -160,39 +160,39 @@ public class AuthenticationController extends HttpServlet {
 //        }
 //    }
     private void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+    String email = request.getParameter("email");
+    String password = request.getParameter("password");
 
-        User user = new User();
-        user.setEmail(email);
-        user.setPassword(password);
+    User user = new User();
+    user.setEmail(email);
+    user.setPassword(password);
 
-        try {
-            User foundUser = userService.loginValidate(user);
-            if (foundUser != null) {
-                String role = foundUser.getRole() != null ? foundUser.getRole().getRole_name() : null;
+    try {
+        User foundUser = userService.loginValidate(user);
+        if (foundUser != null) {
+            int roleId = foundUser.getRole_id(); // Lấy role_id
+            HttpSession session = request.getSession();
+            session.setAttribute("user", foundUser);
+            session.setMaxInactiveInterval(1 * 60);
 
-                HttpSession session = request.getSession();
-                session.setAttribute("user", foundUser);
-                session.setAttribute("userRole", role);
-                session.setMaxInactiveInterval(1 * 60);
-
-                if ("admin".equalsIgnoreCase(role)) {
-                    response.sendRedirect(request.getContextPath() + "/user-management");
-                } else if ("member".equalsIgnoreCase(role)) {
-                    response.sendRedirect(request.getContextPath() + "/member-dashboard");
-                } else {
-                    response.sendRedirect(request.getContextPath() + "/member/unauthorized.jsp");
-                }
+            // Phân quyền dựa vào role_id
+            if (roleId == 1) { // Giả sử role_id = 1 là admin
+                response.sendRedirect(request.getContextPath() + "/user-management");
+            } else if (roleId == 2) { // Giả sử role_id = 2 là member
+                response.sendRedirect(request.getContextPath() + "/member-dashboard");
             } else {
-                HttpSession session = request.getSession();
-                session.setAttribute("NOTIFICATION", "Login Failed!");
-                response.sendRedirect(request.getContextPath() + "/login");
+                response.sendRedirect(request.getContextPath() + "/member/unauthorized.jsp");
             }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        } else {
+            HttpSession session = request.getSession();
+            session.setAttribute("NOTIFICATION", "Login Failed!");
+            response.sendRedirect(request.getContextPath() + "/login");
         }
+    } catch (ClassNotFoundException e) {
+        e.printStackTrace();
     }
+}
+
 
     private void logout(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         // Lấy session hiện tại

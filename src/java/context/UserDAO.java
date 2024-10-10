@@ -60,61 +60,63 @@ public class UserDAO {
 //        return status;
 //    }
     public User loginValidate(User user) throws ClassNotFoundException {
-        User foundUser = null;
-        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(LOGIN_USER_SQL)) {
-            stm.setString(1, user.getEmail());
-            stm.setString(2, user.getPassword());
+    User foundUser = null;
+    String query = """
+                   SELECT id, full_name, email, mobile, password, role_id
+                   FROM pms.user
+                   WHERE email = ? AND password = ?;
+                   """;
 
-            ResultSet rs = stm.executeQuery();
-            if (rs.next()) {
-                // Giả sử bạn đã có một phương thức để lấy thông tin người dùng từ ID
-                int userId = rs.getInt("id"); // Lấy ID người dùng
-                foundUser = selectUserByID(userId); // Lấy thông tin người dùng
-            }
-        } catch (SQLException e) {
-            BaseDAO.printSQLException(e);
+    try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(query)) {
+        stm.setString(1, user.getEmail());
+        stm.setString(2, user.getPassword());
+
+        ResultSet rs = stm.executeQuery();
+        if (rs.next()) {
+            foundUser = new User();
+            foundUser.setId(rs.getInt("id"));
+            foundUser.setFull_name(rs.getString("full_name"));
+            foundUser.setEmail(rs.getString("email"));
+            foundUser.setMobile(rs.getString("mobile"));
+            foundUser.setPassword(rs.getString("password"));
+            foundUser.setRole_id(rs.getInt("role_id")); // Set role_id vào user
         }
-        return foundUser; // Trả về người dùng đã tìm thấy hoặc null
+    } catch (SQLException e) {
+        BaseDAO.printSQLException(e);
     }
+    return foundUser; // Trả về người dùng đã tìm thấy hoặc null
+}
 
-    public User selectUserByEmail(String email) {
-        User user = null;
-        String query = """
-                       SELECT u.id, u.full_name, u.email, u.mobile, u.password, u.notes, 
-                       u.status, u.department_id, d.code, u.role_id, r.role_name, u.status
-                       FROM pms.user u
-                       INNER JOIN pms.department d ON u.department_id = d.id
-                       INNER JOIN pms.role r ON u.role_id = r.id
-                       WHERE u.email = ?;""";
-        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(query)) {
-            stm.setString(1, email);
 
-            ResultSet rs = stm.executeQuery();
-            if (rs.next()) {
-                user = new User();
-                user.setId(rs.getInt("id"));
-                user.setFull_name(rs.getString("full_name"));
-                user.setEmail(rs.getString("email"));
-                user.setMobile(rs.getString("mobile"));
-                user.setPassword(rs.getString("password"));
-                user.setStatus(rs.getInt("status"));
+   public User selectUserByEmail(String email) {
+    User user = null;
+    String query = """
+                   SELECT u.id, u.full_name, u.email, u.mobile, u.password, u.notes, 
+                   u.status, u.role_id
+                   FROM pms.user u
+                   WHERE u.email = ?;""";
+    try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(query)) {
+        stm.setString(1, email);
 
-                Department dept = new Department();
-                dept.setId(rs.getInt("id"));
-                dept.setCode(rs.getString("code"));
-                user.getDepts().add(dept);
+        ResultSet rs = stm.executeQuery();
+        if (rs.next()) {
+            user = new User();
+            user.setId(rs.getInt("id"));
+            user.setFull_name(rs.getString("full_name"));
+            user.setEmail(rs.getString("email"));
+            user.setMobile(rs.getString("mobile"));
+            user.setPassword(rs.getString("password"));
+            user.setStatus(rs.getInt("status"));
 
-                // Lấy vai trò
-                Role role = new Role();
-                role.setId(rs.getInt("id"));
-                role.setRole_name(rs.getString("role_name"));
-                user.getRoles().add(role);
-            }
-        } catch (SQLException e) {
-            BaseDAO.printSQLException(e);
+            
+//            user.setRole(rs.getInt("role_id")); 
         }
-        return user;
+    } catch (SQLException e) {
+        BaseDAO.printSQLException(e);
     }
+    return user;
+}
+
 
 //    public User selectUserByID(int id) {
 //        User user = null;
@@ -146,27 +148,27 @@ public class UserDAO {
 //        return user;
 //    }
 // Thêm phương thức này để lấy vai trò nếu cần
-    private Role selectRoleByID(int roleId) {
-
-        Role role = null;
-        String sql = "SELECT * FROM role WHERE id = ?";
-
-        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
-            stm.setInt(1, roleId);
-            ResultSet rs = stm.executeQuery();
-
-            if (rs.next()) {
-                role = new Role();
-                role.setId(rs.getInt("id"));
-                role.setRole_name(rs.getString("role_name"));
-                role.setDescription(rs.getString("description"));
-            }
-        } catch (SQLException e) {
-            BaseDAO.printSQLException(e);
-        }
-
-        return role;
-    }
+//    private Role selectRoleByID(int roleId) {
+//
+//        Role role = null;
+//        String sql = "SELECT * FROM role WHERE id = ?";
+//
+//        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
+//            stm.setInt(1, roleId);
+//            ResultSet rs = stm.executeQuery();
+//
+//            if (rs.next()) {
+//                role = new Role();
+//                role.setId(rs.getInt("id"));
+//                role.setRole_name(rs.getString("role_name"));
+//                role.setDescription(rs.getString("description"));
+//            }
+//        } catch (SQLException e) {
+//            BaseDAO.printSQLException(e);
+//        }
+//
+//        return role;
+//    }
 
 //BachHD
 //28/9
