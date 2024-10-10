@@ -21,7 +21,7 @@ public class SettingDAO {
     // HuyenPTNHE160769
     // 29/09/2024
     // Get roles list
-    public List<Setting> getRoleList() {
+    public List<Setting> getUserRolesList() {
         List<Setting> setting = new ArrayList<>();
 
         String sql = "SELECT * FROM pms.setting WHERE type = 'User Role' AND status = 1 ORDER BY priority DESC;";

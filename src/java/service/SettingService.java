@@ -25,7 +25,7 @@ public class SettingService {
     // 29/09/2024
     // Get roles list
     public List<Setting> getRoleList() {
-        return settingDAO.getRoleList();
+        return settingDAO.getUserRolesList();
     }
 
     // HuyenPTNHE160769
