@@ -135,21 +135,21 @@
                                         <h6 class="card-subtitle text-muted">Update your profile here.</h6>
                                     </div>
                                     <div class="card-body">
-                                        <form>
-                                            <div class="mb-3">
+                                        <form class="row">
+                                            <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="inputName">Full Name</label>
                                                 <input type="text" class="form-control" id="inputName" placeholder="Enter your full name">
                                             </div>
-                                            <div class="mb-3">
+                                            <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="inputEmail4">Email</label>
                                                 <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
                                             </div>
 
-                                            <div class="mb-3">
+                                            <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="inputAddress">Phone</label>
                                                 <input type="text" class="form-control" id="phone" placeholder="Enter your phone">
                                             </div>
-                                            <div class="mb-3">
+                                            <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="inputAddress2">Address</label>
                                                 <input type="text" class="form-control" id="inputAddress" placeholder="Apartment, studio, or floor">
                                             </div>
@@ -163,7 +163,7 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <button type="submit" class="btn btn-lg btn-primary">Submit</button>
+                                            <button style="width: 150px;" type="submit" class="btn btn-lg btn-primary">Submit</button>
                                         </form>
                                     </div>
                                 </div>

@@ -82,24 +82,23 @@
 
                                             </div>
                                             <div class="text-center mt-3">
-                                                <a href="index.html" class="btn btn-lg btn-secondary" style="border-radius: 50px; width: 95%">Login in</a>
+                                                <a href="index.html" class="btn btn-lg btn-secondary" style="border-radius: 50px; width: 95%">Sign in</a>
                                             </div>
-                                            <div style="display: flex; justify-content: end;">
+                                            
+                                            <div  style="display: flex; justify-content: space-between;margin: 10px 5px;">
                                                 <label class="form-check">
                                                     <input class="form-check-input" type="checkbox" value="remember-me" name="remember-me" checked>
                                                     <span class="form-check-label">
                                                         Remember me next time
                                                     </span>
                                                 </label>
-                                            </div>
-                                            <div class="text-end mt-3">
                                                 <small>
                                                     <a href="pages-reset-password.html">Forgot password?</a>
                                                 </small>
                                             </div>
                                             <div class="text-center mt-3">
-                                                <a href="index.html" class="btn btn-lg btn-outline-secondary" style="margin-bottom: 10px; border-radius: 50px">Create an account</a><br>
-                                                <a href="index.html" class="btn btn-lg btn-outline-info" style="border-radius: 50px"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png" width="23px" alt="alt"/> Continues with Google</a> 
+                                                <a href="index.html" class="btn btn-lg btn-outline-secondary" style="margin-bottom: 10px; border-radius: 50px; border-radius: 50px; width: 95%">Sign up</a><br>
+                                                <a href="index.html" class="btn btn-lg btn-outline-info" style="border-radius: 50px; border-radius: 50px; width: 95%"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png" width="23px" alt="alt"/> Continues with Google</a> 
 
                                             </div>
 
