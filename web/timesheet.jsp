@@ -1,8 +1,4 @@
-<%-- 
-    Document   : projectissue
-    Created on : 1/10/2024, 5:56:53 pm
-    Author     : thiendb
---%>
+
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

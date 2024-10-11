@@ -1,8 +1,4 @@
-<%-- 
-    Document   : profile
-    Created on : 1/10/2024, 5:37:13 pm
-    Author     : thiendb
---%>
+
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
