@@ -1,8 +1,3 @@
-<%-- 
-    Document   : profile
-    Created on : 1/10/2024, 5:37:13 pm
-    Author     : thiendb
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -48,13 +43,7 @@
 
             gtag('config', 'UA-120946860-10', {'anonymize_ip': true});
         </script></head>
-    <!--
-      HOW TO USE: 
-      data-theme: default (default), dark, light, colored
-      data-layout: fluid (default), boxed
-      data-sidebar-position: left (default), right
-      data-sidebar-layout: default (default), compact
-    -->
+   
 
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
         <div class="wrapper">
