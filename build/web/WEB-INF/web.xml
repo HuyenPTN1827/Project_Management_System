@@ -14,7 +14,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>AuthenticationController</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/auth</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>UserController</servlet-name>
