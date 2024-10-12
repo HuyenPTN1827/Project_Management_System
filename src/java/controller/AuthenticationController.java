@@ -178,7 +178,7 @@ public class AuthenticationController extends HttpServlet {
             // Phân quyền dựa vào role_id
             if (roleId == 1) { // Giả sử role_id = 1 là admin
                 response.sendRedirect(request.getContextPath() + "/user-management");
-            } else if (roleId == 2) { // Giả sử role_id = 2 là member
+            } else if (roleId == 7) { // Giả sử role_id = 7 là member
                 response.sendRedirect(request.getContextPath() + "/member-dashboard");
             } else {
                 response.sendRedirect(request.getContextPath() + "/member/unauthorized.jsp");
