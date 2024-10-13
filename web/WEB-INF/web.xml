@@ -69,12 +69,72 @@
         <url-pattern>/setting-management</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>SettingController</servlet-name>
+        <url-pattern>/add-setting</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SettingController</servlet-name>
+        <url-pattern>/insert-setting</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SettingController</servlet-name>
+        <url-pattern>/edit-setting</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SettingController</servlet-name>
+        <url-pattern>/update-setting</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SettingController</servlet-name>
+        <url-pattern>/change-status-setting</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>DepartmentController</servlet-name>
         <url-pattern>/department-management</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>DepartmentController</servlet-name>
+        <url-pattern>/add-department</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DepartmentController</servlet-name>
+        <url-pattern>/insert-department</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DepartmentController</servlet-name>
+        <url-pattern>/edit-department</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DepartmentController</servlet-name>
+        <url-pattern>/update-department</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DepartmentController</servlet-name>
+        <url-pattern>/change-status-department</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>ProjectTypeController</servlet-name>
         <url-pattern>/project-type-management</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <url-pattern>/add-project-type</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <url-pattern>/insert-project-type</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <url-pattern>/edit-project-type</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <url-pattern>/update-project-type</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <url-pattern>/change-status-project-type</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>login-form</welcome-file>
