@@ -166,6 +166,9 @@ public class SettingController extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
+//    HuyenPTNHE160769 
+//    14/10/2024 
+//    Update setting
     private void updateSetting(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         String name = request.getParameter("name");
