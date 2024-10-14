@@ -122,7 +122,7 @@
                                                 </select>
 
                                                 <input type="search" name="keyword" class="form-control" 
-                                                       placeholder="Enter Setting Name" id="keyword" value="${keyword}">
+                                                       placeholder="Enter Setting Name or Value" id="keyword" value="${keyword}">
 
                                                 <button type="submit" class="btn btn-primary">Search</button>
 

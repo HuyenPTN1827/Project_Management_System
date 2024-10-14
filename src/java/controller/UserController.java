@@ -122,13 +122,13 @@ public class UserController extends HttpServlet {
         // Send search results and list depts, roles to JSP page
         List<User> listUser = userService.getAllUsers(keyword, deptId, roleId, status);
         List<Department> dept = deptService.getDepartmentList();
-        List<Setting> role = settingService.getRoleList();
+        List<Setting> role = settingService.getUserRoleList();
 
         // Path to user list page
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/user-list.jsp");
-        if (listUser.isEmpty()) {
-            request.setAttribute("message", "No results found!");
-        }
+//        if (listUser.isEmpty()) {
+//            request.setAttribute("message", "No results found!");
+//        }
         request.setAttribute("listUser", listUser);
         request.setAttribute("dept", dept);
         request.setAttribute("role", role);
@@ -147,10 +147,10 @@ public class UserController extends HttpServlet {
         // Call service to get all department for Department dropdown list
         List<Department> dept = deptService.getDepartmentList();
         // Call service to get all roles for Role dropdown list
-        List<Setting> role = settingService.getRoleList();
+        List<Setting> role = settingService.getUserRoleList();
 
         // Path to user information input form page
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/user-form.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/user-detail.jsp");
         request.setAttribute("dept", dept);
         request.setAttribute("role", role);
         dispatcher.forward(request, response);
@@ -223,10 +223,10 @@ public class UserController extends HttpServlet {
         // Call service to get all department for Department dropdown list
         List<Department> dept = deptService.getDepartmentList();
         // Call service to get all roles for Role dropdown list
-        List<Setting> role = settingService.getRoleList();
+        List<Setting> role = settingService.getUserRoleList();
 
         // Path to user information input form page
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/user-form.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/user-detail.jsp");
         request.setAttribute("user", user);
         request.setAttribute("dept", dept);
         request.setAttribute("role", role);

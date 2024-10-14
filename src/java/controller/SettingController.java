@@ -37,7 +37,7 @@ public class SettingController extends HttpServlet {
             throws ServletException, IOException {
         String action = request.getServletPath();
 
-//        try {
+        try {
             switch (action) {
                 case "/add-setting" ->
                     showNewForm(request, response); // Show form insert setting
@@ -53,9 +53,9 @@ public class SettingController extends HttpServlet {
                     listSetting(request, response); // List of settings
                 }
             }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -123,24 +123,88 @@ public class SettingController extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void showNewForm(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    HuyenPTNHE160769 
+//    14/10/2024 
+//    Show form insert Setting
+    private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Path to setting information input form page
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/setting-detail.jsp");
+        dispatcher.forward(request, response);
     }
 
-    private void insertSetting(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    HuyenPTNHE160769 
+//    14/10/2024 
+//    Insert Setting
+    private void insertSetting(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+        String name = request.getParameter("name");
+        String type = request.getParameter("type");
+        String value = request.getParameter("value");
+        int priority = Integer.parseInt(request.getParameter("priority"));
+        String description = request.getParameter("description");
+
+        Setting s = new Setting();
+        s.setName(name);
+        s.setType(type);
+        s.setValue(value);
+        s.setPriority(priority);
+        s.setDescription(description);
+
+        settingService.insertSetting(s);
+        response.sendRedirect("setting-management");
     }
 
-    private void showEditForm(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    HuyenPTNHE160769 
+//    14/10/2024 
+//    Show form edit Setting
+    private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        Setting setting = settingService.getSettingById(id);
+
+        // Path to setting information input form page
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/setting-detail.jsp");
+        request.setAttribute("setting", setting);
+        dispatcher.forward(request, response);
     }
 
-    private void updateSetting(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    private void updateSetting(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        String name = request.getParameter("name");
+        String type = request.getParameter("type");
+        String value = request.getParameter("value");
+        int priority = Integer.parseInt(request.getParameter("priority"));
+        boolean status = Boolean.parseBoolean(request.getParameter("status"));
+        String description = request.getParameter("description");
+
+        Setting s = new Setting();
+        s.setId(id);
+        s.setName(name);
+        s.setType(type);
+        s.setValue(value);
+        s.setPriority(priority);
+        s.setStatus(status);
+        s.setDescription(description);
+
+        settingService.updateSetting(s);
+        response.sendRedirect("setting-management");
     }
 
-    private void changeStatusSetting(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    HuyenPTNHE160769 
+//    14/10/2024 
+//    Change status Setting
+    private void changeStatusSetting(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        boolean status = Boolean.parseBoolean(request.getParameter("status"));
+
+        Setting s = new Setting();
+        s.setId(id);
+
+        // If status is true, set to false; if false, set to true
+        s.setStatus(!status);
+
+        // Change the status of a setting by id
+        settingService.changeStatusSetting(s);
+        // Redirect to the setting-management page
+        response.sendRedirect("setting-management");
     }
 
 }

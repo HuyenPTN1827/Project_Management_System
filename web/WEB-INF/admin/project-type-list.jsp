@@ -88,7 +88,7 @@
                                                 </select>
 
                                                 <input type="search" name="keyword" class="form-control" 
-                                                       placeholder="Enter Project Type Name" id="keyword" value="${keyword}">
+                                                       placeholder="Enter Project Type Name or Code" id="keyword" value="${keyword}">
 
                                                 <button type="submit" class="btn btn-primary">Search</button>
 
@@ -128,13 +128,13 @@
                                                             <a href="<%=request.getContextPath()%>/edit-project-type?id=${type.id}" 
                                                                class="btn btn-link text-primary">Details</a>
 
-                                                            <c:if test="${dept.status eq 'false'}">
+                                                            <c:if test="${type.status eq 'false'}">
                                                                 <a href="<%=request.getContextPath()%>/change-status-project-type?id=${type.id}&status=${type.status}"
                                                                    class="btn btn-link text-success"
                                                                    onclick="return confirm('Are you sure you want to activate this project type?');">Activate</a>
                                                             </c:if>
 
-                                                            <c:if test="${dept.status eq 'true'}">
+                                                            <c:if test="${type.status eq 'true'}">
                                                                 <a href="<%=request.getContextPath()%>/change-status-project-type?id=${type.id}&status=${type.status}"
                                                                    class="btn btn-link text-danger"
                                                                    onclick="return confirm('Are you sure you want to deactivate this project type?');">Deactivate</a>

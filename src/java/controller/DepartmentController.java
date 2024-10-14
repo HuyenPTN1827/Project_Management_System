@@ -37,7 +37,7 @@ public class DepartmentController extends HttpServlet {
             throws ServletException, IOException {
         String action = request.getServletPath();
 
-//        try {
+        try {
             switch (action) {
                 case "/add-department" ->
                     showNewForm(request, response); // Show form insert department
@@ -53,9 +53,9 @@ public class DepartmentController extends HttpServlet {
                     listDepartment(request, response); // List of departments
                 }
             }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -139,8 +139,23 @@ public class DepartmentController extends HttpServlet {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    private void changeStatusDepartment(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    HuyenPTNHE160769 
+//    14/10/2024 
+//    Change status Department
+    private void changeStatusDepartment(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        boolean status = Boolean.parseBoolean(request.getParameter("status"));
+
+        Department d = new Department();
+        d.setId(id);
+
+        // If status is true, set to false; if false, set to true
+        d.setStatus(!status);
+
+        // Change the status of a dept by id
+        groupService.changeStatusDepartment(d);
+        // Redirect to the department-management page
+        response.sendRedirect("department-management");
     }
 
 }

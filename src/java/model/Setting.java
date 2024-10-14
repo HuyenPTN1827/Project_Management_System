@@ -13,7 +13,7 @@ public class Setting {
     private int id;
     private String name;
     private String type;
-    private int value;
+    private String value;
     private int priority;
     private boolean status;
     private String description;
@@ -21,7 +21,7 @@ public class Setting {
     public Setting() {
     }
 
-    public Setting(int id, String name, String type, int value, int priority, boolean status, String description) {
+    public Setting(int id, String name, String type, String value, int priority, boolean status, String description) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -55,11 +55,11 @@ public class Setting {
         this.type = type;
     }
 
-    public int getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(String value) {
         this.value = value;
     }
 

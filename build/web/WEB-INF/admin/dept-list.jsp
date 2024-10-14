@@ -88,7 +88,7 @@
                                                 </select>
 
                                                 <input type="search" name="keyword" class="form-control" 
-                                                       placeholder="Enter Department Name" id="keyword" value="${keyword}">
+                                                       placeholder="Enter Department Name or Code" id="keyword" value="${keyword}">
 
                                                 <button type="submit" class="btn btn-primary">Search</button>
 

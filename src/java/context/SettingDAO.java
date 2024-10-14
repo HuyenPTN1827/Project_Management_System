@@ -32,7 +32,7 @@ public class SettingDAO {
                 Setting s = new Setting();
                 s.setId(rs.getInt("id"));
                 s.setName(rs.getString("name"));
-                s.setValue(rs.getInt("value"));
+                s.setValue(rs.getString("value"));
                 setting.add(s);
             }
         } catch (SQLException e) {
@@ -84,8 +84,8 @@ public class SettingDAO {
                 s.setId(rs.getInt("id"));
                 s.setName(rs.getString("name"));
                 s.setType(rs.getString("type"));
-                s.setValue(rs.getInt("value"));
-                s.setPriority(rs.getInt("value"));
+                s.setValue(rs.getString("value"));
+                s.setPriority(rs.getInt("priority"));
                 s.setStatus(rs.getBoolean("status"));
                 s.setDescription(rs.getString("description"));
 
@@ -115,8 +115,8 @@ public class SettingDAO {
                 s.setId(rs.getInt("id"));
                 s.setName(rs.getString("name"));
                 s.setType(rs.getString("type"));
-                s.setValue(rs.getInt("value"));
-                s.setPriority(rs.getInt("value"));
+                s.setValue(rs.getString("value"));
+                s.setPriority(rs.getInt("priority"));
                 s.setStatus(rs.getBoolean("status"));
                 s.setDescription(rs.getString("description"));
             }
@@ -136,10 +136,10 @@ public class SettingDAO {
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             stm.setString(1, setting.getName());
-            stm.setString(2, setting.getType());
-            stm.setInt(3, setting.getValue());
-            stm.setInt(4, setting.getPriority());
-            stm.setString(5, setting.getDescription());
+        stm.setString(2, setting.getType());
+        stm.setString(3, setting.getValue());
+        stm.setInt(4, setting.getPriority());
+        stm.setString(5, setting.getDescription());
 
             result = stm.executeUpdate();
         } catch (SQLException e) {
@@ -160,7 +160,7 @@ public class SettingDAO {
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             stm.setString(1, setting.getName());
             stm.setString(2, setting.getType());
-            stm.setInt(3, setting.getValue());
+            stm.setString(3, setting.getValue());
             stm.setInt(4, setting.getPriority());
             stm.setBoolean(5, setting.isStatus());
             stm.setString(6, setting.getDescription());
