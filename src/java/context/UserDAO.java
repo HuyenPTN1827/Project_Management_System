@@ -239,8 +239,6 @@ public class UserDAO {
             sql += " AND u.status = ?";
         }
 
-        sql += " ORDER BY u.id DESC LIMIT 10 OFFSET 0;";
-
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             int index = 1;
 

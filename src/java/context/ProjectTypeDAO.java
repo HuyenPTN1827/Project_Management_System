@@ -8,7 +8,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import model.ProjectType;
@@ -36,8 +35,6 @@ public class ProjectTypeDAO {
         if (status != null) {
             sql += " AND status = ?";
         }
-
-        sql += " ORDER BY id DESC LIMIT 10 OFFSET 0;";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             int index = 1;

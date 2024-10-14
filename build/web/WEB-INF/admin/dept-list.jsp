@@ -1,6 +1,6 @@
 <%-- 
-    Document   : user-list
-    Created on : Sep 15, 2024, 6:19:09 PM
+    Document   : dept-list
+    Created on : Oct 13, 2024, 4:32:33 PM
     Author     : kelma
 --%>
 
@@ -22,7 +22,7 @@
 
         <!--<link rel="canonical" href="tables-datatables-multi.html" />-->
 
-        <title>User Management | PMS</title>
+        <title>Department Management | PMS</title>
 
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet">
 
@@ -62,7 +62,7 @@
                         <div class="container-fluid p-0">
 
                             <div class="mb-3">
-                                <h1 class="h1 d-inline align-middle">User Management</h1>
+                                <h1 class="h1 d-inline align-middle">Department Management</h1>
                             </div>
 
                             <div class="row">
@@ -70,61 +70,31 @@
                                     <div class="card">
                                         <div class="card-header">
                                             <div class="d-flex justify-content-between align-items-center" style="margin: 10px;">
-                                                <form action="user-management" method="post" class="d-flex align-items-center" style="gap: 15px;">
-                                                    <select name="deptId" class="form-select" style="width: 120px;">
-                                                        <option value="">All Departments</option>
-                                                    <c:forEach items="${dept}" var="d">
+                                                <form action="department-management" method="post" class="d-flex align-items-center" style="gap: 15px;">
+                                                    <select name="status" class="form-select"  style="width: 130px;">
+                                                        <option value="">All Status</option>
                                                         <option 
-                                                            <c:if test="${deptId eq d.id}">
-                                                                selected="selected"
-                                                            </c:if>
-                                                            value="${d.id}">${d.name}
-                                                        </option>
-                                                    </c:forEach>
-                                                </select>
-
-                                                <select name="roleId" class="form-select" style="width: 120px;">
-                                                    <option value="">All Roles</option>
-                                                    <c:forEach items="${role}" var="r">
-                                                        <option 
-                                                            <c:if test="${roleId eq r.id}">
-                                                                selected="selected"
-                                                            </c:if>
-                                                            value="${r.id}">${r.name}
-                                                        </option>
-                                                    </c:forEach>
-                                                </select>
-
-                                                <select name="status" class="form-select"  style="width: 130px;">
-                                                    <option value="">All Statuses</option>
-                                                    <option 
-                                                        <c:if test="${status eq 1}">
+                                                        <c:if test="${status eq 'true'}">
                                                             selected="selected"
                                                         </c:if>
-                                                        value="1">Active
+                                                        value="true">Active
                                                     </option>
                                                     <option 
-                                                        <c:if test="${status eq 0}">
+                                                        <c:if test="${status eq 'false'}">
                                                             selected="selected"
                                                         </c:if>
-                                                        value="0">Inactive
-                                                    </option>
-                                                    <option 
-                                                        <c:if test="${status eq 3}">
-                                                            selected="selected"
-                                                        </c:if>
-                                                        value="3">Unverified
+                                                        value="false">Inactive
                                                     </option>
                                                 </select>
 
-                                                <input type="search" name="keyword" class="form-control" style="width: 270px;"
-                                                       placeholder="Enter Full Name or Email or Phone" id="keyword" value="${keyword}">
+                                                <input type="search" name="keyword" class="form-control" 
+                                                       placeholder="Enter Department Name" id="keyword" value="${keyword}">
 
                                                 <button type="submit" class="btn btn-primary">Search</button>
 
                                             </form>
 
-                                            <a class="btn btn-primary" href="<%=request.getContextPath()%>/add-user">Create new</a>
+                                            <a class="btn btn-primary" href="<%=request.getContextPath()%>/add-department">Create new</a>
                                         </div>
                                     </div>
                                 </div>
@@ -134,62 +104,42 @@
                                             <thead>
                                                 <tr style="text-align: center">
                                                     <th>ID</th>
-                                                    <th>Full Name</th>
-                                                    <th>Email</th>
-                                                    <th>Mobile</th>
-                                                    <th>Department</th>
-                                                    <th>Role</th>
+                                                    <th>Name</th>
+                                                    <th>Code</th>
+                                                    <!--<th>Parent</th>-->
                                                     <th>Status</th>
-                                                    <th>Actions</th>
+                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <c:forEach items="${requestScope.listUser}" var="user">
+                                                <c:forEach items="${requestScope.listDept}" var="dept">
                                                     <tr style="text-align: center">
-                                                        <td>${user.id}</td>
-                                                        <td>${user.full_name}</td>
-                                                        <td>${user.email}</td>
-                                                        <td>${user.mobile}</td>
-                                                        <c:forEach items="${user.depts}" var="d">
-                                                            <td>${d.code}</td>
-                                                        </c:forEach>
-                                                        <c:forEach items="${user.settings}" var="r">
-                                                            <td>${r.name}</td>
-                                                        </c:forEach>
+                                                        <td>${dept.id}</td>
+                                                        <td>${dept.name}</td>
+                                                        <td>${dept.code}</td>
+                                                        <!--<td>${dept.parent}</td>-->
                                                         <td>
-                                                            <c:if test="${user.status eq '0'}">
-                                                                <span class="badge bg-danger">Inactive</span>
-                                                            </c:if>
-                                                            <c:if test="${user.status eq '1'}">
+                                                            <c:if test="${dept.status eq 'true'}">
                                                                 <span class="badge bg-success">Active</span>
                                                             </c:if>
-                                                            <c:if test="${user.status eq '3'}">
-                                                                <span class="badge bg-secondary">Unverified</span>
+                                                            <c:if test="${dept.status eq 'false'}">
+                                                                <span class="badge bg-danger">Inactive</span>
                                                             </c:if>
                                                         </td>
                                                         <td>
-                                                            <c:if test="${user.status eq '0'}">
-                                                                <a href="<%=request.getContextPath()%>/edit-user?id=${user.id}"
-                                                                   class="btn btn-link text-primary">Details</a>
-                                                                   
-                                                                <a href="<%=request.getContextPath()%>/change-status-user?id=${user.id}&status=${user.status}"
+                                                            <a href="<%=request.getContextPath()%>/edit-department?id=${dept.id}" 
+                                                               class="btn btn-link text-primary">Details</a>
+
+                                                            <c:if test="${dept.status eq 'false'}">
+                                                                <a href="<%=request.getContextPath()%>/change-status-department?id=${dept.id}&status=${dept.status}"
                                                                    class="btn btn-link text-success"
-                                                                   onclick="return confirm('Are you sure you want to activate this user?');">Activate</a>
+                                                                   onclick="return confirm('Are you sure you want to activate this department?');">Activate</a>
                                                             </c:if>
-                                                            
-                                                            <c:if test="${user.status eq '1'}">
-                                                                <a href="<%=request.getContextPath()%>/edit-user?id=${user.id}"
-                                                                   class="btn btn-link text-primary">Details</a>
-                                                                
-                                                                <a href="<%=request.getContextPath()%>/change-status-user?id=${user.id}&status=${user.status}"
-                                                                   class="btn btn-link text-success"
-                                                                   onclick="return confirm('Are you sure you want to deactivate this user?');">Deactivate</a>
-                                                            </c:if>
-                                                            
-                                                            <c:if test="${user.status eq '3'}">
-                                                                <a href="<%=request.getContextPath()%>/edit-user?id=${user.id}"
-                                                                   class="btn btn-link text-success"
-                                                                   class="btn btn-link text-primary">Details</a>
+
+                                                            <c:if test="${dept.status eq 'true'}">
+                                                                <a href="<%=request.getContextPath()%>/change-status-department?id=${dept.id}&status=${dept.status}"
+                                                                   class="btn btn-link text-danger"
+                                                                   onclick="return confirm('Are you sure you want to deactivate this department?');">Deactivate</a>
                                                             </c:if>
                                                         </td>
                                                     </tr>
@@ -246,15 +196,15 @@
                                                                                info: true,
                                                                                order: [[0, 'desc']], // Default sort by ID column in descending order
                                                                                columnDefs: [
-                                                                                   {orderable: false, targets: 6} // Disable sorting on the 'Action' column
+                                                                                   {orderable: false, targets: 4} // Disable sorting on the 'Action' column
                                                                                ],
                                                                                language: {
                                                                                    paginate: {
                                                                                        previous: "&laquo;",
                                                                                        next: "&raquo;"
                                                                                    },
-                                                                                   info: "_TOTAL_ user(s) found",
-                                                                                   infoEmpty: "No user found"
+                                                                                   info: "_TOTAL_ department(s) found",
+                                                                                   infoEmpty: "No department found"
                                                                                },
                                                                                dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
                                                                                initComplete: function () {

@@ -62,8 +62,6 @@ public class SettingDAO {
             sql += " AND status = ?";
         }
 
-        sql += " ORDER BY id DESC LIMIT 10 OFFSET 0;";
-
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             int index = 1;
 

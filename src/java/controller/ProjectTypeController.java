@@ -4,12 +4,15 @@
  */
 package controller;
 
+import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import model.ProjectType;
+import service.GroupService;
 
 /**
  *
@@ -17,30 +20,39 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 public class ProjectTypeController extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    private GroupService groupService;
+
+    @Override
+    public void init() throws ServletException {
+        this.groupService = new GroupService();
+    }
+
+//    HuyenPTNHE160769 
+//    13/10/2024 
+//    Project type management controller by Admin
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ProjectTypeController</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ProjectTypeController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        String action = request.getServletPath();
+
+//        try {
+        switch (action) {
+            case "/add-project-type" ->
+                showNewForm(request, response); // Show form insert project type
+            case "/insert-project-type" ->
+                insertProjectType(request, response); // Insert project type
+            case "/edit-project-type" ->
+                showEditForm(request, response); // Show form edit project type
+            case "/update-project-type" ->
+                updateProjectType(request, response); // Update project type
+            case "/change-status-project-type" ->
+                changeStatusProjectType(request, response); // Change status project type
+            default -> {
+                listProjectType(request, response); // List of project types
+            }
         }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -81,5 +93,49 @@ public class ProjectTypeController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+//    HuyenPTNHE160769 
+//    13/10/2024 
+//    Show list of Project types
+    private void listProjectType(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String keyword = request.getParameter("keyword");
+        String statusStr = request.getParameter("status");
+
+        // Process the filter value, convert to number or null if not selected
+        Boolean status = statusStr != null && !statusStr.isEmpty() ? Boolean.valueOf(statusStr) : null;
+
+        // Send search results and list depts, roles to JSP page
+        List<ProjectType> listType = groupService.getAllProjectTypes(keyword, status);
+
+        // Path to user list page
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/project-type-list.jsp");
+//        if (listDept.isEmpty()) {
+//            request.setAttribute("message", "No results found!");
+//        }
+        request.setAttribute("listType", listType);
+        request.setAttribute("keyword", keyword);
+        request.setAttribute("status", status);
+        dispatcher.forward(request, response);
+    }
+
+    private void showNewForm(HttpServletRequest request, HttpServletResponse response) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    private void insertProjectType(HttpServletRequest request, HttpServletResponse response) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    private void showEditForm(HttpServletRequest request, HttpServletResponse response) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    private void updateProjectType(HttpServletRequest request, HttpServletResponse response) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    private void changeStatusProjectType(HttpServletRequest request, HttpServletResponse response) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
 }
