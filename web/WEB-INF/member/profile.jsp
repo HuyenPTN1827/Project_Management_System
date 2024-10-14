@@ -1,42 +1,155 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="model.User" %>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
+    <meta name="author" content="AdminKit">
+    <meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="shortcut icon" href="img/icons/icon-48x48.png" />
+    <link rel="canonical" href="pages-profile.html" />
+    <title>Profile | AdminKit Demo</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet">
+    <link class="js-stylesheet" href="css/light.css" rel="stylesheet">
+    <script src="js/settings.js"></script>
+    <style>body { opacity: 0; }</style>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-10"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-120946860-10', {'anonymize_ip': true});
+    </script>
 </head>
-<body>
 
-<h1>User Profile</h1>
+<body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
+    <div class="wrapper">
+        
+        <div class="main">
+         
 
-<div>
-    <strong>Full Name:</strong> <%= ((User) request.getAttribute("memberProfile")).getFull_name() %><br>
-    <strong>Email:</strong> <%= ((User) request.getAttribute("memberProfile")).getEmail() %><br>
-    <strong>Mobile:</strong> <%= ((User) request.getAttribute("memberProfile")).getMobile() %><br>
-</div>
+            <main class="content">
+                <div class="container-fluid p-0">
+                    <h1 class="h3 mb-3">Profile</h1>
 
-<div>
-    <a href="<%= request.getContextPath() %>/member-dashboard">Back to Dashboard</a>
-</div>
+                    <div class="row">
+                        <div class="col-md-4 col-xl-3">
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Profile Details</h5>
+                                </div>
+                                <div class="card-body text-center">
+                                    <img src="img/avatars/avatar-4.jpg" alt="<%= ((User) request.getAttribute("memberProfile")).getFull_name() %>" class="img-fluid rounded-circle mb-2" width="128" height="128" />
+                                    <h5 class="card-title mb-0"><%= ((User) request.getAttribute("memberProfile")).getFull_name() %></h5>
+                                    <div class="text-muted mb-2">Lead Developer</div>
+                                    <div class="text-muted mb-2">Viet Nam</div>
+                                </div>
+                                <hr class="my-0" />
+                                <div class="card-body">
+                                    <h5 class="h6 card-title">About</h5>
+                                    <ul class="list-unstyled mb-0">
+                                        <li class="mb-1"><span data-feather="home" class="feather-sm me-1"></span> Lives in <a href="#">San Francisco, SA</a></li>
+                                        <li class="mb-1"><span data-feather="briefcase" class="feather-sm me-1"></span> Works at <a href="#">GitHub</a></li>
+                                        <li class="mb-1"><span data-feather="map-pin" class="feather-sm me-1"></span> From <a href="#">Boston</a></li>
+                                        <li class="mb-1"><a href="changepasswordcontroller">Change password</a></li>
+                                    </ul>
+                                </div>
+                            </div>
 
-<!-- Form chỉnh sửa thông tin trực tiếp -->
-<h2>Edit Profile</h2>
-<form action="<%= request.getContextPath() %>/member-profilecontroller" method="post">
-    <label for="fullName">Full Name:</label>
-    <input type="text" id="fullname" name="fullname" value="<%= ((User) request.getAttribute("memberProfile")).getFull_name() %>"><br>
+                            <!-- Additional Info -->
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h5 class="card-title">Total work done</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="chartjs-dashboard-pie" width="228" height="150"></canvas>
+                                    <h4 style="text-align: center">5 weeks: 2 days</h4>
+                                </div>
+                            </div>
+                        </div>
 
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" value="<%= ((User) request.getAttribute("memberProfile")).getEmail() %>"><br>
+                        <div class="col-md-8 col-xl-9">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Edit Profile</h5>
+                                    <h6 class="card-subtitle text-muted">Update your profile here.</h6>
+                                </div>
+                                <div class="card-body">
+                                    <form action="<%= request.getContextPath() %>/member-profilecontroller" method="post" class="row">
+                                        <div class="mb-3 col-md-6">
+                                            <label class="form-label" for="inputName">Full Name</label>
+                                            <input type="text" class="form-control" id="inputName" name="fullname" value="<%= ((User) request.getAttribute("memberProfile")).getFull_name() %>" required>
+                                        </div>
+                                        <div class="mb-3 col-md-6">
+                                            <label class="form-label" for="inputEmail4">Email</label>
+                                            <input type="email" class="form-control" id="inputEmail4" name="email" value="<%= ((User) request.getAttribute("memberProfile")).getEmail() %>" required>
+                                        </div>
+                                        <div class="mb-3 col-md-6">
+                                            <label class="form-label" for="phone">Phone</label>
+                                            <input type="text" class="form-control" id="phone" name="mobile" value="<%= ((User) request.getAttribute("memberProfile")).getMobile() %>" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-lg btn-primary">Save Changes</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
 
-    <label for="mobile">Mobile:</label>
-    <input type="text" id="mobile" name="mobile" value="<%= ((User) request.getAttribute("memberProfile")).getMobile() %>"><br>
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row text-muted">
+                        <div class="col-6 text-start">
+                            <p class="mb-0">
+                                <a href="https://adminkit.io/" target="_blank" class="text-muted"><strong>AdminKit</strong></a> &copy;
+                            </p>
+                        </div>
+                        <div class="col-6 text-end">
+                            <ul class="list-inline">
+                                <li class="list-inline-item"><a class="text-muted" href="#">Support</a></li>
+                                <li class="list-inline-item"><a class="text-muted" href="#">Help Center</a></li>
+                                <li class="list-inline-item"><a class="text-muted" href="#">Privacy</a></li>
+                                <li class="list-inline-item"><a class="text-muted" href="#">Terms</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
 
-    <button type="submit">Save Changes</button>
-   
-</form>
-     ${message}
-
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Pie chart
+            new Chart(document.getElementById("chartjs-dashboard-pie"), {
+                type: "pie",
+                data: {
+                    labels: ["Working time", "Not work"],
+                    datasets: [{
+                        data: [4306, 1251],
+                        backgroundColor: [window.theme.primary, "#E8EAED"],
+                        borderWidth: 5,
+                        borderColor: window.theme.white
+                    }]
+                },
+                options: {
+                    responsive: !window.MSInputMethodContext,
+                    maintainAspectRatio: false,
+                    legend: { display: false },
+                    cutoutPercentage: 70
+                }
+            });
+        });
+    </script>
 </body>
+
 </html>

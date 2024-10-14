@@ -1,43 +1,80 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Khôi phục mật khẩu</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css">
-    </head>
-    <body>
-        <div class="container col-md-6 offset-md-3" style="padding-top: 20px;">
-            <h1>Khôi phục mật khẩu</h1>
+<html lang="en">
 
-            <!-- Form nhập OTP và mật khẩu mới (ẩn lúc đầu) -->
-            <form id="otp-form" action="<%=request.getContextPath()%>/resetpassword" method="post" style="display: none;">
-                <div class="form-group">
-                    <label for="otp">Nhập mã OTP:</label>
-                    <input type="text" class="form-control" id="otp" name="otp" placeholder="Nhập mã OTP" required>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
+    <meta name="author" content="AdminKit">
+    <meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="shortcut icon" href="img/icons/icon-48x48.png" />
+    <link rel="canonical" href="pages-sign-up.html" />
+
+    <title>Reset Password | AdminKit Demo</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet">
+    <link class="js-stylesheet" href="css/light.css" rel="stylesheet">
+    <script src="js/settings.js"></script>
+    <style>
+        body {
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
+    <main class="d-flex w-100 h-100">
+        <div class="container d-flex flex-column">
+            <div class="row vh-100">
+                <div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
+                    <div class="d-table-cell align-middle">
+                        <div class="text-center mt-4">
+                            <div>
+                                <img src="https://tatthanh.com.vn/pic/Images/Module/News/images/image(1722).png" width="100px" style="border-radius: 50%;" alt="alt" />
+                            </div>
+                            <h1 class="h2">Khôi phục mật khẩu</h1>
+                            <p class="lead">
+                                Đã có tài khoản? <a style="color: black;" href="">Quay lại đăng nhập</a>
+                            </p>
+                        </div>
+                        <div class="card">
+                            <div class="card-body row">
+                                <div class="col-md-12">
+                                    <form id="otp-form" action="<%=request.getContextPath()%>/resetpassword" method="post">
+                                        <div class="mb-3" style="margin-top: 30px;">
+                                            <label class="form-label">Nhập mã OTP:</label>
+                                            <input class="form-control form-control-lg" type="text" name="otp" placeholder="Nhập mã OTP" required />
+                                        </div>
+                                        <div class="mb-3" style="margin-top: 30px;">
+                                            <label class="form-label">Mật khẩu mới:</label>
+                                            <input class="form-control form-control-lg" type="password" name="newPassword" placeholder="Nhập mật khẩu mới" required />
+                                        </div>
+                                        <div class="mb-3" style="margin-top: 30px;">
+                                            <label class="form-label">Xác nhận mật khẩu:</label>
+                                            <input class="form-control form-control-lg" type="password" name="confirmPassword" placeholder="Nhập lại mật khẩu mới" required />
+                                        </div>
+                                        <div class="text-center mt-3">
+                                            <button type="submit" class="btn btn-lg btn-success" style="border-radius: 50px;">Cập nhật mật khẩu</button>
+                                        </div>
+                                        <c:if test="${not empty errorMessage}">
+                                            <div class="text-danger mt-2">${errorMessage}</div>
+                                        </c:if>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="new-password">Mật khẩu mới:</label>
-                    <input type="password" class="form-control" id="new-password" name="newPassword" placeholder="Nhập mật khẩu mới" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="confirm-password">Xác nhận mật khẩu:</label>
-                    <input type="password" class="form-control" id="confirm-password" name="confirmPassword" placeholder="Nhập lại mật khẩu mới" required>
-                </div>
-                ${errorMessage}<br>
-                <button type="submit" class="btn btn-success">Cập nhật mật khẩu</button>
-            </form>
-
-            <%-- Script để chuyển đổi form khi OTP đã được gửi thành công --%>
-            
-                <script>
-                    document.getElementById('otp-form').style.display = 'block';
-                    // Thông báo cho người dùng rằng OTP đã được gửi
-                    alert("OTP đã được gửi đến email của bạn.");
-                </script>
-            
+            </div>
         </div>
-    </body>
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+
 </html>
