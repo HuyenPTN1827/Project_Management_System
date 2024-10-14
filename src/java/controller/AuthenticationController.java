@@ -121,7 +121,7 @@ public class AuthenticationController extends HttpServlet {
     }
 
     private void showLoginForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/login.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/login.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -159,7 +159,8 @@ public class AuthenticationController extends HttpServlet {
 //            e.printStackTrace();
 //        }
 //    }
-    private void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
+   private void login(HttpServletRequest request, HttpServletResponse response) 
+        throws ServletException, IOException {
     String email = request.getParameter("email");
     String password = request.getParameter("password");
 
@@ -170,15 +171,15 @@ public class AuthenticationController extends HttpServlet {
     try {
         User foundUser = userService.loginValidate(user);
         if (foundUser != null) {
-            int roleId = foundUser.getRole_id(); // Lấy role_id
+            int roleId = foundUser.getRole_id();
             HttpSession session = request.getSession();
             session.setAttribute("user", foundUser);
             session.setMaxInactiveInterval(1 * 60);
 
             // Phân quyền dựa vào role_id
-            if (roleId == 1) { // Giả sử role_id = 1 là admin
+            if (roleId == 1) { // Admin
                 response.sendRedirect(request.getContextPath() + "/user-management");
-            } else if (roleId == 2) { // Giả sử role_id = 2 là member
+            } else if (roleId == 2) { // Member
                 response.sendRedirect(request.getContextPath() + "/member-dashboard");
             } else {
                 response.sendRedirect(request.getContextPath() + "/member/unauthorized.jsp");
@@ -186,12 +187,15 @@ public class AuthenticationController extends HttpServlet {
         } else {
             HttpSession session = request.getSession();
             session.setAttribute("NOTIFICATION", "Login Failed!");
-            response.sendRedirect(request.getContextPath() + "/login");
+            request.getRequestDispatcher("/WEB-INF/member/login.jsp").forward(request, response);
+
         }
     } catch (ClassNotFoundException e) {
         e.printStackTrace();
+        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An internal error occurred.");
     }
 }
+
 
 
     private void logout(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

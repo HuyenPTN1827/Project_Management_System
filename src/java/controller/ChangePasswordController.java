@@ -108,7 +108,7 @@ public class ChangePasswordController extends HttpServlet {
 
         if (success) {
             // Đổi mật khẩu thành công
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member//success.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/success.jsp");
             dispatcher.forward(request, response);
 //            response.sendRedirect(request.getContextPath() + "/success.jsp");
 

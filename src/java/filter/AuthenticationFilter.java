@@ -54,7 +54,7 @@ public class AuthenticationFilter implements Filter {
                 chain.doFilter(request, response);
             } else {
                 // Nếu không phải admin, chuyển hướng đến trang lỗi
-                httpRequest.getRequestDispatcher("/member/unauthorized.jsp").forward(request, response);
+                httpRequest.getRequestDispatcher("/WEB-INF/member/unauthorized.jsp").forward(request, response);
             }
         } else if (currentURL.contains("/todo-list")) {
             if ("member".equalsIgnoreCase(userRole) || "admin".equalsIgnoreCase(userRole)) {
@@ -62,7 +62,7 @@ public class AuthenticationFilter implements Filter {
                 chain.doFilter(request, response);
             } else {
                 // Nếu không có quyền, chuyển hướng đến trang lỗi
-                httpRequest.getRequestDispatcher("/member/unauthorized.jsp").forward(request, response);
+                httpRequest.getRequestDispatcher("/WEB-INF/member/unauthorized.jsp").forward(request, response);
             }
         } else {
             // Nếu không thuộc các đường dẫn cần kiểm tra quyền, cho phép tiếp tục

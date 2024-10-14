@@ -1,53 +1,89 @@
-<%-- 
-    Document   : login
-    Created on : Sep 12, 2024, 2:36:08 AM
-    Author     : kelma
---%>
-
+<!--BachHD-->
+<%@ page import="model.User" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Login</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <style>
-            body {
-                overflow-x: hidden;
-                padding-bottom: 40px;
-            }
-        </style>
-    </head>
-    <body>
-        <jsp:include page="../component/header-guest.jsp"></jsp:include>
+<html lang="en">
 
-            <div class="container col-md-8 col-md-offset-3" style="overflow: auto; padding: 10px 0px 10px 0px">
-                <h1>Login Form</h1>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="shortcut icon" href="img/icons/icon-48x48.png" />
+    <link rel="canonical" href="pages-sign-in.html" />
+    <title>Login | AdminKit Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet">
+    <link class="js-stylesheet" href="${pageContext.request.contextPath}/css/light.css" rel="stylesheet">
+    <script src="${pageContext.request.contextPath}/js/settings.js"></script>
+    <style>body { opacity: 0; }</style>
+</head>
 
-                <div class="alert alert-success center" role="alert">
-                    <p>${NOTIFICATION}</p>
+<body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
+    <main class="d-flex w-100 h-100">
+        <div class="container d-flex flex-column">
+            <div class="row vh-100">
+                <div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
+                    <div class="d-table-cell align-middle">
+                        <div class="text-center mt-4">
+                            <h1 class="h2">Welcome back</h1>
+                            <p class="lead">Sign in to your account to continue</p>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="m-sm-4">
+                                    <div class="text-center">
+                                        <img src="${pageContext.request.contextPath}/img/avatars/avatar.jpg" alt="Charles Hall" class="img-fluid rounded-circle" width="132" height="132" />
+                                    </div>
+                                    <form action="<%=request.getContextPath()%>/login" method="post">
+                                        <div class="mb-3">
+                                            <label class="form-label">Email</label>
+                                            <input type="text" class="form-control form-control-lg" id="email" value="${sessionScope.user}" placeholder="Enter your email" name="email" required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Password</label>
+                                            <input type="password" class="form-control form-control-lg" id="password" placeholder="Enter your password" name="password" required />
+                                        </div>
+                                        <% 
+    String notification = (String) session.getAttribute("NOTIFICATION");
+    if (notification != null) {
+        out.println("<p style='color:red;'>" + notification + "</p>");
+        session.removeAttribute("NOTIFICATION"); // Xóa sau khi hiển thị để tránh lặp lại
+    }
+%>
+
+                                        <div class="text-center mt-3">
+                                            <button type="submit" class="btn btn-lg btn-secondary" style="border-radius: 50px; width: 95%">Sign in</button>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; margin: 10px 5px;">
+                                            <label class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="remember-me" name="remember-me" checked>
+                                                <span class="form-check-label">Remember me next time</span>
+                                            </label>
+                                            <small>
+                                                <button type="button" class="btn btn-link" onclick="location.href='<%=request.getContextPath()%>/forgotpassword'">Forgot password?</button>
+                                            </small>
+                                        </div>
+                                        <div class="text-center mt-3">
+                                            <a href="register-form" class="btn btn-lg btn-outline-secondary" style="margin-bottom: 10px; border-radius: 50px; width: 95%">Sign up</a>
+                                            <br>
+                                            <a href="index.html" class="btn btn-lg btn-outline-info" style="border-radius: 50px; width: 95%">
+                                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png" width="23px" alt="alt" /> Continues with Google
+                                            </a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
-
-            <form action="<%=request.getContextPath()%>/login" method="post">
-                <div class="form-group">
-                    <label for="uname">Email:</label>
-                    <input type="text" class="form-control" id="email" value="${sessionScope.user}"
-                           placeholder="Enter the Email" name="email" required/>
-                </div>
-
-                <div class="form-group">
-                    <label for="uname">Password:</label>
-                    <input type="password" class="form-control" id="password"
-                           placeholder="Enter the Password" name="password" required/>
-                </div>
-
-                <button type="submit" class="btn btn-primary">Submit</button>
-<!--                5/10
-                BachHD-->
-                <button type="button" class="btn btn-link" onclick="location.href='<%=request.getContextPath()%>/forgotpassword'">Quên mật khẩu?</button>
-            </form>
         </div>
+    </main>
 
-        <jsp:include page="../component/footer.jsp"></jsp:include>
-    </body>
+    <script src="${pageContext.request.contextPath}/js/app.js"></script>
+</body>
+
 </html>
