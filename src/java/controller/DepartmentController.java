@@ -107,36 +107,100 @@ public class DepartmentController extends HttpServlet {
         // Process the filter value, convert to number or null if not selected
         Boolean status = statusStr != null && !statusStr.isEmpty() ? Boolean.valueOf(statusStr) : null;
 
-        // Send search results and list depts, roles to JSP page
         List<Department> listDept = groupService.getAllDepartments(keyword, status);
-        List<Department> dept = groupService.getDepartmentList();
 
-        // Path to user list page
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/dept-list.jsp");
 //        if (listDept.isEmpty()) {
 //            request.setAttribute("message", "No results found!");
 //        }
         request.setAttribute("listDept", listDept);
-        request.setAttribute("dept", dept);
         request.setAttribute("keyword", keyword);
         request.setAttribute("status", status);
         dispatcher.forward(request, response);
     }
 
-    private void showNewForm(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    HuyenPTNHE160769 
+//    15/10/2024 
+//    Show form insert department
+    private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Call service to get all department for Department dropdown list
+        List<Department> dept = groupService.getDepartmentList();
+
+        // Path to user information input form page
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/dept-detail.jsp");
+        request.setAttribute("dept", dept);
+        dispatcher.forward(request, response);
     }
 
-    private void insertDepartment(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    HuyenPTNHE160769 
+//    15/10/2024 
+//    Insert department
+    private void insertDepartment(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+        String name = request.getParameter("name");
+        String code = request.getParameter("code");
+        String parent = request.getParameter("parent");
+        String details = request.getParameter("details");
+
+        // Process the filter value, convert to number or null if not selected
+        Integer parentId = parent != null && !parent.isEmpty() ? Integer.valueOf(parent) : null;
+
+        Department d = new Department();
+        d.setName(name);
+        d.setCode(code);
+        if (parentId != null) {
+            d.setParentId(parentId);
+        }
+        d.setDetails(details);
+
+        groupService.insertDepartment(d, parentId);
+        response.sendRedirect("department-management");
     }
 
-    private void showEditForm(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    HuyenPTNHE160769 
+//    15/10/2024 
+//    Show form edit department
+    private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        // Call service to get an user information by id
+        Department department = groupService.getDepartmentById(id);
+
+        // Call service to get all department for Department dropdown list
+        List<Department> dept = groupService.getDepartmentList();
+
+        // Path to user information input form page
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/dept-detail.jsp");
+        request.setAttribute("department", department);
+        request.setAttribute("dept", dept);
+        dispatcher.forward(request, response);
     }
 
-    private void updateDepartment(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    HuyenPTNHE160769 
+//    15/10/2024 
+//    Update department
+    private void updateDepartment(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        String name = request.getParameter("name");
+        String code = request.getParameter("code");
+        String parent = request.getParameter("parent");
+        String details = request.getParameter("details");
+        boolean status = Boolean.parseBoolean(request.getParameter("status"));
+
+        // Process the filter value, convert to number or null if not selected
+        Integer parentId = parent != null && !parent.isEmpty() ? Integer.valueOf(parent) : null;
+
+        Department d = new Department();
+        d.setId(id);
+        d.setName(name);
+        d.setCode(code);
+        if (parentId != null) {
+            d.setParentId(parentId);
+        }
+        d.setDetails(details);
+        d.setStatus(status);
+
+        groupService.updateDepartment(d, parentId);
+        // Redirect to user-management url
+        response.sendRedirect("department-management");
     }
 
 //    HuyenPTNHE160769 

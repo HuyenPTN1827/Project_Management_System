@@ -14,19 +14,23 @@ public class Department {
     private String code;
     private String name;
     private String details;
-    private int parent;
+    private int parentId;
+    private String parentCode;
+    private String parentName;
     private boolean status;
     private User users;
 
     public Department() {
     }
 
-    public Department(int id, String code, String name, String details, int parent, boolean status, User users) {
+    public Department(int id, String code, String name, String details, int parent, String parentCode, String parentName, boolean status, User users) {
         this.id = id;
         this.code = code;
         this.name = name;
         this.details = details;
-        this.parent = parent;
+        this.parentId = parent;
+        this.parentCode = parentCode;
+        this.parentName = parentName;
         this.status = status;
         this.users = users;
     }
@@ -63,12 +67,28 @@ public class Department {
         this.details = details;
     }
 
-    public int getParent() {
-        return parent;
+    public int getParentId() {
+        return parentId;
     }
 
-    public void setParent(int parent) {
-        this.parent = parent;
+    public void setParentId(int parentId) {
+        this.parentId = parentId;
+    }
+
+    public String getParentCode() {
+        return parentCode;
+    }
+
+    public void setParentCode(String parentCode) {
+        this.parentCode = parentCode;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
     }
 
     public boolean isStatus() {

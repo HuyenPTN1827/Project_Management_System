@@ -1,3 +1,8 @@
+<%-- 
+    Document   : setting-detail
+    Created on : Oct 14, 2024, 4:20:19 PM
+    Author     : HuyenPTNHE160769
+--%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -17,7 +22,7 @@
 
         <link rel="canonical" href="pages-profile.html" />
 
-        <title>Profile | AdminKit Demo</title>
+        <title>Setting Details | PMS</title>
 
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet">
 
@@ -72,7 +77,7 @@
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label">Type<span style="color: red;">*</span></label>
                                                     <select name="type" class="form-select" required>
-                                                        <option value="" hidden disable selected>Choose Type</option>
+                                                        <option value="" hidden disable selected>Choose Setting Type</option>
                                                         <option 
                                                             <c:if test="${type eq 'User Role'}">
                                                                 selected="selected"
@@ -85,12 +90,12 @@
                                                             </c:if>
                                                             value="Dept Role">Dept Role
                                                         </option>
-                                                        <option 
-                                                            <c:if test="${type eq 'Project Role'}">
-                                                                selected="selected"
-                                                            </c:if>
-                                                            value="Project Role">Project Role
-                                                        </option>
+                                                        <!--                                                        <option 
+                                                        <%--<c:if test="${type eq 'Project Role'}">--%>
+                                                            selected="selected"
+                                                        <%--</c:if>--%>
+                                                        value="Project Role">Project Role
+                                                    </option>-->
                                                         <option 
                                                             <c:if test="${type eq 'Business Term'}">
                                                                 selected="selected"
@@ -108,20 +113,20 @@
 
                                                 <div class="mb-3 col-md-12">
                                                     <label class="form-label">Value</label>
-                                                    <input type="text" class="form-control" name="value" placeholder="Enter the Value" 
+                                                    <input type="text" class="form-control" name="value" placeholder="Enter the Setting value" 
                                                            value="${value}">
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label">Priority<span style="color: red;">*</span></label>
-                                                    <input type="number" class="form-control" name="priority" placeholder="Enter the Priority" 
+                                                    <input type="number" class="form-control" name="priority" placeholder="Enter the Setting priority" 
                                                            value="${priority}" required>
                                                 </div>
 
                                                 <div class="mb-3 col-md-12">
                                                     <label class="form-label">Description</label>
                                                     <textarea class="form-control" name="description" 
-                                                              placeholder="Enter the Description" rows="3">${description}</textarea>
+                                                              placeholder="Enter the Setting description" rows="3">${description}</textarea>
                                                 </div>
 
                                                 <div>
@@ -167,12 +172,12 @@
                                                             </c:if>
                                                             value="Dept Role">Dept Role
                                                         </option>
-                                                        <option 
-                                                            <c:if test="${setting.type eq 'Project Role'}">
+<!--                                                        <option 
+                                                            <%--<c:if test="${setting.type eq 'Project Role'}">--%>
                                                                 selected="selected"
-                                                            </c:if>
+                                                            <%--</c:if>--%>
                                                             value="Project Role">Project Role
-                                                        </option>
+                                                        </option>-->
                                                         <option 
                                                             <c:if test="${setting.type eq 'Business Term'}">
                                                                 selected="selected"
@@ -207,14 +212,14 @@
                                                                <c:if test="${setting.status eq 'true'}">
                                                                    checked
                                                                </c:if>
-                                                               value="1">Active
+                                                               value="true">Active
                                                     </div>
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio" name="status"
                                                                <c:if test="${setting.status eq 'false'}">
                                                                    checked
                                                                </c:if>
-                                                               value="0">Inactive
+                                                               value="false">Inactive
                                                     </div>
                                                 </div>
 

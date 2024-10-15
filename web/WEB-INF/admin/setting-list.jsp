@@ -1,7 +1,7 @@
 <%-- 
     Document   : setting-list
-    Created on : Oct 13, 2024, 4:20:19 PM
-    Author     : kelma
+    Created on : Oct 14, 2024, 4:20:19 PM
+    Author     : HuyenPTNHE160769
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -85,12 +85,12 @@
                                                         </c:if>
                                                         value="Dept Role">Dept Role
                                                     </option>
-                                                    <option 
-                                                        <c:if test="${type eq 'Project Role'}">
-                                                            selected="selected"
-                                                        </c:if>
-                                                        value="Project Role">Project Role
-                                                    </option>
+                                                    <!--                                                    <option 
+                                                    <%--<c:if test="${type eq 'Project Role'}">--%>
+                                                        selected="selected"
+                                                    <%--</c:if>--%>
+                                                    value="Project Role">Project Role
+                                                </option>-->
                                                     <option 
                                                         <c:if test="${type eq 'Business Term'}">
                                                             selected="selected"

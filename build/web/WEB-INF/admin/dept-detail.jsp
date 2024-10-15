@@ -1,6 +1,6 @@
 <%-- 
-    Document   : setting-detail
-    Created on : Oct 14, 2024, 4:20:19 PM
+    Document   : dept-detail
+    Created on : Oct 14, 2024, 4:32:33 PM
     Author     : HuyenPTNHE160769
 --%>
 
@@ -22,7 +22,7 @@
 
         <link rel="canonical" href="pages-profile.html" />
 
-        <title>Setting Details | PMS</title>
+        <title>Department Details | PMS</title>
 
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet">
 
@@ -59,79 +59,51 @@
 
                     <main class="content">
                         <div class="container-fluid p-0">
-                        <c:if test="${setting == null}">
-                            <h1 class="h1 mb-3"> Create New Setting</h1>
+                        <c:if test="${department == null}">
+                            <h1 class="h1 mb-3"> Create New Department</h1>
                             <div class="row">
 
                                 <div class="col-md-12 col-xl-12">
                                     <div class="card">
                                         <div class="card-body">
 
-                                            <form action="insert-setting" method="get" class="row">
+                                            <form action="insert-department" method="get" class="row">
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label">Name<span style="color: red;">*</span></label>
-                                                    <input type="text" class="form-control" name="name" placeholder="Enter the Setting name" 
+                                                    <input type="text" class="form-control" name="name" placeholder="Enter the Department name" 
                                                            value="${name}" required>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Type<span style="color: red;">*</span></label>
-                                                    <select name="type" class="form-select" required>
-                                                        <option value="" hidden disable selected>Choose Setting Type</option>
-                                                        <option 
-                                                            <c:if test="${type eq 'User Role'}">
-                                                                selected="selected"
-                                                            </c:if>
-                                                            value="User Role">User Role
-                                                        </option>
-                                                        <option 
-                                                            <c:if test="${type eq 'Dept Role'}">
-                                                                selected="selected"
-                                                            </c:if>
-                                                            value="Dept Role">Dept Role
-                                                        </option>
-                                                        <!--                                                        <option 
-                                                        <%--<c:if test="${type eq 'Project Role'}">--%>
-                                                            selected="selected"
-                                                        <%--</c:if>--%>
-                                                        value="Project Role">Project Role
-                                                    </option>-->
-                                                        <option 
-                                                            <c:if test="${type eq 'Business Term'}">
-                                                                selected="selected"
-                                                            </c:if>
-                                                            value="Business Term">Business Term
-                                                        </option>
-                                                        <option 
-                                                            <c:if test="${type eq 'Defect Severity'}">
-                                                                selected="selected"
-                                                            </c:if>
-                                                            value="Defect Severity">Defect Severity
-                                                        </option>
+                                                    <label class="form-label">Parent</label>
+                                                    <select name="dept" class="form-select">
+                                                        <option value="">Choose Department Parent</option>
+                                                        <c:forEach items="${dept}" var="d">
+                                                            <option 
+                                                                <c:if test="${deptId eq d.id}">
+                                                                    selected="selected"
+                                                                </c:if>
+                                                                value=${d.id}>${d.name}
+                                                            </option>
+                                                        </c:forEach>
                                                     </select>
                                                 </div>
 
-                                                <div class="mb-3 col-md-12">
-                                                    <label class="form-label">Value</label>
-                                                    <input type="text" class="form-control" name="value" placeholder="Enter the Setting value" 
-                                                           value="${value}">
-                                                </div>
-
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Priority<span style="color: red;">*</span></label>
-                                                    <input type="number" class="form-control" name="priority" placeholder="Enter the Setting priority" 
-                                                           value="${priority}" required>
+                                                    <label class="form-label">Code<span style="color: red;">*</span></label>
+                                                    <input type="text" class="form-control" name="code" placeholder="Enter the Department code" 
+                                                           value="${code}" required>
                                                 </div>
 
                                                 <div class="mb-3 col-md-12">
-                                                    <label class="form-label">Description</label>
-                                                    <textarea class="form-control" name="description" 
-                                                              placeholder="Enter the Setting description" rows="3">${description}</textarea>
+                                                    <label class="form-label">Details</label>
+                                                    <textarea class="form-control" name="details" 
+                                                              placeholder="Enter the Department details" rows="3">${details}</textarea>
                                                 </div>
 
                                                 <div>
                                                     <button type="submit" class="btn btn-lg btn-success">Submit</button>
-                                                    <a href="<%=request.getContextPath()%>/setting-management" class="btn btn-lg btn-light">Cancel</a>
+                                                    <a href="<%=request.getContextPath()%>/department-management" class="btn btn-lg btn-light">Cancel</a>
                                                 </div>
                                             </form>
                                         </div>
@@ -140,83 +112,56 @@
                             </div>
                         </c:if> 
 
-                        <c:if test="${setting != null}">
-                            <h1 class="h1 mb-3"> Setting Details</h1>
+                        <c:if test="${department != null}">
+                            <h1 class="h1 mb-3"> Department Details</h1>
                             <div class="row">
 
                                 <div class="col-md-12 col-xl-12">
                                     <div class="card">
                                         <div class="card-body">
 
-                                            <form action="update-setting" method="post" class="row">
-                                                <input type="hidden" name="id" value="${setting.id}"/>
+                                            <form action="update-department" method="post" class="row">
+                                                <input type="hidden" name="id" value="${department.id}"/>
 
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label">Name<span style="color: red;">*</span></label>
-                                                    <input type="text" class="form-control" name="name" placeholder="Enter the Setting name" 
-                                                           value="${setting.name}" required>
+                                                    <input type="text" class="form-control" name="name" placeholder="Enter the Department name" 
+                                                           value="${department.name}" required>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Type<span style="color: red;">*</span></label>
-                                                    <select name="type" class="form-select" required>
-                                                        <option 
-                                                            <c:if test="${setting.type eq 'User Role'}">
-                                                                selected="selected"
-                                                            </c:if>
-                                                            value="User Role">User Role
-                                                        </option>
-                                                        <option 
-                                                            <c:if test="${setting.type eq 'Dept Role'}">
-                                                                selected="selected"
-                                                            </c:if>
-                                                            value="Dept Role">Dept Role
-                                                        </option>
-<!--                                                        <option 
-                                                            <%--<c:if test="${setting.type eq 'Project Role'}">--%>
-                                                                selected="selected"
-                                                            <%--</c:if>--%>
-                                                            value="Project Role">Project Role
-                                                        </option>-->
-                                                        <option 
-                                                            <c:if test="${setting.type eq 'Business Term'}">
-                                                                selected="selected"
-                                                            </c:if>
-                                                            value="Business Term">Business Term
-                                                        </option>
-                                                        <option 
-                                                            <c:if test="${setting.type eq 'Defect Severity'}">
-                                                                selected="selected"
-                                                            </c:if>
-                                                            value="Defect Severity">Defect Severity
-                                                        </option>
+                                                    <label class="form-label">Parent</label>
+                                                    <select name="parent" class="form-select">
+                                                        <option value="">Choose Department Parent</option>
+                                                        <c:forEach items="${dept}" var="d">
+                                                            <option 
+                                                                <c:if test="${department.parentId eq d.id}">
+                                                                    selected="selected"
+                                                                </c:if>
+                                                                value=${d.id}>${d.name}
+                                                            </option>
+                                                        </c:forEach>
                                                     </select>
                                                 </div>
 
-                                                <div class="mb-3 col-md-12">
-                                                    <label class="form-label">Value</label>
-                                                    <input type="text" class="form-control" name="value" placeholder="Enter the Value" 
-                                                           value="${setting.value}">
-                                                </div>
-
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Priority<span style="color: red;">*</span></label>
-                                                    <input type="number" class="form-control" name="priority" placeholder="Enter the Priority" 
-                                                           value="${setting.priority}" required>
+                                                    <label class="form-label">Code<span style="color: red;">*</span></label>
+                                                    <input type="text" class="form-control" name="code" placeholder="Enter the Department code" 
+                                                           value="${department.code}" required>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label">Status<span style="color: red;">*</span></label>
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio" name="status"
-                                                               <c:if test="${setting.status eq 'true'}">
+                                                               <c:if test="${department.status eq 'true'}">
                                                                    checked
                                                                </c:if>
                                                                value="true">Active
                                                     </div>
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio" name="status"
-                                                               <c:if test="${setting.status eq 'false'}">
+                                                               <c:if test="${department.status eq 'false'}">
                                                                    checked
                                                                </c:if>
                                                                value="false">Inactive
@@ -224,15 +169,15 @@
                                                 </div>
 
                                                 <div class="mb-3 col-md-12">
-                                                    <label class="form-label">Description</label>
-                                                    <textarea class="form-control" name="description" 
-                                                              placeholder="Enter the Description" rows="3">${setting.description}</textarea>
+                                                    <label class="form-label">Details</label>
+                                                    <textarea class="form-control" name="details" 
+                                                              placeholder="Enter the Department details" rows="3">${department.details}</textarea>
                                                 </div>
 
                                                 <div>
                                                     <button type="submit" class="btn btn-lg btn-success">Submit</button>
                                                     <button type="reset" class="btn btn-lg btn-primary">Reset</button>
-                                                    <a href="<%=request.getContextPath()%>/setting-management" class="btn btn-lg btn-light">Cancel</a>
+                                                    <a href="<%=request.getContextPath()%>/department-management" class="btn btn-lg btn-light">Cancel</a>
                                                 </div>
                                             </form>
                                         </div>

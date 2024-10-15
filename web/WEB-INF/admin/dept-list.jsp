@@ -1,7 +1,7 @@
 <%-- 
     Document   : dept-list
-    Created on : Oct 13, 2024, 4:32:33 PM
-    Author     : kelma
+    Created on : Oct 14, 2024, 4:32:33 PM
+    Author     : HuyenPTNHE160769
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -87,10 +87,10 @@
                                                     </option>
                                                 </select>
 
-                                                <input type="search" name="keyword" class="form-control" 
+                                                <input type="search" name="keyword" class="form-control" style="width: 270px;"
                                                        placeholder="Enter Department Name or Code" id="keyword" value="${keyword}">
 
-                                                <button type="submit" class="btn btn-primary">Search</button>
+                                                <button type="submit" class="btn btn-primary" >Search</button>
 
                                             </form>
 
@@ -106,7 +106,7 @@
                                                     <th>ID</th>
                                                     <th>Name</th>
                                                     <th>Code</th>
-                                                    <!--<th>Parent</th>-->
+                                                    <th>Parent</th>
                                                     <th>Status</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -117,7 +117,7 @@
                                                         <td>${dept.id}</td>
                                                         <td>${dept.name}</td>
                                                         <td>${dept.code}</td>
-                                                        <!--<td>${dept.parent}</td>-->
+                                                        <td>${dept.parentCode}</td>
                                                         <td>
                                                             <c:if test="${dept.status eq 'true'}">
                                                                 <span class="badge bg-success">Active</span>
@@ -196,7 +196,7 @@
                                                                                info: true,
                                                                                order: [[0, 'desc']], // Default sort by ID column in descending order
                                                                                columnDefs: [
-                                                                                   {orderable: false, targets: 4} // Disable sorting on the 'Action' column
+                                                                                   {orderable: false, targets: 5} // Disable sorting on the 'Action' column
                                                                                ],
                                                                                language: {
                                                                                    paginate: {

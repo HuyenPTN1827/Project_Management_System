@@ -1,7 +1,7 @@
 <%-- 
     Document   : project-type-list
-    Created on : Oct 13, 2024, 4:48:12 PM
-    Author     : kelma
+    Created on : Oct 14, 2024, 4:48:12 PM
+    Author     : HuyenPTNHE160769
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -87,7 +87,7 @@
                                                     </option>
                                                 </select>
 
-                                                <input type="search" name="keyword" class="form-control" 
+                                                <input type="search" name="keyword" class="form-control" style="width: 270px;"
                                                        placeholder="Enter Project Type Name or Code" id="keyword" value="${keyword}">
 
                                                 <button type="submit" class="btn btn-primary">Search</button>

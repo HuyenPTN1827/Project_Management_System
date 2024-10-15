@@ -121,21 +121,68 @@ public class ProjectTypeController extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void showNewForm(HttpServletRequest request, HttpServletResponse response) {
+//    HuyenPTNHE160769 
+//    15/10/2024 
+//    Show form insert project type
+    private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/project-type-detail.jsp");
+        dispatcher.forward(request, response);
     }
 
-    private void insertProjectType(HttpServletRequest request, HttpServletResponse response) {
+//    HuyenPTNHE160769 
+//    15/10/2024 
+//    Insert project type
+    private void insertProjectType(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+        String name = request.getParameter("name");
+        String code = request.getParameter("code");
+        String details = request.getParameter("details");
+
+        ProjectType pt = new ProjectType();
+        pt.setName(name);
+        pt.setCode(code);
+        pt.setDetails(details);
+
+        groupService.insertProjectType(pt);
+        response.sendRedirect("project-type-management");
     }
 
-    private void showEditForm(HttpServletRequest request, HttpServletResponse response) {
+//    HuyenPTNHE160769 
+//    15/10/2024 
+//    Show form edit project type
+    private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+
+        ProjectType projectType = groupService.getProjectTypeById(id);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/project-type-detail.jsp");
+        request.setAttribute("projectType", projectType);
+        dispatcher.forward(request, response);
     }
 
-    private void updateProjectType(HttpServletRequest request, HttpServletResponse response) {
+//    HuyenPTNHE160769 
+//    15/10/2024 
+//    Update project type
+    private void updateProjectType(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        String name = request.getParameter("name");
+        String code = request.getParameter("code");
+        String details = request.getParameter("details");
+        boolean status = Boolean.parseBoolean(request.getParameter("status"));
+
+        ProjectType pt = new ProjectType();
+        pt.setId(id);
+        pt.setName(name);
+        pt.setCode(code);
+        pt.setDetails(details);
+        pt.setStatus(status);
+
+        groupService.updateProjectType(pt);
+        response.sendRedirect("project-type-management");
     }
-    
+
 //    HuyenPTNHE160769 
 //    14/10/2024 
-//    Change status Project types
+//    Change status project types
     private void changeStatusProjectType(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         boolean status = Boolean.parseBoolean(request.getParameter("status"));
