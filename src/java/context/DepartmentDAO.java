@@ -34,7 +34,7 @@ public class DepartmentDAO {
                 d.setCode(rs.getString("code"));
                 d.setName(rs.getString("name"));
                 d.setDetails(rs.getString("details"));
-                d.setParent(rs.getInt("parent"));
+                d.setParentId(rs.getInt("parent"));
                 d.setStatus(rs.getBoolean("status"));
                 dept.add(d);
             }
@@ -52,14 +52,19 @@ public class DepartmentDAO {
     public List<Department> selectAllDepartments(String keyword, Boolean status) {
         List<Department> dept = new ArrayList<>();
 
-        String sql = "SELECT * FROM pms.department WHERE 1=1";
+        String sql = """
+                     SELECT d1.id, d1.code, d1.name, d1.details, d1.parent, 
+                     d1.status, d2.code, d2.name 
+                     FROM pms.department d1
+                     LEFT JOIN pms.department d2 ON d1.parent = d2.id
+                     WHERE 1=1""";
 
         // Add search conditions if any
         if (keyword != null && !keyword.isEmpty()) {
-            sql += " AND (LOWER(code) LIKE ? OR LOWER(name) LIKE ?)";
+            sql += " AND (LOWER(d1.code) LIKE ? OR LOWER(d1.name) LIKE ?)";
         }
         if (status != null) {
-            sql += " AND status = ?";
+            sql += " AND d1.status = ?";
         }
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
@@ -78,12 +83,14 @@ public class DepartmentDAO {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Department d = new Department();
-                d.setId(rs.getInt("id"));
-                d.setCode(rs.getString("code"));
-                d.setName(rs.getString("name"));
-                d.setDetails(rs.getString("details"));
-                d.setParent(rs.getInt("parent"));
-                d.setStatus(rs.getBoolean("status"));
+                d.setId(rs.getInt("d1.id"));
+                d.setCode(rs.getString("d1.code"));
+                d.setName(rs.getString("d1.name"));
+                d.setDetails(rs.getString("d1.details"));
+                d.setParentId(rs.getInt("d1.parent"));
+                d.setParentName(rs.getString("d2.name"));
+                d.setParentCode(rs.getString("d2.code"));
+                d.setStatus(rs.getBoolean("d1.status"));
 
                 dept.add(d);
             }
@@ -112,7 +119,7 @@ public class DepartmentDAO {
                 d.setCode(rs.getString("code"));
                 d.setName(rs.getString("name"));
                 d.setDetails(rs.getString("details"));
-                d.setParent(rs.getInt("parent"));
+                d.setParentId(rs.getInt("parent"));
                 d.setStatus(rs.getBoolean("status"));
             }
         } catch (SQLException e) {

@@ -10,7 +10,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.ProjectType;
 import service.GroupService;
 
@@ -34,25 +37,25 @@ public class ProjectTypeController extends HttpServlet {
             throws ServletException, IOException {
         String action = request.getServletPath();
 
-//        try {
-        switch (action) {
-            case "/add-project-type" ->
-                showNewForm(request, response); // Show form insert project type
-            case "/insert-project-type" ->
-                insertProjectType(request, response); // Insert project type
-            case "/edit-project-type" ->
-                showEditForm(request, response); // Show form edit project type
-            case "/update-project-type" ->
-                updateProjectType(request, response); // Update project type
-            case "/change-status-project-type" ->
-                changeStatusProjectType(request, response); // Change status project type
-            default -> {
-                listProjectType(request, response); // List of project types
+        try {
+            switch (action) {
+                case "/add-project-type" ->
+                    showNewForm(request, response); // Show form insert project type
+                case "/insert-project-type" ->
+                    insertProjectType(request, response); // Insert project type
+                case "/edit-project-type" ->
+                    showEditForm(request, response); // Show form edit project type
+                case "/update-project-type" ->
+                    updateProjectType(request, response); // Update project type
+                case "/change-status-project-type" ->
+                    changeStatusProjectType(request, response); // Change status project type
+                default -> {
+                    listProjectType(request, response); // List of project types
+                }
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -118,24 +121,82 @@ public class ProjectTypeController extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void showNewForm(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    HuyenPTNHE160769 
+//    15/10/2024 
+//    Show form insert project type
+    private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/project-type-detail.jsp");
+        dispatcher.forward(request, response);
     }
 
-    private void insertProjectType(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    HuyenPTNHE160769 
+//    15/10/2024 
+//    Insert project type
+    private void insertProjectType(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+        String name = request.getParameter("name");
+        String code = request.getParameter("code");
+        String details = request.getParameter("details");
+
+        ProjectType pt = new ProjectType();
+        pt.setName(name);
+        pt.setCode(code);
+        pt.setDetails(details);
+
+        groupService.insertProjectType(pt);
+        response.sendRedirect("project-type-management");
     }
 
-    private void showEditForm(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    HuyenPTNHE160769 
+//    15/10/2024 
+//    Show form edit project type
+    private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+
+        ProjectType projectType = groupService.getProjectTypeById(id);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/project-type-detail.jsp");
+        request.setAttribute("projectType", projectType);
+        dispatcher.forward(request, response);
     }
 
-    private void updateProjectType(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    HuyenPTNHE160769 
+//    15/10/2024 
+//    Update project type
+    private void updateProjectType(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        String name = request.getParameter("name");
+        String code = request.getParameter("code");
+        String details = request.getParameter("details");
+        boolean status = Boolean.parseBoolean(request.getParameter("status"));
+
+        ProjectType pt = new ProjectType();
+        pt.setId(id);
+        pt.setName(name);
+        pt.setCode(code);
+        pt.setDetails(details);
+        pt.setStatus(status);
+
+        groupService.updateProjectType(pt);
+        response.sendRedirect("project-type-management");
     }
 
-    private void changeStatusProjectType(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    HuyenPTNHE160769 
+//    14/10/2024 
+//    Change status project types
+    private void changeStatusProjectType(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        boolean status = Boolean.parseBoolean(request.getParameter("status"));
+
+        ProjectType pt = new ProjectType();
+        pt.setId(id);
+
+        // If status is true, set to false; if false, set to true
+        pt.setStatus(!status);
+
+        // Change the status of a project type by id
+        groupService.changeStatusProjectType(pt);
+        // Redirect to the project-type-management page
+        response.sendRedirect("project-type-management");
     }
 
 }

@@ -165,72 +165,116 @@ public class AuthenticationController extends HttpServlet {
 //            e.printStackTrace();
 //        }
 //    }
-    private void login(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+//   private void login(HttpServletRequest request, HttpServletResponse response) 
+//        throws ServletException, IOException {
+//    String email = request.getParameter("email");
+//    String password = request.getParameter("password");
+//
+//    User user = new User();
+//    user.setEmail(email);
+//    user.setPassword(password);
+//
+//    try {
+//        User foundUser = userService.loginValidate(user);
+//        if (foundUser != null) {
+//            int roleId = foundUser.getRole_id();
+//            HttpSession session = request.getSession();
+//            session.setAttribute("user", foundUser);
+//            session.setMaxInactiveInterval(1 * 60);
+//
+//            // Phân quyền dựa vào role_id
+//            if (roleId == 1) { // Admin
+//                response.sendRedirect(request.getContextPath() + "/user-management");
+//            } else if (roleId == 2) { // Member
+//                response.sendRedirect(request.getContextPath() + "/member-dashboard");
+//            } else {
+//                response.sendRedirect(request.getContextPath() + "/member/unauthorized.jsp");
+//            }
+//        } else {
+//            HttpSession session = request.getSession();
+//            session.setAttribute("NOTIFICATION", "Login Failed!");
+//            request.getRequestDispatcher("/WEB-INF/member/login.jsp").forward(request, response);
+//
+//        }
+//    } catch (ClassNotFoundException e) {
+//        e.printStackTrace();
+//        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An internal error occurred.");
+//    }
+//}
 
-        System.out.println("Email: " + email);
-        System.out.println("Password: " + password);
+private void login(HttpServletRequest request, HttpServletResponse response) 
+    throws ServletException, IOException {
+    String email = request.getParameter("email");
+    String password = request.getParameter("password");
 
-        SettingDAO settingDAO = new SettingDAO();
-        List<Setting> userRoles = settingService.getPriorityUserRolesList();
+    System.out.println("Email: " + email);
+    System.out.println("Password: " + password);
 
-        User user = new User();
-        user.setEmail(email);
-        user.setPassword(password);
+    SettingDAO settingDAO = new SettingDAO();
+    List<Setting> userRoles = settingService.getPriorityUserRolesList(); 
 
-        try {
-            User foundUser = userService.loginValidate(user);
-            if (foundUser != null) {
-                System.out.println("User found: " + foundUser.getEmail());
-                int roleId = foundUser.getRole_id();
-                HttpSession session = request.getSession();
-                session.setAttribute("user", foundUser);
-                session.setMaxInactiveInterval(1 * 60);
+    User user = new User();
+    user.setEmail(email);
+    user.setPassword(password);
 
-                Setting userRoleSetting = null;
-                for (Setting role : userRoles) {
-                    System.out.println("Checking role: " + role.getValue() + " with ID: " + roleId);
-                    if (role.getValue() == roleId) {
-                        userRoleSetting = role;
-                        break;
-                    }
+    try {
+        User foundUser = userService.loginValidate(user);
+        if (foundUser != null) {
+            System.out.println("User found: " + foundUser.getEmail());
+            int roleId = foundUser.getRole_id();
+            HttpSession session = request.getSession();
+            session.setAttribute("user", foundUser);
+            session.setMaxInactiveInterval(1 * 60);
 
-                }
+            Setting userRoleSetting = null;
+            for (Setting role : userRoles) {
+                System.out.println("Checking role: " + role.getValue() + " with ID: " + roleId);
+              if (role.getValue().equals(String.valueOf(roleId))) { 
+    userRoleSetting = role;
+    break;
+}
 
-                if (userRoleSetting != null) {
-                    session.setAttribute("userRoleSetting", userRoleSetting);
-                    System.out.println("User Role: " + userRoleSetting.getName());
-                    System.out.println("Role Priority: " + userRoleSetting.getPriority());
-                    System.out.println("User found: " + foundUser.getEmail() + ", Role ID: " + foundUser.getRole_id());
 
-                    // Phân quyền dựa vào tên role
-                    if (userRoleSetting.getPriority() == 1) {
-                        System.out.println("Redirecting to user-management");
-                        response.sendRedirect(request.getContextPath() + "/user-management");
-                    } else if (userRoleSetting.getPriority() == 2) {
-                        System.out.println("Redirecting to member-dashboard");
-                        response.sendRedirect(request.getContextPath() + "/member-dashboard");
-                    } else {
-                        System.out.println("Unauthorized access!");
-                        response.sendRedirect(request.getContextPath() + "/member/unauthorized.jsp");
-                    }
+            }
+
+            if (userRoleSetting != null) {
+                session.setAttribute("userRoleSetting", userRoleSetting);
+                System.out.println("User Role: " + userRoleSetting.getName());
+                System.out.println("Role Priority: " + userRoleSetting.getPriority());
+                System.out.println("User found: " + foundUser.getEmail() + ", Role ID: " + foundUser.getRole_id());
+
+                // Phân quyền dựa vào tên role
+                if (userRoleSetting.getPriority() == 1) { 
+                    System.out.println("Redirecting to user-management");
+                    response.sendRedirect(request.getContextPath() + "/user-management");
+                } else if (userRoleSetting.getPriority() == 2) { 
+                    System.out.println("Redirecting to member-dashboard");
+                    response.sendRedirect(request.getContextPath() + "/member-dashboard");
                 } else {
-                    System.out.println("User role setting is null!");
+                    System.out.println("Unauthorized access!");
                     response.sendRedirect(request.getContextPath() + "/member/unauthorized.jsp");
                 }
             } else {
-                HttpSession session = request.getSession();
-                session.setAttribute("NOTIFICATION", "Login Failed!");
-                System.out.println("Login Failed!");
-                request.getRequestDispatcher("/WEB-INF/member/login.jsp").forward(request, response);
+                System.out.println("User role setting is null!");
+                response.sendRedirect(request.getContextPath() + "/member/unauthorized.jsp");
             }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An internal error occurred.");
+        } else {
+            HttpSession session = request.getSession();
+            session.setAttribute("NOTIFICATION", "Login Failed!");
+            System.out.println("Login Failed!");
+            request.getRequestDispatcher("/WEB-INF/member/login.jsp").forward(request, response);
         }
+    } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An internal error occurred.");
     }
+}
+
+
+
+
+
+
 
     private void logout(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         // Lấy session hiện tại

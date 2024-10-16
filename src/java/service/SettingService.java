@@ -62,10 +62,10 @@ public class SettingService {
     public boolean changeStatusSetting(Setting setting) throws SQLException {
         return settingDAO.changeStatusSetting(setting);
     }
-
+    
     //BachHD
     //16/10
-    public List<Setting> getPriorityUserRolesList() {
+    public List<Setting> getPriorityUserRolesList(){
         return settingDAO.getPriorityUserRolesList();
     }
 }

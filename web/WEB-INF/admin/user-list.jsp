@@ -1,7 +1,7 @@
 <%-- 
     Document   : user-list
     Created on : Sep 15, 2024, 6:19:09 PM
-    Author     : kelma
+    Author     : HuyenPTNHE160769
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -182,13 +182,12 @@
                                                                    class="btn btn-link text-primary">Details</a>
                                                                 
                                                                 <a href="<%=request.getContextPath()%>/change-status-user?id=${user.id}&status=${user.status}"
-                                                                   class="btn btn-link text-success"
+                                                                   class="btn btn-link text-danger"
                                                                    onclick="return confirm('Are you sure you want to deactivate this user?');">Deactivate</a>
                                                             </c:if>
                                                             
                                                             <c:if test="${user.status eq '3'}">
                                                                 <a href="<%=request.getContextPath()%>/edit-user?id=${user.id}"
-                                                                   class="btn btn-link text-success"
                                                                    class="btn btn-link text-primary">Details</a>
                                                             </c:if>
                                                         </td>
@@ -246,7 +245,7 @@
                                                                                info: true,
                                                                                order: [[0, 'desc']], // Default sort by ID column in descending order
                                                                                columnDefs: [
-                                                                                   {orderable: false, targets: 6} // Disable sorting on the 'Action' column
+                                                                                   {orderable: false, targets: 7} // Disable sorting on the 'Action' column
                                                                                ],
                                                                                language: {
                                                                                    paginate: {

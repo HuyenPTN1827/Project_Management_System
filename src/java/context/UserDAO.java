@@ -60,63 +60,60 @@ public class UserDAO {
 //        return status;
 //    }
     public User loginValidate(User user) throws ClassNotFoundException {
-    User foundUser = null;
-    String query = """
+        User foundUser = null;
+        String query = """
                    SELECT id, full_name, email, mobile, password, role_id
                    FROM pms.user
                    WHERE email = ? AND password = ?;
                    """;
 
-    try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(query)) {
-        stm.setString(1, user.getEmail());
-        stm.setString(2, user.getPassword());
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(query)) {
+            stm.setString(1, user.getEmail());
+            stm.setString(2, user.getPassword());
 
-        ResultSet rs = stm.executeQuery();
-        if (rs.next()) {
-            foundUser = new User();
-            foundUser.setId(rs.getInt("id"));
-            foundUser.setFull_name(rs.getString("full_name"));
-            foundUser.setEmail(rs.getString("email"));
-            foundUser.setMobile(rs.getString("mobile"));
-            foundUser.setPassword(rs.getString("password"));
-            foundUser.setRole_id(rs.getInt("role_id")); // Set role_id vào user
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                foundUser = new User();
+                foundUser.setId(rs.getInt("id"));
+                foundUser.setFull_name(rs.getString("full_name"));
+                foundUser.setEmail(rs.getString("email"));
+                foundUser.setMobile(rs.getString("mobile"));
+                foundUser.setPassword(rs.getString("password"));
+                foundUser.setRole_id(rs.getInt("role_id")); // Set role_id vào user
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
         }
-    } catch (SQLException e) {
-        BaseDAO.printSQLException(e);
+        return foundUser; // Trả về người dùng đã tìm thấy hoặc null
     }
-    return foundUser; // Trả về người dùng đã tìm thấy hoặc null
-}
 
-
-   public User selectUserByEmail(String email) {
-    User user = null;
-    String query = """
+    public User selectUserByEmail(String email) {
+        User user = null;
+        String query = """
                    SELECT u.id, u.full_name, u.email, u.mobile, u.password, u.notes, 
                    u.status, u.role_id
                    FROM pms.user u
                    WHERE u.email = ?;""";
-    try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(query)) {
-        stm.setString(1, email);
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(query)) {
+            stm.setString(1, email);
 
-        ResultSet rs = stm.executeQuery();
-        if (rs.next()) {
-            user = new User();
-            user.setId(rs.getInt("id"));
-            user.setFull_name(rs.getString("full_name"));
-            user.setEmail(rs.getString("email"));
-            user.setMobile(rs.getString("mobile"));
-            user.setPassword(rs.getString("password"));
-            user.setStatus(rs.getInt("status"));
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                user = new User();
+                user.setId(rs.getInt("id"));
+                user.setFull_name(rs.getString("full_name"));
+                user.setEmail(rs.getString("email"));
+                user.setMobile(rs.getString("mobile"));
+                user.setPassword(rs.getString("password"));
+                user.setStatus(rs.getInt("status"));
 
-            
 //            user.setRole(rs.getInt("role_id")); 
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
         }
-    } catch (SQLException e) {
-        BaseDAO.printSQLException(e);
+        return user;
     }
-    return user;
-}
-
 
 //    public User selectUserByID(int id) {
 //        User user = null;
@@ -169,7 +166,6 @@ public class UserDAO {
 //
 //        return role;
 //    }
-
 //BachHD
 //28/9
 //updateMember
@@ -404,7 +400,7 @@ public class UserDAO {
 
                         rowUpdated = updateUserStm.executeUpdate() > 0;
                     }
-                    
+
                     if (deptId != null) {
                         // Update current record in dept_user
                         String updateDeptUserSql = "UPDATE pms.dept_user SET dept_id = ? WHERE user_id = ? AND end_date IS NULL";
@@ -457,23 +453,38 @@ public class UserDAO {
                     }
 
                     if (deptId != null) {
-                        // Close current record in dept_user
-                        String closeDeptUserSql = "UPDATE pms.dept_user SET end_date = CURDATE(), "
-                                + "status = 0 WHERE user_id = ? AND end_date IS NULL";
-                        try (PreparedStatement closeDeptUserStm = cnt.prepareStatement(closeDeptUserSql)) {
-                            closeDeptUserStm.setInt(1, user.getId());
-                            closeDeptUserStm.executeUpdate();
+                        // Query to get the current dept_id from dept_user
+                        String selectDeptIdSql = "SELECT dept_id FROM pms.dept_user WHERE user_id = ? AND end_date IS NULL";
+                        Integer currentDeptId = null;
 
-                            closeDeptUserStm.executeUpdate();
+                        try (PreparedStatement selectDeptIdStm = cnt.prepareStatement(selectDeptIdSql)) {
+                            selectDeptIdStm.setInt(1, user.getId());
+                            try (ResultSet rs = selectDeptIdStm.executeQuery()) {
+                                if (rs.next()) {
+                                    currentDeptId = rs.getInt("dept_id");
+                                }
+                            }
                         }
 
-                        // Insert new record in dept_user
-                        String insertDeptUserSql = "INSERT INTO pms.dept_user (user_id, dept_id, start_date, status) VALUES (?, ?, CURDATE(), 1)";
-                        try (PreparedStatement insertDeptUserStm = cnt.prepareStatement(insertDeptUserSql)) {
-                            insertDeptUserStm.setInt(1, user.getId());
-                            insertDeptUserStm.setInt(2, user.getDept().getId());
+                        // Only update if deptId is different from currentDeptId
+                        if (!deptId.equals(currentDeptId)) {
+                            // Close current record in dept_user
+                            String closeDeptUserSql = "UPDATE pms.dept_user SET end_date = CURDATE(), "
+                                    + "status = 0 WHERE user_id = ? AND end_date IS NULL";
+                            try (PreparedStatement closeDeptUserStm = cnt.prepareStatement(closeDeptUserSql)) {
+                                closeDeptUserStm.setInt(1, user.getId());
 
-                            insertDeptUserStm.executeUpdate();
+                                closeDeptUserStm.executeUpdate();
+                            }
+
+                            // Insert new record in dept_user
+                            String insertDeptUserSql = "INSERT INTO pms.dept_user (user_id, dept_id, start_date, status) VALUES (?, ?, CURDATE(), 1)";
+                            try (PreparedStatement insertDeptUserStm = cnt.prepareStatement(insertDeptUserSql)) {
+                                insertDeptUserStm.setInt(1, user.getId());
+                                insertDeptUserStm.setInt(2, user.getDept().getId());
+
+                                insertDeptUserStm.executeUpdate();
+                            }
                         }
                     }
                 }
@@ -512,10 +523,10 @@ public class UserDAO {
 
         return rowUpdated;
     }
+    //    HuyenPTNHE160769
+    //    25/09/2024        
+    //    Admin change status of an user
 
-//    HuyenPTNHE160769
-//    25/09/2024        
-//    Admin change status of an user
     public boolean changeStatusUser(User user) throws SQLException {
         boolean rowUpdated = false;
         try (Connection cnt = BaseDAO.getConnection()) {

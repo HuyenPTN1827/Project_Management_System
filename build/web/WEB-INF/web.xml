@@ -138,6 +138,6 @@
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>login-form</welcome-file>
-        <!--<welcome-file>user-management</welcome-file>-->
+        <!--<welcome-file>project-type-management</welcome-file>-->
     </welcome-file-list>
 </web-app>

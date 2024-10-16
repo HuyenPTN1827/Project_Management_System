@@ -16,7 +16,7 @@ import model.User;
  */
 public class UserService extends BaseServive {
 
-    private UserDAO userDAO;
+    private final UserDAO userDAO;
 
     public UserService() {
         this.userDAO = new UserDAO();
