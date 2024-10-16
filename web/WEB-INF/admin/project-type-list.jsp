@@ -66,7 +66,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-12">
+                                <div class="col-md-12 col-xl-12">
                                     <div class="card">
                                         <div class="card-header">
                                             <div class="d-flex justify-content-between align-items-center" style="margin: 10px;">
@@ -125,8 +125,11 @@
                                                             </c:if>
                                                         </td>
                                                         <td>
-                                                            <a href="<%=request.getContextPath()%>/edit-project-type?id=${type.id}" 
-                                                               class="btn btn-link text-primary">Details</a>
+<!--                                                            <a href="<%=request.getContextPath()%>/edit-project-type?id=${type.id}" 
+                                                               class="btn btn-link text-primary">Details</a>-->
+                                                            
+                                                            <a href="<%=request.getContextPath()%>/project-type-user?id=${type.id}" 
+                                                               class="btn btn-link text-primary">Configs</a>
 
                                                             <c:if test="${type.status eq 'false'}">
                                                                 <a href="<%=request.getContextPath()%>/change-status-project-type?id=${type.id}&status=${type.status}"

@@ -49,6 +49,8 @@ public class ProjectTypeController extends HttpServlet {
                     updateProjectType(request, response); // Update project type
                 case "/change-status-project-type" ->
                     changeStatusProjectType(request, response); // Change status project type
+                case "/project-type-user" ->
+                    listProjectTypeUser(request, response); // List of project type users
                 default -> {
                     listProjectType(request, response); // List of project types
                 }
@@ -197,6 +199,19 @@ public class ProjectTypeController extends HttpServlet {
         groupService.changeStatusProjectType(pt);
         // Redirect to the project-type-management page
         response.sendRedirect("project-type-management");
+    }
+
+//    HuyenPTNHE160769 
+//    14/10/2024 
+//    List of project type users
+    private void listProjectTypeUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+
+        ProjectType projectType = groupService.getProjectTypeById(id);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/project-type-users.jsp");
+        request.setAttribute("projectType", projectType);
+        dispatcher.forward(request, response);
     }
 
 }
