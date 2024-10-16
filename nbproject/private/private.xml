@@ -2,6 +2,15 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/AuthenticationController.java</file>
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/ResetPasswordController.java</file>
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/filter/AuthenticationFilter.java</file>
+            <file>file:/D:/Do%20An/Project_Management_System/web/WEB-INF/member/success.jsp</file>
+            <file>file:/D:/Do%20An/Project_Management_System/web/WEB-INF/member/login.jsp</file>
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/ChangePasswordController.java</file>
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/ForgotPasswordController.java</file>
+            <file>file:/D:/Do%20An/Project_Management_System/web/WEB-INF/member/sidebar.jsp</file>
+        </group>
     </open-files>
 </project-private>

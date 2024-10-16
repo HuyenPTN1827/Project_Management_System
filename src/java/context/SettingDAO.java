@@ -191,4 +191,25 @@ public class SettingDAO {
         }
         return rowUpdated;
     }
+
+    public List<Setting> getPriorityUserRolesList() {
+        List<Setting> settings = new ArrayList<>();
+
+        String sql = "SELECT id, name, value, priority FROM pms.setting WHERE type = 'User Role' AND status = 1 ORDER BY priority DESC;";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Setting s = new Setting();
+                s.setId(rs.getInt("id"));
+                s.setName(rs.getString("name"));
+                s.setValue(rs.getInt("value"));
+                s.setPriority(rs.getInt("priority")); // Thêm dòng này để gán giá trị cho priority
+                settings.add(s);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return settings;
+    }
 }

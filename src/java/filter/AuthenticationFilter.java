@@ -11,8 +11,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
-
 import java.io.IOException;
+import model.Setting;
 import model.User;
 
 /**
@@ -20,11 +20,6 @@ import model.User;
  * @author Admin
  */
 public class AuthenticationFilter implements Filter {
-
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        // Khởi tạo filter, nếu cần
-    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -39,34 +34,32 @@ public class AuthenticationFilter implements Filter {
         }
 
         // Đã đăng nhập, kiểm tra quyền hạn
-        User user = (User) userObject; // Ép kiểu đối tượng user từ session
-        String userRole = (String) httpRequest.getSession().getAttribute("userRole"); // Lấy vai trò từ session
-
-        // Lấy URL hiện tại để kiểm tra quyền truy cập
+        Setting userRoleSetting = (Setting) httpRequest.getSession().getAttribute("userRoleSetting"); // Lấy vai trò từ session
         String currentURL = httpRequest.getRequestURI();
 
+        // Ghi log thông tin
         System.out.println("Current URL: " + currentURL);
-        System.out.println("User Role: " + userRole);
+        System.out.println("User Role: " + (userRoleSetting != null ? userRoleSetting.getName() : "No role"));
+
         // Kiểm tra quyền truy cập dựa trên vai trò
         if (currentURL.contains("/user-management")) {
-            if ("admin".equalsIgnoreCase(userRole)) {
-                // Nếu là admin, cho phép truy cập
-                chain.doFilter(request, response);
+            if (userRoleSetting != null && userRoleSetting.getPriority() == 1) {
+                chain.doFilter(request, response); // Cho phép truy cập
             } else {
-                // Nếu không phải admin, chuyển hướng đến trang lỗi
+                // Ghi log và chuyển hướng đến trang lỗi
+                System.out.println("Unauthorized access attempt by user with role: " + (userRoleSetting != null ? userRoleSetting.getName() : "No role"));
                 httpRequest.getRequestDispatcher("/WEB-INF/member/unauthorized.jsp").forward(request, response);
             }
-        } else if (currentURL.contains("/todo-list")) {
-            if ("member".equalsIgnoreCase(userRole) || "admin".equalsIgnoreCase(userRole)) {
-                // Nếu là user hoặc admin, cho phép truy cập
-                chain.doFilter(request, response);
+        } else if (currentURL.contains("/member-dashboard")) {
+            if (userRoleSetting != null && (userRoleSetting.getPriority() == 2)) {
+                chain.doFilter(request, response); // Cho phép truy cập
             } else {
-                // Nếu không có quyền, chuyển hướng đến trang lỗi
+                // Ghi log và chuyển hướng đến trang lỗi
+                System.out.println("Unauthorized access attempt by user with role: " + (userRoleSetting != null ? userRoleSetting.getName() : "No role"));
                 httpRequest.getRequestDispatcher("/WEB-INF/member/unauthorized.jsp").forward(request, response);
             }
         } else {
-            // Nếu không thuộc các đường dẫn cần kiểm tra quyền, cho phép tiếp tục
-            chain.doFilter(request, response);
+            chain.doFilter(request, response); // Cho phép tiếp tục
         }
     }
 
