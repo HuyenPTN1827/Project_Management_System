@@ -33,7 +33,7 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(int id, String full_name, String email, String mobile, String password, String notes, int status, int role_id ,Role role, Department dept, Setting setting) {
+    public User(int id, String full_name, String email, String mobile, String password, String notes, int status, int role_id, Role role, Department dept, Setting setting) {
         this.id = id;
         this.full_name = full_name;
         this.email = email;
@@ -158,5 +158,5 @@ public class User implements Serializable {
     public void setSettings(ArrayList<Setting> settings) {
         this.settings = settings;
     }
-
+    
 }

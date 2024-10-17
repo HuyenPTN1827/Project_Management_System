@@ -23,7 +23,11 @@ public class SettingService {
 
     // HuyenPTNHE160769
     // 29/09/2024
+<<<<<<< Updated upstream
     // Get roles list
+=======
+    // Get user roles list
+>>>>>>> Stashed changes
     public List<Setting> getUserRoleList() {
         return settingDAO.getUserRolesList();
     }

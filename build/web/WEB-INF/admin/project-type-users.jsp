@@ -114,15 +114,16 @@
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 15px;">
                                             <form action="project-type-user" method="post" class="d-flex align-items-center" style="gap: 15px;">
+                                                <input type="hidden" name="id" value="${projectType.id}">
 
                                                 <select name="roleId" class="form-select">
                                                     <option value="">All Project Roles</option>
-                                                    <c:forEach items="${role}" var="r">
+                                                    <c:forEach items="${ptSetting}" var="s">
                                                         <option 
-                                                            <c:if test="${roleId eq r.id}">
+                                                            <c:if test="${roleId eq s.id}">
                                                                 selected="selected"
                                                             </c:if>
-                                                            value="${r.id}">${r.name}
+                                                            value="${s.id}">${s.name}
                                                         </option>
                                                     </c:forEach>
                                                 </select>
@@ -130,22 +131,16 @@
                                                 <select name="status" class="form-select">
                                                     <option value="">All Statuses</option>
                                                     <option 
-                                                        <c:if test="${status eq 1}">
+                                                        <c:if test="${status eq 'true'}">
                                                             selected="selected"
                                                         </c:if>
-                                                        value="1">Active
+                                                        value="true">Active
                                                     </option>
                                                     <option 
-                                                        <c:if test="${status eq 0}">
+                                                        <c:if test="${status eq 'false'}">
                                                             selected="selected"
                                                         </c:if>
-                                                        value="0">Inactive
-                                                    </option>
-                                                    <option 
-                                                        <c:if test="${status eq 3}">
-                                                            selected="selected"
-                                                        </c:if>
-                                                        value="3">Unverified
+                                                        value="false">Inactive
                                                     </option>
                                                 </select>
 
@@ -162,6 +157,7 @@
                                         <table id="datatables-multi" class="table table-striped" style="width:100%">
                                             <thead>
                                                 <tr>
+                                                    <th hidden>ID</th>
                                                     <th>ID</th>
                                                     <th>Full Name</th>
                                                     <th>Project Role</th>
@@ -172,42 +168,43 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>35</td>
-                                                    <td>Iteration 1</td>
-                                                    <td>Ongoing Phase 1</td>
-                                                    <td>15/07/2024</td>
-                                                    <td>15/07/2024</td>
-                                                    <td>Closed</td>
-                                                    <td>
-                                                        <a href="#" class="text-primary">View</a> 
-                                                        <a href="#" class="text-primary">Update</a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>42</td>
-                                                    <td>Iteration 2</td>
-                                                    <td>Ongoing Phase 2</td>
-                                                    <td>29/07/2024</td>
-                                                    <td>29/07/2024</td>
-                                                    <td>In Progress</td>
-                                                    <td>
-                                                        <a href="#" class="text-primary">View</a> 
-                                                        <a href="#" class="text-primary">Update</a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>43</td>
-                                                    <td>Iteration 3</td>
-                                                    <td>Ongoing Phase 3</td>
-                                                    <td>13/08/2024</td>
-                                                    <td>13/08/2024</td>
-                                                    <td>Pending</td>
-                                                    <td>
-                                                        <a href="#" class="text-primary">View</a> 
-                                                        <a href="#" class="text-primary">Update</a>
-                                                    </td>
-                                                </tr>
+                                                <c:forEach items="${requestScope.ptUser}" var="ptu">
+                                                    <tr>
+                                                        <td hidden>${ptu.id}</td>
+                                                        <td>${ptu.user.id}</td>
+                                                        <td>${ptu.user.full_name}</td>
+                                                        <td>${ptu.ptSetting.name}</td>
+                                                        <td>${ptu.start_date}</td>
+                                                        <td>${ptu.end_date}</td>
+                                                        <td>
+                                                            <c:if test="${ptu.status eq 'false'}">
+                                                                <span class="badge bg-danger">Inactive</span>
+                                                            </c:if>
+                                                            <c:if test="${ptu.status eq 'true'}">
+                                                                <span class="badge bg-success">Active</span>
+                                                            </c:if>
+                                                        </td>
+                                                        <td>
+                                                            <c:if test="${ptu.status eq 'false'}">
+                                                                <a href="<%=request.getContextPath()%>/edit-project-type-user?id=${ptu.id}"
+                                                                   class="btn btn-link text-primary">Details</a>
+
+                                                                <a href="<%=request.getContextPath()%>/change-status-project-type-user?id=${ptu.id}&status=${ptu.status}"
+                                                                   class="btn btn-link text-success"
+                                                                   onclick="return confirm('Are you sure you want to activate this user?');">Activate</a>
+                                                            </c:if>
+
+                                                            <c:if test="${ptu.status eq 'true'}">
+                                                                <a href="<%=request.getContextPath()%>/edit-project-type-user?id=${ptu.id}"
+                                                                   class="btn btn-link text-primary">Details</a>
+
+                                                                <a href="<%=request.getContextPath()%>/change-status-project-type-user?id=${ptu.id}&status=${ptu.status}"
+                                                                   class="btn btn-link text-danger"
+                                                                   onclick="return confirm('Are you sure you want to deactivate this user?');">Deactivate</a>
+                                                            </c:if>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
                                             </tbody>
                                         </table>
                                     </div>
@@ -251,32 +248,32 @@
         <script src="${pageContext.request.contextPath}/js/datatables.js"></script>
 
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                var datatablesMulti = $("#datatables-multi").DataTable({
-                    responsive: true,
-                    paging: true,
-                    searching: false,
-                    info: true,
-                    order: [[0, 'desc']], // Default sort by ID column in descending order
-                    columnDefs: [
-                        {orderable: false, targets: 6} // Disable sorting on the 'Action' column
-                    ],
-                    language: {
-                        paginate: {
-                            previous: "&laquo;",
-                            next: "&raquo;"
-                        },
-                        info: "_TOTAL_ user(s) found",
-                        infoEmpty: "No user found"
-                    },
-                    dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
-                    initComplete: function () {
-                        // Add necessary classes for alignment
-                        $('.dataTables_info').addClass('text-left fw-bolder');
-                        $('.dataTables_length').addClass('mt-2'); // Add necessary margin classes
-                    }
-                });
-            });
+                                                                       document.addEventListener("DOMContentLoaded", function () {
+                                                                           var datatablesMulti = $("#datatables-multi").DataTable({
+                                                                               responsive: true,
+                                                                               paging: true,
+                                                                               searching: false,
+                                                                               info: true,
+                                                                               order: [[0, 'desc']], // Default sort by ID column in descending order
+                                                                               columnDefs: [
+                                                                                   {orderable: false, targets: 7} // Disable sorting on the 'Action' column
+                                                                               ],
+                                                                               language: {
+                                                                                   paginate: {
+                                                                                       previous: "&laquo;",
+                                                                                       next: "&raquo;"
+                                                                                   },
+                                                                                   info: "_TOTAL_ user(s) found",
+                                                                                   infoEmpty: "No user found"
+                                                                               },
+                                                                               dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
+                                                                               initComplete: function () {
+                                                                                   // Add necessary classes for alignment
+                                                                                   $('.dataTables_info').addClass('text-left fw-bolder');
+                                                                                   $('.dataTables_length').addClass('mt-2'); // Add necessary margin classes
+                                                                               }
+                                                                           });
+                                                                       });
         </script>
 
         <script>

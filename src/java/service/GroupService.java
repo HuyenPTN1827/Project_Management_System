@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.List;
 import model.Department;
 import model.ProjectType;
+import model.ProjectType_User;
 
 /**
  *
@@ -100,5 +101,12 @@ public class GroupService {
     // Admin change status of a project type
     public boolean changeStatusProjectType(ProjectType projectType) throws SQLException {
         return projectTypeDAO.changeStatusProjectType(projectType);
+    }
+    
+//    HuyenPTNHE160769
+//    17/10/2024      
+//    Admin get all project type users
+    public List<ProjectType_User> getAllProjectTypeUsers(String keyword, Integer roleId, Boolean status, int typeId) {
+        return projectTypeDAO.selectAllProjectTypeUsers(keyword, roleId, status, typeId);
     }
 }
