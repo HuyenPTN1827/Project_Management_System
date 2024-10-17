@@ -70,7 +70,7 @@ public class AuthenticationFilter implements Filter {
 //            chain.doFilter(request, response);
 //        }
 //    }
-
+//BachHD
   @Override
 public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
         throws IOException, ServletException {
@@ -101,7 +101,7 @@ public void doFilter(ServletRequest request, ServletResponse response, FilterCha
             httpRequest.getRequestDispatcher("/WEB-INF/member/unauthorized.jsp").forward(request, response);
         }
     } else if (currentURL.contains("/member-dashboard")) {
-        if (userRoleSetting != null && ( userRoleSetting.getPriority() == 2)) {
+        if (userRoleSetting != null && ( userRoleSetting.getPriority() >= 2)) {
             chain.doFilter(request, response); // Cho phép truy cập
         } else {
             // Ghi log và chuyển hướng đến trang lỗi
