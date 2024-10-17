@@ -8,7 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
-import model.ProjecTypeSetting;
+import model.ProjectTypeSetting;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,14 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 import model.User;
 import model.Department;
-import model.Role;
 import model.Setting;
 
-public class ProjecTypeSettingDAO {
+public class ProjectTypeSettingDAO {
 
 // Get list of ProjectTypeSetting with search by name or value and filter by status
-    public List<ProjecTypeSetting> getAllProjectTypeSettings(String keyword, Boolean statusFilter) throws SQLException {
-        List<ProjecTypeSetting> list = new ArrayList<>();
+    public List<ProjectTypeSetting> getAllProjectTypeSettings(String keyword, Boolean statusFilter) throws SQLException {
+        List<ProjectTypeSetting> list = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT * FROM project_type_setting WHERE 1=1");
 
         // Add search condition if keyword is provided
@@ -56,7 +55,7 @@ public class ProjecTypeSettingDAO {
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                ProjecTypeSetting setting = new ProjecTypeSetting(
+                ProjectTypeSetting setting = new ProjectTypeSetting(
                         rs.getInt("id"),
                         rs.getString("name"),
                         rs.getString("type"),
@@ -74,7 +73,7 @@ public class ProjecTypeSettingDAO {
     }
 
     // Get ProjectTypeSetting by ID
-    public ProjecTypeSetting getProjectTypeSettingById(int id) throws SQLException {
+    public ProjectTypeSetting getProjectTypeSettingById(int id) throws SQLException {
         String sql = "SELECT * FROM project_type_setting WHERE id = ?";
         System.out.println(sql);
 
@@ -82,7 +81,7 @@ public class ProjecTypeSettingDAO {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new ProjecTypeSetting(
+                return new ProjectTypeSetting(
                         rs.getInt("id"),
                         rs.getString("name"),
                         rs.getString("type"),
@@ -99,7 +98,7 @@ public class ProjecTypeSettingDAO {
     }
 
     // Create new ProjectTypeSetting
-    public void createProjectTypeSetting(ProjecTypeSetting setting) throws SQLException {
+    public void createProjectTypeSetting(ProjectTypeSetting setting) throws SQLException {
         String sql = "INSERT INTO project_type_setting (name, type, value, priority, status, description) VALUES (?, ?, ?, ?, ?, ?)";
         System.out.println(sql);
 
@@ -117,7 +116,7 @@ public class ProjecTypeSettingDAO {
     }
 
     // Update existing ProjectTypeSetting
-    public void updateProjectTypeSetting(ProjecTypeSetting setting) throws SQLException {
+    public void updateProjectTypeSetting(ProjectTypeSetting setting) throws SQLException {
         String sql = "UPDATE project_type_setting SET name = ?, type = ?, value = ?, priority = ?, status = ?, description = ? WHERE id = ?";
         System.out.println(sql);
 
@@ -161,4 +160,26 @@ public class ProjecTypeSettingDAO {
         }
     }
 
+    // HuyenPTNHE160769
+    // 29/09/2024
+    // Get roles list
+    public List<ProjectTypeSetting> getProjectRolesList() {
+        List<ProjectTypeSetting> pjSetting = new ArrayList<>();
+
+        String sql = "SELECT * FROM pms.project_type_setting WHERE type = 'Project Role' AND status = 1 ORDER BY priority ASC;";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                ProjectTypeSetting pts = new ProjectTypeSetting();
+                pts.setId(rs.getInt("id"));
+                pts.setName(rs.getString("name"));
+                pts.setValue(rs.getString("value"));
+                pjSetting.add(pts);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return pjSetting;
+    }
 }

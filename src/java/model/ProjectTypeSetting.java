@@ -6,19 +6,21 @@ package model;
 
 /**
  *
- * @author Admin
+ * @author kelma
  */
-public class ProjecTypeSetting {
+public class ProjectTypeSetting {
+    private int id;
+    private String name;
+    private String type;
+    private String value;
+    private int priority;
+    private boolean status;
+    private String description;
 
-    int id;
-    String name;
-    String type;
-    String value;
-    int priority;
-    boolean status;
-    String description;
+    public ProjectTypeSetting() {
+    }
 
-    public ProjecTypeSetting(int id, String name, String type, String value, int priority, boolean status, String description) {
+    public ProjectTypeSetting(int id, String name, String type, String value, int priority, boolean status, String description) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -26,9 +28,6 @@ public class ProjecTypeSetting {
         this.priority = priority;
         this.status = status;
         this.description = description;
-    }
-
-    public ProjecTypeSetting() {
     }
 
     public int getId() {
@@ -86,6 +85,5 @@ public class ProjecTypeSetting {
     public void setDescription(String description) {
         this.description = description;
     }
-    
     
 }

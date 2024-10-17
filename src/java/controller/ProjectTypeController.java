@@ -15,7 +15,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.ProjectType;
+import model.ProjectTypeSetting;
+import model.ProjectType_User;
 import service.GroupService;
+import service.ProjectTypeSettingService;
 
 /**
  *
@@ -24,10 +27,12 @@ import service.GroupService;
 public class ProjectTypeController extends HttpServlet {
 
     private GroupService groupService;
+    private ProjectTypeSettingService ptSettingService;
 
     @Override
     public void init() throws ServletException {
         this.groupService = new GroupService();
+        this.ptSettingService = new ProjectTypeSettingService();
     }
 
 //    HuyenPTNHE160769 
@@ -179,7 +184,9 @@ public class ProjectTypeController extends HttpServlet {
         pt.setStatus(status);
 
         groupService.updateProjectType(pt);
-        response.sendRedirect("project-type-management");
+//        response.sendRedirect("project-type-management");
+        response.sendRedirect("project-type-user?id=" +  id);
+
     }
 
 //    HuyenPTNHE160769 
@@ -206,11 +213,25 @@ public class ProjectTypeController extends HttpServlet {
 //    List of project type users
     private void listProjectTypeUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
+        String keyword = request.getParameter("keyword");
+        String roleIdStr = request.getParameter("roleId");
+        String statusStr = request.getParameter("status");
+
+        // Process the filter value, convert to number or null if not selected
+        Integer roleId = roleIdStr != null && !roleIdStr.isEmpty() ? Integer.valueOf(roleIdStr) : null;
+        Boolean status = statusStr != null && !statusStr.isEmpty() ? Boolean.valueOf(statusStr) : null;
 
         ProjectType projectType = groupService.getProjectTypeById(id);
+        List<ProjectTypeSetting> ptSetting = ptSettingService.getProjectRoleList();
+        List<ProjectType_User> ptUser = groupService.getAllProjectTypeUsers(keyword, roleId, status, id);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/project-type-users.jsp");
         request.setAttribute("projectType", projectType);
+        request.setAttribute("ptSetting", ptSetting);
+        request.setAttribute("ptUser", ptUser);
+        request.setAttribute("keyword", keyword);
+        request.setAttribute("roleId", roleId);
+        request.setAttribute("status", status);
         dispatcher.forward(request, response);
     }
 

@@ -10,7 +10,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.ProjecTypeSetting;
+import model.ProjectTypeSetting;
 import service.GroupService;
 
 /**
@@ -35,7 +35,7 @@ public class ProjectTypeSettingController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try {
             String action = request.getParameter("action");
-            ProjecTypeSetting pts = new ProjecTypeSetting();
+            ProjectTypeSetting pts = new ProjectTypeSetting();
             if (action == null) {
                 String keyword = request.getParameter("keyword");
                 Boolean statusFilter = request.getParameter("statusFilter") == null ? null : Boolean.valueOf(request.getParameter("statusFilter"));
@@ -123,7 +123,7 @@ public class ProjectTypeSettingController extends HttpServlet {
         boolean status = request.getParameter("status") != null;
         String description = request.getParameter("description");
 
-        ProjecTypeSetting newSetting = new ProjecTypeSetting(0, name, type, value, priority, status, description);
+        ProjectTypeSetting newSetting = new ProjectTypeSetting(0, name, type, value, priority, status, description);
         groupService.createProjectTypeSetting(newSetting);
         response.sendRedirect("ProjectTypeSetting");
     }
@@ -132,7 +132,7 @@ public class ProjectTypeSettingController extends HttpServlet {
     private void showEditForm(HttpServletRequest request, HttpServletResponse response)
             throws Exception, ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        ProjecTypeSetting existingSetting = groupService.getProjectTypeSettingById(id);
+        ProjectTypeSetting existingSetting = groupService.getProjectTypeSettingById(id);
         request.setAttribute("pts", existingSetting);
         request.getRequestDispatcher("/WEB-INF/admin/project-type-setting-edit.jsp").forward(request, response);
     }
@@ -148,7 +148,7 @@ public class ProjectTypeSettingController extends HttpServlet {
         boolean status = request.getParameter("status") != null;
         String description = request.getParameter("description");
 
-        ProjecTypeSetting updatedSetting = new ProjecTypeSetting(id, name, type, value, priority, status, description);
+        ProjectTypeSetting updatedSetting = new ProjectTypeSetting(id, name, type, value, priority, status, description);
         groupService.updateProjectTypeSetting(updatedSetting);
         response.sendRedirect("ProjectTypeSetting");
     }

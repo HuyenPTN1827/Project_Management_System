@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import model.User;
 import model.Department;
-import model.Role;
 import model.Setting;
 
 /**
@@ -554,7 +553,7 @@ public class UserDAO {
     }
     //BachHD
     // Phương thức kiểm tra email đã tồn tại
-    public boolean checkEmailExists(String email) {
+    public boolean checkEmailExist(String email) {
         String query = "SELECT COUNT(*) FROM user WHERE email = ?";
         try (Connection con = BaseDAO.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
             ps.setString(1, email);
@@ -573,7 +572,7 @@ public class UserDAO {
         int result = 0;
 
         // Kiểm tra xem email đã tồn tại chưa
-        if (checkEmailExists(user.getEmail())) {
+        if (checkEmailExist(user.getEmail())) {
             return -1; // Trả về -1 nếu email đã tồn tại
         }
 

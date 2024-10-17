@@ -20,7 +20,7 @@ public class BaseDAO {
 
     private static final String jdbcURL = "jdbc:mysql://localhost:3306/pms";
     private static final String jdbcUsername = "root";
-    private static final String jdbcPassword = "11102001";
+    private static final String jdbcPassword = "182769";
 
     public static Connection getConnection() {
         Connection connection = null;
@@ -49,11 +49,14 @@ public class BaseDAO {
         }
     }
 
-    public static Date getSQLDate(LocalDate date) {
-        return java.sql.Date.valueOf(date);
-    }
+    public class MyDateUtil {
 
-    public static LocalDate getUtilDate(Date sqlDate) {
-        return sqlDate.toLocalDate();
+        public static LocalDate getUtilDate(Date sqlDate) {
+            return sqlDate != null ? sqlDate.toLocalDate() : null;
+        }
+
+        public static Date getSQLDate(LocalDate date) {
+            return date != null ? java.sql.Date.valueOf(date) : null;
+        }
     }
 }

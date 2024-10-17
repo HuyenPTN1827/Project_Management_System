@@ -59,8 +59,10 @@
 
                     <main class="content">
                         <div class="container-fluid p-0">
+                            <a href="<%=request.getContextPath()%>/department-management">Department Management > </a>
+
                         <c:if test="${department == null}">
-                            <h1 class="h1 mb-3"> Create New Department</h1>
+                            <h1 class="h1 mt-2 mb-3"> Create New Department</h1>
                             <div class="row">
 
                                 <div class="col-md-12 col-xl-12">
@@ -113,7 +115,7 @@
                         </c:if> 
 
                         <c:if test="${department != null}">
-                            <h1 class="h1 mb-3"> Department Details</h1>
+                            <h1 class="h1 mt-2 mb-3"> Department Details</h1>
                             <div class="row">
 
                                 <div class="col-md-12 col-xl-12">

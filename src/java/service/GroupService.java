@@ -17,12 +17,12 @@ public class GroupService {
 
     private final DepartmentDAO deptDAO;
     private final ProjectTypeDAO projectTypeDAO;
-    private final ProjecTypeSettingDAO projecTypeSettingDAO;
+    private final ProjectTypeSettingDAO projecTypeSettingDAO;
 
     public GroupService() {
         this.deptDAO = new DepartmentDAO();
         this.projectTypeDAO = new ProjectTypeDAO();
-        this.projecTypeSettingDAO = new ProjecTypeSettingDAO();
+        this.projecTypeSettingDAO = new ProjectTypeSettingDAO();
     }
 
     // HuyenPTNHE160769
@@ -103,22 +103,22 @@ public class GroupService {
     }
 
     // Get all project type settings
-    public List<ProjecTypeSetting> getAllProjectTypeSettings(String keyword, Boolean statusFilter) throws SQLException {
+    public List<ProjectTypeSetting> getAllProjectTypeSettings(String keyword, Boolean statusFilter) throws SQLException {
         return projecTypeSettingDAO.getAllProjectTypeSettings(keyword,statusFilter);
     }
 
     // Get project type setting by id
-    public ProjecTypeSetting getProjectTypeSettingById(int id) throws SQLException {
+    public ProjectTypeSetting getProjectTypeSettingById(int id) throws SQLException {
         return projecTypeSettingDAO.getProjectTypeSettingById(id);
     }
 
     // Create new project type setting
-    public void createProjectTypeSetting(ProjecTypeSetting setting) throws SQLException {
+    public void createProjectTypeSetting(ProjectTypeSetting setting) throws SQLException {
         projecTypeSettingDAO.createProjectTypeSetting(setting);
     }
 
     // Update an existing project type setting
-    public void updateProjectTypeSetting(ProjecTypeSetting setting) throws SQLException {
+    public void updateProjectTypeSetting(ProjectTypeSetting setting) throws SQLException {
         projecTypeSettingDAO.updateProjectTypeSetting(setting);
     }
 
@@ -132,4 +132,10 @@ public class GroupService {
         projecTypeSettingDAO.changeStatusById(id, newStatus);
     }
 
+//    HuyenPTNHE160769
+//    17/10/2024      
+//    Admin get all project type users
+    public List<ProjectType_User> getAllProjectTypeUsers(String keyword, Integer roleId, Boolean status, int typeId) {
+        return projectTypeDAO.selectAllProjectTypeUsers(keyword, roleId, status, typeId);
+    }
 }
