@@ -18,10 +18,12 @@
             <file>file:/D:/Do%20An/Project_Management_System/src/java/context/UserDAO.java</file>
             <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/ProjectListController.java</file>
             <file>file:/D:/Do%20An/Project_Management_System/web/WEB-INF/member/projectlist.jsp</file>
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/context/BaseDAO.java</file>
             <file>file:/D:/Do%20An/Project_Management_System/src/java/context/ProjectDAO.java</file>
             <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/UserController.java</file>
             <file>file:/D:/Do%20An/Project_Management_System/src/java/service/ProjectService.java</file>
             <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/ProfileController.java</file>
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/context/ProjecTypeSettingDAO.java</file>
             <file>file:/D:/Do%20An/Project_Management_System/src/java/service/SettingService.java</file>
             <file>file:/D:/Do%20An/Project_Management_System/src/java/context/SettingDAO.java</file>
             <file>file:/D:/Do%20An/Project_Management_System/web/WEB-INF/guest/register.jsp</file>
