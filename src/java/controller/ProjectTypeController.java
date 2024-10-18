@@ -56,6 +56,16 @@ public class ProjectTypeController extends HttpServlet {
                     changeStatusProjectType(request, response); // Change status project type
                 case "/project-type-user" ->
                     listProjectTypeUser(request, response); // List of project type users
+                case "/add-project-type-user" ->
+                    showNewFormPTUser(request, response); // Show form insert project type users
+                case "/insert-project-type-user" ->
+                    insertPTUser(request, response); // Insert project type user
+                case "/edit-project-type-user" ->
+                    showEditFormPTUser(request, response); // Show form edit project type user
+                case "/update-project-type-user" ->
+                    updatePTUser(request, response); // Update project type user
+                case "/change-status-project-type-user" ->
+                    changeStatusPTUser(request, response); // Change status project type user
                 default -> {
                     listProjectType(request, response); // List of project types
                 }
@@ -185,7 +195,7 @@ public class ProjectTypeController extends HttpServlet {
 
         groupService.updateProjectType(pt);
 //        response.sendRedirect("project-type-management");
-        response.sendRedirect("project-type-user?id=" +  id);
+        response.sendRedirect("project-type-user?id=" + id);
 
     }
 
@@ -233,6 +243,41 @@ public class ProjectTypeController extends HttpServlet {
         request.setAttribute("roleId", roleId);
         request.setAttribute("status", status);
         dispatcher.forward(request, response);
+    }
+
+    private void showNewFormPTUser(HttpServletRequest request, HttpServletResponse response) {
+    }
+
+    private void insertPTUser(HttpServletRequest request, HttpServletResponse response) {
+    }
+
+    private void showEditFormPTUser(HttpServletRequest request, HttpServletResponse response) {
+    }
+
+    private void updatePTUser(HttpServletRequest request, HttpServletResponse response) {
+    }
+
+//    HuyenPTNHE160769 
+//    18/10/2024 
+//    Change status project types user
+    private void changeStatusPTUser(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+        int typeId = Integer.parseInt(request.getParameter("typeId"));
+        int recordId = Integer.parseInt(request.getParameter("recordId"));
+        boolean status = Boolean.parseBoolean(request.getParameter("status"));
+
+        ProjectType_User ptUser = new ProjectType_User();
+        ptUser.setId(recordId);
+        // If status is true, set to false; if false, set to true
+        ptUser.setStatus(!status);
+
+        ProjectType pt = new ProjectType();
+        pt.setId(typeId);
+        ptUser.setPjType(pt);
+
+        // Change the status of a project type by id
+        groupService.changeStatusProjectTypeUser(ptUser);
+        // Redirect to the project-type-management page
+        response.sendRedirect("project-type-user?id=" + typeId);
     }
 
 }

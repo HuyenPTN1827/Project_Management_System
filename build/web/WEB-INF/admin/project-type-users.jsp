@@ -153,7 +153,7 @@
 
                                             </form>
 
-                                            <a class="btn btn-primary" href="<%=request.getContextPath()%>/add-user">Create new</a>
+                                            <a class="btn btn-primary" href="<%=request.getContextPath()%>/add-project-type-user">Create new</a>
                                         </div>
 
                                         <table id="datatables-multi" class="table table-striped" style="width:100%">
@@ -191,7 +191,7 @@
                                                                 <a href="<%=request.getContextPath()%>/edit-project-type-user?id=${ptu.id}"
                                                                    class="btn btn-link text-primary">Details</a>
 
-                                                                <a href="<%=request.getContextPath()%>/change-status-project-type-user?id=${ptu.id}&status=${ptu.status}"
+                                                                <a href="<%=request.getContextPath()%>/change-status-project-type-user?recordId=${ptu.id}&status=${ptu.status}&typeId=${projectType.id}"
                                                                    class="btn btn-link text-success"
                                                                    onclick="return confirm('Are you sure you want to activate this user?');">Activate</a>
                                                             </c:if>
@@ -200,7 +200,7 @@
                                                                 <a href="<%=request.getContextPath()%>/edit-project-type-user?id=${ptu.id}"
                                                                    class="btn btn-link text-primary">Details</a>
 
-                                                                <a href="<%=request.getContextPath()%>/change-status-project-type-user?id=${ptu.id}&status=${ptu.status}"
+                                                                <a href="<%=request.getContextPath()%>/change-status-project-type-user?recordId=${ptu.id}&status=${ptu.status}&typeId=${projectType.id}"
                                                                    class="btn btn-link text-danger"
                                                                    onclick="return confirm('Are you sure you want to deactivate this user?');">Deactivate</a>
                                                             </c:if>

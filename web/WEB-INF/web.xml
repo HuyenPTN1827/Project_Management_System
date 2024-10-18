@@ -149,6 +149,26 @@
         <url-pattern>/project-type-user</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <url-pattern>/add-project-type-user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <url-pattern>/insert-project-type-user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <url-pattern>/edit-project-type-user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <url-pattern>/update-project-type-user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <url-pattern>/change-status-project-type-user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>ProjectTypeSettingController</servlet-name>
         <url-pattern>/ProjectTypeSetting</url-pattern>
     </servlet-mapping>
