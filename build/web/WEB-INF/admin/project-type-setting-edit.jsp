@@ -59,96 +59,51 @@
 
                     <main class="content">
                         <div class="container-fluid p-0">
-                        <c:if test="${projectType == null}">
-                            <h1 class="h1 mb-3"> Create New Project Type Setting</h1>
-                            <div class="row">
-
-                                <div class="col-md-12 col-xl-12">
-                                    <div class="card">
-                                        <div class="card-body">
-
-                                            <form action="insert-project-type" method="get" class="row">
-                                                <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Name<span style="color: red;">*</span></label>
-                                                    <input type="text" class="form-control" name="name" placeholder="Enter the Project Type name" 
-                                                           value="${name}" required>
-                                                </div>
-
-                                                <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Code<span style="color: red;">*</span></label>
-                                                    <input type="text" class="form-control" name="code" placeholder="Enter the Project Type code" 
-                                                           value="${code}" required>
-                                                </div>
-
-                                                <div class="mb-3 col-md-12">
-                                                    <label class="form-label">Details</label>
-                                                    <textarea class="form-control" name="details" 
-                                                              placeholder="Enter the Project Type details" rows="3">${details}</textarea>
-                                                </div>
-
-                                                <div>
-                                                    <button type="submit" class="btn btn-lg btn-success">Submit</button>
-                                                    <a href="<%=request.getContextPath()%>/project-type-management" class="btn btn-lg btn-light">Cancel</a>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </c:if> 
-
+                        
                         <c:if test="${projectType != null}">
                             <h1 class="h1 mb-3"> Project Type Details</h1>
                             <div class="row">
-
-                                <div class="col-md-12 col-xl-12">
+                                 <div class="col-md-12 col-xl-12">
                                     <div class="card">
                                         <div class="card-body">
-
-                                            <form action="update-project-type" method="post" class="row">
-                                                <input type="hidden" name="id" value="${projectType.id}"/>
-
+                                            <form action="ProjectTypeSetting" method="post" class="row">
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label">Name<span style="color: red;">*</span></label>
-                                                    <input type="text" class="form-control" name="name" placeholder="Enter the Project Type name" 
+                                                    <input type="hidden" name="id" value="${projectType.id}"/>
+                                                    <input type="text" class="form-control" name="name" placeholder="Enter the Project Type Setting name" 
                                                            value="${projectType.name}" required>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Code<span style="color: red;">*</span></label>
-                                                    <input type="text" class="form-control" name="code" placeholder="Enter the Project Type code" 
-                                                           value="${projectType.code}" required>
+                                                    <label class="form-label">Type<span style="color: red;">*</span></label>
+                                                    <input type="text" class="form-control" name="type" placeholder="Enter the Project Type Setting type" 
+                                                           value="${projectType.type}" required>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Details</label>
-                                                    <textarea class="form-control" name="details" 
-                                                              placeholder="Enter the Project Type details" rows="3">${projectType.details}</textarea>
+                                                    <label class="form-label">Value<span style="color: red;">*</span></label>
+                                                    <input type="text" class="form-control" name="value" placeholder="Enter the Project Type Setting value" 
+                                                           value="${projectType.value}" required>
                                                 </div>
-
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Status<span style="color: red;">*</span></label>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="status"
-                                                               <c:if test="${projectType.status eq 'true'}">
-                                                                   checked
-                                                               </c:if>
-                                                               value="true">Active
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="status"
-                                                               <c:if test="${projectType.status eq 'false'}">
-                                                                   checked
-                                                               </c:if>
-                                                               value="false">Inactive
-                                                    </div>
+                                                    <label class="form-label">Priority<span style="color: red;">*</span></label>
+                                                    <input type="number" class="form-control" name="priority" placeholder="Enter the Project Type Setting priority" 
+                                                           value="${projectType.priority}" required>
                                                 </div>
-
+                                                <div class="mb-3 col-md-12">
+                                                    <label class="form-label">Description</label>
+                                                    <textarea class="form-control" name="description" 
+                                                              placeholder="Enter the Project Type details" rows="3">${projectType.description}</textarea>
+                                                </div>
+                                                <div class="mb-3 col-md-12">
+                                                    <label class="form-label">Status ${projectType.status}</label>
+                                                    <input type="radio" name="status" ${projectType.status eq 'true'?'checked':''} class="form-checkbox"  value="true" /> Active 
+                                                    <input type="radio" name="status"  ${projectType.status eq 'false'?'checked':''} class="form-checkbox" value="false" /> Inactive 
+                                                </div>
                                                 <div>
-                                                    <button type="submit" class="btn btn-lg btn-success">Submit</button>
-                                                    <button type="reset" class="btn btn-lg btn-primary">Reset</button>
-                                                    <a href="<%=request.getContextPath()%>/project-type-management" class="btn btn-lg btn-light">Cancel</a>
+                                                    <button type="submit"  name="action" value="edit"  class="btn btn-lg btn-success">Submit</button>
+                                                    <a href="./ProjectTypeSetting" class="btn btn-lg btn-light">Cancel</a>
                                                 </div>
                                             </form>
                                         </div>

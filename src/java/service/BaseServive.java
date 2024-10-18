@@ -46,4 +46,5 @@ public class BaseServive {
         Matcher matcher = pattern.matcher(password);
         return matcher.matches();
     }
+    
 }

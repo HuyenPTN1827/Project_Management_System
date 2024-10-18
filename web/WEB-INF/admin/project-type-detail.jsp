@@ -59,8 +59,10 @@
 
                     <main class="content">
                         <div class="container-fluid p-0">
+
                         <c:if test="${projectType == null}">
-                            <h1 class="h1 mb-3"> Create New Project Type</h1>
+                            <a href="<%=request.getContextPath()%>/project-type-management">Project Type Management > </a>
+                            <h1 class="h1 mt-2 mb-3"> Create New Project Type</h1>
                             <div class="row">
 
                                 <div class="col-md-12 col-xl-12">
@@ -98,7 +100,9 @@
                         </c:if> 
 
                         <c:if test="${projectType != null}">
-                            <h1 class="h1 mb-3"> Project Type Details</h1>
+                            <a href="<%=request.getContextPath()%>/project-type-management">Project Type Management > </a>
+                            <a href="<%=request.getContextPath()%>/project-type-user?id=${projectType.id}">Project Type Configs > </a>
+                            <h1 class="h1 mt-2 mb-3"> Project Type Details</h1>
                             <div class="row">
 
                                 <div class="col-md-12 col-xl-12">
@@ -148,7 +152,8 @@
                                                 <div>
                                                     <button type="submit" class="btn btn-lg btn-success">Submit</button>
                                                     <button type="reset" class="btn btn-lg btn-primary">Reset</button>
-                                                    <a href="<%=request.getContextPath()%>/project-type-management" class="btn btn-lg btn-light">Cancel</a>
+                                                    <a href="<%=request.getContextPath()%>/project-type-user?id=${projectType.id}" 
+                                                       class="btn btn-lg btn-light">Cancel</a>
                                                 </div>
                                             </form>
                                         </div>
