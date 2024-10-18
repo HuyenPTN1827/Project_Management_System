@@ -101,30 +101,66 @@ public class AuthenticationController extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void register(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String fullname = request.getParameter("fullname");
-        String email = request.getParameter("email");
-        String mobile = request.getParameter("mobile");
-        String password = request.getParameter("password");
+//    private void register(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        String fullname = request.getParameter("fullname");
+//        String email = request.getParameter("email");
+//        String mobile = request.getParameter("mobile");
+//        String password = request.getParameter("password");
+//
+//        User user = new User();
+//        user.setFull_name(fullname);
+//        user.setPassword(password);
+//        user.setEmail(email);
+//        user.setMobile(mobile);
+//
+//        try {
+//            int result = userService.registerUser(user);
+//            if (result == 1) {
+//                request.setAttribute("NOTIFICATION", "User Register Successfully!");
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            Logger.getLogger(AuthenticationController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/guest/register.jsp");
+//        dispatcher.forward(request, response);
+//    }
+    
+    //BachHD
+  private void register(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    String fullname = request.getParameter("fullname");
+    String email = request.getParameter("email");
+    String mobile = request.getParameter("mobile");
+    String password = request.getParameter("password");
 
-        User user = new User();
-        user.setFull_name(fullname);
-        user.setPassword(password);
-        user.setEmail(email);
-        user.setMobile(mobile);
+    User user = new User();
+    user.setFull_name(fullname);
+    user.setPassword(password);
+    user.setEmail(email);
+    user.setMobile(mobile);
 
-        try {
-            int result = userService.registerUser(user);
-            if (result == 1) {
-                request.setAttribute("NOTIFICATION", "User Register Successfully!");
-            }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(AuthenticationController.class.getName()).log(Level.SEVERE, null, ex);
+    try {
+        int result = userService.registerUser(user);
+        
+        if (result == 1) {
+            // Đăng ký thành công
+            request.setAttribute("NOTIFICATION", "User Registered Successfully!");
+        } else if (result == -1) {
+            // Email đã tồn tại
+            request.setAttribute("NOTIFICATION", "Email already exists. Please use a different email.");
+        } else {
+            // Đăng ký thất bại vì lý do khác
+            request.setAttribute("NOTIFICATION", "Registration failed. Please try again.");
         }
-
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/guest/register.jsp");
-        dispatcher.forward(request, response);
+    } catch (ClassNotFoundException ex) {
+        Logger.getLogger(AuthenticationController.class.getName()).log(Level.SEVERE, null, ex);
     }
+
+    RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/guest/register.jsp");
+    dispatcher.forward(request, response);
+}
+
+
 
     private void showLoginForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/login.jsp");
@@ -247,7 +283,7 @@ private void login(HttpServletRequest request, HttpServletResponse response)
                 if (userRoleSetting.getPriority() == 1) { 
                     System.out.println("Redirecting to user-management");
                     response.sendRedirect(request.getContextPath() + "/user-management");
-                } else if (userRoleSetting.getPriority() == 2) { 
+                } else if (userRoleSetting.getPriority() >= 2) { 
                     System.out.println("Redirecting to member-dashboard");
                     response.sendRedirect(request.getContextPath() + "/member-dashboard");
                 } else {

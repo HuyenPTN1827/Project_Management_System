@@ -4,13 +4,18 @@
  */
 package context;
 
+import context.BaseDAO.MyDateUtil;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import model.ProjectType;
+import model.ProjectTypeSetting;
+import model.ProjectType_User;
+import model.User;
 
 /**
  *
@@ -20,9 +25,7 @@ public class ProjectTypeDAO {
 
 //    HuyenPTNHE160769
 //    05/10/2024        
-//    Admin select all project types order by id descending
-//        LIMIT = pageSize
-//        OFFSET = (pageIndex - 1) * pageSize;
+//    Admin select all project types
     public List<ProjectType> selectAllProjectTypes(String keyword, Boolean status) {
         List<ProjectType> projectType = new ArrayList<>();
 
@@ -151,5 +154,87 @@ public class ProjectTypeDAO {
             BaseDAO.printSQLException(e);
         }
         return rowUpdated;
+    }
+
+//    HuyenPTNHE160769
+//    17/10/2024      
+//    Admin select all project type users
+    public List<ProjectType_User> selectAllProjectTypeUsers(String keyword, Integer roleId, Boolean status, int typeId) {
+        List<ProjectType_User> ptUsers = new ArrayList<>();
+
+        String sql = """
+                     SELECT ut.id, ut.user_id, u.full_name, ut.role_id, pts.name, ut.type_id, 
+                     ut.start_date, ut.end_date, ut.status FROM pms.user_type ut
+                     INNER JOIN pms.user u ON ut.user_id = u.id
+                     INNER JOIN pms.project_type pt ON ut.type_id = pt.id
+                     INNER JOIN pms.project_type_setting pts ON ut.role_id = pts.id
+                     WHERE ut.type_id = ?""";
+
+        // Add search conditions if any
+        if (keyword != null && !keyword.isEmpty()) {
+            sql += " AND LOWER(u.full_name) LIKE ?";
+        }
+        if (roleId != null) {
+            sql += " AND ut.role_id = ?";
+        }
+        if (status != null) {
+            sql += " AND ut.status = ?";
+        }
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            stm.setInt(1, typeId);
+
+            int index = 2;
+            if (keyword != null && !keyword.isEmpty()) {
+                String keywordPattern = "%" + keyword.toLowerCase().trim() + "%";
+                stm.setString(index++, "%" + keywordPattern + "%");
+            }
+            if (roleId != null) {
+                stm.setInt(index++, roleId);
+            }
+            if (status != null) {
+                stm.setBoolean(index++, status);
+            }
+
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                ProjectType_User ptu = new ProjectType_User();
+                ptu.setId(rs.getInt("ut.id"));
+                ptu.setId(rs.getInt("ut.user_id"));
+
+                // Handle potential null values for dates
+                Date startDate = rs.getDate("ut.start_date");
+                if (startDate != null) {
+                    ptu.setStart_date(MyDateUtil.getUtilDate((java.sql.Date) startDate));
+                }
+
+                Date endDate = rs.getDate("ut.end_date");
+                if (endDate != null) {
+                    ptu.setEnd_date(MyDateUtil.getUtilDate((java.sql.Date) endDate));
+                }
+                
+                ptu.setStatus(rs.getBoolean("ut.status"));
+
+                User u = new User();
+                u.setId(rs.getInt("ut.user_id"));
+                u.setFull_name(rs.getString("u.full_name"));
+                ptu.setUser(u);
+
+                ProjectType pt = new ProjectType();
+                pt.setId(rs.getInt("ut.type_id"));
+                ptu.setPjType(pt);
+
+                ProjectTypeSetting pts = new ProjectTypeSetting();
+                pts.setId(rs.getInt("ut.role_id"));  // Set role_id as the ID
+                pts.setName(rs.getString("pts.name"));  // Set name as a string
+                ptu.setPtSetting(pts);
+
+                ptUsers.add(ptu);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+
+        return ptUsers;
     }
 }

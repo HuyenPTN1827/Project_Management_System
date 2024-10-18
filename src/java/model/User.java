@@ -22,8 +22,6 @@ public class User implements Serializable {
     private String notes;
     private int status;
     private int role_id;
-    private Role role;
-    private ArrayList<Role> roles = new ArrayList<>();
     
     private Department dept;
     private Setting setting;
@@ -33,7 +31,7 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(int id, String full_name, String email, String mobile, String password, String notes, int status, int role_id ,Role role, Department dept, Setting setting) {
+    public User(int id, String full_name, String email, String mobile, String password, String notes, int status, int role_id , Department dept, Setting setting) {
         this.id = id;
         this.full_name = full_name;
         this.email = email;
@@ -42,7 +40,6 @@ public class User implements Serializable {
         this.notes = notes;
         this.status = status;
         this.role_id = role_id;
-        this.role = role;
         this.dept = dept;
         this.setting = setting;
     }
@@ -109,22 +106,6 @@ public class User implements Serializable {
 
     public void setStatus(int status) {
         this.status = status;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public ArrayList<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(ArrayList<Role> roles) {
-        this.roles = roles;
     }
 
     public Department getDept() {

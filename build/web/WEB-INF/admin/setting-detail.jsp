@@ -59,8 +59,10 @@
 
                     <main class="content">
                         <div class="container-fluid p-0">
+                            <a href="<%=request.getContextPath()%>/setting-management">Setting Management > </a>
+
                         <c:if test="${setting == null}">
-                            <h1 class="h1 mb-3"> Create New Setting</h1>
+                            <h1 class="h1 mt-2 mb-3"> Create New Setting</h1>
                             <div class="row">
 
                                 <div class="col-md-12 col-xl-12">
@@ -141,7 +143,7 @@
                         </c:if> 
 
                         <c:if test="${setting != null}">
-                            <h1 class="h1 mb-3"> Setting Details</h1>
+                            <h1 class="h1 mt-2 mb-3"> Setting Details</h1>
                             <div class="row">
 
                                 <div class="col-md-12 col-xl-12">
@@ -172,12 +174,12 @@
                                                             </c:if>
                                                             value="Dept Role">Dept Role
                                                         </option>
-<!--                                                        <option 
-                                                            <%--<c:if test="${setting.type eq 'Project Role'}">--%>
-                                                                selected="selected"
-                                                            <%--</c:if>--%>
-                                                            value="Project Role">Project Role
-                                                        </option>-->
+                                                        <!--                                                        <option 
+                                                        <%--<c:if test="${setting.type eq 'Project Role'}">--%>
+                                                            selected="selected"
+                                                        <%--</c:if>--%>
+                                                        value="Project Role">Project Role
+                                                    </option>-->
                                                         <option 
                                                             <c:if test="${setting.type eq 'Business Term'}">
                                                                 selected="selected"

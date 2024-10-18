@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import model.User;
 import model.Department;
-import model.Role;
 import model.Setting;
 
 /**
@@ -29,22 +28,21 @@ public class UserDAO {
             + "WHERE email = ? AND password = ?;";
 
 //    Member
-    public int registerUser(User user) throws ClassNotFoundException {
-        int result = 0;
-
-        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(REGISTER_USER_SQL)) {
-            stm.setString(1, user.getFull_name());
-            stm.setString(2, user.getEmail());
-            stm.setString(3, user.getMobile());
-            stm.setString(4, user.getPassword());
-
-            result = stm.executeUpdate();
-        } catch (SQLException e) {
-            BaseDAO.printSQLException(e);
-        }
-        return result;
-    }
-
+//    public int registerUser(User user) throws ClassNotFoundException {
+//        int result = 0;
+//
+//        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(REGISTER_USER_SQL)) {
+//            stm.setString(1, user.getFull_name());
+//            stm.setString(2, user.getEmail());
+//            stm.setString(3, user.getMobile());
+//            stm.setString(4, user.getPassword());
+//
+//            result = stm.executeUpdate();
+//        } catch (SQLException e) {
+//            BaseDAO.printSQLException(e);
+//        }
+//        return result;
+//    }
 //    public boolean loginValidate(User user) throws ClassNotFoundException {
 //        boolean status = false;
 //
@@ -552,6 +550,46 @@ public class UserDAO {
             BaseDAO.printSQLException(e);
         }
         return rowUpdated;
+    }
+    //BachHD
+    // Phương thức kiểm tra email đã tồn tại
+    public boolean checkEmailExist(String email) {
+        String query = "SELECT COUNT(*) FROM user WHERE email = ?";
+        try (Connection con = BaseDAO.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Trả về true nếu email đã tồn tại
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return false;
+    }
+
+    //BachHD
+    public int registerUser(User user) throws ClassNotFoundException {
+        int result = 0;
+
+        // Kiểm tra xem email đã tồn tại chưa
+        if (checkEmailExist(user.getEmail())) {
+            return -1; // Trả về -1 nếu email đã tồn tại
+        }
+
+        // Thực hiện đăng ký nếu email chưa tồn tại
+        String REGISTER_USER_SQL = "INSERT INTO user (full_name, email, mobile, password) VALUES (?, ?, ?, ?)";
+        try (Connection connection = BaseDAO.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(REGISTER_USER_SQL)) {
+            preparedStatement.setString(1, user.getFull_name());
+            preparedStatement.setString(2, user.getEmail());
+            preparedStatement.setString(3, user.getMobile());
+            preparedStatement.setString(4, user.getPassword());
+
+            result = preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+
+        return result; // Trả về 1 nếu đăng ký thành công
     }
 
 }

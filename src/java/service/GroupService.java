@@ -17,12 +17,12 @@ public class GroupService {
 
     private final DepartmentDAO deptDAO;
     private final ProjectTypeDAO projectTypeDAO;
-    private final ProjecTypeSettingDAO projecTypeSettingDAO;
+    private final ProjectTypeSettingDAO projecTypeSettingDAO;
 
     public GroupService() {
         this.deptDAO = new DepartmentDAO();
         this.projectTypeDAO = new ProjectTypeDAO();
-        this.projecTypeSettingDAO = new ProjecTypeSettingDAO();
+        this.projecTypeSettingDAO = new ProjectTypeSettingDAO();
     }
 
     // HuyenPTNHE160769
@@ -101,35 +101,48 @@ public class GroupService {
     public boolean changeStatusProjectType(ProjectType projectType) throws SQLException {
         return projectTypeDAO.changeStatusProjectType(projectType);
     }
-
+    // TrươngHBHE151011
+    // 17/10/2024
     // Get all project type settings
-    public List<ProjecTypeSetting> getAllProjectTypeSettings(String keyword, Boolean statusFilter) throws SQLException {
+    public List<ProjectTypeSetting> getAllProjectTypeSettings(String keyword, Boolean statusFilter) throws SQLException {
         return projecTypeSettingDAO.getAllProjectTypeSettings(keyword,statusFilter);
     }
-
+    // TrươngHBHE151011
+    // 17/10/2024
     // Get project type setting by id
-    public ProjecTypeSetting getProjectTypeSettingById(int id) throws SQLException {
+    public ProjectTypeSetting getProjectTypeSettingById(int id) throws SQLException {
         return projecTypeSettingDAO.getProjectTypeSettingById(id);
     }
-
+    // TrươngHBHE151011
+    // 17/10/2024
     // Create new project type setting
-    public void createProjectTypeSetting(ProjecTypeSetting setting) throws SQLException {
+    public void createProjectTypeSetting(ProjectTypeSetting setting) throws SQLException {
         projecTypeSettingDAO.createProjectTypeSetting(setting);
     }
-
+    // TrươngHBHE151011
+    // 17/10/2024
     // Update an existing project type setting
-    public void updateProjectTypeSetting(ProjecTypeSetting setting) throws SQLException {
+    public void updateProjectTypeSetting(ProjectTypeSetting setting) throws SQLException {
         projecTypeSettingDAO.updateProjectTypeSetting(setting);
     }
-
+    // TrươngHBHE151011
+    // 17/10/2024
     // Delete project type setting by id
     public void deleteProjectTypeSetting(int id) throws SQLException {
         projecTypeSettingDAO.deleteProjectTypeSetting(id);
     }
-
+    
+    // TrươngHBHE151011
+    // 17/10/2024
     // Change status of project type setting by id
     public void changeStatusProjectTypeSettingById(int id, boolean newStatus) throws SQLException {
         projecTypeSettingDAO.changeStatusById(id, newStatus);
     }
 
+//    HuyenPTNHE160769
+//    17/10/2024      
+//    Admin get all project type users
+    public List<ProjectType_User> getAllProjectTypeUsers(String keyword, Integer roleId, Boolean status, int typeId) {
+        return projectTypeDAO.selectAllProjectTypeUsers(keyword, roleId, status, typeId);
+    }
 }

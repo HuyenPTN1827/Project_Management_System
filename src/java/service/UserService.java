@@ -33,15 +33,14 @@ public class UserService extends BaseServive {
         return userDAO.loginValidate(user);
     }
 
-    //lấy vai trò người dùng
-    public String getUserRole(User user) {
-        User foundUser = userDAO.selectUserByEmail(user.getEmail());
-        if (foundUser != null) {
-            return foundUser.getRole().getRole_name(); // Lấy role của user
-        }
-        return null; // Trả về null nếu không tìm thấy user
-    }
-
+//    //lấy vai trò người dùng
+//    public String getUserRole(User user) {
+//        User foundUser = userDAO.selectUserByEmail(user.getEmail());
+//        if (foundUser != null) {
+//            return foundUser.getRole().getRole_name(); // Lấy role của user
+//        }
+//        return null; // Trả về null nếu không tìm thấy user
+//    }
     public User selectUserByEmail(String email) {
         return userDAO.selectUserByEmail(email);
     }
@@ -140,4 +139,12 @@ public class UserService extends BaseServive {
         }
         return errors;
     }
+
+    // HuyenPTNHE160769
+    // 18/10/2024
+    // Check for uniqueness in the database
+    public boolean checkEmailExist(String email) throws SQLException {
+        return userDAO.checkEmailExist(email);
+    }
+
 }
