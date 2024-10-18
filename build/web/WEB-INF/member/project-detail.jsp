@@ -3,7 +3,7 @@
     Created on : Oct 18, 2024, 10:18:04 AM
     Author     : Admin
 --%>
-//BachHD
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
