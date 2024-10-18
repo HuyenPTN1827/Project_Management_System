@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller;
 
 import java.io.IOException;
@@ -15,86 +11,63 @@ import java.util.List;
 import model.Project;
 import service.ProjectService;
 
-/**
- *
- * @author Admin
- */
-//BachHD
-@WebServlet(name = "ProjectListController", urlPatterns = {"/projectlist"})
+
 public class ProjectListController extends HttpServlet {
 
     private ProjectService projectService;
 
     @Override
     public void init() throws ServletException {
-        projectService = new ProjectService(); // Đảm bảo rằng ProjectService được khởi tạo
+        projectService = new ProjectService(); // Khởi tạo ProjectService
     }
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ProjectListController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ProjectListController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        String action = request.getServletPath(); // Lấy action từ URL
+
+        try {
+            switch (action) {
+                case "/projectlist":
+                    listProjects(request, response); // Hiển thị danh sách dự án
+                    break;
+                case "/add-project":
+                    projectDetail(request, response); // Hiển thị form thêm mới dự án
+                    break;
+                default:
+                    listProjects(request, response); // Mặc định hiển thị danh sách dự án
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    private void listProjects(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         List<Project> projects = projectService.getAllProjects(); // Lấy danh sách dự án
         request.setAttribute("listProjects", projects); // Lưu danh sách vào request
         request.getRequestDispatcher("/WEB-INF/member/projectlist.jsp").forward(request, response); // Chuyển tiếp đến JSP
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    private void projectDetail(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getRequestDispatcher("/WEB-INF/member/project-detail.jsp").forward(request, response); // Chuyển đến trang thêm dự án
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response); // Xử lý request
+    }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        processRequest(request, response); // Xử lý request
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+        return "Project List Controller";
+    }
 }
