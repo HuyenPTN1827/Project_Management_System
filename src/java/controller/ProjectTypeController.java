@@ -221,7 +221,7 @@ public class ProjectTypeController extends HttpServlet {
 //    HuyenPTNHE160769 
 //    14/10/2024 
 //    List of project type users
-    private void listProjectTypeUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void listProjectTypeUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         int id = Integer.parseInt(request.getParameter("id"));
         String keyword = request.getParameter("keyword");
         String roleIdStr = request.getParameter("roleId");
@@ -234,7 +234,8 @@ public class ProjectTypeController extends HttpServlet {
         ProjectType projectType = groupService.getProjectTypeById(id);
         List<ProjectTypeSetting> ptSetting = ptSettingService.getProjectRoleList();
         List<ProjectType_User> ptUser = groupService.getAllProjectTypeUsers(keyword, roleId, status, id);
-
+        Boolean statusFilter = request.getParameter("statusFilter") == null ? null : Boolean.valueOf(request.getParameter("statusFilter"));
+        request.setAttribute("sl", groupService.getAllProjectTypeSettings(keyword, statusFilter));
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/project-type-users.jsp");
         request.setAttribute("projectType", projectType);
         request.setAttribute("ptSetting", ptSetting);
