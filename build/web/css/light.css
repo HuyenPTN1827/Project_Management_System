@@ -19468,6 +19468,7 @@ table.dataTable.fixedHeader-locked{
     width:6ch;
     width:7ch\0 
 
+
 }
 .flatpickr-current-month input.cur-year{
     -webkit-appearance:textfield;
@@ -23703,4 +23704,29 @@ body[data-theme=colored] .simplebar-scrollbar:before{
     position:sticky;
     top:0;
     width:264px
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1050;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-dialog {
+    position: relative;
+    margin: 5% auto;
+    width: 80%;
+    max-width: 600px;
+}
+
+.modal-content {
+    background-color: #F4F6FA;
+    padding: 20px;
+    border-radius: 5px;
 }

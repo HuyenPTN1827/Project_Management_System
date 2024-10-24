@@ -142,8 +142,10 @@ public class ProjectTypeController extends HttpServlet {
 //    15/10/2024 
 //    Show form insert project type
     private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("projectType", null);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/project-type-detail.jsp");
-        dispatcher.forward(request, response);
+//        dispatcher.forward(request, response);
+        dispatcher.include(request, response);
     }
 
 //    HuyenPTNHE160769 
@@ -168,11 +170,10 @@ public class ProjectTypeController extends HttpServlet {
 //    Show form edit project type
     private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-
         ProjectType projectType = groupService.getProjectTypeById(id);
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/project-type-detail.jsp");
         request.setAttribute("projectType", projectType);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/project-type-detail.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -194,8 +195,7 @@ public class ProjectTypeController extends HttpServlet {
         pt.setStatus(status);
 
         groupService.updateProjectType(pt);
-//        response.sendRedirect("project-type-management");
-        response.sendRedirect("project-type-user?id=" + id);
+        response.sendRedirect("project-type-management");
 
     }
 
