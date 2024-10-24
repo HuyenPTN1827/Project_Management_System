@@ -61,7 +61,7 @@
                         <div class="container-fluid p-0">
                         
                         <c:if test="${projectType != null}">
-                            <h1 class="h1 mb-3"> Project Type Details</h1>
+                            <h1 class="h1 mb-3">Edit Project Type Setting </h1>
                             <div class="row">
                                  <div class="col-md-12 col-xl-12">
                                     <div class="card">

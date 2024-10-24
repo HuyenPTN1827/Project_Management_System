@@ -130,7 +130,7 @@
                                                         </td>
                                                         <td>
                                                             <a href="./ProjectTypeSetting?action=edit&id=${type.id}" 
-                                                               class="btn btn-link text-primary">Edit</a>
+                                                               class="btn btn-link text-primary">Configs</a>
                                                         </td>
                                                         <td>
                                                             <c:if test="${type.status eq 'false'}">
