@@ -128,7 +128,10 @@
                                                         </td>
                                                         <td>
                                                             <a href="<%=request.getContextPath()%>/edit-department?id=${dept.id}" 
-                                                               class="btn btn-link text-primary">Details</a>
+                                                               class="btn btn-link text-primary">Edit</a>
+
+                                                            <a href="#" 
+                                                               class="btn btn-link text-primary">Configs</a>
 
                                                             <c:if test="${dept.status eq 'false'}">
                                                                 <a href="<%=request.getContextPath()%>/change-status-department?id=${dept.id}&status=${dept.status}"

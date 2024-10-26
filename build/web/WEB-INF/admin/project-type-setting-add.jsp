@@ -102,7 +102,6 @@
                                                 </div>
                                                 <div>
                                                     <button type="submit" value="add" name="action" class="btn btn-lg btn-success">Submit</button>
-                                                    <a href="./ProjectTypeSetting" class="btn btn-lg btn-light">Cancel</a>
                                                 </div>
                                             </form>
                                         </div>

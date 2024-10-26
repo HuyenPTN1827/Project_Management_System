@@ -164,7 +164,7 @@
                                                         </td>
                                                         <td>
                                                             <a href="<%=request.getContextPath()%>/edit-setting?id=${setting.id}" 
-                                                               class="btn btn-link text-primary">Details</a>
+                                                               class="btn btn-link text-primary">Edit</a>
 
                                                             <c:if test="${setting.status eq 'false'}">
                                                                 <a href="<%=request.getContextPath()%>/change-status-setting?id=${setting.id}&status=${setting.status}"

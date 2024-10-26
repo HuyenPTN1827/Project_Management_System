@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import model.ProjectType;
 import model.ProjectTypeSetting;
 import model.ProjectType_User;
@@ -200,7 +201,6 @@ public class ProjectTypeDAO {
             while (rs.next()) {
                 ProjectType_User ptu = new ProjectType_User();
                 ptu.setId(rs.getInt("ut.id"));
-                ptu.setId(rs.getInt("ut.user_id"));
 
                 // Handle potential null values for dates
                 Date startDate = rs.getDate("ut.start_date");
@@ -212,7 +212,7 @@ public class ProjectTypeDAO {
                 if (endDate != null) {
                     ptu.setEnd_date(MyDateUtil.getUtilDate((java.sql.Date) endDate));
                 }
-                
+
                 ptu.setStatus(rs.getBoolean("ut.status"));
 
                 User u = new User();
@@ -236,5 +236,32 @@ public class ProjectTypeDAO {
         }
 
         return ptUsers;
+    }
+
+//    HuyenPTNHE160769
+//    18/10/2024      
+//    Admin change status of a project type users
+    public boolean changeStatusProjectTypeUser(ProjectType_User ptUser) throws SQLException {
+        boolean rowUpdated = false;
+
+        String activateSql = "UPDATE pms.user_type SET status = ?, start_date = CURDATE(), end_date = NULL WHERE id = ? AND type_id = ?;";
+        String deactivateSql = "UPDATE pms.user_type SET status = ?, end_date = CURDATE() WHERE id = ? AND type_id = ?;";
+
+        try (Connection cnt = BaseDAO.getConnection()) {
+            PreparedStatement stm;
+            if (!ptUser.isStatus()) { // Check if status is false
+                stm = cnt.prepareStatement(deactivateSql);
+                stm.setBoolean(1, ptUser.isStatus());  // Change to inactive
+            } else {  // Check if status is true
+                stm = cnt.prepareStatement(activateSql);
+                stm.setBoolean(1, ptUser.isStatus()); // Change to active
+            }
+            stm.setInt(2, ptUser.getId());
+            stm.setInt(3, ptUser.getPjType().getId());
+            rowUpdated = stm.executeUpdate() > 0;
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return rowUpdated;
     }
 }

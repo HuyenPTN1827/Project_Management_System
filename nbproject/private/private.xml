@@ -5,11 +5,16 @@
         <group>
             <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/AuthenticationController.java</file>
             <file>file:/D:/Do%20An/Project_Management_System/web/WEB-INF/member/project-edit.jsp</file>
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/model/Project.java</file>
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/ResetPasswordController.java</file>
             <file>file:/D:/Do%20An/Project_Management_System/src/java/context/UserDAO.java</file>
             <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/ProjectListController.java</file>
             <file>file:/D:/Do%20An/Project_Management_System/src/java/context/BaseDAO.java</file>
             <file>file:/D:/Do%20An/Project_Management_System/web/WEB-INF/member/project-add.jsp</file>
+            <file>file:/D:/Do%20An/Project_Management_System/web/WEB-INF/member/projectlist.jsp</file>
             <file>file:/D:/Do%20An/Project_Management_System/src/java/context/ProjectDAO.java</file>
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/ChangePasswordController.java</file>
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/ProfileController.java</file>
         </group>
     </open-files>
 </project-private>

@@ -48,149 +48,82 @@
             gtag('js', new Date());
 
             gtag('config', 'UA-120946860-10', {'anonymize_ip': true});
-        </script></head>
+        </script>
+    </head>
+    <body>
+        <div class="row">
+            <div class="col-md-12 col-xl-12"></div>
+            <div class="card">
+                <div class="card-body">
+                    <c:if test="${projectType == null}">
+                        <!--<h3>Create New Project Type</h3>-->
+                        <form action="insert-project-type" method="post" class="row">
+                            <!-- Form fields for creating new -->
+                            <div class="mb-3 col-md-12">
+                                <label class="form-label">Name<span style="color: red;">*</span></label>
+                                <input type="text" class="form-control" name="name" placeholder="Enter the Project Type name" 
+                                       value="${name}" required>
+                            </div>
 
+                            <div class="mb-3 col-md-12">
+                                <label class="form-label">Code<span style="color: red;">*</span></label>
+                                <input type="text" class="form-control" name="code" placeholder="Enter the Project Type code" 
+                                       value="${code}" required>
+                            </div>
 
-    <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
-        <div class="wrapper">
-            <jsp:include page="../component/sidebar.jsp"></jsp:include>
-                <div class="main">
-                <jsp:include page="../component/header.jsp"></jsp:include>
+                            <div class="mb-3 col-md-12">
+                                <label class="form-label">Details</label>
+                                <textarea class="form-control" name="details" 
+                                          placeholder="Enter the Project Type details" rows="3">${details}</textarea>
+                            </div>
 
-                    <main class="content">
-                        <div class="container-fluid p-0">
+                            <div>
+                                <button type="submit" class="btn btn-lg btn-success">Submit</button>
+                            </div>
+                        </form>
+                    </c:if>
 
-                        <c:if test="${projectType == null}">
-                            <a href="<%=request.getContextPath()%>/project-type-management">Project Type Management > </a>
-                            <h1 class="h1 mt-2 mb-3"> Create New Project Type</h1>
-                            <div class="row">
+                    <c:if test="${projectType != null}">
+                        <!--<h3>Edit Project Type</h3>-->
+                        <form action="update-project-type" method="post" class="row">
+                            <input type="hidden" name="id" value="${projectType.id}">
+                            <div class="mb-3 col-md-12">
+                                <label class="form-label">Name<span style="color: red;">*</span></label>
+                                <input type="text" class="form-control" name="name" value="${projectType.name}" required>
+                            </div>
 
-                                <div class="col-md-12 col-xl-12">
-                                    <div class="card">
-                                        <div class="card-body">
+                            <div class="mb-3 col-md-12">
+                                <label class="form-label">Code<span style="color: red;">*</span></label>
+                                <input type="text" class="form-control" name="code" value="${projectType.code}" required>
+                            </div>
 
-                                            <form action="insert-project-type" method="get" class="row">
-                                                <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Name<span style="color: red;">*</span></label>
-                                                    <input type="text" class="form-control" name="name" placeholder="Enter the Project Type name" 
-                                                           value="${name}" required>
-                                                </div>
+                            <div class="mb-3 col-md-12">
+                                <label class="form-label">Details</label>
+                                <textarea class="form-control" name="details">${projectType.details}</textarea>
+                            </div>
 
-                                                <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Code<span style="color: red;">*</span></label>
-                                                    <input type="text" class="form-control" name="code" placeholder="Enter the Project Type code" 
-                                                           value="${code}" required>
-                                                </div>
-
-                                                <div class="mb-3 col-md-12">
-                                                    <label class="form-label">Details</label>
-                                                    <textarea class="form-control" name="details" 
-                                                              placeholder="Enter the Project Type details" rows="3">${details}</textarea>
-                                                </div>
-
-                                                <div>
-                                                    <button type="submit" class="btn btn-lg btn-success">Submit</button>
-                                                    <a href="<%=request.getContextPath()%>/project-type-management" class="btn btn-lg btn-light">Cancel</a>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label">Status<span style="color: red;">*</span></label>
+                                <div class="check">
+                                    <input class="form-check-input" type="radio" name="status"
+                                           <c:if test="${projectType.status eq 'true'}">
+                                               checked
+                                           </c:if>
+                                           value="true">Active
+                                    <input class="form-check-input ms-3" type="radio" name="status"
+                                           <c:if test="${projectType.status eq 'false'}">
+                                               checked
+                                           </c:if>
+                                           value="false">Inactive
                                 </div>
                             </div>
-                        </c:if> 
 
-                        <c:if test="${projectType != null}">
-                            <a href="<%=request.getContextPath()%>/project-type-management">Project Type Management > </a>
-                            <a href="<%=request.getContextPath()%>/project-type-user?id=${projectType.id}">Project Type Configs > </a>
-                            <h1 class="h1 mt-2 mb-3"> Project Type Details</h1>
-                            <div class="row">
-
-                                <div class="col-md-12 col-xl-12">
-                                    <div class="card">
-                                        <div class="card-body">
-
-                                            <form action="update-project-type" method="post" class="row">
-                                                <input type="hidden" name="id" value="${projectType.id}"/>
-
-                                                <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Name<span style="color: red;">*</span></label>
-                                                    <input type="text" class="form-control" name="name" placeholder="Enter the Project Type name" 
-                                                           value="${projectType.name}" required>
-                                                </div>
-
-                                                <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Code<span style="color: red;">*</span></label>
-                                                    <input type="text" class="form-control" name="code" placeholder="Enter the Project Type code" 
-                                                           value="${projectType.code}" required>
-                                                </div>
-
-                                                <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Details</label>
-                                                    <textarea class="form-control" name="details" 
-                                                              placeholder="Enter the Project Type details" rows="3">${projectType.details}</textarea>
-                                                </div>
-
-
-                                                <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Status<span style="color: red;">*</span></label>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="status"
-                                                               <c:if test="${projectType.status eq 'true'}">
-                                                                   checked
-                                                               </c:if>
-                                                               value="true">Active
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="status"
-                                                               <c:if test="${projectType.status eq 'false'}">
-                                                                   checked
-                                                               </c:if>
-                                                               value="false">Inactive
-                                                    </div>
-                                                </div>
-
-                                                <div>
-                                                    <button type="submit" class="btn btn-lg btn-success">Submit</button>
-                                                    <button type="reset" class="btn btn-lg btn-primary">Reset</button>
-                                                    <a href="<%=request.getContextPath()%>/project-type-user?id=${projectType.id}" 
-                                                       class="btn btn-lg btn-light">Cancel</a>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div>
+                                <button type="submit" class="btn btn-lg btn-success">Submit</button>
                             </div>
-                        </c:if>
-                    </div>
-                </main>
-
-                <footer class="footer">
-                    <div class="container-fluid">
-                        <div class="row text-muted">
-                            <div class="col-6 text-start">
-                                <p class="mb-0">
-                                    <a href="https://adminkit.io/" target="_blank" class="text-muted"><strong>AdminKit</strong></a> &copy;
-                                </p>
-                            </div>
-                            <div class="col-6 text-end">
-                                <ul class="list-inline">
-                                    <li class="list-inline-item">
-                                        <a class="text-muted" href="#">Support</a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a class="text-muted" href="#">Help Center</a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a class="text-muted" href="#">Privacy</a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a class="text-muted" href="#">Terms</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </footer>
+                        </form>
+                    </c:if>
+                </div>
             </div>
         </div>
 
@@ -217,8 +150,5 @@
                 }, 15000);
             });
         </script>
-
-
     </body>
-
 </html>

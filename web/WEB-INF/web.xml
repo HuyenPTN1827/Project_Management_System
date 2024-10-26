@@ -17,9 +17,9 @@
         <servlet-class>controller.ProjectTypeSettingController</servlet-class>
     </servlet>
     <servlet>
-    <servlet-name>ProjectListController</servlet-name>
-    <servlet-class>controller.ProjectListController</servlet-class>
-</servlet>
+        <servlet-name>ProjectListController</servlet-name>
+        <servlet-class>controller.ProjectListController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AuthenticationController</servlet-name>
         <url-pattern>/register-form</url-pattern>
@@ -147,6 +147,26 @@
     <servlet-mapping>
         <servlet-name>ProjectTypeController</servlet-name>
         <url-pattern>/project-type-user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <url-pattern>/add-project-type-user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <url-pattern>/insert-project-type-user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <url-pattern>/edit-project-type-user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <url-pattern>/update-project-type-user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <url-pattern>/change-status-project-type-user</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ProjectTypeSettingController</servlet-name>

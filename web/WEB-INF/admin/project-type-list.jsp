@@ -49,7 +49,27 @@
             gtag('js', new Date());
 
             gtag('config', 'UA-120946860-10', {'anonymize_ip': true});
-        </script></head>
+
+            function openProjectTypeModal(id = null) {
+                let url = '<%=request.getContextPath()%>/add-project-type'; // Default for Create New
+                if (id) {
+                    url = '<%=request.getContextPath()%>/edit-project-type?id=' + id; // For Edit
+                }
+
+                fetch(url)
+                        .then(response => response.text())
+                        .then(data => {
+                            document.querySelector('#projectTypeModal .modal-body').innerHTML = data;
+                            document.getElementById('projectTypeModal').style.display = 'block';
+                        })
+                        .catch(error => console.log('Error loading the form:', error));
+            }
+
+            function closeModal() {
+                document.getElementById('projectTypeModal').style.display = 'none';
+            }
+        </script>
+    </head>
 
 
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
@@ -94,7 +114,7 @@
 
                                             </form>
 
-                                            <a class="btn btn-primary" href="<%=request.getContextPath()%>/add-project-type">Create new</a>
+                                            <a class="btn btn-primary" href="javascript:void(0);" onclick="openProjectTypeModal();">Create new</a>
                                         </div>
                                     </div>
                                 </div>
@@ -125,9 +145,9 @@
                                                             </c:if>
                                                         </td>
                                                         <td>
-<!--                                                            <a href="<%=request.getContextPath()%>/edit-project-type?id=${type.id}" 
-                                                               class="btn btn-link text-primary">Details</a>-->
-                                                            
+                                                            <a href="javascript:void(0);" class="btn btn-link text-primary" 
+                                                               onclick="openProjectTypeModal(${type.id});">Edit</a>
+
                                                             <a href="<%=request.getContextPath()%>/project-type-user?id=${type.id}" 
                                                                class="btn btn-link text-primary">Configs</a>
 
@@ -149,6 +169,24 @@
                                         </table>
                                     </div>
                                 </div>
+
+                                <!-- Modal -->
+                                <div id="projectTypeModal" class="modal" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title">Project Type Details</h1>
+                                                <button type="button" class="close btn btn-danger" data-dismiss="modal" aria-label="Close" onclick="closeModal();">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <!-- This is where the project-type-detail.jsp will be loaded via AJAX -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -189,32 +227,32 @@
         <script src="${pageContext.request.contextPath}/js/datatables.js"></script>
 
         <script>
-                                                                       document.addEventListener("DOMContentLoaded", function () {
-                                                                           var datatablesMulti = $("#datatables-multi").DataTable({
-                                                                               responsive: true,
-                                                                               paging: true,
-                                                                               searching: false,
-                                                                               info: true,
-                                                                               order: [[0, 'desc']], // Default sort by ID column in descending order
-                                                                               columnDefs: [
-                                                                                   {orderable: false, targets: 4} // Disable sorting on the 'Action' column
-                                                                               ],
-                                                                               language: {
-                                                                                   paginate: {
-                                                                                       previous: "&laquo;",
-                                                                                       next: "&raquo;"
-                                                                                   },
-                                                                                   info: "_TOTAL_ project type(s) found",
-                                                                                   infoEmpty: "No project type found"
-                                                                               },
-                                                                               dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
-                                                                               initComplete: function () {
-                                                                                   // Add necessary classes for alignment
-                                                                                   $('.dataTables_info').addClass('text-left fw-bolder');
-                                                                                   $('.dataTables_length').addClass('mt-2');
-                                                                               }
-                                                                           });
-                                                                       });
+                                                    document.addEventListener("DOMContentLoaded", function () {
+                                                        var datatablesMulti = $("#datatables-multi").DataTable({
+                                                            responsive: true,
+                                                            paging: true,
+                                                            searching: false,
+                                                            info: true,
+                                                            order: [[0, 'desc']], // Default sort by ID column in descending order
+                                                            columnDefs: [
+                                                                {orderable: false, targets: 4} // Disable sorting on the 'Action' column
+                                                            ],
+                                                            language: {
+                                                                paginate: {
+                                                                    previous: "&laquo;",
+                                                                    next: "&raquo;"
+                                                                },
+                                                                info: "_TOTAL_ project type(s) found",
+                                                                infoEmpty: "No project type found"
+                                                            },
+                                                            dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
+                                                            initComplete: function () {
+                                                                // Add necessary classes for alignment
+                                                                $('.dataTables_info').addClass('text-left fw-bolder');
+                                                                $('.dataTables_length').addClass('mt-2');
+                                                            }
+                                                        });
+                                                    });
         </script>
 
         <script>

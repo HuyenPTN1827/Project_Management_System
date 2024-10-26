@@ -48,8 +48,6 @@ public class ProjectTypeSettingController extends HttpServlet {
             } else if (action.endsWith("delete")) {
                 deleteProjectTypeSetting(request, response);
             } else if (action.endsWith("changeStatus")) {
-                System.out.println("++++++++++++++++++++++++");
-                System.out.println("changeStatus");
                 changeStatusProjectTypeSetting(request, response);
             }
         } catch (Exception e) {

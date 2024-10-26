@@ -101,6 +101,7 @@ public class GroupService {
     public boolean changeStatusProjectType(ProjectType projectType) throws SQLException {
         return projectTypeDAO.changeStatusProjectType(projectType);
     }
+    
     // TrươngHBHE151011
     // 17/10/2024
     // Get all project type settings
@@ -144,5 +145,12 @@ public class GroupService {
 //    Admin get all project type users
     public List<ProjectType_User> getAllProjectTypeUsers(String keyword, Integer roleId, Boolean status, int typeId) {
         return projectTypeDAO.selectAllProjectTypeUsers(keyword, roleId, status, typeId);
+    }
+    
+    // HuyenPTNHE160769
+    // 18/10/2024
+    // Admin change status of a project type user
+    public boolean changeStatusProjectTypeUser(ProjectType_User ptUser) throws SQLException {
+        return projectTypeDAO.changeStatusProjectTypeUser(ptUser);
     }
 }

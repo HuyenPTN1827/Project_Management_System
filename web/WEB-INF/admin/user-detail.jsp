@@ -141,7 +141,6 @@
 
                                                 <div>
                                                     <button type="submit" class="btn btn-lg btn-success">Submit</button>
-                                                    <a href="<%=request.getContextPath()%>/user-management" class="btn btn-lg btn-light">Cancel</a>
                                                 </div>
                                             </form>
                                         </div>
@@ -253,8 +252,6 @@
 
                                                 <div>
                                                     <button type="submit" class="btn btn-lg btn-success">Submit</button>
-                                                    <button type="reset" class="btn btn-lg btn-primary">Reset</button>
-                                                    <a href="<%=request.getContextPath()%>/user-management" class="btn btn-lg btn-light">Cancel</a>
                                                 </div>
                                             </form>
                                         </div>

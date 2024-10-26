@@ -170,7 +170,7 @@
                                                         <td>
                                                             <c:if test="${user.status eq '0'}">
                                                                 <a href="<%=request.getContextPath()%>/edit-user?id=${user.id}"
-                                                                   class="btn btn-link text-primary">Details</a>
+                                                                   class="btn btn-link text-primary">Edit</a>
                                                                    
                                                                 <a href="<%=request.getContextPath()%>/change-status-user?id=${user.id}&status=${user.status}"
                                                                    class="btn btn-link text-success"
@@ -179,7 +179,7 @@
                                                             
                                                             <c:if test="${user.status eq '1'}">
                                                                 <a href="<%=request.getContextPath()%>/edit-user?id=${user.id}"
-                                                                   class="btn btn-link text-primary">Details</a>
+                                                                   class="btn btn-link text-primary">Edit</a>
                                                                 
                                                                 <a href="<%=request.getContextPath()%>/change-status-user?id=${user.id}&status=${user.status}"
                                                                    class="btn btn-link text-danger"
@@ -188,7 +188,7 @@
                                                             
                                                             <c:if test="${user.status eq '3'}">
                                                                 <a href="<%=request.getContextPath()%>/edit-user?id=${user.id}"
-                                                                   class="btn btn-link text-primary">Details</a>
+                                                                   class="btn btn-link text-primary">Edit</a>
                                                             </c:if>
                                                         </td>
                                                     </tr>

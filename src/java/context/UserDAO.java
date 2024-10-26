@@ -206,9 +206,7 @@ public class UserDAO {
 
 //    HuyenPTNHE160769
 //    25/09/2024        
-//    Admin select all users order by user id descending
-//        LIMIT = pageSize
-//        OFFSET = (pageIndex - 1) * pageSize;
+//    Admin select all users 
     public List<User> selectAllUsers(String keyword, Integer deptId, Integer roleId, Integer status) {
         List<User> user = new ArrayList<>();
 
