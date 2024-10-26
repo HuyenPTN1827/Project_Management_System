@@ -50,7 +50,7 @@
                                             <h1 class="h2">Forgot password</h1>
                                             <p class="lead">
                                                 Already have account? 
-                                                <a style="color: black;" href="">Back to Sign in</a>
+                                                <a style="color: black;" href="<%=request.getContextPath()%>/login-form">Back to Sign in</a>
                                             </p>
                                         </div>
 

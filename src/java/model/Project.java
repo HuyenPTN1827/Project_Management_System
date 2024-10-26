@@ -13,7 +13,7 @@ import java.util.Date;
 //BachHD
 public class Project {
     private int id;
-    private String bizTerm;
+    private int bizTerm;
     private String code;
     private String name;
     private String details;
@@ -27,35 +27,10 @@ public class Project {
     private String departmentCode;
     private String settingName;
 
-    public String getSettingName() {
-        return settingName;
-    }
-
-    public void setSettingName(String settingName) {
-        this.settingName = settingName;
-    }
-    
-
-    public String getTypeCode() {
-        return typeCode;
-    }
-
-    public void setTypeCode(String typeCode) {
-        this.typeCode = typeCode;
-    }
-
-    public String getDepartmentCode() {
-        return departmentCode;
-    }
-
-    public void setDepartmentCode(String departmentCode) {
-        this.departmentCode = departmentCode;
-    }
-
     public Project() {
     }
 
-    public Project(int id, String bizTerm, String code, String name, String details, Date startDate, boolean status, int typeId, int departmentId) {
+    public Project(int id, int bizTerm, String code, String name, String details, Date startDate, boolean status, int typeId, int departmentId, String typeCode, String departmentCode, String settingName) {
         this.id = id;
         this.bizTerm = bizTerm;
         this.code = code;
@@ -65,7 +40,9 @@ public class Project {
         this.status = status;
         this.typeId = typeId;
         this.departmentId = departmentId;
-        
+        this.typeCode = typeCode;
+        this.departmentCode = departmentCode;
+        this.settingName = settingName;
     }
 
     public int getId() {
@@ -76,11 +53,11 @@ public class Project {
         this.id = id;
     }
 
-    public String getBizTerm() {
+    public int getBizTerm() {
         return bizTerm;
     }
 
-    public void setBizTerm(String bizTerm) {
+    public void setBizTerm(int bizTerm) {
         this.bizTerm = bizTerm;
     }
 
@@ -139,6 +116,31 @@ public class Project {
     public void setDepartmentId(int departmentId) {
         this.departmentId = departmentId;
     }
+
+    public String getTypeCode() {
+        return typeCode;
+    }
+
+    public void setTypeCode(String typeCode) {
+        this.typeCode = typeCode;
+    }
+
+    public String getDepartmentCode() {
+        return departmentCode;
+    }
+
+    public void setDepartmentCode(String departmentCode) {
+        this.departmentCode = departmentCode;
+    }
+
+    public String getSettingName() {
+        return settingName;
+    }
+
+    public void setSettingName(String settingName) {
+        this.settingName = settingName;
+    }
+
     
     
     

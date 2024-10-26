@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Setting;
 import model.User;
+import service.BaseServive;
 import service.SettingService;
 import service.UserService;
 
@@ -29,11 +30,13 @@ public class AuthenticationController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private UserService userService;
     private SettingService settingService;
+    
 
     @Override
     public void init() throws ServletException {
         this.userService = new UserService();
         this.settingService = new SettingService();
+        
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -132,19 +135,28 @@ public class AuthenticationController extends HttpServlet {
     String email = request.getParameter("email");
     String mobile = request.getParameter("mobile");
     String password = request.getParameter("password");
-
+ 
     User user = new User();
     user.setFull_name(fullname);
     user.setPassword(password);
     user.setEmail(email);
     user.setMobile(mobile);
+// Validate user information
+    List<String> validationErrors = userService.validateUser(user);
 
+    // Kiểm tra giá trị người dùng nhập có lỗi nào không
+    if (!validationErrors.isEmpty()) {
+        request.setAttribute("NOTIFICATION", String.join(", ", validationErrors));
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/guest/register.jsp");
+        dispatcher.forward(request, response);
+        return; // Dừng xử lý nếu có lỗi
+    }
     try {
         int result = userService.registerUser(user);
         
         if (result == 1) {
             // Đăng ký thành công
-            request.setAttribute("NOTIFICATION", "User Registered Successfully!");
+            request.setAttribute("SUCCESS", "User Registered Successfully!");
         } else if (result == -1) {
             // Email đã tồn tại
             request.setAttribute("NOTIFICATION", "Email already exists. Please use a different email.");

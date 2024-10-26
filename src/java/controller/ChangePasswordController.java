@@ -84,39 +84,46 @@ public class ChangePasswordController extends HttpServlet {
     //    28/09/2024        
     //     xử lý yêu cầu đổi mật khẩu của người dùng
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        // Lấy đối tượng user từ session
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    // Lấy đối tượng user từ session
+    HttpSession session = request.getSession();
+    User user = (User) session.getAttribute("user");
 
-        // Kiểm tra nếu user là null
-        if (user == null) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
-            return;
-        }
-
-        System.out.println("User: " + user);
-
-        String oldPassword = request.getParameter("oldPassword");
-        System.out.println("Old Password entered: " + oldPassword);
-        String newPassword = request.getParameter("newPassword");
-
-        // Gọi userservice để thay đổi mật khẩu
-        UserService userService = new UserService();
-        boolean success = userService.changePassword(user, oldPassword, newPassword);
-
-        if (success) {
-            // Đổi mật khẩu thành công
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/success.jsp");
-            dispatcher.forward(request, response);
-//            response.sendRedirect(request.getContextPath() + "/success.jsp");
-
-        } else {
-            // Đổi mật khẩu không thành công (mật khẩu cũ không khớp)
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Old password is incorrect");
-        }
+    // Kiểm tra nếu user là null
+    if (user == null) {
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
+        return;
     }
+
+    String oldPassword = request.getParameter("oldPassword");
+    String newPassword = request.getParameter("newPassword");
+
+    // Gọi UserService để validate mật khẩu mới
+    UserService userService = new UserService();
+    
+    // Kiểm tra tính hợp lệ của mật khẩu mới
+    if (!userService.validatePassword(newPassword)) {
+        request.setAttribute("ERROR", "The new password does not meet the security requirements.");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/change-password.jsp");
+        dispatcher.forward(request, response);
+        return;
+    }
+
+    // Gọi UserService để thay đổi mật khẩu
+    boolean success = userService.changePassword(user, oldPassword, newPassword);
+
+    if (success) {
+        // Đổi mật khẩu thành công
+        request.setAttribute("NOTIFICATION", "You have changed your password successfully.");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/change-password.jsp");
+        dispatcher.forward(request, response);
+    } else {
+        // Đổi mật khẩu không thành công (mật khẩu cũ không khớp)
+        response.sendError(HttpServletResponse.SC_FORBIDDEN, "Old password is incorrect");
+    }
+}
+
 
     /**
      * Returns a short description of the servlet.

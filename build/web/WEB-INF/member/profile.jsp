@@ -1,4 +1,3 @@
-<!--BachHD-->
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="model.User" %>
 <!DOCTYPE html>
@@ -32,9 +31,12 @@
 
 <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
     <div class="wrapper">
-        
+        <!-- Include sidebar -->
+        <jsp:include page="../component/sidebar.jsp"></jsp:include>
+
         <div class="main">
-         
+            <!-- Include header -->
+            <jsp:include page="../component/header.jsp"></jsp:include>
 
             <main class="content">
                 <div class="container-fluid p-0">
@@ -59,7 +61,6 @@
                                         <li class="mb-1"><span data-feather="home" class="feather-sm me-1"></span> Lives in <a href="#">San Francisco, SA</a></li>
                                         <li class="mb-1"><span data-feather="briefcase" class="feather-sm me-1"></span> Works at <a href="#">GitHub</a></li>
                                         <li class="mb-1"><span data-feather="map-pin" class="feather-sm me-1"></span> From <a href="#">Boston</a></li>
-                                        <li class="mb-1"><a href="changepasswordcontroller">Change password</a></li>
                                     </ul>
                                 </div>
                             </div>
