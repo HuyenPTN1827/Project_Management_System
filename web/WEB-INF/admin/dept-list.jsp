@@ -49,6 +49,25 @@
             gtag('js', new Date());
 
             gtag('config', 'UA-120946860-10', {'anonymize_ip': true});
+
+            function openDeptModal(id = null) {
+                let url = '<%=request.getContextPath()%>/add-department'; // Default for Create New
+                if (id) {
+                    url = '<%=request.getContextPath()%>/edit-department?id=' + id; // For Edit
+                }
+
+                fetch(url)
+                        .then(response => response.text())
+                        .then(data => {
+                            document.querySelector('#projectTypeModal .modal-body').innerHTML = data;
+                            document.getElementById('projectTypeModal').style.display = 'block';
+                        })
+                        .catch(error => console.log('Error loading the form:', error));
+            }
+
+            function closeModal() {
+                document.getElementById('projectTypeModal').style.display = 'none';
+            }
         </script></head>
 
 
@@ -94,7 +113,7 @@
 
                                             </form>
 
-                                            <a class="btn btn-primary" href="<%=request.getContextPath()%>/add-department">Create new</a>
+                                            <a class="btn btn-primary" href="javascript:void(0);" onclick="openDeptModal();">Create new</a>
                                         </div>
                                     </div>
                                 </div>
@@ -127,8 +146,8 @@
                                                             </c:if>
                                                         </td>
                                                         <td>
-                                                            <a href="<%=request.getContextPath()%>/edit-department?id=${dept.id}" 
-                                                               class="btn btn-link text-primary">Edit</a>
+                                                            <a href="javascript:void(0);" class="btn btn-link text-primary" 
+                                                               onclick="openDeptModal(${dept.id});">Edit</a>
 
                                                             <a href="#" 
                                                                class="btn btn-link text-primary">Configs</a>
@@ -151,6 +170,24 @@
                                         </table>
                                     </div>
                                 </div>
+
+                                <!-- Modal -->
+                                <div id="projectTypeModal" class="modal" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title">Department Details</h1>
+                                                <button type="button" class="close btn btn-danger" data-dismiss="modal" aria-label="Close" onclick="closeModal();">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <!-- This is where the project-type-detail.jsp will be loaded via AJAX -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -191,32 +228,32 @@
         <script src="${pageContext.request.contextPath}/js/datatables.js"></script>
 
         <script>
-                                                                       document.addEventListener("DOMContentLoaded", function () {
-                                                                           var datatablesMulti = $("#datatables-multi").DataTable({
-                                                                               responsive: true,
-                                                                               paging: true,
-                                                                               searching: false,
-                                                                               info: true,
-                                                                               order: [[0, 'desc']], // Default sort by ID column in descending order
-                                                                               columnDefs: [
-                                                                                   {orderable: false, targets: 5} // Disable sorting on the 'Action' column
-                                                                               ],
-                                                                               language: {
-                                                                                   paginate: {
-                                                                                       previous: "&laquo;",
-                                                                                       next: "&raquo;"
-                                                                                   },
-                                                                                   info: "_TOTAL_ department(s) found",
-                                                                                   infoEmpty: "No department found"
-                                                                               },
-                                                                               dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
-                                                                               initComplete: function () {
-                                                                                   // Add necessary classes for alignment
-                                                                                   $('.dataTables_info').addClass('text-left fw-bolder');
-                                                                                   $('.dataTables_length').addClass('mt-2'); // Add necessary margin classes
-                                                                               }
-                                                                           });
-                                                                       });
+                                                    document.addEventListener("DOMContentLoaded", function () {
+                                                        var datatablesMulti = $("#datatables-multi").DataTable({
+                                                            responsive: true,
+                                                            paging: true,
+                                                            searching: false,
+                                                            info: true,
+                                                            order: [[0, 'desc']], // Default sort by ID column in descending order
+                                                            columnDefs: [
+                                                                {orderable: false, targets: 5} // Disable sorting on the 'Action' column
+                                                            ],
+                                                            language: {
+                                                                paginate: {
+                                                                    previous: "&laquo;",
+                                                                    next: "&raquo;"
+                                                                },
+                                                                info: "_TOTAL_ department(s) found",
+                                                                infoEmpty: "No department found"
+                                                            },
+                                                            dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
+                                                            initComplete: function () {
+                                                                // Add necessary classes for alignment
+                                                                $('.dataTables_info').addClass('text-left fw-bolder');
+                                                                $('.dataTables_length').addClass('mt-2'); // Add necessary margin classes
+                                                            }
+                                                        });
+                                                    });
         </script>
 
         <script>

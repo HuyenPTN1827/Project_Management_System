@@ -59,13 +59,13 @@
                         <!--<h3>Create New Project Type</h3>-->
                         <form action="insert-project-type" method="post" class="row">
                             <!-- Form fields for creating new -->
-                            <div class="mb-3 col-md-12">
+                            <div class="mb-3 col-md-6">
                                 <label class="form-label">Name<span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" name="name" placeholder="Enter the Project Type name" 
                                        value="${name}" required>
                             </div>
 
-                            <div class="mb-3 col-md-12">
+                            <div class="mb-3 col-md-6">
                                 <label class="form-label">Code<span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" name="code" placeholder="Enter the Project Type code" 
                                        value="${code}" required>
@@ -77,7 +77,7 @@
                                           placeholder="Enter the Project Type details" rows="3">${details}</textarea>
                             </div>
 
-                            <div>
+                            <div class="d-flex justify-content-end">
                                 <button type="submit" class="btn btn-lg btn-success">Submit</button>
                             </div>
                         </form>
@@ -87,19 +87,19 @@
                         <!--<h3>Edit Project Type</h3>-->
                         <form action="update-project-type" method="post" class="row">
                             <input type="hidden" name="id" value="${projectType.id}">
-                            <div class="mb-3 col-md-12">
+                            <div class="mb-3 col-md-6">
                                 <label class="form-label">Name<span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" name="name" value="${projectType.name}" required>
                             </div>
 
-                            <div class="mb-3 col-md-12">
+                            <div class="mb-3 col-md-6">
                                 <label class="form-label">Code<span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" name="code" value="${projectType.code}" required>
                             </div>
 
                             <div class="mb-3 col-md-12">
                                 <label class="form-label">Details</label>
-                                <textarea class="form-control" name="details">${projectType.details}</textarea>
+                                <textarea class="form-control" name="details" rows="3">${projectType.details}</textarea>
                             </div>
 
                             <div class="mb-3 col-md-6">
@@ -109,16 +109,16 @@
                                            <c:if test="${projectType.status eq 'true'}">
                                                checked
                                            </c:if>
-                                           value="true">Active
+                                           value="true"> Active
                                     <input class="form-check-input ms-3" type="radio" name="status"
                                            <c:if test="${projectType.status eq 'false'}">
                                                checked
                                            </c:if>
-                                           value="false">Inactive
+                                           value="false"> Inactive
                                 </div>
                             </div>
 
-                            <div>
+                            <div class="d-flex justify-content-end">
                                 <button type="submit" class="btn btn-lg btn-success">Submit</button>
                             </div>
                         </form>

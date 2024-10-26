@@ -21,42 +21,31 @@ import model.Setting;
  */
 public class UserDAO {
 
-//    Queries của Member
-    private static final String REGISTER_USER_SQL = "INSERT INTO pms.user (full_name, "
-            + "email, mobile, password) VALUES (?, ?, ?, ?);";
-    private static final String LOGIN_USER_SQL = "SELECT * FROM pms.user "
-            + "WHERE email = ? AND password = ?;";
+    //BachHD
+    public int registerUser(User user) throws ClassNotFoundException {
+        int result = 0;
 
-//    Member
-//    public int registerUser(User user) throws ClassNotFoundException {
-//        int result = 0;
-//
-//        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(REGISTER_USER_SQL)) {
-//            stm.setString(1, user.getFull_name());
-//            stm.setString(2, user.getEmail());
-//            stm.setString(3, user.getMobile());
-//            stm.setString(4, user.getPassword());
-//
-//            result = stm.executeUpdate();
-//        } catch (SQLException e) {
-//            BaseDAO.printSQLException(e);
-//        }
-//        return result;
-//    }
-//    public boolean loginValidate(User user) throws ClassNotFoundException {
-//        boolean status = false;
-//
-//        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(LOGIN_USER_SQL)) {
-//            stm.setString(1, user.getEmail());
-//            stm.setString(2, user.getPassword());
-//
-//            ResultSet rs = stm.executeQuery();
-//            status = rs.next();
-//        } catch (SQLException e) {
-//            BaseDAO.printSQLException(e);
-//        }
-//        return status;
-//    }
+        // Kiểm tra xem email đã tồn tại chưa
+        if (checkEmailExist(user.getEmail())) {
+            return -1; // Trả về -1 nếu email đã tồn tại
+        }
+
+        // Thực hiện đăng ký nếu email chưa tồn tại
+        String REGISTER_USER_SQL = "INSERT INTO user (full_name, email, mobile, password) VALUES (?, ?, ?, ?)";
+        try (Connection connection = BaseDAO.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(REGISTER_USER_SQL)) {
+            preparedStatement.setString(1, user.getFull_name());
+            preparedStatement.setString(2, user.getEmail());
+            preparedStatement.setString(3, user.getMobile());
+            preparedStatement.setString(4, user.getPassword());
+
+            result = preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+
+        return result; // Trả về 1 nếu đăng ký thành công
+    }
+
     public User loginValidate(User user) throws ClassNotFoundException {
         User foundUser = null;
         String query = """
@@ -113,57 +102,6 @@ public class UserDAO {
         return user;
     }
 
-//    public User selectUserByID(int id) {
-//        User user = null;
-//        String sql = "SELECT * FROM user WHERE id = ?"; // Thay đổi tên bảng nếu cần
-//
-//        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
-//            stm.setInt(1, id);
-//            ResultSet rs = stm.executeQuery();
-//
-//            if (rs.next()) {
-//                user = new User();
-//                user.setId(rs.getInt("id"));
-//                user.setFull_name(rs.getString("full_name"));
-//                user.setEmail(rs.getString("email"));
-//                user.setMobile(rs.getString("mobile"));
-//                user.setPassword(rs.getString("password"));
-//                user.setNotes(rs.getString("notes"));
-//                user.setStatus(rs.getInt("status"));
-//
-//                // Lấy vai trò của người dùng (nếu có)
-//                int roleId = rs.getInt("role_id"); // Thay đổi tên trường nếu cần
-//                Role role = selectRoleByID(roleId); // Phương thức để lấy thông tin vai trò
-//                user.setRole(role);
-//            }
-//        } catch (SQLException e) {
-//            BaseDAO.printSQLException(e);
-//        }
-//
-//        return user;
-//    }
-// Thêm phương thức này để lấy vai trò nếu cần
-//    private Role selectRoleByID(int roleId) {
-//
-//        Role role = null;
-//        String sql = "SELECT * FROM role WHERE id = ?";
-//
-//        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
-//            stm.setInt(1, roleId);
-//            ResultSet rs = stm.executeQuery();
-//
-//            if (rs.next()) {
-//                role = new Role();
-//                role.setId(rs.getInt("id"));
-//                role.setRole_name(rs.getString("role_name"));
-//                role.setDescription(rs.getString("description"));
-//            }
-//        } catch (SQLException e) {
-//            BaseDAO.printSQLException(e);
-//        }
-//
-//        return role;
-//    }
 //BachHD
 //28/9
 //updateMember
@@ -519,10 +457,10 @@ public class UserDAO {
 
         return rowUpdated;
     }
+
     //    HuyenPTNHE160769
     //    25/09/2024        
-    //    Admin change status of an user
-
+    //    Admin change status of an user2
     public boolean changeStatusUser(User user) throws SQLException {
         boolean rowUpdated = false;
         try (Connection cnt = BaseDAO.getConnection()) {
@@ -549,6 +487,7 @@ public class UserDAO {
         }
         return rowUpdated;
     }
+
     //BachHD
     // Phương thức kiểm tra email đã tồn tại
     public boolean checkEmailExist(String email) {
@@ -565,29 +504,43 @@ public class UserDAO {
         return false;
     }
 
-    //BachHD
-    public int registerUser(User user) throws ClassNotFoundException {
-        int result = 0;
+//    HuyenPTNHE160769
+//    22/10/2024        
+//    Admin select user by user full name or email
+    public User findUserByFullNameOrEmail(String keyword) {
+        User u = null;
 
-        // Kiểm tra xem email đã tồn tại chưa
-        if (checkEmailExist(user.getEmail())) {
-            return -1; // Trả về -1 nếu email đã tồn tại
+        if (keyword != null) {
+            String sql = "SELECT * FROM pms.user WHERE (LOWER(full_name) LIKE ? OR LOWER(email) LIKE ?) AND status = 1 LIMIT 1;";
+            try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+                String keywordPattern = "%" + keyword.toLowerCase().trim() + "%";
+                stm.setString(1, "%" + keywordPattern + "%");
+                stm.setString(2, "%" + keywordPattern + "%");
+                ResultSet rs = stm.executeQuery();
+                while (rs.next()) {
+                    u = new User();
+                    u.setId(rs.getInt("id"));
+                    u.setFull_name(rs.getString("full_name"));
+                    u.setEmail(rs.getString("email"));
+                    u.setMobile(rs.getString("mobile"));
+//                u.setNotes(rs.getString("notes"));
+                    u.setStatus(rs.getInt("status"));
+
+//                Department d = new Department();
+//                d.setId(rs.getInt("d.id"));
+//                d.setCode(rs.getString("d.name"));
+//                u.setDept(d);
+//
+//                Setting s = new Setting();
+//                s.setId(rs.getInt("s.id"));
+//                s.setName(rs.getString("s.name"));
+//                u.setSetting(s);
+                }
+            } catch (SQLException e) {
+                BaseDAO.printSQLException(e);
+            }
         }
-
-        // Thực hiện đăng ký nếu email chưa tồn tại
-        String REGISTER_USER_SQL = "INSERT INTO user (full_name, email, mobile, password) VALUES (?, ?, ?, ?)";
-        try (Connection connection = BaseDAO.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(REGISTER_USER_SQL)) {
-            preparedStatement.setString(1, user.getFull_name());
-            preparedStatement.setString(2, user.getEmail());
-            preparedStatement.setString(3, user.getMobile());
-            preparedStatement.setString(4, user.getPassword());
-
-            result = preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            BaseDAO.printSQLException(e);
-        }
-
-        return result; // Trả về 1 nếu đăng ký thành công
+        return u;
     }
 
 }

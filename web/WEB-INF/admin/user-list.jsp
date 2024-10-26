@@ -71,60 +71,70 @@
                                         <div class="card-header">
                                             <div class="d-flex justify-content-between align-items-center" style="margin: 10px;">
                                                 <form action="user-management" method="post" class="d-flex align-items-center" style="gap: 15px;">
-                                                    <select name="deptId" class="form-select" style="width: 120px;">
-                                                        <option value="">All Departments</option>
-                                                    <c:forEach items="${dept}" var="d">
+                                                    <div class="col-md-2">
+                                                        <select name="deptId" class="form-select " >
+                                                            <option value="">All Departments</option>
+                                                        <c:forEach items="${dept}" var="d">
+                                                            <option 
+                                                                <c:if test="${deptId eq d.id}">
+                                                                    selected="selected"
+                                                                </c:if>
+                                                                value="${d.id}">${d.name}
+                                                            </option>
+                                                        </c:forEach>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <select name="roleId" class="form-select">
+                                                        <option value="">All Roles</option>
+                                                        <c:forEach items="${role}" var="r">
+                                                            <option 
+                                                                <c:if test="${roleId eq r.id}">
+                                                                    selected="selected"
+                                                                </c:if>
+                                                                value="${r.id}">${r.name}
+                                                            </option>
+                                                        </c:forEach>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-md-2">
+                                                    <select name="status" class="form-select">
+                                                        <option value="">All Statuses</option>
                                                         <option 
-                                                            <c:if test="${deptId eq d.id}">
+                                                            <c:if test="${status eq 1}">
                                                                 selected="selected"
                                                             </c:if>
-                                                            value="${d.id}">${d.name}
+                                                            value="1">Active
                                                         </option>
-                                                    </c:forEach>
-                                                </select>
-
-                                                <select name="roleId" class="form-select" style="width: 120px;">
-                                                    <option value="">All Roles</option>
-                                                    <c:forEach items="${role}" var="r">
                                                         <option 
-                                                            <c:if test="${roleId eq r.id}">
+                                                            <c:if test="${status eq 0}">
                                                                 selected="selected"
                                                             </c:if>
-                                                            value="${r.id}">${r.name}
+                                                            value="0">Inactive
                                                         </option>
-                                                    </c:forEach>
-                                                </select>
+                                                        <option 
+                                                            <c:if test="${status eq 3}">
+                                                                selected="selected"
+                                                            </c:if>
+                                                            value="3">Unverified
+                                                        </option>
+                                                    </select>
+                                                </div>
 
-                                                <select name="status" class="form-select"  style="width: 130px;">
-                                                    <option value="">All Statuses</option>
-                                                    <option 
-                                                        <c:if test="${status eq 1}">
-                                                            selected="selected"
-                                                        </c:if>
-                                                        value="1">Active
-                                                    </option>
-                                                    <option 
-                                                        <c:if test="${status eq 0}">
-                                                            selected="selected"
-                                                        </c:if>
-                                                        value="0">Inactive
-                                                    </option>
-                                                    <option 
-                                                        <c:if test="${status eq 3}">
-                                                            selected="selected"
-                                                        </c:if>
-                                                        value="3">Unverified
-                                                    </option>
-                                                </select>
+                                                <div class="col-md-4">
+                                                    <input type="search" name="keyword" class="form-control"
+                                                           placeholder="Enter Full Name or Email or Phone" id="keyword" value="${keyword}">
+                                                </div>
 
-                                                <input type="search" name="keyword" class="form-control" style="width: 270px;"
-                                                       placeholder="Enter Full Name or Email or Phone" id="keyword" value="${keyword}">
-
-                                                <button type="submit" class="btn btn-primary">Search</button>
-
+                                                <div class="col-md-2">
+                                                    <button type="submit" class="btn btn-primary">Search</button>
+                                                </div>
                                             </form>
 
-                                            <a class="btn btn-primary" href="<%=request.getContextPath()%>/add-user">Create new</a>
+                                            <div class="col-md-2 d-flex justify-content-end align-items-end">
+                                                <a class="btn btn-primary" href="<%=request.getContextPath()%>/add-user">Create new</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -171,21 +181,21 @@
                                                             <c:if test="${user.status eq '0'}">
                                                                 <a href="<%=request.getContextPath()%>/edit-user?id=${user.id}"
                                                                    class="btn btn-link text-primary">Edit</a>
-                                                                   
+
                                                                 <a href="<%=request.getContextPath()%>/change-status-user?id=${user.id}&status=${user.status}"
                                                                    class="btn btn-link text-success"
                                                                    onclick="return confirm('Are you sure you want to activate this user?');">Activate</a>
                                                             </c:if>
-                                                            
+
                                                             <c:if test="${user.status eq '1'}">
                                                                 <a href="<%=request.getContextPath()%>/edit-user?id=${user.id}"
                                                                    class="btn btn-link text-primary">Edit</a>
-                                                                
+
                                                                 <a href="<%=request.getContextPath()%>/change-status-user?id=${user.id}&status=${user.status}"
                                                                    class="btn btn-link text-danger"
                                                                    onclick="return confirm('Are you sure you want to deactivate this user?');">Deactivate</a>
                                                             </c:if>
-                                                            
+
                                                             <c:if test="${user.status eq '3'}">
                                                                 <a href="<%=request.getContextPath()%>/edit-user?id=${user.id}"
                                                                    class="btn btn-link text-primary">Edit</a>

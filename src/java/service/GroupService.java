@@ -101,38 +101,42 @@ public class GroupService {
     public boolean changeStatusProjectType(ProjectType projectType) throws SQLException {
         return projectTypeDAO.changeStatusProjectType(projectType);
     }
-    
+
     // TrươngHBHE151011
     // 17/10/2024
     // Get all project type settings
     public List<ProjectTypeSetting> getAllProjectTypeSettings(String keyword, Boolean statusFilter) throws SQLException {
-        return projecTypeSettingDAO.getAllProjectTypeSettings(keyword,statusFilter);
+        return projecTypeSettingDAO.getAllProjectTypeSettings(keyword, statusFilter);
     }
+
     // TrươngHBHE151011
     // 17/10/2024
     // Get project type setting by id
     public ProjectTypeSetting getProjectTypeSettingById(int id) throws SQLException {
         return projecTypeSettingDAO.getProjectTypeSettingById(id);
     }
+
     // TrươngHBHE151011
     // 17/10/2024
     // Create new project type setting
     public void createProjectTypeSetting(ProjectTypeSetting setting) throws SQLException {
         projecTypeSettingDAO.createProjectTypeSetting(setting);
     }
+
     // TrươngHBHE151011
     // 17/10/2024
     // Update an existing project type setting
     public void updateProjectTypeSetting(ProjectTypeSetting setting) throws SQLException {
         projecTypeSettingDAO.updateProjectTypeSetting(setting);
     }
+
     // TrươngHBHE151011
     // 17/10/2024
     // Delete project type setting by id
     public void deleteProjectTypeSetting(int id) throws SQLException {
         projecTypeSettingDAO.deleteProjectTypeSetting(id);
     }
-    
+
     // TrươngHBHE151011
     // 17/10/2024
     // Change status of project type setting by id
@@ -146,7 +150,28 @@ public class GroupService {
     public List<ProjectType_User> getAllProjectTypeUsers(String keyword, Integer roleId, Boolean status, int typeId) {
         return projectTypeDAO.selectAllProjectTypeUsers(keyword, roleId, status, typeId);
     }
-    
+
+    // HuyenPTNHE160769
+    // 22/10/2024
+    // Admin add new project type user information
+    public int insertProjectTypeUser(ProjectType_User ptUser) throws SQLException {
+        return projectTypeDAO.insertProjectTypeUser(ptUser);
+    }
+
+    // HuyenPTNHE160769
+    // 22/10/2024
+    // Admin get a project type user information by id
+    public ProjectType_User getProjectTypeUserById(int id) {
+        return projectTypeDAO.selectProjectTypeUserByID(id);
+    }
+
+    // HuyenPTNHE160769
+    // 22/10/2024
+    // Admin update a project type user information
+    public boolean updateProjectTypeUser(ProjectType_User ptUser) throws SQLException {
+        return projectTypeDAO.updateProjectTypeUser(ptUser);
+    }
+
     // HuyenPTNHE160769
     // 18/10/2024
     // Admin change status of a project type user

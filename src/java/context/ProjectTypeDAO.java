@@ -244,7 +244,7 @@ public class ProjectTypeDAO {
     public boolean changeStatusProjectTypeUser(ProjectType_User ptUser) throws SQLException {
         boolean rowUpdated = false;
 
-        String activateSql = "UPDATE pms.user_type SET status = ?, start_date = CURDATE(), end_date = NULL WHERE id = ? AND type_id = ?;";
+        String activateSql = "UPDATE pms.user_type SET status = ?, end_date = NULL WHERE id = ? AND type_id = ?;";
         String deactivateSql = "UPDATE pms.user_type SET status = ?, end_date = CURDATE() WHERE id = ? AND type_id = ?;";
 
         try (Connection cnt = BaseDAO.getConnection()) {
@@ -264,4 +264,111 @@ public class ProjectTypeDAO {
         }
         return rowUpdated;
     }
+
+//    HuyenPTNHE160769
+//    22/10/2024       
+//    Admin add new project type user
+    public int insertProjectTypeUser(ProjectType_User ptUser) throws SQLException {
+        int result = 0;
+        String sql = """
+                     INSERT INTO pms.user_type (user_id, type_id, start_date, status, role_id)
+                     VALUES (?, ?, CURDATE(), 1, ?);""";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            stm.setInt(1, ptUser.getUser().getId());
+            stm.setInt(2, ptUser.getPjType().getId());
+            stm.setInt(3, ptUser.getPtSetting().getId());
+
+            result = stm.executeUpdate();
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return result;
+    }
+
+//    HuyenPTNHE160769
+//    05/10/2024      
+//    Admin select project type by id
+    public ProjectType_User selectProjectTypeUserByID(int id) {
+        ProjectType_User ptu = null;
+
+        String sql = """
+                     SELECT ut.id, ut.user_id, u.full_name, u.email, u.mobile, ut.role_id, pts.name, ut.type_id, 
+                                          ut.start_date, ut.end_date, ut.status FROM pms.user_type ut
+                                          INNER JOIN pms.user u ON ut.user_id = u.id
+                                          INNER JOIN pms.project_type pt ON ut.type_id = pt.id
+                                          INNER JOIN pms.project_type_setting pts ON ut.role_id = pts.id
+                                          WHERE ut.id = ?;""";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            stm.setInt(1, id);
+
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                ptu = new ProjectType_User();
+                ptu.setId(rs.getInt("ut.id"));
+
+                // Handle potential null values for dates
+                Date startDate = rs.getDate("ut.start_date");
+                if (startDate != null) {
+                    ptu.setStart_date(MyDateUtil.getUtilDate((java.sql.Date) startDate));
+                }
+
+                Date endDate = rs.getDate("ut.end_date");
+                if (endDate != null) {
+                    ptu.setEnd_date(MyDateUtil.getUtilDate((java.sql.Date) endDate));
+                }
+
+                ptu.setStatus(rs.getBoolean("ut.status"));
+
+                User u = new User();
+                u.setId(rs.getInt("ut.user_id"));
+                u.setFull_name(rs.getString("u.full_name"));
+                u.setEmail(rs.getString("u.email"));
+                u.setMobile(rs.getString("u.mobile"));
+                ptu.setUser(u);
+
+                ProjectType pt = new ProjectType();
+                pt.setId(rs.getInt("ut.type_id"));
+                ptu.setPjType(pt);
+
+                ProjectTypeSetting pts = new ProjectTypeSetting();
+                pts.setId(rs.getInt("ut.role_id"));
+                pts.setName(rs.getString("pts.name"));
+                ptu.setPtSetting(pts);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return ptu;
+    }
+
+//    HuyenPTNHE160769
+//    05/10/2024         
+//    Admin update a project type user
+    public boolean updateProjectTypeUser(ProjectType_User ptUser) throws SQLException {
+        boolean rowUpdated = false;
+
+        String activateSql = "UPDATE pms.user_type SET status = ?, role_id = ?, end_date = NULL WHERE id = ? AND type_id = ?;";
+        String deactivateSql = "UPDATE pms.user_type SET status = ?, role_id = ?, end_date = CURDATE() WHERE id = ? AND type_id = ?;";
+
+        try (Connection cnt = BaseDAO.getConnection()) {
+            PreparedStatement stm;
+            if (!ptUser.isStatus()) { // Check if status is false
+                stm = cnt.prepareStatement(deactivateSql);
+                stm.setBoolean(1, ptUser.isStatus());  // Change to inactive
+            } else {  // Check if status is true
+                stm = cnt.prepareStatement(activateSql);
+                stm.setBoolean(1, ptUser.isStatus()); // Change to active
+            }
+            stm.setInt(2, ptUser.getPtSetting().getId());
+            stm.setInt(3, ptUser.getId());
+            stm.setInt(4, ptUser.getPjType().getId());
+            rowUpdated = stm.executeUpdate() > 0;
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return rowUpdated;
+    }
+
 }

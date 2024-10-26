@@ -147,4 +147,10 @@ public class UserService extends BaseServive {
         return userDAO.checkEmailExist(email);
     }
 
+    // HuyenPTNHE160769
+    // 22/10/2024
+    // Admin get an user information by fullname or email
+    public User findUserByFullNameOrEmail(String keyword) {
+        return userDAO.findUserByFullNameOrEmail(keyword);
+    }
 }

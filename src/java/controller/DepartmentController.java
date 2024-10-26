@@ -129,7 +129,8 @@ public class DepartmentController extends HttpServlet {
         // Path to user information input form page
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/dept-detail.jsp");
         request.setAttribute("dept", dept);
-        dispatcher.forward(request, response);
+        request.setAttribute("department", null);
+        dispatcher.include(request, response);
     }
 
 //    HuyenPTNHE160769 
@@ -161,16 +162,12 @@ public class DepartmentController extends HttpServlet {
 //    Show form edit department
     private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        // Call service to get an user information by id
         Department department = groupService.getDepartmentById(id);
-
-        // Call service to get all department for Department dropdown list
         List<Department> dept = groupService.getDepartmentList();
-
-        // Path to user information input form page
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/dept-detail.jsp");
+        
         request.setAttribute("department", department);
         request.setAttribute("dept", dept);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/dept-detail.jsp");
         dispatcher.forward(request, response);
     }
 
