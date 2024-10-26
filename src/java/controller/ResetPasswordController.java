@@ -80,6 +80,13 @@ public class ResetPasswordController extends HttpServlet {
 
         String sessionOtp = (String) request.getSession().getAttribute("otp");
         Integer userId = (Integer) request.getSession().getAttribute("userId");
+        
+        UserService userService = new UserService();
+        if(!userService.validatePassword(newPassword)){
+            request.setAttribute("ERROR", "The new password does not meet the security requirements.");
+            request.getRequestDispatcher("/WEB-INF/member/resetpassword.jsp").forward(request, response);
+        return;
+        }
 
         if (enteredOtp != null && enteredOtp.equals(sessionOtp) && userId != null) {
             // Cập nhật mật khẩu

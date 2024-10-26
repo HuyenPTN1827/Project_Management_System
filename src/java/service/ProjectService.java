@@ -22,4 +22,30 @@ public class ProjectService {
     public List<Project> getAllProjects() {
         return projectDAO.getAllProjects();
     }
+  public List<Project> getProjectsByCode(String projectCode) {
+    return projectDAO.getProjectsByCode(projectCode); // Gọi phương thức từ ProjectDAO
+}
+   // Tìm kiếm dự án theo trạng thái
+    public List<Project> searchProjectsByStatus(boolean status) {
+        return projectDAO.getProjectsByStatus(status);
+    }
+  
+public List<Project> searchProjectsByKeyword(String keyword) {
+    return projectDAO.searchProjectsByKeyword(keyword); // Gọi phương thức từ ProjectDAO
+}
+
+ // Lấy dự án theo ID
+    public Project getProjectById(int id) {
+        return projectDAO.getProjectById(id); // Gọi phương thức từ ProjectDAO
+    }
+    
+    public boolean updateProject(Project project) {
+        return projectDAO.updateProject(project); // Gọi hàm cập nhật từ ProjectDAO
+    }
+    
+    public boolean insertProject(Project project) {
+    return projectDAO.insertProject(project);
+}
+
+
 }

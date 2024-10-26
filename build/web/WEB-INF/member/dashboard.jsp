@@ -49,9 +49,9 @@
    
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
         <div class="wrapper">
-            <jsp:include page="/WEB-INF/member/sidebar.jsp"></jsp:include>
-                <div class="main">
-                <jsp:include page="./layout/header.jsp"></jsp:include>
+            <jsp:include page="../component/sidebar.jsp"></jsp:include>
+                <div class="main"> 
+                <jsp:include page="../component/header.jsp"></jsp:include>
 
                 <main class="content">
                     <div class="container-fluid p-0">

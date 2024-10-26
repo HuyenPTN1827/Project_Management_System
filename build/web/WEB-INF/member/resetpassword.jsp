@@ -3,79 +3,82 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
-    <meta name="author" content="AdminKit">
-    <meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
+        <meta name="author" content="AdminKit">
+        <meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
 
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link rel="shortcut icon" href="img/icons/icon-48x48.png" />
-    <link rel="canonical" href="pages-sign-up.html" />
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link rel="shortcut icon" href="img/icons/icon-48x48.png" />
+        <link rel="canonical" href="pages-sign-up.html" />
 
-    <title>Reset Password | AdminKit Demo</title>
+        <title>Reset Password | AdminKit Demo</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet">
-    <link class="js-stylesheet" href="css/light.css" rel="stylesheet">
-    <script src="js/settings.js"></script>
-    <style>
-        body {
-            opacity: 0;
-        }
-    </style>
-</head>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet">
+        <link class="js-stylesheet" href="css/light.css" rel="stylesheet">
+        <script src="js/settings.js"></script>
+        <style>
+            body {
+                opacity: 0;
+            }
+        </style>
+    </head>
 
-<body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
-    <main class="d-flex w-100 h-100">
-        <div class="container d-flex flex-column">
-            <div class="row vh-100">
-                <div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
-                    <div class="d-table-cell align-middle">
-                        <div class="text-center mt-4">
-                            <div>
-                                <img src="https://tatthanh.com.vn/pic/Images/Module/News/images/image(1722).png" width="100px" style="border-radius: 50%;" alt="alt" />
+    <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
+        <main class="d-flex w-100 h-100">
+            <div class="container d-flex flex-column">
+                <div class="row vh-100">
+                    <div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
+                        <div class="d-table-cell align-middle">
+                            <div class="text-center mt-4">
+                                <div>
+                                    <img src="https://tatthanh.com.vn/pic/Images/Module/News/images/image(1722).png" width="100px" style="border-radius: 50%;" alt="alt" />
+                                </div>
+                                <h1 class="h2">Khôi phục mật khẩu</h1>
+                                <p class="lead">
+                                    Đã có tài khoản? <a style="color: black;" href="">Quay lại đăng nhập</a>
+                                </p>
                             </div>
-                            <h1 class="h2">Khôi phục mật khẩu</h1>
-                            <p class="lead">
-                                Đã có tài khoản? <a style="color: black;" href="">Quay lại đăng nhập</a>
-                            </p>
-                        </div>
-                        <div class="card">
-                            <div class="card-body row">
-                                <div class="col-md-12">
-                                    <form id="otp-form" action="<%=request.getContextPath()%>/resetpassword" method="post">
-                                        <div class="mb-3" style="margin-top: 30px;">
-                                            <label class="form-label">Nhập mã OTP:</label>
-                                            <input class="form-control form-control-lg" type="text" name="otp" placeholder="Nhập mã OTP" required />
-                                        </div>
-                                        <div class="mb-3" style="margin-top: 30px;">
-                                            <label class="form-label">Mật khẩu mới:</label>
-                                            <input class="form-control form-control-lg" type="password" name="newPassword" placeholder="Nhập mật khẩu mới" required />
-                                        </div>
-                                        <div class="mb-3" style="margin-top: 30px;">
-                                            <label class="form-label">Xác nhận mật khẩu:</label>
-                                            <input class="form-control form-control-lg" type="password" name="confirmPassword" placeholder="Nhập lại mật khẩu mới" required />
-                                        </div>
-                                        <div class="text-center mt-3">
-                                            <button type="submit" class="btn btn-lg btn-success" style="border-radius: 50px;">Cập nhật mật khẩu</button>
-                                        </div>
-                                        <c:if test="${not empty errorMessage}">
-                                            <div class="text-danger mt-2">${errorMessage}</div>
-                                        </c:if>
-                                    </form>
+                            <div class="card">
+                                <div class="card-body row">
+                                    <div class="col-md-12">
+                                        <form id="otp-form" action="<%=request.getContextPath()%>/resetpassword" method="post">
+                                            <div class="mb-3" style="margin-top: 30px;">
+                                                <label class="form-label">Nhập mã OTP:</label>
+                                                <input class="form-control form-control-lg" type="text" name="otp" placeholder="Nhập mã OTP" required />
+                                            </div>
+                                            <div class="mb-3" style="margin-top: 30px;">
+                                                <label class="form-label">Mật khẩu mới:</label>
+                                                <input class="form-control form-control-lg" type="password" name="newPassword" placeholder="Nhập mật khẩu mới" required />
+                                            </div>
+                                            <div class="mb-3" style="margin-top: 30px;">
+                                                <label class="form-label">Xác nhận mật khẩu:</label>
+                                                <input class="form-control form-control-lg" type="password" name="confirmPassword" placeholder="Nhập lại mật khẩu mới" required />
+                                            </div>
+                                            <p style="color: red;">
+                                                ${ERROR}
+                                            </p>
+                                            <div class="text-center mt-3">
+                                                <button type="submit" class="btn btn-lg btn-success" style="border-radius: 50px;">Cập nhật mật khẩu</button>
+                                            </div>
+                                            <c:if test="${not empty errorMessage}">
+                                                <div class="text-danger mt-2">${errorMessage}</div>
+                                            </c:if>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
+        </main>
 
-    <script src="js/app.js"></script>
-</body>
+        <script src="js/app.js"></script>
+    </body>
 
 </html>

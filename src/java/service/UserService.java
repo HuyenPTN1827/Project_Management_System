@@ -8,6 +8,8 @@ import context.UserDAO;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import model.User;
 
 /**
@@ -139,12 +141,21 @@ public class UserService extends BaseServive {
         }
         return errors;
     }
+   
 
     // HuyenPTNHE160769
     // 18/10/2024
     // Check for uniqueness in the database
     public boolean checkEmailExist(String email) throws SQLException {
         return userDAO.checkEmailExist(email);
+    }
+    
+    
+public boolean validatePassword(String password) {
+        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{6,}$";
+        Pattern pattern = Pattern.compile(passwordRegex);
+        Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
     }
 
 }
