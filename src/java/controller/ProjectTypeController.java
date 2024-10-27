@@ -259,16 +259,16 @@ public class ProjectTypeController extends HttpServlet {
         String keyword = request.getParameter("keyword");
         List<String> errors = new ArrayList<>();
 
-        User user = userService.findUserByFullNameOrEmail(keyword);
+        User userType = userService.findUserByFullNameOrEmail(keyword);
         List<ProjectTypeSetting> ptSetting = ptSettingService.getProjectRoleList();
 
-        if (user == null && keyword != null) {
+        if (userType == null && keyword != null) {
             errors.add("No user found.");
         }
 
         request.setAttribute("typeId", typeId);
         request.setAttribute("ptSetting", ptSetting);
-        request.setAttribute("user", user);
+        request.setAttribute("userType", userType);
         request.setAttribute("keyword", keyword);
         request.setAttribute("errorMessages", errors);
 

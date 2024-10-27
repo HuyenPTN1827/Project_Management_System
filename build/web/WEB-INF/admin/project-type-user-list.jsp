@@ -88,7 +88,8 @@
     </head>
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
         <div class="wrapper">
-            <jsp:include page="../component/sidebar.jsp"></jsp:include>
+            <% request.setAttribute("currentPage", "project-type-management"); %>
+            <jsp:include page="../component/sidebar-admin.jsp"></jsp:include>
                 <div class="main">
                 <jsp:include page="../component/header.jsp"></jsp:include>
 
@@ -147,22 +148,22 @@
                                     </div>
                                 </div>
 
-<!--                                 Project Type Users Modal 
-                                <div id="ptUserModal" class="modal" tabindex="-1" role="dialog">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title">User Details</h1>
-                                                <button type="button" class="close btn btn-danger" data-dismiss="modal" aria-label="Close" onclick="closeModal();">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                 This is where the project-type-user-list.jsp will be loaded via AJAX 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>-->
+                                <!--                                 Project Type Users Modal 
+                                                                <div id="ptUserModal" class="modal" tabindex="-1" role="dialog">
+                                                                    <div class="modal-dialog" role="document">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h1 class="modal-title">User Details</h1>
+                                                                                <button type="button" class="close btn btn-danger" data-dismiss="modal" aria-label="Close" onclick="closeModal();">
+                                                                                    <span aria-hidden="true">&times;</span>
+                                                                                </button>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                 This is where the project-type-user-list.jsp will be loaded via AJAX 
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>-->
 
                                 <div class="card">
                                     <div class="card-header">
@@ -264,8 +265,8 @@
                                                                 <a href="<%=request.getContextPath()%>/edit-project-type-user?id=${ptu.id}"
                                                                    class="btn btn-link text-primary">Edit</a>
 
-<!--                                                                <a href="javascript:void(0);" class="btn btn-link text-primary" 
-                                                                   onclick="openPTUserModal(${projectType.id}, ${ptu.id});">Edit</a>-->
+                                                                <!--                                                                <a href="javascript:void(0);" class="btn btn-link text-primary" 
+                                                                                                                                   onclick="openPTUserModal(${projectType.id}, ${ptu.id});">Edit</a>-->
 
                                                                 <a href="<%=request.getContextPath()%>/change-status-project-type-user?id=${ptu.id}&status=${ptu.status}&typeId=${projectType.id}"
                                                                    class="btn btn-link text-success"
@@ -276,8 +277,8 @@
                                                                 <a href="<%=request.getContextPath()%>/edit-project-type-user?id=${ptu.id}"
                                                                    class="btn btn-link text-primary">Edit</a>
 
-<!--                                                                <a href="javascript:void(0);" class="btn btn-link text-primary" 
-                                                                    onclick="openPTUserModal(${projectType.id}, ${ptu.id});">Edit</a>-->
+                                                                <!--                                                                <a href="javascript:void(0);" class="btn btn-link text-primary" 
+                                                                                                                                    onclick="openPTUserModal(${projectType.id}, ${ptu.id});">Edit</a>-->
 
                                                                 <a href="<%=request.getContextPath()%>/change-status-project-type-user?id=${ptu.id}&status=${ptu.status}&typeId=${projectType.id}"
                                                                    class="btn btn-link text-danger"

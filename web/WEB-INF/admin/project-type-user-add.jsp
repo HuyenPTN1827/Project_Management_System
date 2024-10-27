@@ -53,7 +53,8 @@
 
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
         <div class="wrapper">
-            <jsp:include page="../component/sidebar.jsp"></jsp:include>
+            <% request.setAttribute("currentPage", "project-type-management"); %>
+            <jsp:include page="../component/sidebar-admin.jsp"></jsp:include>
                 <div class="main">
                 <jsp:include page="../component/header.jsp"></jsp:include>
 
@@ -97,24 +98,24 @@
 
                                         <form action="insert-project-type-user" method="post" class="row">
                                             <input type="hidden" name="typeId" value="${typeId}">
-                                            <input type="hidden" name="id" value="${user.id}">
+                                            <input type="hidden" name="id" value="${userType.id}">
 
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label">Full Name<span style="color: red;">*</span></label>
                                                 <input type="text" class="form-control" name="fullname" placeholder="Full name" 
-                                                       value="${user.full_name}" readonly>
+                                                       value="${userType.full_name}" readonly>
                                             </div>
 
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label">Phone</label>
                                                 <input type="text" class="form-control" name="mobile" placeholder="Enter the Phone number"
-                                                       value="${user.mobile}" readonly>
+                                                       value="${userType.mobile}" readonly>
                                             </div>
 
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label">Email<span style="color: red;">*</span></label>
                                                 <input type="text" class="form-control" name="email" placeholder="Enter the Email address" 
-                                                       value="${user.email}" readonly>
+                                                       value="${userType.email}" readonly>
                                             </div>
 
                                             <div class="mb-3 col-md-6">
@@ -122,12 +123,7 @@
                                                 <select name="pjRole" class="form-select" required>
                                                     <option value="" disable hidden>Choose Project Role</option>
                                                     <c:forEach items="${ptSetting}" var="r">
-                                                        <option 
-                                                            <c:if test="${roleId eq r.id}">
-                                                                selected="selected"
-                                                            </c:if>
-                                                            value=${r.id}>${r.name}
-                                                        </option>
+                                                        <option value=${r.id}>${r.name}</option>
                                                     </c:forEach>
                                                 </select>
                                             </div>

@@ -52,17 +52,6 @@
 
 
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
-        <!--        <div class="wrapper">
-        <%--<jsp:include page="../component/sidebar.jsp"></jsp:include>--%>
-            <div class="main">
-        <%--<jsp:include page="../component/header.jsp"></jsp:include>--%>
-
-            <main class="content">
-                <div class="container-fluid p-0">
-                    <a href="<%=request.getContextPath()%>/department-management">Department Management > </a>
-
-                    <h1 class="h1 mt-2 mb-3"> Create New Department</h1>-->
-
         <div class="row">
 
             <div class="col-md-12 col-xl-12">

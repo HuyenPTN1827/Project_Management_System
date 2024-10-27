@@ -151,7 +151,7 @@ public class UserController extends HttpServlet {
 
         // Path to user information input form page
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/user-detail.jsp");
-        request.setAttribute("user", null);
+        request.setAttribute("userDetail", null);
         request.setAttribute("dept", dept);
         request.setAttribute("role", role);
         dispatcher.forward(request, response);
@@ -231,7 +231,7 @@ public class UserController extends HttpServlet {
 
         // Path to user information input form page
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/user-detail.jsp");
-        request.setAttribute("user", user);
+        request.setAttribute("userDetail", user);
         request.setAttribute("dept", dept);
         request.setAttribute("role", role);
         dispatcher.forward(request, response);
