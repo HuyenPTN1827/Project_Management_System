@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.ProjectTypeSetting;
-import service.GroupService;
+import service.ProjectTypeService;
 
 /**
  *
@@ -19,7 +19,7 @@ import service.GroupService;
  */
 public class ProjectTypeSettingController extends HttpServlet {
 
-    private GroupService groupService = new GroupService();
+    private ProjectTypeService groupService = new ProjectTypeService();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

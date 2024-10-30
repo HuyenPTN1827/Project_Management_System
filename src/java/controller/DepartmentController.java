@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Department;
-import service.GroupService;
+import service.DepartmentService;
 
 /**
  *
@@ -23,11 +23,11 @@ import service.GroupService;
  */
 public class DepartmentController extends HttpServlet {
 
-    private GroupService groupService;
+    private DepartmentService deptService;
 
     @Override
     public void init() throws ServletException {
-        this.groupService = new GroupService();
+        this.deptService = new DepartmentService();
     }
 
 //    HuyenPTNHE160769 
@@ -107,7 +107,7 @@ public class DepartmentController extends HttpServlet {
         // Process the filter value, convert to number or null if not selected
         Boolean status = statusStr != null && !statusStr.isEmpty() ? Boolean.valueOf(statusStr) : null;
 
-        List<Department> listDept = groupService.getAllDepartments(keyword, status);
+        List<Department> listDept = deptService.getAllDepartments(keyword, status);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/dept-list.jsp");
 //        if (listDept.isEmpty()) {
@@ -124,7 +124,7 @@ public class DepartmentController extends HttpServlet {
 //    Show form insert department
     private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Call service to get all department for Department dropdown list
-        List<Department> dept = groupService.getDepartmentList();
+        List<Department> dept = deptService.getDepartmentList();
 
         // Path to user information input form page
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/dept-detail.jsp");
@@ -153,7 +153,7 @@ public class DepartmentController extends HttpServlet {
         }
         d.setDetails(details);
 
-        groupService.insertDepartment(d, parentId);
+        deptService.insertDepartment(d, parentId);
         response.sendRedirect("department-management");
     }
 
@@ -162,9 +162,9 @@ public class DepartmentController extends HttpServlet {
 //    Show form edit department
     private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        Department department = groupService.getDepartmentById(id);
-        List<Department> dept = groupService.getDepartmentList();
-        
+        Department department = deptService.getDepartmentById(id);
+        List<Department> dept = deptService.getDepartmentList();
+
         request.setAttribute("department", department);
         request.setAttribute("dept", dept);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/dept-detail.jsp");
@@ -195,7 +195,7 @@ public class DepartmentController extends HttpServlet {
         d.setDetails(details);
         d.setStatus(status);
 
-        groupService.updateDepartment(d, parentId);
+        deptService.updateDepartment(d, parentId);
         // Redirect to user-management url
         response.sendRedirect("department-management");
     }
@@ -214,7 +214,7 @@ public class DepartmentController extends HttpServlet {
         d.setStatus(!status);
 
         // Change the status of a dept by id
-        groupService.changeStatusDepartment(d);
+        deptService.changeStatusDepartment(d);
         // Redirect to the department-management page
         response.sendRedirect("department-management");
     }

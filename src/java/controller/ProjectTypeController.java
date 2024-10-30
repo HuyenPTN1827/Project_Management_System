@@ -19,7 +19,7 @@ import model.ProjectType;
 import model.ProjectTypeSetting;
 import model.ProjectType_User;
 import model.User;
-import service.GroupService;
+import service.ProjectTypeService;
 import service.ProjectTypeSettingService;
 import service.UserService;
 
@@ -29,13 +29,13 @@ import service.UserService;
  */
 public class ProjectTypeController extends HttpServlet {
 
-    private GroupService groupService;
+    private ProjectTypeService groupService;
     private ProjectTypeSettingService ptSettingService;
     private UserService userService;
 
     @Override
     public void init() throws ServletException {
-        this.groupService = new GroupService();
+        this.groupService = new ProjectTypeService();
         this.ptSettingService = new ProjectTypeSettingService();
         this.userService = new UserService();
     }

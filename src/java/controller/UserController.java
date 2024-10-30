@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 import model.Department;
 import model.Setting;
 import model.User;
-import service.GroupService;
+import service.DepartmentService;
 import service.SettingService;
 import service.UserService;
 
@@ -28,13 +28,13 @@ import service.UserService;
 public class UserController extends HttpServlet {
 
     private UserService userService;
-    private GroupService deptService;
+    private DepartmentService deptService;
     private SettingService settingService;
 
     @Override
     public void init() throws ServletException {
         this.userService = new UserService();
-        this.deptService = new GroupService();
+        this.deptService = new DepartmentService();
         this.settingService = new SettingService();
     }
 

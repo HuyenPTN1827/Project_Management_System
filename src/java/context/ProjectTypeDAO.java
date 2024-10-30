@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import model.ProjectType;
 import model.ProjectTypeSetting;
 import model.ProjectType_User;
