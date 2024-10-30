@@ -49,9 +49,43 @@
             gtag('js', new Date());
 
             gtag('config', 'UA-120946860-10', {'anonymize_ip': true});
-        </script></head>
 
+            function openProjectTypeModal(id = null) {
+                let url = '<%=request.getContextPath()%>/add-project-type'; // Default for Create New
+                if (id) {
+                    url = '<%=request.getContextPath()%>/edit-project-type?id=' + id; // For Edit
+                }
 
+                fetch(url)
+                        .then(response => response.text())
+                        .then(data => {
+                            document.querySelector('#projectTypeModal .modal-body').innerHTML = data;
+                            document.getElementById('projectTypeModal').style.display = 'block';
+                        })
+                        .catch(error => console.log('Error loading the form:', error));
+            }
+
+            function openPTUserModal(typeId, id = null) {
+                let url = '<%=request.getContextPath()%>/add-project-type-user?typeId=' + typeId; // Default for Create New
+                if (id) {
+                    url = '<%=request.getContextPath()%>/edit-project-type-user?typeId=' + typeId + '&id=' + id; // For Edit
+                }
+
+                fetch(url)
+                        .then(response => response.text())
+                        .then(data => {
+                            document.querySelector('#ptUserModal .modal-body').innerHTML = data;
+                            document.getElementById('ptUserModal').style.display = 'block';
+                        })
+                        .catch(error => console.log('Error loading the form:', error));
+            }
+
+            function closeModal() {
+                document.getElementById('projectTypeModal').style.display = 'none';
+                document.getElementById('ptUserModal').style.display = 'none';
+            }
+        </script>
+    </head>
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
         <div class="wrapper">
             <% request.setAttribute("currentPage", "project-type-management"); %>
@@ -86,14 +120,50 @@
                                                 </div>
 
                                                 <div class="col-md-4 mt-4 d-flex align-items-end">
-                                                    <a href="<%=request.getContextPath()%>/edit-project-type?id=${projectType.id}" 
-                                                       class="btn btn-primary mt-1">View Details</a>
+                                                    <a href="javascript:void(0);" class="btn btn-primary mt-1" 
+                                                       onclick="openProjectTypeModal(${projectType.id});">View Details</a>
                                                 </div>
 
                                             </form>
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- Project Type Modal -->
+                                <div id="projectTypeModal" class="modal" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title">Project Type Details</h1>
+                                                <button type="button" class="close btn btn-danger" data-dismiss="modal" aria-label="Close" onclick="closeModal();">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <!-- This is where the project-type-detail.jsp will be loaded via AJAX -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--                                 Project Type Users Modal 
+                                                                <div id="ptUserModal" class="modal" tabindex="-1" role="dialog">
+                                                                    <div class="modal-dialog" role="document">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h1 class="modal-title">User Details</h1>
+                                                                                <button type="button" class="close btn btn-danger" data-dismiss="modal" aria-label="Close" onclick="closeModal();">
+                                                                                    <span aria-hidden="true">&times;</span>
+                                                                                </button>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                 This is where the project-type-user-list.jsp will be loaded via AJAX 
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>-->
+
+
                                 <div class="card">
                                     <div class="card-header">
                                         <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -221,7 +291,7 @@
                                             <!-- Project Type Users -->
                                             <div class="tab-pane fade" id="project-type-users" role="tabpanel" aria-labelledby="project-type-users-tab">
                                                 <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 15px;">
-                                                    <form action="project-type-user" method="post" class="d-flex align-items-center" style="gap: 15px;">
+                                                    <form action="project-type-config" method="post" class="d-flex align-items-center" style="gap: 15px;">
                                                         <input type="hidden" name="id" value="${projectType.id}">
 
                                                         <select name="roleId" class="form-select">
@@ -252,14 +322,15 @@
                                                             </option>
                                                         </select>
 
-                                                        <input type="search" name="keyword" class="form-control"  style="width: 270px;"
-                                                               placeholder="Enter the Full Name" id="keyword" value="${keyword}">
+                                                        <input type="search" name="keywordUser" class="form-control"  style="width: 270px;"
+                                                               placeholder="Enter the Full Name" id="keywordUser" value="${keywordUser}">
 
                                                         <button type="submit" class="btn btn-primary">Search</button>
 
                                                     </form>
 
-                                                    <a class="btn btn-primary" href="<%=request.getContextPath()%>/add-project-type-user">Create new</a>
+                                                    <a class="btn btn-primary" href="<%=request.getContextPath()%>/add-project-type-user?typeId=${projectType.id}">Create new</a>
+                                                    <!--<a class="btn btn-primary" href="javascript:void(0);" onclick="openPTUserModal(${projectType.id});">Create new</a>-->
                                                 </div>
 
                                                 <table id="datatables-multi" class="table table-striped" style="width:100%">
@@ -295,18 +366,24 @@
                                                                 <td>
                                                                     <c:if test="${ptu.status eq 'false'}">
                                                                         <a href="<%=request.getContextPath()%>/edit-project-type-user?id=${ptu.id}"
-                                                                           class="btn btn-link text-primary">Details</a>
+                                                                           class="btn btn-link text-primary">Edit</a>
 
-                                                                        <a href="<%=request.getContextPath()%>/change-status-project-type-user?recordId=${ptu.id}&status=${ptu.status}&typeId=${projectType.id}"
+                                                                        <!--                                                                <a href="javascript:void(0);" class="btn btn-link text-primary" 
+                                                                                                                                           onclick="openPTUserModal(${projectType.id}, ${ptu.id});">Edit</a>-->
+
+                                                                        <a href="<%=request.getContextPath()%>/change-status-project-type-user?id=${ptu.id}&status=${ptu.status}&typeId=${projectType.id}"
                                                                            class="btn btn-link text-success"
                                                                            onclick="return confirm('Are you sure you want to activate this user?');">Activate</a>
                                                                     </c:if>
 
                                                                     <c:if test="${ptu.status eq 'true'}">
                                                                         <a href="<%=request.getContextPath()%>/edit-project-type-user?id=${ptu.id}"
-                                                                           class="btn btn-link text-primary">Details</a>
+                                                                           class="btn btn-link text-primary">Edit</a>
 
-                                                                        <a href="<%=request.getContextPath()%>/change-status-project-type-user?recordId=${ptu.id}&status=${ptu.status}&typeId=${projectType.id}"
+                                                                        <!--                                                                <a href="javascript:void(0);" class="btn btn-link text-primary" 
+                                                                                                                                            onclick="openPTUserModal(${projectType.id}, ${ptu.id});">Edit</a>-->
+
+                                                                        <a href="<%=request.getContextPath()%>/change-status-project-type-user?id=${ptu.id}&status=${ptu.status}&typeId=${projectType.id}"
                                                                            class="btn btn-link text-danger"
                                                                            onclick="return confirm('Are you sure you want to deactivate this user?');">Deactivate</a>
                                                                     </c:if>

@@ -146,7 +146,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ProjectTypeController</servlet-name>
-        <url-pattern>/project-type-user</url-pattern>
+        <url-pattern>/project-type-config</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ProjectTypeController</servlet-name>

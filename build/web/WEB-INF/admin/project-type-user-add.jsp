@@ -61,7 +61,7 @@
                     <main class="content">
                         <div class="container-fluid p-0">
                             <a href="<%=request.getContextPath()%>/project-type-management">Project Types Management > </a>
-                        <a href="<%=request.getContextPath()%>/project-type-user?id=${typeId}">Project Type Configs > </a>
+                        <a href="<%=request.getContextPath()%>/project-type-config?id=${typeId}">Project Type Configs > </a>
 
                         <h1 class="h1 mt-2 mb-3"> Add User</h1>
                         <div class="row">

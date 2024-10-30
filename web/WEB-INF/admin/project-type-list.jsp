@@ -147,7 +147,7 @@
                                                             <a href="javascript:void(0);" class="btn btn-link text-primary" 
                                                                onclick="openProjectTypeModal(${type.id});">Edit</a>
 
-                                                            <a href="<%=request.getContextPath()%>/project-type-user?id=${type.id}" 
+                                                            <a href="<%=request.getContextPath()%>/project-type-config?id=${type.id}" 
                                                                class="btn btn-link text-primary">Configs</a>
 
                                                             <c:if test="${type.status eq 'false'}">

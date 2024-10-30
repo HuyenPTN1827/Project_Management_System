@@ -59,8 +59,8 @@ public class ProjectTypeController extends HttpServlet {
                     updateProjectType(request, response); // Update project type
                 case "/change-status-project-type" ->
                     changeStatusProjectType(request, response); // Change status project type
-                case "/project-type-user" ->
-                    listProjectTypeUser(request, response); // List of project type users
+                case "/project-type-config" ->
+                    listProjectTypeConfig(request, response); // List of project type configs
                 case "/add-project-type-user" ->
                     showNewFormPTUser(request, response); // Show form insert project type users
                 case "/insert-project-type-user" ->
@@ -200,8 +200,8 @@ public class ProjectTypeController extends HttpServlet {
         pt.setStatus(status);
 
         groupService.updateProjectType(pt);
-//        response.sendRedirect("project-type-management");
-        response.sendRedirect(request.getHeader("referer"));
+        response.sendRedirect("project-type-management");
+//        response.sendRedirect(request.getHeader("referer"));
     }
 
 //    HuyenPTNHE160769 
@@ -225,9 +225,10 @@ public class ProjectTypeController extends HttpServlet {
 
 //    HuyenPTNHE160769 
 //    14/10/2024 
-//    List of project type users
-    private void listProjectTypeUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+//    List of project type configs
+    private void listProjectTypeConfig(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         int id = Integer.parseInt(request.getParameter("id"));
+        String keywordUser = request.getParameter("keywordUser");
         String keyword = request.getParameter("keyword");
         String roleIdStr = request.getParameter("roleId");
         String statusStr = request.getParameter("status");
@@ -235,19 +236,20 @@ public class ProjectTypeController extends HttpServlet {
         // Process the filter value, convert to number or null if not selected
         Integer roleId = roleIdStr != null && !roleIdStr.isEmpty() ? Integer.valueOf(roleIdStr) : null;
         Boolean status = statusStr != null && !statusStr.isEmpty() ? Boolean.valueOf(statusStr) : null;
+        Boolean statusFilter = request.getParameter("statusFilter") == null ? null : Boolean.valueOf(request.getParameter("statusFilter"));
 
         ProjectType projectType = groupService.getProjectTypeById(id);
         List<ProjectTypeSetting> ptSetting = ptSettingService.getProjectRoleList();
-        List<ProjectType_User> ptUser = groupService.getAllProjectTypeUsers(keyword, roleId, status, id);
-        Boolean statusFilter = request.getParameter("statusFilter") == null ? null : Boolean.valueOf(request.getParameter("statusFilter"));
+        List<ProjectType_User> ptUser = groupService.getAllProjectTypeUsers(keywordUser, roleId, status, id);
+        
         request.setAttribute("sl", groupService.getAllProjectTypeSettings(keyword, statusFilter));
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/project-type-user-list.jsp");
         request.setAttribute("projectType", projectType);
         request.setAttribute("ptSetting", ptSetting);
         request.setAttribute("ptUser", ptUser);
-        request.setAttribute("keyword", keyword);
+        request.setAttribute("keywordUser", keywordUser);
         request.setAttribute("roleId", roleId);
         request.setAttribute("status", status);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/project-type-config.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -275,7 +277,10 @@ public class ProjectTypeController extends HttpServlet {
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/project-type-user-add.jsp");
         dispatcher.forward(request, response);
     }
-
+    
+//    HuyenPTNHE160769 
+//    22/10/2024 
+//    Insert project type user
     private void insertPTUser(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         int typeId = Integer.parseInt(request.getParameter("typeId"));
@@ -296,9 +301,12 @@ public class ProjectTypeController extends HttpServlet {
         ptUser.setPtSetting(ptSetting);
 
         groupService.insertProjectTypeUser(ptUser);
-        response.sendRedirect("project-type-user?id=" + typeId);
+        response.sendRedirect("project-type-config?id=" + typeId);
     }
-
+    
+//    HuyenPTNHE160769 
+//    23/10/2024 
+//    Show form edit project type user
     private void showEditFormPTUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         ProjectType_User ptUser = groupService.getProjectTypeUserById(id);
@@ -309,7 +317,10 @@ public class ProjectTypeController extends HttpServlet {
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/project-type-user-edit.jsp");
         dispatcher.forward(request, response);
     }
-
+    
+//    HuyenPTNHE160769 
+//    23/10/2024 
+//    Update project type user
     private void updatePTUser(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         int userId = Integer.parseInt(request.getParameter("userId"));
@@ -324,7 +335,7 @@ public class ProjectTypeController extends HttpServlet {
         User u = new User();
         u.setId(userId);
         ptUser.setUser(u);
-        
+
         ProjectType pt = new ProjectType();
         pt.setId(typeId);
         ptUser.setPjType(pt);
@@ -334,7 +345,7 @@ public class ProjectTypeController extends HttpServlet {
         ptUser.setPtSetting(ptSetting);
 
         groupService.updateProjectTypeUser(ptUser);
-        response.sendRedirect("project-type-user?id=" + typeId);
+        response.sendRedirect("project-type-config?id=" + typeId);
     }
 
 //    HuyenPTNHE160769 
@@ -355,7 +366,7 @@ public class ProjectTypeController extends HttpServlet {
         ptUser.setPjType(pt);
 
         groupService.changeStatusProjectTypeUser(ptUser);
-        response.sendRedirect("project-type-user?id=" + typeId);
+        response.sendRedirect("project-type-config?id=" + typeId);
     }
 
 }
