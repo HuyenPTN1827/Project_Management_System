@@ -16,6 +16,8 @@ public class ProjectTypeSetting {
     private int priority;
     private boolean status;
     private String description;
+    
+    private ProjectType pjType;
 
     public ProjectTypeSetting() {
     }
@@ -28,6 +30,17 @@ public class ProjectTypeSetting {
         this.priority = priority;
         this.status = status;
         this.description = description;
+    }
+
+    public ProjectTypeSetting(int id, String name, String type, String value, int priority, boolean status, String description, ProjectType pjType) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.value = value;
+        this.priority = priority;
+        this.status = status;
+        this.description = description;
+        this.pjType = pjType;
     }
 
     public int getId() {
@@ -84,6 +97,14 @@ public class ProjectTypeSetting {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public ProjectType getPjType() {
+        return pjType;
+    }
+
+    public void setPjType(ProjectType pjType) {
+        this.pjType = pjType;
     }
     
 }

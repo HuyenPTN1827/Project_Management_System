@@ -12,7 +12,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import model.ProjectPhase;
 import model.ProjectType;
+import model.ProjectTypeCriteria;
 import model.ProjectTypeSetting;
 import model.ProjectType_User;
 import model.User;
@@ -156,6 +158,39 @@ public class ProjectTypeDAO {
         return rowUpdated;
     }
 
+    // HuyenPTNHE160769
+    // 29/09/2024
+    // Get roles list
+    public List<ProjectTypeSetting> getProjectRolesList(int typeId) {
+        List<ProjectTypeSetting> pjSetting = new ArrayList<>();
+
+        String sql = """
+                     SELECT * FROM pms.project_type_setting 
+                     WHERE type = 'Project Role' 
+                     AND type_id = ?
+                     AND status = 1 ORDER BY priority ASC;""";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            stm.setInt(1, typeId);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                ProjectTypeSetting pts = new ProjectTypeSetting();
+                pts.setId(rs.getInt("id"));
+                pts.setName(rs.getString("name"));
+                pts.setValue(rs.getString("value"));
+
+                ProjectType pt = new ProjectType();
+                pt.setId(rs.getInt("type_id"));
+                pts.setPjType(pt);
+
+                pjSetting.add(pts);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return pjSetting;
+    }
+
 //    HuyenPTNHE160769
 //    17/10/2024      
 //    Admin select all project type users
@@ -287,7 +322,7 @@ public class ProjectTypeDAO {
 
 //    HuyenPTNHE160769
 //    05/10/2024      
-//    Admin select project type by id
+//    Admin select project type user by id
     public ProjectType_User selectProjectTypeUserByID(int id) {
         ProjectType_User ptu = null;
 
@@ -368,6 +403,154 @@ public class ProjectTypeDAO {
             BaseDAO.printSQLException(e);
         }
         return rowUpdated;
+    }
+
+    // HuyenPTNHE160769
+    // 29/10/2024
+    // Get project phases list
+    public List<ProjectPhase> getPhaseList(int typeId) {
+        List<ProjectPhase> phase = new ArrayList<>();
+
+        String sql = "SELECT * FROM pms.project_phase WHERE type_id = ?;";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            stm.setInt(1, typeId);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                ProjectPhase p = new ProjectPhase();
+                p.setId(rs.getInt("id"));
+                p.setName(rs.getString("name"));
+
+                ProjectType pt = new ProjectType();
+                pt.setId(rs.getInt("type_id"));
+                p.setPjType(pt);
+
+                phase.add(p);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return phase;
+    }
+
+//    HuyenPTNHE160769
+//    29/10/2024      
+//    Admin select all project type criteria
+    public List<ProjectTypeCriteria> selectAllProjectTypeCriteria(String keyword, Integer phaseId, Boolean status, int typeId) {
+        List<ProjectTypeCriteria> ptCriteria = new ArrayList<>();
+
+        String sql = """
+                     SELECT ec.id, ec.name, ec.weight, ec.status, ec.phase_id, pp.name, pp.type_id
+                     FROM pms.eval_criteria ec 
+                     INNER JOIN pms.project_phase pp ON ec.phase_id = pp.id
+                     WHERE pp.type_id = ?""";
+
+        // Add search conditions if any
+        if (keyword != null && !keyword.isEmpty()) {
+            sql += " AND LOWER(ec.name) LIKE ?";
+        }
+        if (phaseId != null) {
+            sql += " AND ec.phase_id = ?";
+        }
+        if (status != null) {
+            sql += " AND ec.status = ?";
+        }
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            stm.setInt(1, typeId);
+
+            int index = 2;
+            if (keyword != null && !keyword.isEmpty()) {
+                String keywordPattern = "%" + keyword.toLowerCase().trim() + "%";
+                stm.setString(index++, "%" + keywordPattern + "%");
+            }
+            if (phaseId != null) {
+                stm.setInt(index++, phaseId);
+            }
+            if (status != null) {
+                stm.setBoolean(index++, status);
+            }
+
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                ProjectTypeCriteria ptc = new ProjectTypeCriteria();
+                ptc.setId(rs.getInt("ec.id"));
+                ptc.setName(rs.getString("ec.name"));
+                ptc.setWeight(rs.getFloat("ec.weight"));
+                ptc.setStatus(rs.getBoolean("ec.status"));
+
+                ProjectPhase pp = new ProjectPhase();
+                pp.setId(rs.getInt("ec.phase_id"));
+                pp.setName(rs.getString("pp.name"));
+                ptc.setPjPhase(pp);
+
+                ProjectType pt = new ProjectType();
+                pt.setId(rs.getInt("pp.type_id"));
+                ptc.setPjType(pt);
+
+                ptCriteria.add(ptc);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+
+        return ptCriteria;
+    }
+
+//    HuyenPTNHE160769
+//    29/10/2024      
+//    Admin change status of a project type criteria
+    public boolean changeStatusProjectTypeCriteria(ProjectTypeCriteria ptCriteria) throws SQLException {
+        boolean rowUpdated = false;
+
+        String sql = "UPDATE pms.eval_criteria SET status = ? WHERE id = ?;";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            stm.setBoolean(1, ptCriteria.isStatus());
+            stm.setInt(2, ptCriteria.getId());
+            rowUpdated = stm.executeUpdate() > 0;
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return rowUpdated;
+    }
+
+//    HuyenPTNHE160769
+//    30/10/2024      
+//    Admin select project type criteria by id
+    public ProjectTypeCriteria selectProjectTypeCriteriaByID(int id) {
+        ProjectTypeCriteria ptc = null;
+
+        String sql = """
+                     SELECT ec.id, ec.name, ec.weight, ec.status, ec.phase_id, pp.name, pp.type_id
+                     FROM pms.eval_criteria ec 
+                     INNER JOIN pms.project_phase pp ON ec.phase_id = pp.id
+                     WHERE ec.id = ?;""";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            stm.setInt(1, id);
+
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                ptc = new ProjectTypeCriteria();
+                ptc.setId(rs.getInt("ec.id"));
+                ptc.setName(rs.getString("ec.name"));
+                ptc.setWeight(rs.getFloat("ec.weight"));
+                ptc.setStatus(rs.getBoolean("ec.status"));
+
+                ProjectPhase pp = new ProjectPhase();
+                pp.setId(rs.getInt("ec.phase_id"));
+                pp.setName(rs.getString("pp.name"));
+                ptc.setPjPhase(pp);
+
+                ProjectType pt = new ProjectType();
+                pt.setId(rs.getInt("pp.type_id"));
+                ptc.setPjType(pt);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return ptc;
     }
 
 }

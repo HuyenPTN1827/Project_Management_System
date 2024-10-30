@@ -22,7 +22,7 @@
 
         <!--<link rel="canonical" href="tables-datatables-multi.html" />-->
 
-        <title>Project Type Configs | PMS</title>
+        <title>Project Type User Configs | PMS</title>
 
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet">
 

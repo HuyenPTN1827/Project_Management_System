@@ -65,24 +65,46 @@
                         .catch(error => console.log('Error loading the form:', error));
             }
 
-            function openPTUserModal(typeId, id = null) {
-                let url = '<%=request.getContextPath()%>/add-project-type-user?typeId=' + typeId; // Default for Create New
+//            function openPTUserModal(typeId, id = null) {
+//                let url = '<%=request.getContextPath()%>/add-project-type-user?typeId=' + typeId; // Default for Create New
+//                if (id) {
+//                    url = '<%=request.getContextPath()%>/edit-project-type-user?typeId=' + typeId + '&id=' + id; // For Edit
+//                }
+//
+//                fetch(url)
+//                        .then(response => response.text())
+//                        .then(data => {
+//                            document.querySelector('#ptUserModal .modal-body').innerHTML = data;
+//                            document.getElementById('ptUserModal').style.display = 'block';
+//                        })
+//                        .catch(error => console.log('Error loading the form:', error));
+//            }
+
+            function openPTCriteriaModal(typeId, id = null) {
+                let url = '<%=request.getContextPath()%>/add-project-type-criteria?typeId=' + typeId; // Default for Create New
                 if (id) {
-                    url = '<%=request.getContextPath()%>/edit-project-type-user?typeId=' + typeId + '&id=' + id; // For Edit
+                    url = '<%=request.getContextPath()%>/edit-project-type-criteria?typeId=' + typeId + '&id=' + id; // For Edit
                 }
 
                 fetch(url)
                         .then(response => response.text())
                         .then(data => {
-                            document.querySelector('#ptUserModal .modal-body').innerHTML = data;
-                            document.getElementById('ptUserModal').style.display = 'block';
+                            document.querySelector('#ptCriteriaModal .modal-body').innerHTML = data;
+                            document.getElementById('ptCriteriaModal').style.display = 'block';
                         })
                         .catch(error => console.log('Error loading the form:', error));
             }
 
             function closeModal() {
                 document.getElementById('projectTypeModal').style.display = 'none';
-                document.getElementById('ptUserModal').style.display = 'none';
+            }
+            
+//            function closeptUserModal() {
+//                document.getElementById('ptUserModal').style.display = 'none';
+//            }
+            
+            function closeptCriteriaModal() {
+                document.getElementById('ptCriteriaModal').style.display = 'none';
             }
         </script>
     </head>
@@ -152,7 +174,7 @@
                                                                         <div class="modal-content">
                                                                             <div class="modal-header">
                                                                                 <h1 class="modal-title">User Details</h1>
-                                                                                <button type="button" class="close btn btn-danger" data-dismiss="modal" aria-label="Close" onclick="closeModal();">
+                                                                                <button type="button" class="close btn btn-danger" data-dismiss="modal" aria-label="Close" onclick="closeptUserModal();">
                                                                                     <span aria-hidden="true">&times;</span>
                                                                                 </button>
                                                                             </div>
@@ -163,6 +185,22 @@
                                                                     </div>
                                                                 </div>-->
 
+                                <!--Project Type Criteria Modal--> 
+                                <div id="ptCriteriaModal" class="modal" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title">Project Type Criteria Details</h1>
+                                                <button type="button" class="close btn btn-danger" data-dismiss="modal" aria-label="Close" onclick="closeptCriteriaModal();">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <!--This is where the project-type-user-list.jsp will be loaded via AJAX--> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div class="card">
                                     <div class="card-header">
@@ -306,16 +344,16 @@
                                                             </c:forEach>
                                                         </select>
 
-                                                        <select name="status" class="form-select">
+                                                        <select name="statusUser" class="form-select">
                                                             <option value="">All Statuses</option>
                                                             <option 
-                                                                <c:if test="${status eq 'true'}">
+                                                                <c:if test="${statusUser eq 'true'}">
                                                                     selected="selected"
                                                                 </c:if>
                                                                 value="true">Active
                                                             </option>
                                                             <option 
-                                                                <c:if test="${status eq 'false'}">
+                                                                <c:if test="${statusUser eq 'false'}">
                                                                     selected="selected"
                                                                 </c:if>
                                                                 value="false">Inactive
@@ -365,7 +403,7 @@
                                                                 </td>
                                                                 <td>
                                                                     <c:if test="${ptu.status eq 'false'}">
-                                                                        <a href="<%=request.getContextPath()%>/edit-project-type-user?id=${ptu.id}"
+                                                                        <a href="<%=request.getContextPath()%>/edit-project-type-user?id=${ptu.id}&typeId=${projectType.id}"
                                                                            class="btn btn-link text-primary">Edit</a>
 
                                                                         <!--                                                                <a href="javascript:void(0);" class="btn btn-link text-primary" 
@@ -377,7 +415,7 @@
                                                                     </c:if>
 
                                                                     <c:if test="${ptu.status eq 'true'}">
-                                                                        <a href="<%=request.getContextPath()%>/edit-project-type-user?id=${ptu.id}"
+                                                                        <a href="<%=request.getContextPath()%>/edit-project-type-user?id=${ptu.id}&typeId=${projectType.id}"
                                                                            class="btn btn-link text-primary">Edit</a>
 
                                                                         <!--                                                                <a href="javascript:void(0);" class="btn btn-link text-primary" 
@@ -497,55 +535,92 @@
 
                                             <!-- Eval Criteria -->
                                             <div class="tab-pane fade" id="eval-criteria" role="tabpanel" aria-labelledby="eval-criteria-tab">
-                                                <!-- Content for Eval Criteria tab -->
-                                                <h4>Eval Criteria Content</h4>
+                                                <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 15px;">
+                                                    <form action="project-type-config" method="post" class="d-flex align-items-center" style="gap: 15px;">
+                                                        <input type="hidden" name="id" value="${projectType.id}">
+
+                                                        <select name="phaseId" class="form-select">
+                                                            <option value="">All Project Phase</option>
+                                                            <c:forEach items="${phase}" var="p">
+                                                                <option 
+                                                                    <c:if test="${phaseId eq p.id}">
+                                                                        selected="selected"
+                                                                    </c:if>
+                                                                    value="${p.id}">${p.name}
+                                                                </option>
+                                                            </c:forEach>
+                                                        </select>
+
+                                                        <select name="statusCriteria" class="form-select">
+                                                            <option value="">All Statuses</option>
+                                                            <option 
+                                                                <c:if test="${statusCriteria eq 'true'}">
+                                                                    selected="selected"
+                                                                </c:if>
+                                                                value="true">Active
+                                                            </option>
+                                                            <option 
+                                                                <c:if test="${statusCriteria eq 'false'}">
+                                                                    selected="selected"
+                                                                </c:if>
+                                                                value="false">Inactive
+                                                            </option>
+                                                        </select>
+
+                                                        <input type="search" name="keywordCriteria" class="form-control"  style="width: 270px;"
+                                                               placeholder="Enter the Eval Criteria" id="keywordCriteria" value="${keywordCriteria}">
+
+                                                        <button type="submit" class="btn btn-primary">Search</button>
+
+                                                    </form>
+
+                                                    <!--<a class="btn btn-primary" href="<%=request.getContextPath()%>/add-project-type-criteria?typeId=${projectType.id}">Create new</a>-->
+                                                    <a class="btn btn-primary" href="javascript:void(0);" onclick="openPTCriteriaModal(${projectType.id});">Create new</a>
+                                                </div>
+
                                                 <table id="datatables-multi2" class="table table-striped" style="width:100%">
                                                     <thead>
                                                         <tr>
-                                                            <th hidden>ID</th>
                                                             <th>ID</th>
-                                                            <th>Full Name</th>
-                                                            <th>Project Role</th>
-                                                            <th>Start date</th>
-                                                            <th>End Date</th>
+                                                            <th>Criteria</th>
+                                                            <th>Project Phase</th>
+                                                            <th>Weight</th>
                                                             <th>Status</th>
                                                             <th>Actions</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <c:forEach items="${requestScope.ptUser}" var="ptu">
+                                                        <c:forEach items="${requestScope.ptCriteria}" var="ptc">
                                                             <tr>
-                                                                <td hidden>${ptu.id}</td>
-                                                                <td>${ptu.user.id}</td>
-                                                                <td>${ptu.user.full_name}</td>
-                                                                <td>${ptu.ptSetting.name}</td>
-                                                                <td>${ptu.start_date}</td>
-                                                                <td>${ptu.end_date}</td>
+                                                                <td>${ptc.id}</td>
+                                                                <td>${ptc.name}</td>
+                                                                <td>${ptc.pjPhase.name}</td>
+                                                                <td>${ptc.weight}</td>
                                                                 <td>
-                                                                    <c:if test="${ptu.status eq 'false'}">
+                                                                    <c:if test="${ptc.status eq 'false'}">
                                                                         <span class="badge bg-danger">Inactive</span>
                                                                     </c:if>
-                                                                    <c:if test="${ptu.status eq 'true'}">
+                                                                    <c:if test="${ptc.status eq 'true'}">
                                                                         <span class="badge bg-success">Active</span>
                                                                     </c:if>
                                                                 </td>
                                                                 <td>
-                                                                    <c:if test="${ptu.status eq 'false'}">
-                                                                        <a href="<%=request.getContextPath()%>/edit-project-type-user?id=${ptu.id}"
-                                                                           class="btn btn-link text-primary">Edit</a>
-
-                                                                        <a href="<%=request.getContextPath()%>/change-status-project-type-user?recordId=${ptu.id}&status=${ptu.status}&typeId=${projectType.id}"
+                                                                    <!--<a href="<%=request.getContextPath()%>/edit-project-type-criteria?id=${ptc.id}&typeId=${projectType.id}"
+                                                                           class="btn btn-link text-primary">Edit</a>-->
+                                                                    
+                                                                    <a href="javascript:void(0);" class="btn btn-link text-primary" 
+                                                                           onclick="openPTCriteriaModal(${projectType.id}, ${ptc.id});">Edit</a>
+                                                                           
+                                                                    <c:if test="${ptc.status eq 'false'}">
+                                                                        <a href="<%=request.getContextPath()%>/change-status-project-type-criteria?id=${ptc.id}&status=${ptc.status}&typeId=${projectType.id}"
                                                                            class="btn btn-link text-success"
-                                                                           onclick="return confirm('Are you sure you want to activate this user?');">Activate</a>
+                                                                           onclick="return confirm('Are you sure you want to activate this criteria?');">Activate</a>
                                                                     </c:if>
 
-                                                                    <c:if test="${ptu.status eq 'true'}">
-                                                                        <a href="<%=request.getContextPath()%>/edit-project-type-user?id=${ptu.id}"
-                                                                           class="btn btn-link text-primary">Edit</a>
-
-                                                                        <a href="<%=request.getContextPath()%>/change-status-project-type-user?recordId=${ptu.id}&status=${ptu.status}&typeId=${projectType.id}"
+                                                                    <c:if test="${ptc.status eq 'true'}">
+                                                                        <a href="<%=request.getContextPath()%>/change-status-project-type-criteria?id=${ptc.id}&status=${ptc.status}&typeId=${projectType.id}"
                                                                            class="btn btn-link text-danger"
-                                                                           onclick="return confirm('Are you sure you want to deactivate this user?');">Deactivate</a>
+                                                                           onclick="return confirm('Are you sure you want to deactivate this criteria?');">Deactivate</a>
                                                                     </c:if>
                                                                 </td>
                                                             </tr>
@@ -661,7 +736,7 @@
                                                                                        info: true,
                                                                                        order: [[0, 'desc']], // Default sort by ID column in descending order
                                                                                        columnDefs: [
-                                                                                           {orderable: false, targets: 7} // Disable sorting on the 'Action' column
+                                                                                           {orderable: false, targets: 5} // Disable sorting on the 'Action' column
                                                                                        ],
                                                                                        language: {
                                                                                            paginate: {

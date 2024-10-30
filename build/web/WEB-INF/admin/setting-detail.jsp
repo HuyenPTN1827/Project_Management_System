@@ -70,7 +70,7 @@
                                     <div class="card">
                                         <div class="card-body">
 
-                                            <form action="insert-setting" method="get" class="row">
+                                            <form action="insert-setting" method="post" class="row">
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label">Name<span style="color: red;">*</span></label>
                                                     <input type="text" class="form-control" name="name" placeholder="Enter the Setting name" 

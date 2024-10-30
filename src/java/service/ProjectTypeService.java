@@ -100,6 +100,13 @@ public class ProjectTypeService {
         projecTypeSettingDAO.changeStatusById(id, newStatus);
     }
 
+    // HuyenPTNHE160769
+    // 17/10/2024
+    // Get project roles list
+    public List<ProjectTypeSetting> getProjectRoleList(int typeId) {
+        return projectTypeDAO.getProjectRolesList(typeId);
+    }
+    
 //    HuyenPTNHE160769
 //    17/10/2024      
 //    Admin get all project type users
@@ -133,5 +140,33 @@ public class ProjectTypeService {
     // Admin change status of a project type user
     public boolean changeStatusProjectTypeUser(ProjectType_User ptUser) throws SQLException {
         return projectTypeDAO.changeStatusProjectTypeUser(ptUser);
+    }
+
+    // HuyenPTNHE160769
+    // 29/10/2024
+    // Get project phases list
+    public List<ProjectPhase> getPhaseList(int typeId) {
+        return projectTypeDAO.getPhaseList(typeId);
+    }
+    
+//    HuyenPTNHE160769
+//    29/10/2024      
+//    Admin get all project type criteria
+    public List<ProjectTypeCriteria> getAllProjectTypeCriteria(String keyword, Integer phaseId, Boolean status, int typeId) {
+        return projectTypeDAO.selectAllProjectTypeCriteria(keyword, phaseId, status, typeId);
+    }
+    
+    // HuyenPTNHE160769
+    // 29/10/2024
+    // Admin change status of a project type criteria
+    public boolean changeStatusProjectTypeCriteria(ProjectTypeCriteria ptCriteria) throws SQLException {
+        return projectTypeDAO.changeStatusProjectTypeCriteria(ptCriteria);
+    }
+    
+    // HuyenPTNHE160769
+    // 30/10/2024
+    // Admin get a project type criteria information by id
+    public ProjectTypeCriteria getProjectTypeCriteriaById(int id) {
+        return projectTypeDAO.selectProjectTypeCriteriaByID(id);
     }
 }

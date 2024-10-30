@@ -1,6 +1,6 @@
 <%-- 
-    Document   : dept-detail
-    Created on : Oct 14, 2024, 4:32:33 PM
+    Document   : project-type-criteria-detail
+    Created on : Oct 30, 2024, 3:55:41 AM
     Author     : HuyenPTNHE160769
 --%>
 
@@ -8,7 +8,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,7 +21,7 @@
 
         <link rel="canonical" href="pages-profile.html" />
 
-        <title>Department Details | PMS</title>
+        <title>Project Type Criteria Details | PMS</title>
 
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet">
 
@@ -48,48 +47,46 @@
             gtag('js', new Date());
 
             gtag('config', 'UA-120946860-10', {'anonymize_ip': true});
-        </script></head>
-
-
+        </script>
+    </head>
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
         <div class="row">
-
             <div class="col-md-12 col-xl-12">
                 <div class="card">
                     <div class="card-body">
-                        <c:if test="${department == null}">
-                            <form action="insert-department" method="post" class="row">
+                        <c:if test="${ptCriteria == null}">
+                            <form action="insert-project-type-criteria" method="post" class="row">
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Name<span style="color: red;">*</span></label>
-                                    <input type="text" class="form-control" name="name" placeholder="Enter the Department name" 
+                                    <input type="text" class="form-control" name="name" placeholder="Enter the Eval Criteria" 
                                            value="${name}" required>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Code<span style="color: red;">*</span></label>
-                                    <input type="text" class="form-control" name="code" placeholder="Enter the Department code" 
-                                           value="${code}" required>
+                                    <label class="form-label">Weight<span style="color: red;">*</span></label>
+                                    <input type="number" class="form-control" name="code" placeholder="Enter the Criteria weight" 
+                                           value="${weight}" required>
                                 </div>
 
                                 <div class="mb-3 col-md-12">
-                                    <label class="form-label">Parent</label>
-                                    <select name="parent" class="form-select">
-                                        <option value="">Choose Department Parent</option>
-                                        <c:forEach items="${dept}" var="d">
+                                    <label class="form-label">Project Phase<span style="color: red;">*</span></label>
+                                    <select name="phaseId" class="form-select" required>
+                                        <option value="" disable hidden>Choose Project Phase</option>
+                                        <c:forEach items="${phase}" var="p">
                                             <option 
-                                                <c:if test="${deptId eq d.id}">
+                                                <c:if test="${phaseId eq p.id}">
                                                     selected="selected"
                                                 </c:if>
-                                                value=${d.id}>${d.name}
+                                                value=${p.id}>${p.name}
                                             </option>
                                         </c:forEach>
                                     </select>
                                 </div>
 
                                 <div class="mb-3 col-md-12">
-                                    <label class="form-label">Details</label>
-                                    <textarea class="form-control" name="details" 
-                                              placeholder="Enter the Department details" rows="3">${details}</textarea>
+                                    <label class="form-label">Description</label>
+                                    <textarea class="form-control" name="description" 
+                                              placeholder="Enter the Criteria description" rows="3">${description}</textarea>
                                 </div>
 
                                 <div class="d-flex justify-content-end">
@@ -98,32 +95,32 @@
                             </form>
                         </c:if> 
 
-                        <c:if test="${department != null}">
-                            <form action="update-department" method="post" class="row">
-                                <input type="hidden" name="id" value="${department.id}"/>
+                        <c:if test="${ptCriteria != null}">
+                            <form action="update-project-type-criteria" method="post" class="row">
+                                <input type="hidden" name="id" value="${ptCriteria.id}"/>
 
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Name<span style="color: red;">*</span></label>
-                                    <input type="text" class="form-control" name="name" placeholder="Enter the Department name" 
-                                           value="${department.name}" required>
+                                    <input type="text" class="form-control" name="name" placeholder="Enter the Eval Criteria" 
+                                           value="${ptCriteria.name}" required>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Code<span style="color: red;">*</span></label>
-                                    <input type="text" class="form-control" name="code" placeholder="Enter the Department code" 
-                                           value="${department.code}" required>
+                                    <label class="form-label">Weight<span style="color: red;">*</span></label>
+                                    <input type="number" class="form-control" name="code" placeholder="Enter the Criteria weight" 
+                                           value="${ptCriteria.weight}" required>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Parent</label>
-                                    <select name="parent" class="form-select">
-                                        <option value="">Choose Department Parent</option>
-                                        <c:forEach items="${dept}" var="d">
+                                    <label class="form-label">Project Phase<span style="color: red;">*</span></label>
+                                    <select name="phaseId" class="form-select" required>
+                                        <option value="" disable hidden>Choose Project Phase</option>
+                                        <c:forEach items="${phase}" var="p">
                                             <option 
-                                                <c:if test="${department.parentId eq d.id}">
+                                                <c:if test="${ptCriteria.pjPhase.id eq p.id}">
                                                     selected="selected"
                                                 </c:if>
-                                                value=${d.id}>${d.name}
+                                                value=${p.id}>${p.name}
                                             </option>
                                         </c:forEach>
                                     </select>
@@ -133,22 +130,22 @@
                                     <label class="form-label">Status<span style="color: red;">*</span></label>
                                     <div class="check">
                                         <input class="form-check-input" type="radio" name="status"
-                                               <c:if test="${department.status eq 'true'}">
+                                               <c:if test="${ptCriteria.status eq 'true'}">
                                                    checked
                                                </c:if>
                                                value="true"> Active
                                         <input class="form-check-input ms-3" type="radio" name="status"
-                                               <c:if test="${department.status eq 'false'}">
+                                               <c:if test="${ptCriteria.status eq 'false'}">
                                                    checked
                                                </c:if>
                                                value="false"> Inactive
                                     </div>
                                 </div>
-
+                                
                                 <div class="mb-3 col-md-12">
-                                    <label class="form-label">Details</label>
-                                    <textarea class="form-control" name="details" 
-                                              placeholder="Enter the Department details" rows="3">${department.details}</textarea>
+                                    <label class="form-label">Description</label>
+                                    <textarea class="form-control" name="description" 
+                                              placeholder="Enter the Criteria description" rows="3">${ptCriteria.description}</textarea>
                                 </div>
 
                                 <div class="d-flex justify-content-end">

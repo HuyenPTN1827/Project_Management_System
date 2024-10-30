@@ -22,7 +22,7 @@
 
         <link rel="canonical" href="pages-profile.html" />
 
-        <title>Setting Details | PMS</title>
+        <title>Project Type User Details | PMS</title>
 
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet">
 
