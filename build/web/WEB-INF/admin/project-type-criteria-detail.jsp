@@ -56,6 +56,8 @@
                     <div class="card-body">
                         <c:if test="${ptCriteria == null}">
                             <form action="insert-project-type-criteria" method="post" class="row">
+                                <input type="hidden" name="typeId" value="${typeId}">
+
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Name<span style="color: red;">*</span></label>
                                     <input type="text" class="form-control" name="name" placeholder="Enter the Eval Criteria" 
@@ -64,7 +66,7 @@
 
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Weight<span style="color: red;">*</span></label>
-                                    <input type="number" class="form-control" name="code" placeholder="Enter the Criteria weight" 
+                                    <input type="number" class="form-control" name="weight" placeholder="Enter the Criteria weight" 
                                            value="${weight}" required>
                                 </div>
 
@@ -97,7 +99,8 @@
 
                         <c:if test="${ptCriteria != null}">
                             <form action="update-project-type-criteria" method="post" class="row">
-                                <input type="hidden" name="id" value="${ptCriteria.id}"/>
+                                <input type="hidden" name="typeId" value="${typeId}">
+                                <input type="hidden" name="id" value="${ptCriteria.id}">
 
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Name<span style="color: red;">*</span></label>
@@ -107,7 +110,7 @@
 
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Weight<span style="color: red;">*</span></label>
-                                    <input type="number" class="form-control" name="code" placeholder="Enter the Criteria weight" 
+                                    <input type="number" class="form-control" name="weight" placeholder="Enter the Criteria weight" 
                                            value="${ptCriteria.weight}" required>
                                 </div>
 
@@ -141,7 +144,7 @@
                                                value="false"> Inactive
                                     </div>
                                 </div>
-                                
+
                                 <div class="mb-3 col-md-12">
                                     <label class="form-label">Description</label>
                                     <textarea class="form-control" name="description" 
@@ -157,7 +160,7 @@
                 </div>
             </div>
         </div>
-        
+
         <script src="${pageContext.request.contextPath}/js/app.js"></script>
 
         <script>

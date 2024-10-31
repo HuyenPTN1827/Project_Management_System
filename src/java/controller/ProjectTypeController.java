@@ -418,8 +418,24 @@ public class ProjectTypeController extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void insertPTCriteria(HttpServletRequest request, HttpServletResponse response) {
+    private void insertPTCriteria(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+        int typeId = Integer.parseInt(request.getParameter("typeId"));
+        String name = request.getParameter("name");
+        var weight = Float.parseFloat(request.getParameter("weight"));
+        String description = request.getParameter("description");
+        int phaseId = Integer.parseInt(request.getParameter("phaseId"));
 
+        ProjectTypeCriteria ptc = new ProjectTypeCriteria();
+        ptc.setName(name);
+        ptc.setWeight(weight);
+        ptc.setDescription(description);
+
+        ProjectPhase pp = new ProjectPhase();
+        pp.setId(phaseId);
+        ptc.setPjPhase(pp);
+
+        ptService.insertProjectTypeCriteria(ptc);
+        response.sendRedirect("project-type-config?id=" + typeId);
     }
 
     private void showEditFormPTCriteria(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -428,14 +444,33 @@ public class ProjectTypeController extends HttpServlet {
         ProjectTypeCriteria ptCriteria = ptService.getProjectTypeCriteriaById(id);
         List<ProjectPhase> phase = ptService.getPhaseList(typeId);
 
+        request.setAttribute("typeId", typeId);
         request.setAttribute("ptCriteria", ptCriteria);
         request.setAttribute("phase", phase);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/project-type-criteria-detail.jsp");
         dispatcher.forward(request, response);
     }
 
-    private void updatePTCriteria(HttpServletRequest request, HttpServletResponse response) {
+    private void updatePTCriteria(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+        int typeId = Integer.parseInt(request.getParameter("typeId"));
+        int id = Integer.parseInt(request.getParameter("id"));
+        String name = request.getParameter("name");
+        var weight = Float.parseFloat(request.getParameter("weight"));
+        String description = request.getParameter("description");
+        int phaseId = Integer.parseInt(request.getParameter("phaseId"));
 
+        ProjectTypeCriteria ptc = new ProjectTypeCriteria();
+        ptc.setId(id);
+        ptc.setName(name);
+        ptc.setWeight(weight);
+        ptc.setDescription(description);
+
+        ProjectPhase pp = new ProjectPhase();
+        pp.setId(phaseId);
+        ptc.setPjPhase(pp);
+
+        ptService.updateProjectTypeCriteria(ptc);
+        response.sendRedirect("project-type-config?id=" + typeId);
     }
 
 }

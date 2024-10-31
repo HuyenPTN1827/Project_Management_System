@@ -500,14 +500,14 @@ public class ProjectTypeDAO {
 //    HuyenPTNHE160769
 //    29/10/2024      
 //    Admin change status of a project type criteria
-    public boolean changeStatusProjectTypeCriteria(ProjectTypeCriteria ptCriteria) throws SQLException {
+    public boolean changeStatusProjectTypeCriteria(ProjectTypeCriteria ptc) throws SQLException {
         boolean rowUpdated = false;
 
         String sql = "UPDATE pms.eval_criteria SET status = ? WHERE id = ?;";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
-            stm.setBoolean(1, ptCriteria.isStatus());
-            stm.setInt(2, ptCriteria.getId());
+            stm.setBoolean(1, ptc.isStatus());
+            stm.setInt(2, ptc.getId());
             rowUpdated = stm.executeUpdate() > 0;
         } catch (SQLException e) {
             BaseDAO.printSQLException(e);
@@ -522,7 +522,8 @@ public class ProjectTypeDAO {
         ProjectTypeCriteria ptc = null;
 
         String sql = """
-                     SELECT ec.id, ec.name, ec.weight, ec.status, ec.phase_id, pp.name, pp.type_id
+                     SELECT ec.id, ec.name, ec.weight, ec.description, ec.status, 
+                     ec.phase_id, pp.name, pp.type_id
                      FROM pms.eval_criteria ec 
                      INNER JOIN pms.project_phase pp ON ec.phase_id = pp.id
                      WHERE ec.id = ?;""";
@@ -536,6 +537,7 @@ public class ProjectTypeDAO {
                 ptc.setId(rs.getInt("ec.id"));
                 ptc.setName(rs.getString("ec.name"));
                 ptc.setWeight(rs.getFloat("ec.weight"));
+                ptc.setDescription(rs.getString("ec.description"));
                 ptc.setStatus(rs.getBoolean("ec.status"));
 
                 ProjectPhase pp = new ProjectPhase();
@@ -551,6 +553,51 @@ public class ProjectTypeDAO {
             BaseDAO.printSQLException(e);
         }
         return ptc;
+    }
+
+//    HuyenPTNHE160769
+//    30/10/2024       
+//    Admin add new project type criteria
+    public int insertProjectTypeCriteria(ProjectTypeCriteria ptc) throws SQLException {
+        int result = 0;
+        String sql = """
+                     INSERT INTO pms.eval_criteria (name, weight, description, phase_id)
+                     VALUES (?, ?, ?, ?);""";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            stm.setString(1, ptc.getName());
+            stm.setFloat(2, ptc.getWeight());
+            stm.setString(3, ptc.getDescription());
+            stm.setInt(4, ptc.getPjPhase().getId());
+
+            result = stm.executeUpdate();
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return result;
+    }
+
+//    HuyenPTNHE160769
+//    30/10/2024         
+//    Admin update a project type criteria
+    public boolean updateProjectTypeCriteria(ProjectTypeCriteria ptc) throws SQLException {
+        boolean rowUpdated = false;
+
+        String sql = "UPDATE pms.eval_criteria SET name = ?, weight =?, description = ?, status = ?, phase_id = ? WHERE id =?;";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            stm.setString(1, ptc.getName());
+            stm.setFloat(2, ptc.getWeight());
+            stm.setString(3, ptc.getDescription());
+            stm.setBoolean(4, ptc.isStatus());
+            stm.setInt(5, ptc.getPjPhase().getId());
+            stm.setInt(6, ptc.getId());
+
+            rowUpdated = stm.executeUpdate() > 0;
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return rowUpdated;
     }
 
 }

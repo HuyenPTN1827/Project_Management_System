@@ -159,8 +159,8 @@ public class ProjectTypeService {
     // HuyenPTNHE160769
     // 29/10/2024
     // Admin change status of a project type criteria
-    public boolean changeStatusProjectTypeCriteria(ProjectTypeCriteria ptCriteria) throws SQLException {
-        return projectTypeDAO.changeStatusProjectTypeCriteria(ptCriteria);
+    public boolean changeStatusProjectTypeCriteria(ProjectTypeCriteria ptc) throws SQLException {
+        return projectTypeDAO.changeStatusProjectTypeCriteria(ptc);
     }
     
     // HuyenPTNHE160769
@@ -168,5 +168,19 @@ public class ProjectTypeService {
     // Admin get a project type criteria information by id
     public ProjectTypeCriteria getProjectTypeCriteriaById(int id) {
         return projectTypeDAO.selectProjectTypeCriteriaByID(id);
+    }
+    
+    // HuyenPTNHE160769
+    // 30/10/2024
+    // Admin add new project type criteria information
+    public int insertProjectTypeCriteria(ProjectTypeCriteria ptc) throws SQLException {
+        return projectTypeDAO.insertProjectTypeCriteria(ptc);
+    }
+    
+    // HuyenPTNHE160769
+    // 30/10/2024
+    // Admin update a project type criteria information
+    public boolean updateProjectTypeCriteria(ProjectTypeCriteria ptc) throws SQLException {
+        return projectTypeDAO.updateProjectTypeCriteria(ptc);
     }
 }
