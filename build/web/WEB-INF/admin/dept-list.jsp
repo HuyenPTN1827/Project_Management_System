@@ -150,8 +150,8 @@
                                                             <a href="javascript:void(0);" class="btn btn-link text-primary" 
                                                                onclick="openDeptModal(${dept.id});">Edit</a>
 
-                                                            <a href="#" 
-                                                               class="btn btn-link text-primary">Configs</a>
+                                                            <a href="<%=request.getContextPath()%>/department-config?id=${dept.id}" 
+                                                               class="btn btn-link text-info">Configs</a>
 
                                                             <c:if test="${dept.status eq 'false'}">
                                                                 <a href="<%=request.getContextPath()%>/change-status-department?id=${dept.id}&status=${dept.status}"

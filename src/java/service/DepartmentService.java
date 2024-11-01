@@ -8,6 +8,7 @@ import context.DepartmentDAO;
 import java.sql.SQLException;
 import java.util.List;
 import model.Department;
+import model.Department_User;
 
 /**
  *
@@ -62,4 +63,40 @@ public class DepartmentService {
     public boolean changeStatusDepartment(Department dept) throws SQLException {
         return deptDAO.changeStatusDepartment(dept);
     }
+        
+//    HuyenPTNHE160769
+//    31/10/2024      
+//    Admin get all dept users
+    public List<Department_User> getAllDepartmentUsers(String keyword, Integer roleId, Boolean status, int deptId) {
+        return deptDAO.selectAllDepartmentUsers(keyword, roleId, status, deptId);
+    }
+
+    // HuyenPTNHE160769
+    // 31/10/2024
+    // Admin add new dept user information
+    public int insertDepartmentUser(Department_User deptUser) throws SQLException {
+        return deptDAO.insertDepartmentUser(deptUser);
+    }
+
+    // HuyenPTNHE160769
+    // 31/10/2024
+    // Admin get a dept user information by id
+    public Department_User getDepartmentUserById(int id) {
+        return deptDAO.selectDepartmentUserByID(id);
+    }
+
+    // HuyenPTNHE160769
+    // 31/10/2024
+    // Admin update a dept user information
+    public boolean updateDepartmentUser(Department_User deptUser) throws SQLException {
+        return deptDAO.updateDepartmentUser(deptUser);
+    }
+
+    // HuyenPTNHE160769
+    // 1/10/2024
+    // Admin change status of a dept user
+    public boolean changeStatusDepartmentUser(Department_User deptUser) throws SQLException {
+        return deptDAO.changeStatusDepartmentUser(deptUser);
+    }
+
 }

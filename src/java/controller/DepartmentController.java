@@ -15,7 +15,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Department;
+import model.Department_User;
+import model.Setting;
 import service.DepartmentService;
+import service.SettingService;
 
 /**
  *
@@ -24,10 +27,12 @@ import service.DepartmentService;
 public class DepartmentController extends HttpServlet {
 
     private DepartmentService deptService;
+    private SettingService settingService;
 
     @Override
     public void init() throws ServletException {
         this.deptService = new DepartmentService();
+        this.settingService = new SettingService();
     }
 
 //    HuyenPTNHE160769 
@@ -49,6 +54,8 @@ public class DepartmentController extends HttpServlet {
                     updateDepartment(request, response); // Update department
                 case "/change-status-department" ->
                     changeStatusDepartment(request, response); // Change status department
+                case "/department-config" ->
+                    listDepartmentConfig(request, response); // List of department configs
                 default -> {
                     listDepartment(request, response); // List of departments
                 }
@@ -217,6 +224,34 @@ public class DepartmentController extends HttpServlet {
         deptService.changeStatusDepartment(d);
         // Redirect to the department-management page
         response.sendRedirect("department-management");
+    }
+
+//    HuyenPTNHE160769 
+//    01/11/2024 
+//    List of department configs
+    private void listDepartmentConfig(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        String keyword = request.getParameter("keyword");
+        String roleIdStr = request.getParameter("roleId");
+        String statusStr = request.getParameter("status");
+
+        // Process the filter value, convert to number or null if not selected
+        Integer roleId = roleIdStr != null && !roleIdStr.isEmpty() ? Integer.valueOf(roleIdStr) : null;
+        Boolean status = statusStr != null && !statusStr.isEmpty() ? Boolean.valueOf(statusStr) : null;
+
+        Department dept = deptService.getDepartmentById(id);
+        List<Setting> setting = settingService.getDeptRoleList();
+        List<Department_User> deptUser = deptService.getAllDepartmentUsers(keyword, roleId, status, id);
+
+        request.setAttribute("dept", dept);
+        request.setAttribute("setting", setting);
+        request.setAttribute("deptUser", deptUser);
+        request.setAttribute("keyword", keyword);
+        request.setAttribute("roleId", roleId);
+        request.setAttribute("statusUser", status);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/dept-config.jsp");
+        dispatcher.forward(request, response);
     }
 
 }

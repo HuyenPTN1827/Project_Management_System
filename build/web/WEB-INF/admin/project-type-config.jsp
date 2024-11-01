@@ -129,7 +129,7 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <div class="d-flex justify-content-between align-items-center" style="margin: 10px;">
-                                            <form action="department-management" method="post" class="d-flex align-items-center" style="gap: 15px;">
+                                            <form action="project-type-management" method="post" class="d-flex align-items-center" style="gap: 15px;">
 
                                                 <div class="col-md-4">
                                                     <label class="form-label">Project Type</label>
@@ -743,8 +743,8 @@
                                                                                                previous: "&laquo;",
                                                                                                next: "&raquo;"
                                                                                            },
-                                                                                           info: "_TOTAL_ user(s) found",
-                                                                                           infoEmpty: "No user found"
+                                                                                           info: "_TOTAL_ criteria(s) found",
+                                                                                           infoEmpty: "No criteria found"
                                                                                        },
                                                                                        dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
                                                                                        initComplete: function () {

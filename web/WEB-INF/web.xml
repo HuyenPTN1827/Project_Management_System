@@ -121,6 +121,30 @@
         <url-pattern>/change-status-department</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>DepartmentController</servlet-name>
+        <url-pattern>/department-config</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DepartmentController</servlet-name>
+        <url-pattern>/add-department-user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DepartmentController</servlet-name>
+        <url-pattern>/insert-department-user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DepartmentController</servlet-name>
+        <url-pattern>/edit-department-user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DepartmentController</servlet-name>
+        <url-pattern>/update-department-user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DepartmentController</servlet-name>
+        <url-pattern>/change-status-department-user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>ProjectTypeController</servlet-name>
         <url-pattern>/project-type-management</url-pattern>
     </servlet-mapping>

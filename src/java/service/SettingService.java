@@ -29,6 +29,13 @@ public class SettingService {
     }
 
     // HuyenPTNHE160769
+    // 31/10/2024
+    // Get dept roles list
+    public List<Setting> getDeptRoleList() {
+        return settingDAO.getDepartmentRolesList();
+    }
+
+    // HuyenPTNHE160769
     // 03/10/2024
     // Admin get all settings
     public List<Setting> getAllSettings(String keyword, String type, Boolean status) {
