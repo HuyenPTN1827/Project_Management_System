@@ -1,6 +1,6 @@
 <%-- 
-    Document   : project-type-user-edit
-    Created on : Oct 23, 2024, 8:30:22 AM
+    Document   : dept-user-add
+    Created on : Nov 1, 2024, 6:43:42 PM
     Author     : kelma
 --%>
 
@@ -8,7 +8,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -60,73 +59,77 @@
 
                     <main class="content">
                         <div class="container-fluid p-0">
-                            <a href="<%=request.getContextPath()%>/project-type-management">Project Types Management > </a>
-                        <a href="<%=request.getContextPath()%>/project-type-config?id=${ptUser.pjType.id}">Project Type Configs > </a>
+                            <a href="<%=request.getContextPath()%>/department-management">Departments Management > </a>
+                        <a href="<%=request.getContextPath()%>/department-config?id=${deptId}">Department Configs > </a>
 
                         <h1 class="h1 mt-2 mb-3"> Add User</h1>
                         <div class="row">
 
                             <div class="col-md-12 col-xl-12">
                                 <div class="card">
+                                    <div class="card-header">
+                                        <div class="mt-2 mb-2">
+                                            <form action="add-department-user" method="post" class="d-flex align-items-center" style="gap: 15px;">
+                                                <input type="hidden" name="deptId" value="${deptId}">
+                                                <div class="col-md-5">
+                                                    <input type="search" name="keyword" class="form-control"
+                                                           placeholder="Enter Full Name or Email" id="keyword" value="${keyword}">
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <button type="submit" class="btn btn-primary">Search</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>       
+                                <div class="card">
                                     <div class="card-body">
-                                        <form action="update-project-type-user" method="post" class="row">
-                                            <input type="hidden" name="id" value="${ptUser.id}">
-                                            <input type="hidden" name="userId" value="${ptUser.user.id}">
-                                            <input type="hidden" name="typeId" value="${ptUser.pjType.id}">
+                                        <c:if test="${not empty errorMessages}">
+                                            <div class="alert alert-danger pt-3 pe-3 ps-3">
+                                                <ul>
+                                                    <c:forEach items="${errorMessages}" var="error" >
+                                                        <li>${error}</li>
+                                                        </c:forEach>
+                                                </ul>
+                                            </div>
+                                        </c:if>
+
+                                        <form action="insert-department-user" method="get" class="row">
+                                            <input type="hidden" name="deptId" value="${deptId}">
+                                            <input type="hidden" name="id" value="${deptUser.id}">
 
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label">Full Name<span style="color: red;">*</span></label>
                                                 <input type="text" class="form-control" name="fullname" placeholder="Enter the Full name" 
-                                                       value="${ptUser.user.full_name}" readonly>
+                                                       value="${deptUser.full_name}" readonly>
                                             </div>
 
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label">Phone</label>
                                                 <input type="text" class="form-control" name="mobile" placeholder="Enter the Phone number"
-                                                       value="${ptUser.user.mobile}" readonly>
+                                                       value="${deptUser.mobile}" readonly>
                                             </div>
 
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label">Email<span style="color: red;">*</span></label>
                                                 <input type="text" class="form-control" name="email" placeholder="Enter the Email address" 
-                                                       value="${ptUser.user.email}" readonly>
+                                                       value="${deptUser.email}" readonly>
                                             </div>
 
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label">Project Role<span style="color: red;">*</span></label>
-                                                <select name="pjRole" class="form-select" required>
-                                                    <option value="" disable hidden>Choose Project Role</option>
-                                                    <c:forEach items="${ptSetting}" var="r">
-                                                        <option 
-                                                            <c:if test="${ptUser.ptSetting.id eq r.id}">
-                                                                selected="selected"
-                                                            </c:if>
-                                                            value=${r.id}>${r.name}
-                                                        </option>
+                                                <select name="roleId" class="form-select" required>
+                                                    <option value="" disable hidden>Choose Department Role</option>
+                                                    <c:forEach items="${setting}" var="r">
+                                                        <option value=${r.id}>${r.name}</option>
                                                     </c:forEach>
                                                 </select>
-                                            </div>
-
-                                            <div class="mb-3 col-md-6">
-                                                <label class="form-label">Status<span style="color: red;">*</span></label>
-                                                <div class="check">
-                                                    <input class="form-check-input" type="radio" name="status"
-                                                           <c:if test="${ptUser.status eq 'true'}">
-                                                               checked
-                                                           </c:if>
-                                                           value="true"> Active
-                                                    <input class="form-check-input ms-3" type="radio" name="status"
-                                                           <c:if test="${ptUser.status eq 'false'}">
-                                                               checked
-                                                           </c:if>
-                                                           value="false"> Inactive
-                                                </div>
                                             </div>
 
                                             <div>
                                                 <button type="submit" class="btn btn-lg btn-success">Submit</button>
                                             </div>
-                                        </form>
+                                        </form>                                    
                                     </div>
                                 </div>
                             </div>

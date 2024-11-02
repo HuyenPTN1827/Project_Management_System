@@ -76,7 +76,7 @@
 
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label">Full Name<span style="color: red;">*</span></label>
-                                                <input type="text" class="form-control" name="fullname" placeholder="Full name" 
+                                                <input type="text" class="form-control" name="fullname" placeholder="Enter the Full name" 
                                                        value="${ptUser.user.full_name}" readonly>
                                             </div>
 

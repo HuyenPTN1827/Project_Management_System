@@ -322,7 +322,7 @@ public class DepartmentDAO {
     public int insertDepartmentUser(Department_User ptUser) throws SQLException {
         int result = 0;
         String sql = """
-                     INSERT INTO pms.user_type (user_id, dept_id, start_date, status, role_id)
+                     INSERT INTO pms.dept_user (user_id, dept_id, start_date, status, role_id)
                      VALUES (?, ?, CURDATE(), 1, ?);""";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
@@ -344,7 +344,7 @@ public class DepartmentDAO {
         Department_User du = null;
 
         String sql = """
-                     SELECT du.id, du.user_id, u.full_name, du.dept_id, 
+                     SELECT du.id, du.user_id, u.full_name, u.email, u.mobile, du.dept_id, 
                      du.role_id, s.name, du.start_date, du.end_date, du.status
                      FROM pms.dept_user du
                      INNER JOIN pms.user u ON du.user_id = u.id

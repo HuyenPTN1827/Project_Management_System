@@ -224,8 +224,8 @@
                                                 </div>
                                             </form>
 
-                                            <!--<a class="btn btn-primary" href="<%=request.getContextPath()%>/add-department-user?deptId=${dept.id}">Create new</a>-->
-                                            <a class="btn btn-primary" href="javascript:void(0);" onclick="openDeptUserModal(${dept.id});">Create new</a>
+                                            <a class="btn btn-primary" href="<%=request.getContextPath()%>/add-department-user?deptId=${dept.id}">Create new</a>
+                                            <!--<a class="btn btn-primary" href="javascript:void(0);" onclick="openDeptUserModal(${dept.id});">Create new</a>-->
                                         </div>
 
                                         <table id="datatables-multi" class="table table-striped" style="width:100%">

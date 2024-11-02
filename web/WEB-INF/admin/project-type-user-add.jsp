@@ -1,7 +1,7 @@
 <%-- 
     Document   : project-type-user-add
     Created on : Oct 22, 2024, 9:13:36 PM
-    Author     : kelma
+    Author     : HuyenPTNHE160769
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -102,7 +102,7 @@
 
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label">Full Name<span style="color: red;">*</span></label>
-                                                <input type="text" class="form-control" name="fullname" placeholder="Full name" 
+                                                <input type="text" class="form-control" name="fullname" placeholder="Enter the Full name" 
                                                        value="${userType.full_name}" readonly>
                                             </div>
 
