@@ -20,6 +20,10 @@
         <servlet-name>ProjectListController</servlet-name>
         <servlet-class>controller.ProjectListController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ProjectConfigController</servlet-name>
+        <servlet-class>controller.ProjectConfigController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AuthenticationController</servlet-name>
         <url-pattern>/register-form</url-pattern>
@@ -192,6 +196,39 @@
         <servlet-name>ProjectListController</servlet-name>
         <url-pattern>/insert-project</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectConfigController</servlet-name>
+        <url-pattern>/projectconfig</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectConfigController</servlet-name>
+        <url-pattern>/filterandsearchmilestone</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectConfigController</servlet-name>
+        <url-pattern>/edit</url-pattern>
+    </servlet-mapping>
+     <servlet-mapping>
+        <servlet-name>ProjectConfigController</servlet-name>
+        <url-pattern>/update</url-pattern>
+    </servlet-mapping>
+     <servlet-mapping>
+        <servlet-name>ProjectConfigController</servlet-name>
+        <url-pattern>/teamlist</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectConfigController</servlet-name>
+        <url-pattern>/searchteam</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectConfigController</servlet-name>
+        <url-pattern>/editteam</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectConfigController</servlet-name>
+        <url-pattern>/updateteam</url-pattern>
+    </servlet-mapping>
+    
     <welcome-file-list>
         <welcome-file>login-form</welcome-file>
         <!--<welcome-file>project-type-management</welcome-file>-->

@@ -27,7 +27,7 @@
 </head>
 <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
     <div class="wrapper">
-        <jsp:include page="../component/sidebar.jsp"></jsp:include>
+        <jsp:include page="../component/sidebar-manager.jsp"></jsp:include>
         <div class="main">
             <jsp:include page="../component/header.jsp"></jsp:include>
             <main class="content">
@@ -97,7 +97,7 @@
                                                     </td>
                                                     <td>
                                                         <a href="<%=request.getContextPath()%>/edit-project?id=${project.id}" class="btn btn-link text-primary">Edit</a>
-                                                        <a href="<%=request.getContextPath()%>/config-project?id=${project.id}" class="btn btn-link text-secondary">Config</a>
+                                                        <a href="<%=request.getContextPath()%>/projectconfig?id=${project.id}" class="btn btn-link text-secondary">Config</a>
                                                         <c:if test="${project.status eq 'false'}">
                                                             <a href="<%=request.getContextPath()%>/change-status-project?id=${project.id}&status=${project.status}" class="btn btn-link text-success" onclick="return confirm('Are you sure you want to activate this project?');">Activate</a>
                                                         </c:if>
@@ -141,43 +141,7 @@
     <script src="${pageContext.request.contextPath}/js/datatables.js"></script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var datatablesMulti = $("#datatables-multi").DataTable({
-                responsive: true,
-                paging: true,
-                searching: false,
-                info: true,
-                order: [[0, 'desc']], // Default sorting by ID column descending
-                columnDefs: [
-                    { orderable: false, targets: 8 } // Disable sorting on the 'Actions' column
-                ],
-                language: {
-                    paginate: {
-                        previous: "&laquo;",
-                        next: "&raquo;"
-                    },
-                    info: "_TOTAL_ projects found",
-                    infoEmpty: "No projects found"
-                },
-                dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>',
-                initComplete: function () {
-                    $('.dataTables_info').addClass('text-left fw-bolder');
-                    $('.dataTables_length').addClass('mt-2');
-                }
-            });
-        });
-
-        document.addEventListener("DOMContentLoaded", function (event) {
-            setTimeout(function () {
-                if (localStorage.getItem('popState') !== 'shown') {
-                    window.notyf.open({
-                        type: "success",
-                        message: "Welcome back to the Project Management System!"
-                    });
-                    localStorage.setItem('popState', 'shown');
-                }
-            }, 3000); // Show notification after 3 seconds
-        });
+       
     </script>
 </body>
 </html>
