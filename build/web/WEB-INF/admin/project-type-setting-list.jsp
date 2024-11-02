@@ -54,7 +54,8 @@
 
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
         <div class="wrapper">
-            <jsp:include page="../component/sidebar.jsp"></jsp:include>
+            <% request.setAttribute("currentPage", "project-type-management"); %>
+            <jsp:include page="../component/sidebar-admin.jsp"></jsp:include>
                 <div class="main">
                 <jsp:include page="../component/header.jsp"></jsp:include>
 
@@ -109,8 +110,7 @@
                                                     <th>Value</th>
                                                     <th>Status</th>
                                                     <th>Action</th>
-                                                    <th>Action</th>
-                                                    <th>Action</th>
+                                                    
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -131,8 +131,7 @@
                                                         <td>
                                                             <a href="./ProjectTypeSetting?action=edit&id=${type.id}" 
                                                                class="btn btn-link text-primary">Configs</a>
-                                                        </td>
-                                                        <td>
+                                                        
                                                             <c:if test="${type.status eq 'false'}">
                                                                 <a href="./ProjectTypeSetting?action=changeStatus&id=${type.id}&status=true"
                                                                    class="btn btn-link text-success"
@@ -144,8 +143,7 @@
                                                                    class="btn btn-link text-danger"
                                                                    onclick="return confirm('Are you sure you want to deactivate this project type?');">Deactivate</a>
                                                             </c:if>
-                                                        </td>
-                                                        <td>
+                                                        
                                                             <a href="./ProjectTypeSetting?action=delete&id=${type.id}"
                                                                class="btn btn-link text-danger"
                                                                onclick="return confirm('Are you sure you want to deactivate this project type?');">Delete</a>

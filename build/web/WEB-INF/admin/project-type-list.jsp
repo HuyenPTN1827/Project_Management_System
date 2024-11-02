@@ -70,11 +70,10 @@
             }
         </script>
     </head>
-
-
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
         <div class="wrapper">
-            <jsp:include page="../component/sidebar.jsp"></jsp:include>
+            <% request.setAttribute("currentPage", "project-type-management"); %>
+            <jsp:include page="../component/sidebar-admin.jsp"></jsp:include>
                 <div class="main">
                 <jsp:include page="../component/header.jsp"></jsp:include>
 
@@ -148,8 +147,8 @@
                                                             <a href="javascript:void(0);" class="btn btn-link text-primary" 
                                                                onclick="openProjectTypeModal(${type.id});">Edit</a>
 
-                                                            <a href="<%=request.getContextPath()%>/project-type-user?id=${type.id}" 
-                                                               class="btn btn-link text-primary">Configs</a>
+                                                            <a href="<%=request.getContextPath()%>/project-type-config?id=${type.id}" 
+                                                               class="btn btn-link text-info">Configs</a>
 
                                                             <c:if test="${type.status eq 'false'}">
                                                                 <a href="<%=request.getContextPath()%>/change-status-project-type?id=${type.id}&status=${type.status}"

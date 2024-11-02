@@ -53,7 +53,8 @@
 
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
         <div class="wrapper">
-            <jsp:include page="../component/sidebar.jsp"></jsp:include>
+            <% request.setAttribute("currentPage", "user-management"); %>
+            <jsp:include page="../component/sidebar-admin.jsp"></jsp:include>
                 <div class="main">
                 <jsp:include page="../component/header.jsp"></jsp:include>
 
@@ -61,7 +62,7 @@
                         <div class="container-fluid p-0">
                             <a href="<%=request.getContextPath()%>/user-management">User Management > </a>
 
-                        <c:if test="${user == null}">
+                        <c:if test="${userDetail == null}">
 
                             <h1 class="h1 mt-2 mb-3"> Create New User</h1>
                             <div class="row">
@@ -149,7 +150,7 @@
                             </div>
                         </c:if> 
 
-                        <c:if test="${user != null}">
+                        <c:if test="${userDetail != null}">
                             <h1 class="h1 mt-2 mb-3"> User Details</h1>
                             <div class="row">
 
@@ -168,25 +169,25 @@
                                             </c:if>
 
                                             <form action="update-user" method="post" class="row">
-                                                <input type="hidden" name="id" value="${user.id}"/>
-                                                <input type="hidden" name="password" value="${user.password}"/>
+                                                <input type="hidden" name="id" value="${userDetail.id}"/>
+                                                <input type="hidden" name="password" value="${userDetail.password}"/>
 
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label">Full Name<span style="color: red;">*</span></label>
                                                     <input type="text" class="form-control" name="fullname" placeholder="Enter the Full name" 
-                                                           value="${user.full_name}" required>
+                                                           value="${userDetail.full_name}" required>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label">Phone</label>
                                                     <input type="text" class="form-control" name="mobile" placeholder="Enter the Phone number"
-                                                           value="${user.mobile}">
+                                                           value="${userDetail.mobile}">
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label">Email<span style="color: red;">*</span></label>
                                                     <input type="text" class="form-control" name="email" placeholder="Enter the Email address" 
-                                                           value="${user.email}" required>
+                                                           value="${userDetail.email}" required>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
@@ -195,7 +196,7 @@
                                                         <option value="">Choose Department</option>
                                                         <c:forEach items="${dept}" var="d">
                                                             <option 
-                                                                <c:if test="${user.dept.id eq d.id}">
+                                                                <c:if test="${userDetail.dept.id eq d.id}">
                                                                     selected="selected"
                                                                 </c:if>
                                                                 value=${d.id}>${d.name}
@@ -209,7 +210,7 @@
                                                     <select name="role" class="form-select">
                                                         <c:forEach items="${role}" var="r">
                                                             <option 
-                                                                <c:if test="${user.setting.id eq r.id}">
+                                                                <c:if test="${userDetail.setting.id eq r.id}">
                                                                     selected="selected"
                                                                 </c:if>
                                                                 value=${r.id}>${r.name}
@@ -221,22 +222,22 @@
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label">Status<span style="color: red;">*</span></label>
 
-                                                    <c:if test="${user.status eq '3'}">
+                                                    <c:if test="${userDetail.status eq '3'}">
                                                         <input type="hidden" name="status" value="3">
                                                         <input type="text" class="form-control" value="Unverified" readonly>
                                                     </c:if>
 
-                                                    <c:if test="${user.status ne '3'}">
+                                                    <c:if test="${userDetail.status ne '3'}">
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="radio" name="status"
-                                                                   <c:if test="${user.status eq '1'}">
+                                                                   <c:if test="${userDetail.status eq '1'}">
                                                                        checked
                                                                    </c:if>
                                                                    value="1">Active
                                                         </div>
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="radio" name="status"
-                                                                   <c:if test="${user.status eq '0'}">
+                                                                   <c:if test="${userDetail.status eq '0'}">
                                                                        checked
                                                                    </c:if>
                                                                    value="0">Inactive
@@ -247,7 +248,7 @@
                                                 <div class="mb-3 col-md-12">
                                                     <label class="form-label">Notes</label>
                                                     <textarea class="form-control" name="notes" 
-                                                              placeholder="Enter the Notes" rows="3">${user.notes}</textarea>
+                                                              placeholder="Enter the Notes" rows="3">${userDetail.notes}</textarea>
                                                 </div>
 
                                                 <div>

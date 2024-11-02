@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 import model.Department;
 import model.Setting;
 import model.User;
-import service.GroupService;
+import service.DepartmentService;
 import service.SettingService;
 import service.UserService;
 
@@ -28,13 +28,13 @@ import service.UserService;
 public class UserController extends HttpServlet {
 
     private UserService userService;
-    private GroupService deptService;
+    private DepartmentService deptService;
     private SettingService settingService;
 
     @Override
     public void init() throws ServletException {
         this.userService = new UserService();
-        this.deptService = new GroupService();
+        this.deptService = new DepartmentService();
         this.settingService = new SettingService();
     }
 
@@ -151,7 +151,7 @@ public class UserController extends HttpServlet {
 
         // Path to user information input form page
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/user-detail.jsp");
-        request.setAttribute("user", null);
+        request.setAttribute("userDetail", null);
         request.setAttribute("dept", dept);
         request.setAttribute("role", role);
         dispatcher.forward(request, response);
@@ -231,7 +231,7 @@ public class UserController extends HttpServlet {
 
         // Path to user information input form page
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/user-detail.jsp");
-        request.setAttribute("user", user);
+        request.setAttribute("userDetail", user);
         request.setAttribute("dept", dept);
         request.setAttribute("role", role);
         dispatcher.forward(request, response);

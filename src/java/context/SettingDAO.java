@@ -20,11 +20,34 @@ public class SettingDAO {
 
     // HuyenPTNHE160769
     // 29/09/2024
-    // Get roles list
+    // Get user roles list
     public List<Setting> getUserRolesList() {
         List<Setting> setting = new ArrayList<>();
 
         String sql = "SELECT * FROM pms.setting WHERE type = 'User Role' AND status = 1 ORDER BY priority DESC;";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Setting s = new Setting();
+                s.setId(rs.getInt("id"));
+                s.setName(rs.getString("name"));
+                s.setValue(rs.getString("value"));
+                setting.add(s);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return setting;
+    }
+    
+    // HuyenPTNHE160769
+    // 31/10/2024
+    // Get department roles list
+    public List<Setting> getDepartmentRolesList() {
+        List<Setting> setting = new ArrayList<>();
+
+        String sql = "SELECT * FROM pms.setting WHERE type = 'Department Role' AND status = 1 ORDER BY priority ASC;";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             ResultSet rs = stm.executeQuery();

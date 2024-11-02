@@ -52,171 +52,115 @@
 
 
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
-        <div class="wrapper">
-            <jsp:include page="../component/sidebar.jsp"></jsp:include>
-                <div class="main">
-                <jsp:include page="../component/header.jsp"></jsp:include>
+        <div class="row">
 
-                    <main class="content">
-                        <div class="container-fluid p-0">
-                            <a href="<%=request.getContextPath()%>/department-management">Department Management > </a>
-
+            <div class="col-md-12 col-xl-12">
+                <div class="card">
+                    <div class="card-body">
                         <c:if test="${department == null}">
-                            <h1 class="h1 mt-2 mb-3"> Create New Department</h1>
-                            <div class="row">
-
-                                <div class="col-md-12 col-xl-12">
-                                    <div class="card">
-                                        <div class="card-body">
-
-                                            <form action="insert-department" method="get" class="row">
-                                                <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Name<span style="color: red;">*</span></label>
-                                                    <input type="text" class="form-control" name="name" placeholder="Enter the Department name" 
-                                                           value="${name}" required>
-                                                </div>
-
-                                                <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Parent</label>
-                                                    <select name="dept" class="form-select">
-                                                        <option value="">Choose Department Parent</option>
-                                                        <c:forEach items="${dept}" var="d">
-                                                            <option 
-                                                                <c:if test="${deptId eq d.id}">
-                                                                    selected="selected"
-                                                                </c:if>
-                                                                value=${d.id}>${d.name}
-                                                            </option>
-                                                        </c:forEach>
-                                                    </select>
-                                                </div>
-
-                                                <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Code<span style="color: red;">*</span></label>
-                                                    <input type="text" class="form-control" name="code" placeholder="Enter the Department code" 
-                                                           value="${code}" required>
-                                                </div>
-
-                                                <div class="mb-3 col-md-12">
-                                                    <label class="form-label">Details</label>
-                                                    <textarea class="form-control" name="details" 
-                                                              placeholder="Enter the Department details" rows="3">${details}</textarea>
-                                                </div>
-
-                                                <div>
-                                                    <button type="submit" class="btn btn-lg btn-success">Submit</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
+                            <form action="insert-department" method="post" class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Name<span style="color: red;">*</span></label>
+                                    <input type="text" class="form-control" name="name" placeholder="Enter the Department name" 
+                                           value="${name}" required>
                                 </div>
-                            </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Code<span style="color: red;">*</span></label>
+                                    <input type="text" class="form-control" name="code" placeholder="Enter the Department code" 
+                                           value="${code}" required>
+                                </div>
+
+                                <div class="mb-3 col-md-12">
+                                    <label class="form-label">Parent</label>
+                                    <select name="parent" class="form-select">
+                                        <option value="">Choose Department Parent</option>
+                                        <c:forEach items="${dept}" var="d">
+                                            <option 
+                                                <c:if test="${deptId eq d.id}">
+                                                    selected="selected"
+                                                </c:if>
+                                                value=${d.id}>${d.name}
+                                            </option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3 col-md-12">
+                                    <label class="form-label">Details</label>
+                                    <textarea class="form-control" name="details" 
+                                              placeholder="Enter the Department details" rows="3">${details}</textarea>
+                                </div>
+
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-lg btn-success">Submit</button>
+                                </div>
+                            </form>
                         </c:if> 
 
                         <c:if test="${department != null}">
-                            <h1 class="h1 mt-2 mb-3"> Department Details</h1>
-                            <div class="row">
+                            <form action="update-department" method="post" class="row">
+                                <input type="hidden" name="id" value="${department.id}"/>
 
-                                <div class="col-md-12 col-xl-12">
-                                    <div class="card">
-                                        <div class="card-body">
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Name<span style="color: red;">*</span></label>
+                                    <input type="text" class="form-control" name="name" placeholder="Enter the Department name" 
+                                           value="${department.name}" required>
+                                </div>
 
-                                            <form action="update-department" method="post" class="row">
-                                                <input type="hidden" name="id" value="${department.id}"/>
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Code<span style="color: red;">*</span></label>
+                                    <input type="text" class="form-control" name="code" placeholder="Enter the Department code" 
+                                           value="${department.code}" required>
+                                </div>
 
-                                                <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Name<span style="color: red;">*</span></label>
-                                                    <input type="text" class="form-control" name="name" placeholder="Enter the Department name" 
-                                                           value="${department.name}" required>
-                                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Parent</label>
+                                    <select name="parent" class="form-select">
+                                        <option value="">Choose Department Parent</option>
+                                        <c:forEach items="${dept}" var="d">
+                                            <option 
+                                                <c:if test="${department.parentId eq d.id}">
+                                                    selected="selected"
+                                                </c:if>
+                                                value=${d.id}>${d.name}
+                                            </option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
 
-                                                <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Parent</label>
-                                                    <select name="parent" class="form-select">
-                                                        <option value="">Choose Department Parent</option>
-                                                        <c:forEach items="${dept}" var="d">
-                                                            <option 
-                                                                <c:if test="${department.parentId eq d.id}">
-                                                                    selected="selected"
-                                                                </c:if>
-                                                                value=${d.id}>${d.name}
-                                                            </option>
-                                                        </c:forEach>
-                                                    </select>
-                                                </div>
-
-                                                <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Code<span style="color: red;">*</span></label>
-                                                    <input type="text" class="form-control" name="code" placeholder="Enter the Department code" 
-                                                           value="${department.code}" required>
-                                                </div>
-
-                                                <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Status<span style="color: red;">*</span></label>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="status"
-                                                               <c:if test="${department.status eq 'true'}">
-                                                                   checked
-                                                               </c:if>
-                                                               value="true">Active
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="status"
-                                                               <c:if test="${department.status eq 'false'}">
-                                                                   checked
-                                                               </c:if>
-                                                               value="false">Inactive
-                                                    </div>
-                                                </div>
-
-                                                <div class="mb-3 col-md-12">
-                                                    <label class="form-label">Details</label>
-                                                    <textarea class="form-control" name="details" 
-                                                              placeholder="Enter the Department details" rows="3">${department.details}</textarea>
-                                                </div>
-
-                                                <div>
-                                                    <button type="submit" class="btn btn-lg btn-success">Submit</button>
-                                                </div>
-                                            </form>
-                                        </div>
+                                <div class="mb-3 col-md-6 mt-1">
+                                    <label class="form-label">Status<span style="color: red;">*</span></label>
+                                    <div class="check">
+                                        <input class="form-check-input" type="radio" name="status"
+                                               <c:if test="${department.status eq 'true'}">
+                                                   checked
+                                               </c:if>
+                                               value="true"> Active
+                                        <input class="form-check-input ms-3" type="radio" name="status"
+                                               <c:if test="${department.status eq 'false'}">
+                                                   checked
+                                               </c:if>
+                                               value="false"> Inactive
                                     </div>
                                 </div>
-                            </div>
+
+                                <div class="mb-3 col-md-12">
+                                    <label class="form-label">Details</label>
+                                    <textarea class="form-control" name="details" 
+                                              placeholder="Enter the Department details" rows="3">${department.details}</textarea>
+                                </div>
+
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-lg btn-success">Submit</button>
+                                </div>
+                            </form>
                         </c:if>
                     </div>
-                </main>
-
-                <footer class="footer">
-                    <div class="container-fluid">
-                        <div class="row text-muted">
-                            <div class="col-6 text-start">
-                                <p class="mb-0">
-                                    <a href="https://adminkit.io/" target="_blank" class="text-muted"><strong>AdminKit</strong></a> &copy;
-                                </p>
-                            </div>
-                            <div class="col-6 text-end">
-                                <ul class="list-inline">
-                                    <li class="list-inline-item">
-                                        <a class="text-muted" href="#">Support</a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a class="text-muted" href="#">Help Center</a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a class="text-muted" href="#">Privacy</a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a class="text-muted" href="#">Terms</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </footer>
+                </div>
             </div>
         </div>
-
+        
         <script src="${pageContext.request.contextPath}/js/app.js"></script>
 
         <script>
@@ -240,8 +184,5 @@
                 }, 15000);
             });
         </script>
-
-
     </body>
-
 </html>

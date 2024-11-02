@@ -158,4 +158,10 @@ public boolean validatePassword(String password) {
         return matcher.matches();
     }
 
+    // HuyenPTNHE160769
+    // 22/10/2024
+    // Admin get an user information by fullname or email
+    public User findUserByFullNameOrEmail(String keyword) {
+        return userDAO.findUserByFullNameOrEmail(keyword);
+    }
 }

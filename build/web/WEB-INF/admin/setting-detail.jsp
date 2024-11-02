@@ -53,7 +53,8 @@
 
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
         <div class="wrapper">
-            <jsp:include page="../component/sidebar.jsp"></jsp:include>
+            <% request.setAttribute("currentPage", "setting-management"); %>
+            <jsp:include page="../component/sidebar-admin.jsp"></jsp:include>
                 <div class="main">
                 <jsp:include page="../component/header.jsp"></jsp:include>
 
@@ -69,7 +70,7 @@
                                     <div class="card">
                                         <div class="card-body">
 
-                                            <form action="insert-setting" method="get" class="row">
+                                            <form action="insert-setting" method="post" class="row">
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label">Name<span style="color: red;">*</span></label>
                                                     <input type="text" class="form-control" name="name" placeholder="Enter the Setting name" 
