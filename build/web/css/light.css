@@ -23706,7 +23706,7 @@ body[data-theme=colored] .simplebar-scrollbar:before{
     width:264px
 }
 
-/*.modal {
+.modal {
     display: none;
     position: fixed;
     z-index: 1050;
@@ -23716,17 +23716,17 @@ body[data-theme=colored] .simplebar-scrollbar:before{
     height: 100%;
     overflow: hidden;
     background-color: rgba(0, 0, 0, 0.5);
-}*/
+}
 
-/*.modal-dialog {
+.modal-dialog {
     position: relative;
     margin: 5% auto;
     width: 80%;
     max-width: 600px;
-}*/
+}
 
-/*.modal-content {
+.modal-content {
     background-color: #F4F6FA;
     padding: 20px;
     border-radius: 5px;
-}*/
+}
