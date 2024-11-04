@@ -229,7 +229,7 @@ public Team getTeamById(int teamId) {
     }
     return team; // Trả về đội nhóm tìm được
 }
-
+ 
 
     public void updateTeam(Team team) {
         String sql = "UPDATE team SET name = ?, topic = ?, details = ?, project_id = ?, status = ? WHERE id = ?";
@@ -249,6 +249,30 @@ public Team getTeamById(int teamId) {
         }
     }
 
+// Bên trong lớp ProjectConfigDAO
+public boolean addTeam(Team team) {
+    String sql = "INSERT INTO team (name, topic, details, project_id, status) VALUES (?, ?, ?, ?, ?)";
+    boolean isAdded = false;
+
+    try (Connection conn = BaseDAO.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        // Thiết lập các giá trị cho câu lệnh SQL
+        stmt.setString(1, team.getName());
+        stmt.setString(2, team.getTopic());
+        stmt.setString(3, team.getDetails());
+        stmt.setInt(4, team.getProjectId());
+        stmt.setString(5, team.getStatus());
+
+        // Thực thi câu lệnh và kiểm tra xem có thêm thành công không
+        isAdded = stmt.executeUpdate() > 0;
+
+    } catch (SQLException e) {
+        BaseDAO.printSQLException(e);
+    }
+
+    return isAdded; // Trả về true nếu thêm thành công, ngược lại trả về false
+}
 
 
 
@@ -284,7 +308,26 @@ public Team getTeamById(int teamId) {
     }
 
 
+ // Phương thức để xóa một đội theo ID
+    public boolean deleteTeam(int teamId) {
+        String sql = "DELETE FROM team WHERE id = ?";
+        boolean isDeleted = false;
 
+        try (Connection conn = BaseDAO.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Thiết lập giá trị cho câu lệnh SQL
+            stmt.setInt(1, teamId);
+
+            // Thực thi câu lệnh và kiểm tra xem có xóa thành công không
+            isDeleted = stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e); // Xử lý ngoại lệ
+        }
+
+        return isDeleted; // Trả về true nếu xóa thành công, ngược lại trả về false
+    }
 
  public static void main(String[] args) {
     ProjectConfigDAO projectConfigDAO = new ProjectConfigDAO(); // Tạo đối tượng ProjectConfigDAO

@@ -7,6 +7,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import model.Milestone;
 import model.Team;
@@ -60,6 +62,10 @@ public class ProjectConfigController extends HttpServlet {
                 break; 
             case "/updateteam": 
                 updateTeam(request, response);
+            case "/addteam": 
+                addTeam(request, response);
+            case "/deleteteam": 
+                deleteTeam(request, response);    
             break;
             default:
                 listMilestones(request, response);
@@ -153,46 +159,56 @@ public class ProjectConfigController extends HttpServlet {
     }
 
     protected void updateMilestone(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String milestoneIdParam = request.getParameter("id");
-        String code = request.getParameter("code");
-        String name = request.getParameter("name");
-        String details = request.getParameter("details");
-        String priority = request.getParameter("priority");
-        String status = request.getParameter("status");
-        String projectIdParam = request.getParameter("projectId"); // Lấy projectId từ request
+        throws ServletException, IOException {
+    String milestoneIdParam = request.getParameter("id");
+    String code = request.getParameter("code");
+    String name = request.getParameter("name");
+    String details = request.getParameter("details");
+    String priority = request.getParameter("priority");
+    String status = request.getParameter("status");
+    String projectIdParam = request.getParameter("projectId"); // Lấy projectId từ request
+    String deadlineString = request.getParameter("deadline"); // Lấy deadline từ request
 
-        if (milestoneIdParam != null && projectIdParam != null) { // Kiểm tra projectId
-            try {
-                int milestoneId = Integer.parseInt(milestoneIdParam);
-                int projectId = Integer.parseInt(projectIdParam); // Ép kiểu projectId
-                Milestone milestone = projectConfigService.getMilestoneById(milestoneId);
+    if (milestoneIdParam != null && projectIdParam != null) { // Kiểm tra projectId
+        try {
+            int milestoneId = Integer.parseInt(milestoneIdParam);
+            int projectId = Integer.parseInt(projectIdParam); // Ép kiểu projectId
+            Milestone milestone = projectConfigService.getMilestoneById(milestoneId);
 
-                if (milestone != null) {
-                    milestone.setCode(code);
-                    milestone.setName(name);
-                    milestone.setDetails(details);
-                    milestone.setPriority(priority);
-                    milestone.setStatus(status);
+            if (milestone != null) {
+                milestone.setCode(code);
+                milestone.setName(name);
+                milestone.setDetails(details);
+                milestone.setPriority(priority);
+                milestone.setStatus(status);
 
-                    projectConfigService.updateMilestone(milestone); // Cập nhật milestone
-                    request.setAttribute("successMessage", "Milestone updated successfully.");
-
-                    // Điều hướng lại với projectId
-                    response.sendRedirect(request.getContextPath() + "/projectconfig?id=" + projectId);
-                    return;
-                } else {
-                    request.setAttribute("errorMessage", "Milestone not found.");
+                // Chuyển đổi deadline từ String sang LocalDate hoặc Date
+                if (deadlineString != null && !deadlineString.isEmpty()) {
+                    LocalDate deadline = LocalDate.parse(deadlineString);
+                    milestone.setDeadline(java.sql.Date.valueOf(deadline)); // Nếu deadline là kiểu Date
                 }
-            } catch (NumberFormatException e) {
-                request.setAttribute("errorMessage", "Invalid milestone or project ID.");
-            }
-        } else {
-            request.setAttribute("errorMessage", "Milestone ID and Project ID are required.");
-        }
 
-        request.getRequestDispatcher("/WEB-INF/member/project-config.jsp").forward(request, response);
+                projectConfigService.updateMilestone(milestone); // Cập nhật milestone
+                request.setAttribute("successMessage", "Milestone updated successfully.");
+
+                // Điều hướng lại với projectId
+                response.sendRedirect(request.getContextPath() + "/projectconfig?id=" + projectId);
+                return;
+            } else {
+                request.setAttribute("errorMessage", "Milestone not found.");
+            }
+        } catch (NumberFormatException e) {
+            request.setAttribute("errorMessage", "Invalid milestone or project ID.");
+        } catch (DateTimeParseException e) {
+            request.setAttribute("errorMessage", "Invalid date format for deadline.");
+        }
+    } else {
+        request.setAttribute("errorMessage", "Milestone ID and Project ID are required.");
     }
+
+    request.getRequestDispatcher("/WEB-INF/member/project-config.jsp").forward(request, response);
+}
+
 
   protected void listMilestonesAndTeamsAndMembers(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
@@ -319,6 +335,76 @@ protected void updateTeam(HttpServletRequest request, HttpServletResponse respon
 
     // Quay lại trang cấu hình nếu có lỗi
     request.getRequestDispatcher("/WEB-INF/member/project-config.jsp").forward(request, response);
+}
+
+    private void addTeam(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    // Lấy dữ liệu từ form
+    String name = request.getParameter("name");
+    String topic = request.getParameter("topic");
+    String details = request.getParameter("details");
+    String projectIdStr = request.getParameter("projectId"); // Lấy giá trị projectId như chuỗi
+    String status = request.getParameter("status");
+
+    int projectId = 0; // Khởi tạo projectId với giá trị mặc định
+    if (projectIdStr != null && !projectIdStr.isEmpty()) {
+        try {
+            projectId = Integer.parseInt(projectIdStr); // Chuyển đổi chuỗi thành int
+        } catch (NumberFormatException e) {
+            // Xử lý trường hợp projectId không phải là số hợp lệ
+            request.setAttribute("errorMessage", "Invalid project ID. Please enter a valid number.");
+            request.getRequestDispatcher("WEB-INF/member/project-config-team-add.jsp").forward(request, response);
+            return; // Dừng lại nếu có lỗi
+        }
+    } else {
+        // Xử lý trường hợp projectId là null hoặc rỗng
+        request.setAttribute("errorMessage", "Project ID cannot be null or empty.");
+        request.getRequestDispatcher("WEB-INF/member/project-config-team-add.jsp").forward(request, response);
+        return; // Dừng lại nếu có lỗi
+    }
+
+    // Tạo đối tượng Team từ dữ liệu đã lấy
+    Team team = new Team();
+    team.setName(name);
+    team.setTopic(topic);
+    team.setDetails(details);
+    team.setProjectId(projectId);
+    team.setStatus(status);
+
+    // Gọi TeamService để thêm đội mới
+    boolean success = projectConfigService.addTeam(team);
+
+    if (success) {
+        // Thêm thành công, chuyển hướng về trang cấu hình dự án
+        request.setAttribute("successMessage", "Team added successfully!");
+        response.sendRedirect(request.getContextPath() + "/projectconfig");
+    } else {
+        // Thêm thất bại, hiển thị lại trang thêm với thông báo lỗi
+        request.setAttribute("errorMessage", "Failed to add the team. Please try again.");
+        request.getRequestDispatcher("WEB-INF/member/project-config-team-add.jsp").forward(request, response);
+    }
+}
+
+private void deleteTeam(HttpServletRequest request, HttpServletResponse response) 
+        throws ServletException, IOException {
+    String teamIdStr = request.getParameter("id");
+    if (teamIdStr != null) {
+        try {
+            int teamId = Integer.parseInt(teamIdStr);
+            boolean success = projectConfigService.deleteTeam(teamId);
+            if (success) {
+                request.setAttribute("successMessage", "Team deleted successfully!");
+            } else {
+                request.setAttribute("errorMessage", "Failed to delete the team. Please try again.");
+            }
+        } catch (NumberFormatException e) {
+            request.setAttribute("errorMessage", "Invalid team ID. Please try again.");
+        }
+    } else {
+        request.setAttribute("errorMessage", "Team ID cannot be null.");
+    }
+    // Redirect back to the teams list
+    response.sendRedirect("projectconfig");
 }
 
 

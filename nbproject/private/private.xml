@@ -2,36 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-<<<<<<< HEAD
-            <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/ProjectConfigController.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/src/java/model/TeamMember.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/src/java/context/ProjectTypeDAO.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/web/WEB-INF/member/project-config.jsp</file>
-            <file>file:/D:/Do%20An/Project_Management_System/web/WEB-INF/member/project-edit.jsp</file>
-            <file>file:/D:/Do%20An/Project_Management_System/web/WEB-INF/web.xml</file>
-            <file>file:/D:/Do%20An/Project_Management_System/src/java/model/ProjectType.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/ProjectListController.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/nbproject/build-impl.xml</file>
-            <file>file:/D:/Do%20An/Project_Management_System/web/WEB-INF/member/projectlist.jsp</file>
-            <file>file:/D:/Do%20An/Project_Management_System/src/java/context/ProjectConfigDAO.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/src/java/context/ProjectDAO.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/src/java/service/ProjectConfigService.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/src/java/service/ProjectService.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/src/java/context/ProjectTypeSettingDAO.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/ProfileController.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/src/java/model/Milestone.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/web/WEB-INF/member/project-config-edit.jsp</file>
-            <file>file:/D:/Do%20An/Project_Management_System/src/java/model/Team.java</file>
-=======
-            <file>file:/D:/Git/Project/Project_Management_System/src/java/controller/DepartmentController.java</file>
-            <file>file:/D:/Git/Project/Project_Management_System/src/java/service/DepartmentService.java</file>
-            <file>file:/D:/Git/Project/Project_Management_System/src/java/context/SettingDAO.java</file>
-            <file>file:/D:/Git/Project/Project_Management_System/src/java/service/SettingService.java</file>
-            <file>file:/D:/Git/Project/Project_Management_System/src/java/context/DepartmentDAO.java</file>
-            <file>file:/D:/Git/Project/Project_Management_System/web/WEB-INF/admin/dept-config.jsp</file>
-            <file>file:/D:/Git/Project/Project_Management_System/src/java/model/Department_User.java</file>
->>>>>>> 4cd9dd8103145ed9bf92c79e027330ae4eaa2081
-        </group>
+        <group/>
     </open-files>
 </project-private>

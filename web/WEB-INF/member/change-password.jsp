@@ -21,8 +21,8 @@
         <link class="js-stylesheet" href="css/light.css" rel="stylesheet">
         <script src="js/settings.js"></script>
         <style>body {
-            opacity: 0;
-        }</style>
+                opacity: 0;
+            }</style>
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-120946860-10"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
@@ -37,37 +37,37 @@
 
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
         <div class="wrapper">
-<jsp:include page="../component/sidebar.jsp"></jsp:include>
-            <div class="main">
-<jsp:include page="../component/header.jsp"></jsp:include>
-                <main class="content">
-                    <div class="container-fluid p-0">
+            <jsp:include page="../component/sidebar-manager.jsp"></jsp:include>
+                <div class="main">
+                <jsp:include page="../component/header.jsp"></jsp:include>
+                    <main class="content">
+                        <div class="container-fluid p-0">
 
-                        
 
-                        <div class="row">
-                            
 
-                            <div class="col-md-8 col-xl-9">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="card-title">Change Password</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <form action="changepasswordcontroller" method="post"> <!-- Change action URL as necessary -->
-                                            <div class="mb-3">
-                                                <label class="form-label" for="oldPassword">Mật khẩu hiện tại:</label>
-                                                <input type="password" class="form-control" id="oldPassword" name="oldPassword" required>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="form-label" for="newPassword">Mật khẩu mới:</label>
-                                                <input type="password" class="form-control" id="newPassword" name="newPassword" required>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="form-label" for="confirmPassword">Xác nhận mật khẩu mới:</label>
-                                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
-                                            </div>
-                                            <p style="color: blue;">
+                            <div class="row">
+
+
+                                <div class="col-md-8 col-xl-9">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="card-title">Change Password</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <form action="changepasswordcontroller" method="post"> <!-- Change action URL as necessary -->
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="oldPassword">Mật khẩu hiện tại:</label>
+                                                    <input type="password" class="form-control" id="oldPassword" name="oldPassword" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="newPassword">Mật khẩu mới:</label>
+                                                    <input type="password" class="form-control" id="newPassword" name="newPassword" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="confirmPassword">Xác nhận mật khẩu mới:</label>
+                                                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                                                </div>
+                                                <p style="color: blue;">
                                                 ${NOTIFICATION}
                                             </p>
                                             <p style="color: red;">

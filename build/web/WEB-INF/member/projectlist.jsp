@@ -56,7 +56,7 @@
                                                 <option value="true" <c:if test="${status == 'true'}">selected="selected"</c:if>>Active</option>
                                                 <option value="false" <c:if test="${status == 'false'}">selected="selected"</c:if>>Inactive</option>
                                             </select>
-                                            <input type="search" name="keyword" class="form-control" style="width: 270px;" placeholder="Enter Project Name or Code" id="keyword" value="${keyword}">
+                                            <input type="search" name="keyword" class="form-control" style="width: 270px;" placeholder="Enter Project Name" id="keyword" value="${keyword}">
                                             <button type="submit" class="btn btn-primary">Search</button>
                                         </form>
                                         <a class="btn btn-primary" href="<%=request.getContextPath()%>/add-project">Add New</a>

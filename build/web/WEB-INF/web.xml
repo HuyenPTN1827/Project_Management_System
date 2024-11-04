@@ -272,6 +272,14 @@
         <servlet-name>ProjectConfigController</servlet-name>
         <url-pattern>/updateteam</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectConfigController</servlet-name>
+        <url-pattern>/addteam</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectConfigController</servlet-name>
+        <url-pattern>/deleteteam</url-pattern>
+    </servlet-mapping>
     
     <welcome-file-list>
         <welcome-file>login-form</welcome-file>

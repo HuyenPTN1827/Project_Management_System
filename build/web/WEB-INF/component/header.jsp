@@ -156,7 +156,7 @@
                     <a class="dropdown-item" href="changepasswordcontroller"><i class="align-middle me-1" data-feather="pie-chart"></i> Change password</a>
                     
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Log out</a>
+                    <a class="dropdown-item" href="<%=request.getContextPath()%>/logout">Log out</a>
                 </div>
             </li>
         </ul>
