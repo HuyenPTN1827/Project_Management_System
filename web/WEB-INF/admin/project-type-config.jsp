@@ -261,7 +261,7 @@
 
                                                                 </form>
 
-                                                                <a class="btn btn-primary" href="./ProjectTypeSetting?action=add">Create new</a>
+                                                                <a class="btn btn-primary" href="./ProjectTypeSetting?action=add&cuId=${param.id}">Create new</a>
                                                             </div>
                                                         </div>
                                                         <div class="card">
@@ -293,22 +293,22 @@
                                                                                     </c:if>
                                                                                 </td>
                                                                                 <td>
-                                                                                    <a href="./ProjectTypeSetting?action=edit&id=${type.id}" 
-                                                                                       class="btn btn-link text-primary">Configs</a>
+                                                                                    <a href="./ProjectTypeSetting?action=edit&id=${type.id}&cuId=${param.id}" 
+                                                                                       class="btn btn-link text-primary">Edit</a>
 
                                                                                     <c:if test="${type.status eq 'false'}">
-                                                                                        <a href="./ProjectTypeSetting?action=changeStatus&id=${type.id}&status=true"
+                                                                                        <a href="./ProjectTypeSetting?action=changeStatus&id=${type.id}&status=true&cuId=${param.id}"
                                                                                            class="btn btn-link text-success"
                                                                                            onclick="return confirm('Are you sure you want to activate this project type?');">Activate</a>
                                                                                     </c:if>
 
                                                                                     <c:if test="${type.status eq 'true'}">
-                                                                                        <a href="./ProjectTypeSetting?action=changeStatus&id=${type.id}&status=false"
+                                                                                        <a href="./ProjectTypeSetting?action=changeStatus&id=${type.id}&status=false&cuId=${param.id}"
                                                                                            class="btn btn-link text-danger"
                                                                                            onclick="return confirm('Are you sure you want to deactivate this project type?');">Deactivate</a>
                                                                                     </c:if>
 
-                                                                                    <a href="./ProjectTypeSetting?action=delete&id=${type.id}"
+                                                                                    <a href="./ProjectTypeSetting?action=delete&id=${type.id}&cuId=${param.id}"
                                                                                        class="btn btn-link text-danger"
                                                                                        onclick="return confirm('Are you sure you want to deactivate this project type?');">Delete</a>
                                                                                 </td>

@@ -95,7 +95,7 @@
 
                                             </form>
 
-                                            <a class="btn btn-primary" href="./ProjectTypeSetting?action=add">Create new</a>
+                                            <a class="btn btn-primary" href="./ProjectTypeSetting?action=add&cuId=${param.id}">Create new</a>
                                         </div>
                                     </div>
                                 </div>
@@ -129,22 +129,22 @@
                                                             </c:if>
                                                         </td>
                                                         <td>
-                                                            <a href="./ProjectTypeSetting?action=edit&id=${type.id}" 
+                                                            <a href="./ProjectTypeSetting?action=edit&id=${type.id}&cuId=${param.id}" 
                                                                class="btn btn-link text-primary">Configs</a>
                                                         
                                                             <c:if test="${type.status eq 'false'}">
-                                                                <a href="./ProjectTypeSetting?action=changeStatus&id=${type.id}&status=true"
+                                                                <a href="./ProjectTypeSetting?action=changeStatus&id=${type.id}&status=true&cuId=${param.id}"
                                                                    class="btn btn-link text-success"
                                                                    onclick="return confirm('Are you sure you want to activate this project type?');">Activate</a>
                                                             </c:if>
 
                                                             <c:if test="${type.status eq 'true'}">
-                                                                <a href="./ProjectTypeSetting?action=changeStatus&id=${type.id}&status=false"
+                                                                <a href="./ProjectTypeSetting?action=changeStatus&id=${type.id}&status=false&cuId=${param.id}"
                                                                    class="btn btn-link text-danger"
                                                                    onclick="return confirm('Are you sure you want to deactivate this project type?');">Deactivate</a>
                                                             </c:if>
                                                         
-                                                            <a href="./ProjectTypeSetting?action=delete&id=${type.id}"
+                                                            <a href="./ProjectTypeSetting?action=delete&id=${type.id}&cuId=${param.id}"
                                                                class="btn btn-link text-danger"
                                                                onclick="return confirm('Are you sure you want to deactivate this project type?');">Delete</a>
                                                         </td>
@@ -242,6 +242,34 @@
                     }
                 }, 15000);
             });
+        </script>
+              <script>
+                                                                       document.addEventListener("DOMContentLoaded", function () {
+                                                                           var datatablesMulti = $("#datatables-multi5").DataTable({
+                                                                               responsive: true,
+                                                                               paging: true,
+                                                                               searching: false,
+                                                                               info: true,
+                                                                               order: [[0, 'desc']], // Default sort by ID column in descending order
+                                                                               columnDefs: [
+                                                                                   {orderable: false, targets: 4} // Disable sorting on the 'Action' column
+                                                                               ],
+                                                                               language: {
+                                                                                   paginate: {
+                                                                                       previous: "&laquo;",
+                                                                                       next: "&raquo;"
+                                                                                   },
+                                                                                   info: "_TOTAL_ project type(s) found",
+                                                                                   infoEmpty: "No project type found"
+                                                                               },
+                                                                               dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
+                                                                               initComplete: function () {
+                                                                                   // Add necessary classes for alignment
+                                                                                   $('.dataTables_info').addClass('text-left fw-bolder');
+                                                                                   $('.dataTables_length').addClass('mt-2');
+                                                                               }
+                                                                           });
+                                                                       });
         </script>
     </body>
 

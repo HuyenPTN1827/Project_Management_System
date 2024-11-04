@@ -123,7 +123,7 @@ public class ProjectTypeSettingController extends HttpServlet {
 
         ProjectTypeSetting newSetting = new ProjectTypeSetting(0, name, type, value, priority, status, description);
         groupService.createProjectTypeSetting(newSetting);
-        response.sendRedirect("ProjectTypeSetting");
+        response.sendRedirect("project-type-config?id=" + request.getParameter("cuId"));
     }
 
     // Show form to edit an existing ProjectTypeSetting
@@ -148,7 +148,7 @@ public class ProjectTypeSettingController extends HttpServlet {
 
         ProjectTypeSetting updatedSetting = new ProjectTypeSetting(id, name, type, value, priority, status, description);
         groupService.updateProjectTypeSetting(updatedSetting);
-        response.sendRedirect("ProjectTypeSetting");
+        response.sendRedirect("project-type-config?id=" + request.getParameter("cuId"));
     }
 
     // Delete a ProjectTypeSetting
@@ -156,7 +156,8 @@ public class ProjectTypeSettingController extends HttpServlet {
             throws Exception, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         groupService.deleteProjectTypeSetting(id);
-        response.sendRedirect("ProjectTypeSetting");
+        response.sendRedirect("project-type-config?id=" + request.getParameter("cuId"));
+
     }
     // In ProjectTypeSettingServlet.java
 
@@ -165,7 +166,8 @@ public class ProjectTypeSettingController extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         boolean newStatus = Boolean.parseBoolean(request.getParameter("status"));
         groupService.changeStatusProjectTypeSettingById(id, newStatus);
-        response.sendRedirect("ProjectTypeSetting");
+        response.sendRedirect("project-type-config?id=" + request.getParameter("cuId"));
+
     }
 
 }
