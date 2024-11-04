@@ -98,8 +98,8 @@
                                                 </div>
                                                 <div class="mb-3 col-md-12">
                                                     <label class="form-label">Status</label>
-                                                    <input type="radio" name="status" class="form-checkbox" checked="" value="true" /> Active 
-                                                    <input type="radio" name="status" class="form-checkbox" value="false" /> Inactive 
+                                                    <input type="radio" name="status" class="form-checkbox"  value="true" /> Active 
+                                                    <input type="radio" name="status" class="form-checkbox" checked="" value="false" /> Inactive 
                                                 </div>
                                                 <div>
                                                     <button type="submit" value="add" name="action" class="btn btn-lg btn-success">Submit</button>

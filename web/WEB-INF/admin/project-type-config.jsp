@@ -237,7 +237,7 @@
                                                     <div class="col-md-12 col-xl-12">
                                                         <div class="card" style="margin: 0px">
                                                             <div class="d-flex justify-content-between align-items-center" style="margin: 10px;">
-                                                                <form action="ProjectTypeSetting" method="get" class="d-flex align-items-center" style="gap: 15px;">
+                                                                <form action="project-type-config" method="get" class="d-flex align-items-center" style="gap: 15px;">
                                                                     <select name="statusFilter" class="form-select"  style="width: 130px;">
                                                                         <option value="">All Status</option>
                                                                         <option 
@@ -256,7 +256,7 @@
 
                                                                     <input type="search" name="keyword" class="form-control" style="width: 270px;"
                                                                            placeholder="Enter Project Type Name or Code" id="keyword" value="${param.keyword}">
-
+                                                                    <input type="hidden" name="id" value="${param.id}"/>      
                                                                     <button type="submit" class="btn btn-primary">Search</button>
 
                                                                 </form>
