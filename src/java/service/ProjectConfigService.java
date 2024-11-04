@@ -56,5 +56,15 @@ public List<Team> searchTeamsByName(String searchKeyword) {
         return projectConfigDAO.getMembersByProjectId(projectId);
     }
 
+     // Phương thức để thêm một đội mới
+    public boolean addTeam(Team team) {
+        return projectConfigDAO.addTeam(team); // Gọi phương thức trong DAO để thêm đội
+    }
+     // Phương thức để xóa một đội
+    public boolean deleteTeam(int teamId) {
+        return projectConfigDAO.deleteTeam(teamId); // Gọi phương thức trong DAO để xóa đội
+    }
 
+ 
+    
 }

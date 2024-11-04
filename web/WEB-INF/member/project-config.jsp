@@ -164,7 +164,7 @@
                                                 <input type="text" class="form-control me-2" name="searchTeam" placeholder="Search Teams" style="width: 300px;" id="searchTeam">
                                                 <button class="btn btn-primary" type="submit">Search</button>
                                             </form>
-                                            <a href="addTeam" class="btn btn-primary">Add New Team</a>
+                                            <a href="<%=request.getContextPath()%>/addteam" class="btn btn-primary">Add New Team</a>
                                         </div>
                                         ${errorMessage}
                                         <!-- Teams Table -->
@@ -191,6 +191,7 @@
                                                         <td>${team.status}</td>
                                                         <td>
                                                             <a href="editteam?id=${team.id}" class="btn btn-link">Edit</a>
+                                                            <a href="deleteteam?id=${team.id}" class="btn btn-link text-danger" onclick="return confirm('Are you sure you want to delete this team?');">Delete</a>
                                                         </td>
                                                     </tr>
                                                 </c:forEach>

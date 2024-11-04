@@ -32,7 +32,7 @@
 <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
     <div class="wrapper">
         <!-- Include sidebar -->
-        <jsp:include page="../component/sidebar.jsp"></jsp:include>
+        <jsp:include page="../component/sidebar-manager.jsp"></jsp:include>
 
         <div class="main">
             <!-- Include header -->
@@ -65,16 +65,7 @@
                                 </div>
                             </div>
 
-                            <!-- Additional Info -->
-                            <div class="card mb-3">
-                                <div class="card-header">
-                                    <h5 class="card-title">Total work done</h5>
-                                </div>
-                                <div class="card-body">
-                                    <canvas id="chartjs-dashboard-pie" width="228" height="150"></canvas>
-                                    <h4 style="text-align: center">5 weeks: 2 days</h4>
-                                </div>
-                            </div>
+                            
                         </div>
 
                         <div class="col-md-8 col-xl-9">
