@@ -98,11 +98,11 @@
             function closeModal() {
                 document.getElementById('projectTypeModal').style.display = 'none';
             }
-            
+
 //            function closeptUserModal() {
 //                document.getElementById('ptUserModal').style.display = 'none';
 //            }
-            
+
             function closeptCriteriaModal() {
                 document.getElementById('ptCriteriaModal').style.display = 'none';
             }
@@ -275,8 +275,6 @@
                                                                             <th>Value</th>
                                                                             <th>Status</th>
                                                                             <th>Action</th>
-                                                                            <th>Action</th>
-                                                                            <th>Action</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -297,8 +295,7 @@
                                                                                 <td>
                                                                                     <a href="./ProjectTypeSetting?action=edit&id=${type.id}" 
                                                                                        class="btn btn-link text-primary">Configs</a>
-                                                                                </td>
-                                                                                <td>
+
                                                                                     <c:if test="${type.status eq 'false'}">
                                                                                         <a href="./ProjectTypeSetting?action=changeStatus&id=${type.id}&status=true"
                                                                                            class="btn btn-link text-success"
@@ -310,8 +307,7 @@
                                                                                            class="btn btn-link text-danger"
                                                                                            onclick="return confirm('Are you sure you want to deactivate this project type?');">Deactivate</a>
                                                                                     </c:if>
-                                                                                </td>
-                                                                                <td>
+
                                                                                     <a href="./ProjectTypeSetting?action=delete&id=${type.id}"
                                                                                        class="btn btn-link text-danger"
                                                                                        onclick="return confirm('Are you sure you want to deactivate this project type?');">Delete</a>
@@ -607,10 +603,10 @@
                                                                 <td>
                                                                     <!--<a href="<%=request.getContextPath()%>/edit-project-type-criteria?id=${ptc.id}&typeId=${projectType.id}"
                                                                            class="btn btn-link text-primary">Edit</a>-->
-                                                                    
+
                                                                     <a href="javascript:void(0);" class="btn btn-link text-primary" 
-                                                                           onclick="openPTCriteriaModal(${projectType.id}, ${ptc.id});">Edit</a>
-                                                                           
+                                                                       onclick="openPTCriteriaModal(${projectType.id}, ${ptc.id});">Edit</a>
+
                                                                     <c:if test="${ptc.status eq 'false'}">
                                                                         <a href="<%=request.getContextPath()%>/change-status-project-type-criteria?id=${ptc.id}&status=${ptc.status}&typeId=${projectType.id}"
                                                                            class="btn btn-link text-success"
