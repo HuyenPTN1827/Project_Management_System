@@ -72,45 +72,18 @@
 
                                             <form action="insert-setting" method="post" class="row">
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Name<span style="color: red;">*</span></label>
+                                                    <label class="form-label">Name <span style="color: red;">*</span></label>
                                                     <input type="text" class="form-control" name="name" placeholder="Enter the Setting name" 
                                                            value="${name}" required>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Type<span style="color: red;">*</span></label>
-                                                    <select name="type" class="form-select" required>
-                                                        <option value="" hidden disable selected>Choose Setting Type</option>
-                                                        <option 
-                                                            <c:if test="${type eq 'User Role'}">
-                                                                selected="selected"
-                                                            </c:if>
-                                                            value="User Role">User Role
-                                                        </option>
-                                                        <option 
-                                                            <c:if test="${type eq 'Dept Role'}">
-                                                                selected="selected"
-                                                            </c:if>
-                                                            value="Dept Role">Dept Role
-                                                        </option>
-                                                        <!--                                                        <option 
-                                                        <%--<c:if test="${type eq 'Project Role'}">--%>
-                                                            selected="selected"
-                                                        <%--</c:if>--%>
-                                                        value="Project Role">Project Role
-                                                    </option>-->
-                                                        <option 
-                                                            <c:if test="${type eq 'Business Term'}">
-                                                                selected="selected"
-                                                            </c:if>
-                                                            value="Business Term">Business Term
-                                                        </option>
-                                                        <option 
-                                                            <c:if test="${type eq 'Defect Severity'}">
-                                                                selected="selected"
-                                                            </c:if>
-                                                            value="Defect Severity">Defect Severity
-                                                        </option>
+                                                    <label class="form-label">Type</label>
+                                                    <select name="type" class="form-select">
+                                                        <option value="">Choose Setting Type</option>
+                                                        <c:forEach items="${type}" var="t">
+                                                            <option value="${t.name}">${t.name}</option>
+                                                        </c:forEach>
                                                     </select>
                                                 </div>
 
@@ -121,7 +94,7 @@
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Priority<span style="color: red;">*</span></label>
+                                                    <label class="form-label">Priority <span style="color: red;">*</span></label>
                                                     <input type="number" class="form-control" name="priority" placeholder="Enter the Setting priority" 
                                                            value="${priority}" required>
                                                 </div>
@@ -154,44 +127,23 @@
                                                 <input type="hidden" name="id" value="${setting.id}"/>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Name<span style="color: red;">*</span></label>
+                                                    <label class="form-label">Name <span style="color: red;">*</span></label>
                                                     <input type="text" class="form-control" name="name" placeholder="Enter the Setting name" 
                                                            value="${setting.name}" required>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Type<span style="color: red;">*</span></label>
-                                                    <select name="type" class="form-select" required>
-                                                        <option 
-                                                            <c:if test="${setting.type eq 'User Role'}">
-                                                                selected="selected"
-                                                            </c:if>
-                                                            value="User Role">User Role
-                                                        </option>
-                                                        <option 
-                                                            <c:if test="${setting.type eq 'Dept Role'}">
-                                                                selected="selected"
-                                                            </c:if>
-                                                            value="Dept Role">Dept Role
-                                                        </option>
-                                                        <!--                                                        <option 
-                                                        <%--<c:if test="${setting.type eq 'Project Role'}">--%>
-                                                            selected="selected"
-                                                        <%--</c:if>--%>
-                                                        value="Project Role">Project Role
-                                                    </option>-->
-                                                        <option 
-                                                            <c:if test="${setting.type eq 'Business Term'}">
-                                                                selected="selected"
-                                                            </c:if>
-                                                            value="Business Term">Business Term
-                                                        </option>
-                                                        <option 
-                                                            <c:if test="${setting.type eq 'Defect Severity'}">
-                                                                selected="selected"
-                                                            </c:if>
-                                                            value="Defect Severity">Defect Severity
-                                                        </option>
+                                                    <label class="form-label">Type</label>
+                                                    <select name="type" class="form-select">
+                                                        <option value="">Choose Setting Type</option>
+                                                        <c:forEach items="${type}" var="t">
+                                                            <option 
+                                                                <c:if test="${setting.type eq t.name}">
+                                                                    selected="selected"
+                                                                </c:if>
+                                                                value="${t.name}">${t.name}
+                                                            </option>
+                                                        </c:forEach>
                                                     </select>
                                                 </div>
 
@@ -202,13 +154,13 @@
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Priority<span style="color: red;">*</span></label>
+                                                    <label class="form-label">Priority <span style="color: red;">*</span></label>
                                                     <input type="number" class="form-control" name="priority" placeholder="Enter the Priority" 
                                                            value="${setting.priority}" required>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Status<span style="color: red;">*</span></label>
+                                                    <label class="form-label">Status</label>
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio" name="status"
                                                                <c:if test="${setting.status eq 'true'}">

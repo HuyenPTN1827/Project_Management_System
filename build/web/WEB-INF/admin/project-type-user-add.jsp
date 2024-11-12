@@ -101,7 +101,7 @@
                                             <input type="hidden" name="id" value="${userType.id}">
 
                                             <div class="mb-3 col-md-6">
-                                                <label class="form-label">Full Name<span style="color: red;">*</span></label>
+                                                <label class="form-label">Full Name <span style="color: red;">*</span></label>
                                                 <input type="text" class="form-control" name="fullname" placeholder="Enter the Full name" 
                                                        value="${userType.full_name}" readonly>
                                             </div>
@@ -113,13 +113,13 @@
                                             </div>
 
                                             <div class="mb-3 col-md-6">
-                                                <label class="form-label">Email<span style="color: red;">*</span></label>
+                                                <label class="form-label">Email <span style="color: red;">*</span></label>
                                                 <input type="text" class="form-control" name="email" placeholder="Enter the Email address" 
                                                        value="${userType.email}" readonly>
                                             </div>
 
                                             <div class="mb-3 col-md-6">
-                                                <label class="form-label">Project Role<span style="color: red;">*</span></label>
+                                                <label class="form-label">Project Role <span style="color: red;">*</span></label>
                                                 <select name="pjRole" class="form-select" required>
                                                     <option value="" disable hidden>Choose Project Role</option>
                                                     <c:forEach items="${ptSetting}" var="r">

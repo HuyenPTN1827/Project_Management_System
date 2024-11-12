@@ -110,6 +110,7 @@ public class SettingController extends HttpServlet {
 
         // Send search results and list depts, roles to JSP page
         List<Setting> listSetting = settingService.getAllSettings(keyword, type, status);
+        List<Setting> listType = settingService.getTypeList();
 
         // Path to user list page
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/setting-list.jsp");
@@ -119,6 +120,7 @@ public class SettingController extends HttpServlet {
         request.setAttribute("listSetting", listSetting);
         request.setAttribute("keyword", keyword);
         request.setAttribute("type", type);
+        request.setAttribute("listType", listType);
         request.setAttribute("status", status);
         dispatcher.forward(request, response);
     }
@@ -128,7 +130,9 @@ public class SettingController extends HttpServlet {
 //    Show form insert Setting
     private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Path to setting information input form page
+        List<Setting> type = settingService.getTypeList();
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/setting-detail.jsp");
+        request.setAttribute("type", type);
         dispatcher.forward(request, response);
     }
 
@@ -159,10 +163,12 @@ public class SettingController extends HttpServlet {
     private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         Setting setting = settingService.getSettingById(id);
+        List<Setting> type = settingService.getTypeList();
 
         // Path to setting information input form page
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/setting-detail.jsp");
         request.setAttribute("setting", setting);
+        request.setAttribute("type", type);
         dispatcher.forward(request, response);
     }
 

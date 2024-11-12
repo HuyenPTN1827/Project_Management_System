@@ -90,24 +90,28 @@
                                         <div class="card-header">
                                             <div class="d-flex justify-content-between align-items-center" style="margin: 10px;">
                                                 <form action="project-type-management" method="post" class="d-flex align-items-center" style="gap: 15px;">
-                                                    <select name="status" class="form-select"  style="width: 130px;">
-                                                        <option value="">All Status</option>
+                                                    <div class="col-md-4">
+                                                        <select name="status" class="form-select">
+                                                            <option value="">All Status</option>
+                                                            <option 
+                                                            <c:if test="${status eq 'true'}">
+                                                                selected="selected"
+                                                            </c:if>
+                                                            value="true">Active
+                                                        </option>
                                                         <option 
-                                                        <c:if test="${status eq 'true'}">
-                                                            selected="selected"
-                                                        </c:if>
-                                                        value="true">Active
-                                                    </option>
-                                                    <option 
-                                                        <c:if test="${status eq 'false'}">
-                                                            selected="selected"
-                                                        </c:if>
-                                                        value="false">Inactive
-                                                    </option>
-                                                </select>
+                                                            <c:if test="${status eq 'false'}">
+                                                                selected="selected"
+                                                            </c:if>
+                                                            value="false">Inactive
+                                                        </option>
+                                                    </select>
+                                                </div>
 
-                                                <input type="search" name="keyword" class="form-control" style="width: 270px;"
-                                                       placeholder="Enter Project Type Name or Code" id="keyword" value="${keyword}">
+                                                <div class="col-md-8">
+                                                    <input type="search" name="keyword" class="form-control"
+                                                           placeholder="Enter Project Type Name or Code" id="keyword" value="${keyword}">
+                                                </div>
 
                                                 <button type="submit" class="btn btn-primary">Search</button>
 

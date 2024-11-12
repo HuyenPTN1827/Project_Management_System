@@ -72,58 +72,48 @@
                                         <div class="card-header">
                                             <div class="d-flex justify-content-between align-items-center" style="margin: 10px;">
                                                 <form action="setting-management" method="post" class="d-flex align-items-center" style="gap: 15px;">
-                                                    <select name="type" class="form-select" style="width: 120px;">
-                                                        <option value="">All Types</option>
+                                                    <div class="col-md-3">
+                                                        <select name="type" class="form-select">
+                                                            <option value="">All Types</option>
+                                                            <option 
+                                                            <c:if test="${type eq 'parent'}">
+                                                                selected="selected"
+                                                            </c:if>
+                                                            value="parent">Parent Type
+                                                        </option> 
+                                                        <c:forEach items="${listType}" var="t">
+                                                            <option 
+                                                                <c:if test="${type eq t.name}">
+                                                                    selected="selected"
+                                                                </c:if>
+                                                                value="${t.name}">${t.name}
+                                                            </option>
+                                                        </c:forEach>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-md-3">
+                                                    <select name="status" class="form-select">
+                                                        <option value="">All Status</option>
                                                         <option 
-                                                        <c:if test="${type eq 'User Role'}">
-                                                            selected="selected"
-                                                        </c:if>
-                                                        value="User Role">User Role
-                                                    </option>
-                                                    <option 
-                                                        <c:if test="${type eq 'Dept Role'}">
-                                                            selected="selected"
-                                                        </c:if>
-                                                        value="Dept Role">Dept Role
-                                                    </option>
-                                                    <!--                                                    <option 
-                                                    <%--<c:if test="${type eq 'Project Role'}">--%>
-                                                        selected="selected"
-                                                    <%--</c:if>--%>
-                                                    value="Project Role">Project Role
-                                                </option>-->
-                                                    <option 
-                                                        <c:if test="${type eq 'Business Term'}">
-                                                            selected="selected"
-                                                        </c:if>
-                                                        value="Business Term">Business Term
-                                                    </option>
-                                                    <option 
-                                                        <c:if test="${type eq 'Defect Severity'}">
-                                                            selected="selected"
-                                                        </c:if>
-                                                        value="Defect Severity">Defect Severity
-                                                    </option>
-                                                </select>
+                                                            <c:if test="${status eq 'true'}">
+                                                                selected="selected"
+                                                            </c:if>
+                                                            value="true">Active
+                                                        </option>
+                                                        <option 
+                                                            <c:if test="${status eq 'false'}">
+                                                                selected="selected"
+                                                            </c:if>
+                                                            value="false">Inactive
+                                                        </option>
+                                                    </select>
+                                                </div>
 
-                                                <select name="status" class="form-select"  style="width: 130px;">
-                                                    <option value="">All Status</option>
-                                                    <option 
-                                                        <c:if test="${status eq 'true'}">
-                                                            selected="selected"
-                                                        </c:if>
-                                                        value="true">Active
-                                                    </option>
-                                                    <option 
-                                                        <c:if test="${status eq 'false'}">
-                                                            selected="selected"
-                                                        </c:if>
-                                                        value="false">Inactive
-                                                    </option>
-                                                </select>
-
-                                                <input type="search" name="keyword" class="form-control" 
-                                                       placeholder="Enter Setting Name or Value" id="keyword" value="${keyword}">
+                                                <div class="col-md-5">
+                                                    <input type="search" name="keyword" class="form-control" 
+                                                           placeholder="Enter Setting Name or Value" id="keyword" value="${keyword}">
+                                                </div>
 
                                                 <button type="submit" class="btn btn-primary">Search</button>
 

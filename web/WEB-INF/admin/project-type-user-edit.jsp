@@ -75,7 +75,7 @@
                                             <input type="hidden" name="typeId" value="${ptUser.pjType.id}">
 
                                             <div class="mb-3 col-md-6">
-                                                <label class="form-label">Full Name<span style="color: red;">*</span></label>
+                                                <label class="form-label">Full Name <span style="color: red;">*</span></label>
                                                 <input type="text" class="form-control" name="fullname" placeholder="Enter the Full name" 
                                                        value="${ptUser.user.full_name}" readonly>
                                             </div>
@@ -87,13 +87,13 @@
                                             </div>
 
                                             <div class="mb-3 col-md-6">
-                                                <label class="form-label">Email<span style="color: red;">*</span></label>
+                                                <label class="form-label">Email <span style="color: red;">*</span></label>
                                                 <input type="text" class="form-control" name="email" placeholder="Enter the Email address" 
                                                        value="${ptUser.user.email}" readonly>
                                             </div>
 
                                             <div class="mb-3 col-md-6">
-                                                <label class="form-label">Project Role<span style="color: red;">*</span></label>
+                                                <label class="form-label">Project Role <span style="color: red;">*</span></label>
                                                 <select name="pjRole" class="form-select" required>
                                                     <option value="" disable hidden>Choose Project Role</option>
                                                     <c:forEach items="${ptSetting}" var="r">
@@ -108,7 +108,7 @@
                                             </div>
 
                                             <div class="mb-3 col-md-6">
-                                                <label class="form-label">Status<span style="color: red;">*</span></label>
+                                                <label class="form-label">Status</label>
                                                 <div class="check">
                                                     <input class="form-check-input" type="radio" name="status"
                                                            <c:if test="${ptUser.status eq 'true'}">

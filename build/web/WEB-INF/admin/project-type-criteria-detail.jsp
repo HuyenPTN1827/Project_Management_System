@@ -59,19 +59,19 @@
                                 <input type="hidden" name="typeId" value="${typeId}">
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Name<span style="color: red;">*</span></label>
+                                    <label class="form-label">Name <span style="color: red;">*</span></label>
                                     <input type="text" class="form-control" name="name" placeholder="Enter the Eval Criteria" 
                                            value="${name}" required>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Weight<span style="color: red;">*</span></label>
+                                    <label class="form-label">Weight <span style="color: red;">*</span></label>
                                     <input type="number" class="form-control" name="weight" placeholder="Enter the Criteria weight" 
                                            value="${weight}" required>
                                 </div>
 
                                 <div class="mb-3 col-md-12">
-                                    <label class="form-label">Project Phase<span style="color: red;">*</span></label>
+                                    <label class="form-label">Project Phase <span style="color: red;">*</span></label>
                                     <select name="phaseId" class="form-select" required>
                                         <option value="" disable hidden>Choose Project Phase</option>
                                         <c:forEach items="${phase}" var="p">
@@ -103,19 +103,19 @@
                                 <input type="hidden" name="id" value="${ptCriteria.id}">
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Name<span style="color: red;">*</span></label>
+                                    <label class="form-label">Name <span style="color: red;">*</span></label>
                                     <input type="text" class="form-control" name="name" placeholder="Enter the Eval Criteria" 
                                            value="${ptCriteria.name}" required>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Weight<span style="color: red;">*</span></label>
+                                    <label class="form-label">Weight <span style="color: red;">*</span></label>
                                     <input type="number" class="form-control" name="weight" placeholder="Enter the Criteria weight" 
                                            value="${ptCriteria.weight}" required>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Project Phase<span style="color: red;">*</span></label>
+                                    <label class="form-label">Project Phase <span style="color: red;">*</span></label>
                                     <select name="phaseId" class="form-select" required>
                                         <option value="" disable hidden>Choose Project Phase</option>
                                         <c:forEach items="${phase}" var="p">
@@ -130,7 +130,7 @@
                                 </div>
 
                                 <div class="mb-3 col-md-6 mt-1">
-                                    <label class="form-label">Status<span style="color: red;">*</span></label>
+                                    <label class="form-label">Status</label>
                                     <div class="check">
                                         <input class="form-check-input" type="radio" name="status"
                                                <c:if test="${ptCriteria.status eq 'true'}">

@@ -88,7 +88,7 @@
                                 <input type="hidden" name="id" value="${deptUser.id}">
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Full Name<span style="color: red;">*</span></label>
+                                    <label class="form-label">Full Name <span style="color: red;">*</span></label>
                                     <input type="text" class="form-control" name="fullname" placeholder="Enter the Full name" 
                                            value="${deptUser.full_name}" readonly>
                                 </div>
@@ -100,13 +100,13 @@
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Email<span style="color: red;">*</span></label>
+                                    <label class="form-label">Email <span style="color: red;">*</span></label>
                                     <input type="text" class="form-control" name="email" placeholder="Enter the Email address" 
                                            value="${deptUser.email}" readonly>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Project Role<span style="color: red;">*</span></label>
+                                    <label class="form-label">Project Role <span style="color: red;">*</span></label>
                                     <select name="roleId" class="form-select" required>
                                         <option value="" disable hidden>Choose Department Role</option>
                                         <c:forEach items="${setting}" var="r">
@@ -130,7 +130,7 @@
                                         <input type="hidden" name="deptId" value="${deptUser.dept.id}">
 
                                         <div class="mb-3 col-md-6">
-                                            <label class="form-label">Full Name<span style="color: red;">*</span></label>
+                                            <label class="form-label">Full Name <span style="color: red;">*</span></label>
                                             <input type="text" class="form-control" name="fullname" placeholder="Enter the Full name" 
                                                    value="${deptUser.user.full_name}" readonly>
                                         </div>
@@ -142,13 +142,13 @@
                                         </div>
 
                                         <div class="mb-3 col-md-6">
-                                            <label class="form-label">Email<span style="color: red;">*</span></label>
+                                            <label class="form-label">Email <span style="color: red;">*</span></label>
                                             <input type="text" class="form-control" name="email" placeholder="Enter the Email address" 
                                                    value="${deptUser.user.email}" readonly>
                                         </div>
 
                                         <div class="mb-3 col-md-6">
-                                            <label class="form-label">Department Role<span style="color: red;">*</span></label>
+                                            <label class="form-label">Department Role <span style="color: red;">*</span></label>
                                             <select name="roleId" class="form-select" required>
                                                 <option value="" disable hidden>Choose Project Role</option>
                                                 <c:forEach items="${setting}" var="r">
@@ -163,7 +163,7 @@
                                         </div>
 
                                         <div class="mb-3 col-md-6">
-                                            <label class="form-label">Status<span style="color: red;">*</span></label>
+                                            <label class="form-label">Status</label>
                                             <div class="check">
                                                 <input class="form-check-input" type="radio" name="status"
                                                        <c:if test="${deptUser.status eq 'true'}">

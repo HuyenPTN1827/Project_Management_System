@@ -83,7 +83,7 @@
 
                                             <form action="insert-user" method="post" class="row">
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Full Name<span style="color: red;">*</span></label>
+                                                    <label class="form-label">Full Name <span style="color: red;">*</span></label>
                                                     <input type="text" class="form-control" name="fullname" placeholder="Enter the Full name" 
                                                            value="${fullname}" required>
                                                 </div>
@@ -95,7 +95,7 @@
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Email<span style="color: red;">*</span></label>
+                                                    <label class="form-label">Email <span style="color: red;">*</span></label>
                                                     <input type="text" class="form-control" name="email" placeholder="Enter the Email address" 
                                                            value="${email}" required>
                                                 </div>
@@ -116,12 +116,12 @@
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Password<span style="color: red;">*</span></label>
+                                                    <label class="form-label">Password <span style="color: red;">*</span></label>
                                                     <input type="password" class="form-control" name="password" placeholder="Enter the Password" required>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Role<span style="color: red;">*</span></label>
+                                                    <label class="form-label">Role <span style="color: red;">*</span></label>
                                                     <select name="role" class="form-select">
                                                         <c:forEach items="${role}" var="r">
                                                             <option 
@@ -173,7 +173,7 @@
                                                 <input type="hidden" name="password" value="${userDetail.password}"/>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Full Name<span style="color: red;">*</span></label>
+                                                    <label class="form-label">Full Name <span style="color: red;">*</span></label>
                                                     <input type="text" class="form-control" name="fullname" placeholder="Enter the Full name" 
                                                            value="${userDetail.full_name}" required>
                                                 </div>
@@ -185,7 +185,7 @@
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Email<span style="color: red;">*</span></label>
+                                                    <label class="form-label">Email <span style="color: red;">*</span></label>
                                                     <input type="text" class="form-control" name="email" placeholder="Enter the Email address" 
                                                            value="${userDetail.email}" required>
                                                 </div>
@@ -206,7 +206,7 @@
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Role<span style="color: red;">*</span></label>
+                                                    <label class="form-label">Role <span style="color: red;">*</span></label>
                                                     <select name="role" class="form-select">
                                                         <c:forEach items="${role}" var="r">
                                                             <option 
@@ -220,7 +220,7 @@
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Status<span style="color: red;">*</span></label>
+                                                    <label class="form-label">Status</label>
 
                                                     <c:if test="${userDetail.status eq '3'}">
                                                         <input type="hidden" name="status" value="3">

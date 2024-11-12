@@ -52,7 +52,7 @@
 
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
         <div class="wrapper">
-            <% request.setAttribute("currentPage", "project-type-management"); %>
+            <% request.setAttribute("currentPage", "department-management"); %>
             <jsp:include page="../component/sidebar-admin.jsp"></jsp:include>
                 <div class="main">
                 <jsp:include page="../component/header.jsp"></jsp:include>
@@ -99,7 +99,7 @@
                                             <input type="hidden" name="id" value="${deptUser.id}">
 
                                             <div class="mb-3 col-md-6">
-                                                <label class="form-label">Full Name<span style="color: red;">*</span></label>
+                                                <label class="form-label">Full Name <span style="color: red;">*</span></label>
                                                 <input type="text" class="form-control" name="fullname" placeholder="Enter the Full name" 
                                                        value="${deptUser.full_name}" readonly>
                                             </div>
@@ -111,13 +111,13 @@
                                             </div>
 
                                             <div class="mb-3 col-md-6">
-                                                <label class="form-label">Email<span style="color: red;">*</span></label>
+                                                <label class="form-label">Email <span style="color: red;">*</span></label>
                                                 <input type="text" class="form-control" name="email" placeholder="Enter the Email address" 
                                                        value="${deptUser.email}" readonly>
                                             </div>
 
                                             <div class="mb-3 col-md-6">
-                                                <label class="form-label">Project Role<span style="color: red;">*</span></label>
+                                                <label class="form-label">Project Role <span style="color: red;">*</span></label>
                                                 <select name="roleId" class="form-select" required>
                                                     <option value="" disable hidden>Choose Department Role</option>
                                                     <c:forEach items="${setting}" var="r">

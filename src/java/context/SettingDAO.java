@@ -40,7 +40,7 @@ public class SettingDAO {
         }
         return setting;
     }
-    
+
     // HuyenPTNHE160769
     // 31/10/2024
     // Get department roles list
@@ -78,7 +78,9 @@ public class SettingDAO {
         if (keyword != null && !keyword.isEmpty()) {
             sql += " AND (LOWER(name) LIKE ? OR LOWER(value) LIKE ?)";
         }
-        if (type != null && !type.isEmpty()) {
+        if ("parent".equals(type)) {
+            sql += " AND (type IS NULL OR type = '')";
+        } else if (type != null && !type.isEmpty()) {
             sql += " AND type = ?";
         }
         if (status != null) {
@@ -94,7 +96,8 @@ public class SettingDAO {
                 stm.setString(index++, "%" + keywordPattern + "%");
                 stm.setString(index++, "%" + keywordPattern + "%");
             }
-            if (type != null && !type.isEmpty()) {
+            // Set type only if it is not "parent" and not empty
+            if (type != null && !type.isEmpty() && !"parent".equals(type)) {
                 stm.setString(index++, type);
             }
             if (status != null) {
@@ -159,10 +162,10 @@ public class SettingDAO {
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             stm.setString(1, setting.getName());
-        stm.setString(2, setting.getType());
-        stm.setString(3, setting.getValue());
-        stm.setInt(4, setting.getPriority());
-        stm.setString(5, setting.getDescription());
+            stm.setString(2, setting.getType());
+            stm.setString(3, setting.getValue());
+            stm.setInt(4, setting.getPriority());
+            stm.setString(5, setting.getDescription());
 
             result = stm.executeUpdate();
         } catch (SQLException e) {
@@ -214,26 +217,49 @@ public class SettingDAO {
         }
         return rowUpdated;
     }
-    
+
     public List<Setting> getPriorityUserRolesList() {
-  List<Setting> settings = new ArrayList<>();
+        List<Setting> settings = new ArrayList<>();
 
-  String sql = "SELECT id, name, value, priority FROM pms.setting WHERE type = 'User Role' AND status = 1 ORDER BY priority DESC;";
+        String sql = "SELECT id, name, value, priority FROM pms.setting WHERE type = 'User Role' AND status = 1 ORDER BY priority DESC;";
 
-  try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
-    ResultSet rs = stm.executeQuery();
-    while (rs.next()) {
-      Setting s = new Setting();
-      s.setId(rs.getInt("id"));
-      s.setName(rs.getString("name"));
-      s.setValue(rs.getString("value"));
-      s.setPriority(rs.getInt("priority")); // Thêm dòng này để gán giá trị cho priority
-      settings.add(s);
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Setting s = new Setting();
+                s.setId(rs.getInt("id"));
+                s.setName(rs.getString("name"));
+                s.setValue(rs.getString("value"));
+                s.setPriority(rs.getInt("priority")); // Thêm dòng này để gán giá trị cho priority
+                settings.add(s);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return settings;
     }
-  } catch (SQLException e) {
-    BaseDAO.printSQLException(e);
-  }
-  return settings;
-}
-}
 
+    // HuyenPTNHE160769
+    // 11/11/2024
+    // Get type list
+    public List<Setting> getTypeList() {
+        List<Setting> setting = new ArrayList<>();
+
+        String sql = "SELECT * FROM pms.setting WHERE (type IS NULL OR type = '') AND status = 1;";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Setting s = new Setting();
+                s.setId(rs.getInt("id"));
+                s.setName(rs.getString("name"));
+                s.setValue(rs.getString("value"));
+                setting.add(s);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return setting;
+    }
+
+}

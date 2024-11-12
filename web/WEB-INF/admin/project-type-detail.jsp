@@ -56,17 +56,15 @@
             <div class="card">
                 <div class="card-body">
                     <c:if test="${projectType == null}">
-                        <!--<h3>Create New Project Type</h3>-->
                         <form action="insert-project-type" method="post" class="row">
-                            <!-- Form fields for creating new -->
                             <div class="mb-3 col-md-6">
-                                <label class="form-label">Name<span style="color: red;">*</span></label>
+                                <label class="form-label">Name <span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" name="name" placeholder="Enter the Project Type name" 
                                        value="${name}" required>
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label class="form-label">Code<span style="color: red;">*</span></label>
+                                <label class="form-label">Code <span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" name="code" placeholder="Enter the Project Type code" 
                                        value="${code}" required>
                             </div>
@@ -84,26 +82,20 @@
                     </c:if>
 
                     <c:if test="${projectType != null}">
-                        <!--<h3>Edit Project Type</h3>-->
                         <form action="update-project-type" method="post" class="row">
                             <input type="hidden" name="id" value="${projectType.id}">
                             <div class="mb-3 col-md-6">
-                                <label class="form-label">Name<span style="color: red;">*</span></label>
+                                <label class="form-label">Name <span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" name="name" value="${projectType.name}" required>
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label class="form-label">Code<span style="color: red;">*</span></label>
+                                <label class="form-label">Code <span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" name="code" value="${projectType.code}" required>
                             </div>
 
-                            <div class="mb-3 col-md-12">
-                                <label class="form-label">Details</label>
-                                <textarea class="form-control" name="details" rows="3">${projectType.details}</textarea>
-                            </div>
-
                             <div class="mb-3 col-md-6">
-                                <label class="form-label">Status<span style="color: red;">*</span></label>
+                                <label class="form-label">Status</label>
                                 <div class="check">
                                     <input class="form-check-input" type="radio" name="status"
                                            <c:if test="${projectType.status eq 'true'}">
@@ -116,6 +108,11 @@
                                            </c:if>
                                            value="false"> Inactive
                                 </div>
+                            </div>
+
+                            <div class="mb-3 col-md-12">
+                                <label class="form-label">Details</label>
+                                <textarea class="form-control" name="details" rows="3">${projectType.details}</textarea>
                             </div>
 
                             <div class="d-flex justify-content-end">

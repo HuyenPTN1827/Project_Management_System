@@ -91,7 +91,7 @@
     </head>
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
         <div class="wrapper">
-            <% request.setAttribute("currentPage", "project-type-management"); %>
+            <% request.setAttribute("currentPage", "department-management"); %>
             <jsp:include page="../component/sidebar-admin.jsp"></jsp:include>
                 <div class="main">
                 <jsp:include page="../component/header.jsp"></jsp:include>
@@ -107,7 +107,7 @@
 
                         <div class="row">
                             <div class="col-md-12 col-xl-12">
-                                <div class="card">
+<!--                                <div class="card">
                                     <div class="card-header">
                                         <div class="d-flex justify-content-between align-items-center" style="margin: 10px;">
                                             <form action="department-management" method="post" class="d-flex align-items-center" style="gap: 15px;">
@@ -130,7 +130,7 @@
                                             </form>
                                         </div>
                                     </div>
-                                </div>
+                                </div>-->
 
                                 <!-- Department Modal -->
                                 <div id="departmentModal" class="modal" tabindex="-1" role="dialog">

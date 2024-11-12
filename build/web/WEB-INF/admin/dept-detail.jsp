@@ -60,13 +60,13 @@
                         <c:if test="${department == null}">
                             <form action="insert-department" method="post" class="row">
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Name<span style="color: red;">*</span></label>
+                                    <label class="form-label">Name <span style="color: red;">*</span></label>
                                     <input type="text" class="form-control" name="name" placeholder="Enter the Department name" 
                                            value="${name}" required>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Code<span style="color: red;">*</span></label>
+                                    <label class="form-label">Code <span style="color: red;">*</span></label>
                                     <input type="text" class="form-control" name="code" placeholder="Enter the Department code" 
                                            value="${code}" required>
                                 </div>
@@ -103,13 +103,13 @@
                                 <input type="hidden" name="id" value="${department.id}"/>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Name<span style="color: red;">*</span></label>
+                                    <label class="form-label">Name <span style="color: red;">*</span></label>
                                     <input type="text" class="form-control" name="name" placeholder="Enter the Department name" 
                                            value="${department.name}" required>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Code<span style="color: red;">*</span></label>
+                                    <label class="form-label">Code <span style="color: red;">*</span></label>
                                     <input type="text" class="form-control" name="code" placeholder="Enter the Department code" 
                                            value="${department.code}" required>
                                 </div>
@@ -130,7 +130,7 @@
                                 </div>
 
                                 <div class="mb-3 col-md-6 mt-1">
-                                    <label class="form-label">Status<span style="color: red;">*</span></label>
+                                    <label class="form-label">Status</label>
                                     <div class="check">
                                         <input class="form-check-input" type="radio" name="status"
                                                <c:if test="${department.status eq 'true'}">

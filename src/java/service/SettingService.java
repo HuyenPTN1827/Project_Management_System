@@ -75,4 +75,11 @@ public class SettingService {
     public List<Setting> getPriorityUserRolesList(){
         return settingDAO.getPriorityUserRolesList();
     }
+    
+    // HuyenPTNHE160769
+    // 11/11/2024
+    // Get type list
+    public List<Setting> getTypeList() {
+        return settingDAO.getTypeList();
+    }
 }
