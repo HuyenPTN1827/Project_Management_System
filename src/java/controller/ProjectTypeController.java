@@ -253,6 +253,7 @@ public class ProjectTypeController extends HttpServlet {
         Boolean statusCriteria = statusCriteriaStr != null && !statusCriteriaStr.isEmpty() ? Boolean.valueOf(statusCriteriaStr) : null;
 
         ProjectType projectType = ptService.getProjectTypeById(id);
+        List<ProjectType> listType = ptService.getAllProjectTypes(null, null);
         List<ProjectTypeSetting> ptSetting = ptService.getProjectRoleList(id);
         List<ProjectType_User> ptUser = ptService.getAllProjectTypeUsers(keywordUser, roleId, statusUser, id);
         List<ProjectPhase> phase = ptService.getPhaseList(id);
@@ -260,6 +261,7 @@ public class ProjectTypeController extends HttpServlet {
 
         request.setAttribute("sl", ptService.getAllProjectTypeSettings(keyword, statusFilter));
         request.setAttribute("projectType", projectType);
+        request.setAttribute("listType", listType);
         request.setAttribute("ptSetting", ptSetting);
         request.setAttribute("ptUser", ptUser);
         request.setAttribute("keywordUser", keywordUser);

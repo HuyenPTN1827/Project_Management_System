@@ -255,10 +255,12 @@ public class DepartmentController extends HttpServlet {
         Boolean status = statusStr != null && !statusStr.isEmpty() ? Boolean.valueOf(statusStr) : null;
 
         Department dept = deptService.getDepartmentById(id);
+        List<Department> listDept = deptService.getAllDepartments(null, null);
         List<Setting> setting = settingService.getDeptRoleList();
         List<Department_User> deptUser = deptService.getAllDepartmentUsers(keyword, roleId, status, id);
 
         request.setAttribute("dept", dept);
+        request.setAttribute("listDept", listDept);
         request.setAttribute("setting", setting);
         request.setAttribute("deptUser", deptUser);
         request.setAttribute("keyword", keyword);

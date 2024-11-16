@@ -106,6 +106,14 @@
             function closeptCriteriaModal() {
                 document.getElementById('ptCriteriaModal').style.display = 'none';
             }
+
+            function redirectToConfigPage() {
+                const selectedId = document.getElementById("projectTypeDropdown").value;
+                if (selectedId) {
+                    // Redirect to the project type config page with the selected ID
+                    window.location.href = 'project-type-config?id=' + selectedId;
+                }
+            }
         </script>
     </head>
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
@@ -126,31 +134,6 @@
 
                         <div class="row">
                             <div class="col-md-12 col-xl-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <div class="d-flex justify-content-between align-items-center" style="margin: 10px;">
-                                            <form action="project-type-management" method="post" class="d-flex align-items-center" style="gap: 15px;">
-
-                                                <div class="col-md-4">
-                                                    <label class="form-label">Project Type</label>
-                                                    <input type="text" class="form-control" name="name" value="${projectType.name}" readonly>
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <label class="form-label">Code</label>
-                                                    <input type="text" class="form-control" name="code" value="${projectType.code}" readonly>
-                                                </div>
-
-                                                <div class="col-md-4 mt-4 d-flex align-items-end">
-                                                    <a href="javascript:void(0);" class="btn btn-primary mt-1" 
-                                                       onclick="openProjectTypeModal(${projectType.id});">View Details</a>
-                                                </div>
-
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <!-- Project Type Modal -->
                                 <div id="projectTypeModal" class="modal" tabindex="-1" role="dialog">
                                     <div class="modal-dialog" role="document">
@@ -224,6 +207,19 @@
                                                 <a class="nav-link" id="eval-criteria-tab" data-bs-toggle="tab" href="#eval-criteria" role="tab" aria-controls="eval-criteria" aria-selected="false">
                                                     Eval Criteria
                                                 </a>
+                                            </li>
+                                            <!-- Dropdown for selecting Project Type -->
+                                            <li class="nav-item col-md-3 ms-auto">
+                                                <select id="projectTypeDropdown" class="form-select" onchange="redirectToConfigPage()">
+                                                    <c:forEach items="${listType}" var="pt">
+                                                        <option 
+                                                            <c:if test="${projectType.id eq pt.id}">
+                                                                selected="selected"
+                                                            </c:if>
+                                                            value="${pt.id}">${pt.name} (${pt.code})
+                                                        </option>
+                                                    </c:forEach>
+                                                </select>
                                             </li>
                                         </ul>
                                     </div>
@@ -540,110 +536,110 @@
                                                     <form action="project-type-config" method="post" class="d-flex align-items-center" style="gap: 15px;">
                                                         <input type="hidden" name="id" value="${projectType.id}">
                                                         <div class="col-md-3">
-                                                        <select name="phaseId" class="form-select">
-                                                            <option value="">All Project Phase</option>
-                                                            <c:forEach items="${phase}" var="p">
+                                                            <select name="phaseId" class="form-select">
+                                                                <option value="">All Project Phase</option>
+                                                                <c:forEach items="${phase}" var="p">
+                                                                    <option 
+                                                                        <c:if test="${phaseId eq p.id}">
+                                                                            selected="selected"
+                                                                        </c:if>
+                                                                        value="${p.id}">${p.name}
+                                                                    </option>
+                                                                </c:forEach>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-md-3">
+                                                            <select name="statusCriteria" class="form-select">
+                                                                <option value="">All Statuses</option>
                                                                 <option 
-                                                                    <c:if test="${phaseId eq p.id}">
+                                                                    <c:if test="${statusCriteria eq 'true'}">
                                                                         selected="selected"
                                                                     </c:if>
-                                                                    value="${p.id}">${p.name}
+                                                                    value="true">Active
                                                                 </option>
-                                                            </c:forEach>
-                                                        </select>
-                                                </div>
+                                                                <option 
+                                                                    <c:if test="${statusCriteria eq 'false'}">
+                                                                        selected="selected"
+                                                                    </c:if>
+                                                                    value="false">Inactive
+                                                                </option>
+                                                            </select>
+                                                        </div>
 
-                                                <div class="col-md-3">
-                                                    <select name="statusCriteria" class="form-select">
-                                                        <option value="">All Statuses</option>
-                                                        <option 
-                                                            <c:if test="${statusCriteria eq 'true'}">
-                                                                selected="selected"
-                                                            </c:if>
-                                                            value="true">Active
-                                                        </option>
-                                                        <option 
-                                                            <c:if test="${statusCriteria eq 'false'}">
-                                                                selected="selected"
-                                                            </c:if>
-                                                            value="false">Inactive
-                                                        </option>
-                                                    </select>
-                                                </div>
+                                                        <div class="col-md-5">
+                                                            <input type="search" name="keywordCriteria" class="form-control"
+                                                                   placeholder="Enter the Eval Criteria" id="keywordCriteria" value="${keywordCriteria}">
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary">Search</button>
 
-                                                <div class="col-md-5">
-                                                    <input type="search" name="keywordCriteria" class="form-control"
-                                                           placeholder="Enter the Eval Criteria" id="keywordCriteria" value="${keywordCriteria}">
-                                                </div>
-                                                <button type="submit" class="btn btn-primary">Search</button>
-
-                                                </form>
+                                                    </form>
 
                                                     <!--<a class="btn btn-primary" href="<%=request.getContextPath()%>/add-project-type-criteria?typeId=${projectType.id}">Create new</a>-->
-                                                <a class="btn btn-primary" href="javascript:void(0);" onclick="openPTCriteriaModal(${projectType.id});">Create new</a>
-                                            </div>
+                                                    <a class="btn btn-primary" href="javascript:void(0);" onclick="openPTCriteriaModal(${projectType.id});">Create new</a>
+                                                </div>
 
-                                            <table id="datatables-multi2" class="table table-striped" style="width:100%">
-                                                <thead>
-                                                    <tr>
-                                                        <th>ID</th>
-                                                        <th>Criteria</th>
-                                                        <th>Project Phase</th>
-                                                        <th>Weight</th>
-                                                        <th>Status</th>
-                                                        <th>Actions</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <c:forEach items="${requestScope.ptCriteria}" var="ptc">
+                                                <table id="datatables-multi2" class="table table-striped" style="width:100%">
+                                                    <thead>
                                                         <tr>
-                                                            <td>${ptc.id}</td>
-                                                            <td>${ptc.name}</td>
-                                                            <td>${ptc.pjPhase.name}</td>
-                                                            <td>${ptc.weight}</td>
-                                                            <td>
-                                                                <c:if test="${ptc.status eq 'false'}">
-                                                                    <span class="badge bg-danger">Inactive</span>
-                                                                </c:if>
-                                                                <c:if test="${ptc.status eq 'true'}">
-                                                                    <span class="badge bg-success">Active</span>
-                                                                </c:if>
-                                                            </td>
-                                                            <td>
-                                                                <!--<a href="<%=request.getContextPath()%>/edit-project-type-criteria?id=${ptc.id}&typeId=${projectType.id}"
-                                                                       class="btn btn-link text-primary">Edit</a>-->
-
-                                                                <a href="javascript:void(0);" class="btn btn-link text-primary" 
-                                                                   onclick="openPTCriteriaModal(${projectType.id}, ${ptc.id});">Edit</a>
-
-                                                                <c:if test="${ptc.status eq 'false'}">
-                                                                    <a href="<%=request.getContextPath()%>/change-status-project-type-criteria?id=${ptc.id}&status=${ptc.status}&typeId=${projectType.id}"
-                                                                       class="btn btn-link text-success"
-                                                                       onclick="return confirm('Are you sure you want to activate this criteria?');">Activate</a>
-                                                                </c:if>
-
-                                                                <c:if test="${ptc.status eq 'true'}">
-                                                                    <a href="<%=request.getContextPath()%>/change-status-project-type-criteria?id=${ptc.id}&status=${ptc.status}&typeId=${projectType.id}"
-                                                                       class="btn btn-link text-danger"
-                                                                       onclick="return confirm('Are you sure you want to deactivate this criteria?');">Deactivate</a>
-                                                                </c:if>
-                                                            </td>
+                                                            <th>ID</th>
+                                                            <th>Criteria</th>
+                                                            <th>Project Phase</th>
+                                                            <th>Weight</th>
+                                                            <th>Status</th>
+                                                            <th>Actions</th>
                                                         </tr>
-                                                    </c:forEach>
-                                                </tbody>
-                                            </table>
+                                                    </thead>
+                                                    <tbody>
+                                                        <c:forEach items="${requestScope.ptCriteria}" var="ptc">
+                                                            <tr>
+                                                                <td>${ptc.id}</td>
+                                                                <td>${ptc.name}</td>
+                                                                <td>${ptc.pjPhase.name}</td>
+                                                                <td>${ptc.weight}</td>
+                                                                <td>
+                                                                    <c:if test="${ptc.status eq 'false'}">
+                                                                        <span class="badge bg-danger">Inactive</span>
+                                                                    </c:if>
+                                                                    <c:if test="${ptc.status eq 'true'}">
+                                                                        <span class="badge bg-success">Active</span>
+                                                                    </c:if>
+                                                                </td>
+                                                                <td>
+                                                                    <!--<a href="<%=request.getContextPath()%>/edit-project-type-criteria?id=${ptc.id}&typeId=${projectType.id}"
+                                                                           class="btn btn-link text-primary">Edit</a>-->
+
+                                                                    <a href="javascript:void(0);" class="btn btn-link text-primary" 
+                                                                       onclick="openPTCriteriaModal(${projectType.id}, ${ptc.id});">Edit</a>
+
+                                                                    <c:if test="${ptc.status eq 'false'}">
+                                                                        <a href="<%=request.getContextPath()%>/change-status-project-type-criteria?id=${ptc.id}&status=${ptc.status}&typeId=${projectType.id}"
+                                                                           class="btn btn-link text-success"
+                                                                           onclick="return confirm('Are you sure you want to activate this criteria?');">Activate</a>
+                                                                    </c:if>
+
+                                                                    <c:if test="${ptc.status eq 'true'}">
+                                                                        <a href="<%=request.getContextPath()%>/change-status-project-type-criteria?id=${ptc.id}&status=${ptc.status}&typeId=${projectType.id}"
+                                                                           class="btn btn-link text-danger"
+                                                                           onclick="return confirm('Are you sure you want to deactivate this criteria?');">Deactivate</a>
+                                                                    </c:if>
+                                                                </td>
+                                                            </tr>
+                                                        </c:forEach>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
+
+
                                     </div>
-
-
                                 </div>
+
+                                <!-- Include Bootstrap JS (CDN or local) -->
+                                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
                             </div>
-
-                            <!-- Include Bootstrap JS (CDN or local) -->
-                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
                         </div>
-                    </div>
                 </main>
 
                 <footer class="footer">
@@ -681,110 +677,110 @@
         <script src="${pageContext.request.contextPath}/js/datatables.js"></script>
 
         <script>
-                                                                           document.addEventListener("DOMContentLoaded", function () {
-                                                                               var datatablesMulti = $("#datatables-multi").DataTable({
-                                                                                   responsive: true,
-                                                                                   paging: true,
-                                                                                   searching: false,
-                                                                                   info: true,
-                                                                                   order: [[0, 'desc']], // Default sort by ID column in descending order
-                                                                                   columnDefs: [
-                                                                                       {orderable: false, targets: 7} // Disable sorting on the 'Action' column
-                                                                                   ],
-                                                                                   language: {
-                                                                                       paginate: {
-                                                                                           previous: "&laquo;",
-                                                                                           next: "&raquo;"
+                                                                               document.addEventListener("DOMContentLoaded", function () {
+                                                                                   var datatablesMulti = $("#datatables-multi").DataTable({
+                                                                                       responsive: true,
+                                                                                       paging: true,
+                                                                                       searching: false,
+                                                                                       info: true,
+                                                                                       order: [[0, 'desc']], // Default sort by ID column in descending order
+                                                                                       columnDefs: [
+                                                                                           {orderable: false, targets: 7} // Disable sorting on the 'Action' column
+                                                                                       ],
+                                                                                       language: {
+                                                                                           paginate: {
+                                                                                               previous: "&laquo;",
+                                                                                               next: "&raquo;"
+                                                                                           },
+                                                                                           info: "_TOTAL_ user(s) found",
+                                                                                           infoEmpty: "No user found"
                                                                                        },
-                                                                                       info: "_TOTAL_ user(s) found",
-                                                                                       infoEmpty: "No user found"
-                                                                                   },
-                                                                                   dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
-                                                                                   initComplete: function () {
-                                                                                       // Add necessary classes for alignment
-                                                                                       $('.dataTables_info').addClass('text-left fw-bolder');
-                                                                                       $('.dataTables_length').addClass('mt-2'); // Add necessary margin classes
-                                                                                   }
+                                                                                       dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
+                                                                                       initComplete: function () {
+                                                                                           // Add necessary classes for alignment
+                                                                                           $('.dataTables_info').addClass('text-left fw-bolder');
+                                                                                           $('.dataTables_length').addClass('mt-2'); // Add necessary margin classes
+                                                                                       }
+                                                                                   });
                                                                                });
-                                                                           });
-                                                                           document.addEventListener("DOMContentLoaded", function () {
-                                                                               var datatablesMulti = $("#datatables-multi1").DataTable({
-                                                                                   responsive: true,
-                                                                                   paging: true,
-                                                                                   searching: false,
-                                                                                   info: true,
-                                                                                   order: [[0, 'desc']], // Default sort by ID column in descending order
-                                                                                   columnDefs: [
-                                                                                       {orderable: false, targets: 7} // Disable sorting on the 'Action' column
-                                                                                   ],
-                                                                                   language: {
-                                                                                       paginate: {
-                                                                                           previous: "&laquo;",
-                                                                                           next: "&raquo;"
+                                                                               document.addEventListener("DOMContentLoaded", function () {
+                                                                                   var datatablesMulti = $("#datatables-multi1").DataTable({
+                                                                                       responsive: true,
+                                                                                       paging: true,
+                                                                                       searching: false,
+                                                                                       info: true,
+                                                                                       order: [[0, 'desc']], // Default sort by ID column in descending order
+                                                                                       columnDefs: [
+                                                                                           {orderable: false, targets: 7} // Disable sorting on the 'Action' column
+                                                                                       ],
+                                                                                       language: {
+                                                                                           paginate: {
+                                                                                               previous: "&laquo;",
+                                                                                               next: "&raquo;"
+                                                                                           },
+                                                                                           info: "_TOTAL_ user(s) found",
+                                                                                           infoEmpty: "No user found"
                                                                                        },
-                                                                                       info: "_TOTAL_ user(s) found",
-                                                                                       infoEmpty: "No user found"
-                                                                                   },
-                                                                                   dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
-                                                                                   initComplete: function () {
-                                                                                       // Add necessary classes for alignment
-                                                                                       $('.dataTables_info').addClass('text-left fw-bolder');
-                                                                                       $('.dataTables_length').addClass('mt-2'); // Add necessary margin classes
-                                                                                   }
+                                                                                       dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
+                                                                                       initComplete: function () {
+                                                                                           // Add necessary classes for alignment
+                                                                                           $('.dataTables_info').addClass('text-left fw-bolder');
+                                                                                           $('.dataTables_length').addClass('mt-2'); // Add necessary margin classes
+                                                                                       }
+                                                                                   });
                                                                                });
-                                                                           });
-                                                                           document.addEventListener("DOMContentLoaded", function () {
-                                                                               var datatablesMulti = $("#datatables-multi2").DataTable({
-                                                                                   responsive: true,
-                                                                                   paging: true,
-                                                                                   searching: false,
-                                                                                   info: true,
-                                                                                   order: [[0, 'desc']], // Default sort by ID column in descending order
-                                                                                   columnDefs: [
-                                                                                       {orderable: false, targets: 5} // Disable sorting on the 'Action' column
-                                                                                   ],
-                                                                                   language: {
-                                                                                       paginate: {
-                                                                                           previous: "&laquo;",
-                                                                                           next: "&raquo;"
+                                                                               document.addEventListener("DOMContentLoaded", function () {
+                                                                                   var datatablesMulti = $("#datatables-multi2").DataTable({
+                                                                                       responsive: true,
+                                                                                       paging: true,
+                                                                                       searching: false,
+                                                                                       info: true,
+                                                                                       order: [[0, 'desc']], // Default sort by ID column in descending order
+                                                                                       columnDefs: [
+                                                                                           {orderable: false, targets: 5} // Disable sorting on the 'Action' column
+                                                                                       ],
+                                                                                       language: {
+                                                                                           paginate: {
+                                                                                               previous: "&laquo;",
+                                                                                               next: "&raquo;"
+                                                                                           },
+                                                                                           info: "_TOTAL_ criteria(s) found",
+                                                                                           infoEmpty: "No criteria found"
                                                                                        },
-                                                                                       info: "_TOTAL_ criteria(s) found",
-                                                                                       infoEmpty: "No criteria found"
-                                                                                   },
-                                                                                   dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
-                                                                                   initComplete: function () {
-                                                                                       // Add necessary classes for alignment
-                                                                                       $('.dataTables_info').addClass('text-left fw-bolder');
-                                                                                       $('.dataTables_length').addClass('mt-2'); // Add necessary margin classes
-                                                                                   }
+                                                                                       dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
+                                                                                       initComplete: function () {
+                                                                                           // Add necessary classes for alignment
+                                                                                           $('.dataTables_info').addClass('text-left fw-bolder');
+                                                                                           $('.dataTables_length').addClass('mt-2'); // Add necessary margin classes
+                                                                                       }
+                                                                                   });
                                                                                });
-                                                                           });
-                                                                           document.addEventListener("DOMContentLoaded", function () {
-                                                                               var datatablesMulti = $("#datatables-multi5").DataTable({
-                                                                                   responsive: true,
-                                                                                   paging: true,
-                                                                                   searching: false,
-                                                                                   info: true,
-                                                                                   order: [[0, 'desc']], // Default sort by ID column in descending order
-                                                                                   columnDefs: [
-                                                                                       {orderable: false, targets: 7} // Disable sorting on the 'Action' column
-                                                                                   ],
-                                                                                   language: {
-                                                                                       paginate: {
-                                                                                           previous: "&laquo;",
-                                                                                           next: "&raquo;"
+                                                                               document.addEventListener("DOMContentLoaded", function () {
+                                                                                   var datatablesMulti = $("#datatables-multi5").DataTable({
+                                                                                       responsive: true,
+                                                                                       paging: true,
+                                                                                       searching: false,
+                                                                                       info: true,
+                                                                                       order: [[0, 'desc']], // Default sort by ID column in descending order
+                                                                                       columnDefs: [
+                                                                                           {orderable: false, targets: 7} // Disable sorting on the 'Action' column
+                                                                                       ],
+                                                                                       language: {
+                                                                                           paginate: {
+                                                                                               previous: "&laquo;",
+                                                                                               next: "&raquo;"
+                                                                                           },
+                                                                                           info: "_TOTAL_ user(s) found",
+                                                                                           infoEmpty: "No user found"
                                                                                        },
-                                                                                       info: "_TOTAL_ user(s) found",
-                                                                                       infoEmpty: "No user found"
-                                                                                   },
-                                                                                   dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
-                                                                                   initComplete: function () {
-                                                                                       // Add necessary classes for alignment
-                                                                                       $('.dataTables_info').addClass('text-left fw-bolder');
-                                                                                       $('.dataTables_length').addClass('mt-2'); // Add necessary margin classes
-                                                                                   }
+                                                                                       dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
+                                                                                       initComplete: function () {
+                                                                                           // Add necessary classes for alignment
+                                                                                           $('.dataTables_info').addClass('text-left fw-bolder');
+                                                                                           $('.dataTables_length').addClass('mt-2'); // Add necessary margin classes
+                                                                                       }
+                                                                                   });
                                                                                });
-                                                                           });
         </script>
 
         <script>
