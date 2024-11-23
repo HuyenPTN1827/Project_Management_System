@@ -63,7 +63,7 @@
                         <div class="container-fluid p-0">
 
                             <div class="mb-3">
-                                <h1 class="h1 d-inline align-middle">Team List</h1>
+                                <h1 class="h1 d-inline align-middle">Scope List</h1>
                             </div>
 
                             <div class="row">
@@ -71,31 +71,31 @@
                                     <div class="card">
                                         <div class="card-header">
                                             <div class="d-flex justify-content-between align-items-center" style="margin: 10px;">
-                                                <form action="TeamController" method="get" class="d-flex align-items-center" style="gap: 15px;">
-                                                    <select name="statusFilter" class="form-select"  style="width: 130px;">
+                                                <form action="WorkPackageController" method="get" class="d-flex align-items-center" style="gap: 15px;">
+                                                    <select name="status" class="form-select"  style="width: 130px;">
                                                         <option value="">All Status</option>
                                                         <option 
                                                         <c:if test="${param.status eq 'true'}">
                                                             selected="selected"
                                                         </c:if>
-                                                        value="true">Active
+                                                        value="1">Active
                                                     </option>
                                                     <option 
                                                         <c:if test="${param.status eq 'false'}">
                                                             selected="selected"
                                                         </c:if>
-                                                        value="false">Inactive
+                                                        value="0">Inactive
                                                     </option>
                                                 </select>
 
-                                                <input type="search" name="keyword" class="form-control" style="width: 270px;"
-                                                       placeholder="Enter Team Name or Code" id="keyword" value="${param.keyword}">
+                                                <input type="search" name="title" class="form-control" style="width: 270px;"
+                                                       placeholder="Enter title" id="keyword" value="${param.keyword}">
 
                                                 <button type="submit" class="btn btn-primary">Search</button>
 
                                             </form>
 
-                                            <!--<a class="btn btn-primary" href="./TeamController?action=add&cuId=${param.id}">Create new</a>-->
+                                            <a class="btn btn-primary" href="./WorkPackageController?action=add&cuId=${param.id}">Create new</a>
                                         </div>
                                     </div>
                                 </div>
@@ -105,21 +105,23 @@
                                             <thead>
                                                 <tr style="text-align: center">
                                                     <th>ID</th>
-                                                    <th>Name</th>
-                                                    <th>Topic</th>
-                                                    <th>Details</th>
+                                                    <th>Last Updated</th>
+                                                    <th>Title</th>
+                                                    <th>complexity</th>
+                                                    <th>Planned Effort</th>
                                                     <th>Status</th>
                                                     <th>Action</th>
                                                     
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <c:forEach items="${requestScope.teams}" var="type">
+                                                <c:forEach items="${requestScope.workPackages}" var="type">
                                                     <tr style="text-align: center">
                                                         <td>${type.id}</td>
-                                                        <td>${type.name}</td>
-                                                        <td>${type.topic}</td>
-                                                        <td>${type.details}</td>
+                                                        <td>${type.lastUpdated}</td>
+                                                        <td>${type.title}</td>
+                                                        <td>${type.complexity}</td>
+                                                        <td>${type.plannedEffort}</td>
                                                         <td>
                                                             <c:if test="${type.status eq '1'}">
                                                                 <span class="badge bg-success">Active</span>
@@ -129,24 +131,24 @@
                                                             </c:if>
                                                         </td>
                                                         <td>
-                                                            <a href="./TeamController?action=edit&id=${type.id}&cuId=${param.id}" 
+                                                            <a href="./WorkPackageController?action=edit&id=${type.id}&cuId=${param.id}" 
                                                                class="btn btn-link text-primary">Edit</a>
                                                         
                                                             <c:if test="${type.status eq '0'}">
-                                                                <a href="./TeamController?action=changeStatus&id=${type.id}&status=true&cuId=${param.id}"
+                                                                <a href="./WorkPackageController?action=changeStatus&id=${type.id}&status=1&cuId=${param.id}"
                                                                    class="btn btn-link text-success"
                                                                    onclick="return confirm('Are you sure you want to activate this project type?');">Activate</a>
                                                             </c:if>
 
                                                             <c:if test="${type.status eq '1'}">
-                                                                <a href="./TeamController?action=changeStatus&id=${type.id}&status=false&cuId=${param.id}"
+                                                                <a href="./WorkPackageController?action=changeStatus&id=${type.id}&status=0&cuId=${param.id}"
                                                                    class="btn btn-link text-danger"
                                                                    onclick="return confirm('Are you sure you want to deactivate this project type?');">Deactivate</a>
                                                             </c:if>
                                                         
-                                                            <a href="./TeamController?action=delete&id=${type.id}&cuId=${param.id}"
+<!--                                                            <a href="./WorkPackageController?action=delete&id=${type.id}&cuId=${param.id}"
                                                                class="btn btn-link text-danger"
-                                                               onclick="return confirm('Are you sure you want to deactivate this project type?');">Delete</a>
+                                                               onclick="return confirm('Are you sure you want to deactivate this project type?');">Delete</a>-->
                                                         </td>
                                                     </tr>
                                                 </c:forEach>

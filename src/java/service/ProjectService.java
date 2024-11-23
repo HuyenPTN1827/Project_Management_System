@@ -53,7 +53,8 @@ public class ProjectService {
     public boolean insertProject(Project project) {
         return projectDAO.insertProject(project);
     }
-    
-   
 
+    public List<Project> getProjectsDropDown() {
+        return projectDAO.getProjectsDropDown();
+    }
 }

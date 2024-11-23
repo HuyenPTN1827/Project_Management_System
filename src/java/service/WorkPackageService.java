@@ -13,7 +13,7 @@ public class WorkPackageService {
         return workPackageDAO.getOne(id);
     }
 
-    public List<WorkPackage> getList(String title, Integer status) throws SQLException {
+    public List<WorkPackage> getList(String title, String status) throws SQLException {
         return workPackageDAO.getList(title, status);
     }
 

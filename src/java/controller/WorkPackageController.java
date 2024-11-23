@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Date;
 import model.WorkPackage;
+import service.ProjectService;
+import service.UserService;
 import service.WorkPackageService;
 
 public class WorkPackageController extends HttpServlet {
@@ -16,7 +18,7 @@ public class WorkPackageController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("action");
+        String action = request.getParameter("action") == null ? "" : request.getParameter("action");
 
         try {
             switch (action) {
@@ -38,6 +40,9 @@ public class WorkPackageController extends HttpServlet {
                 case "changeStatus":
                     changeStatus(request, response);
                     break;
+                default:
+                    listWorkPackages(request, response);
+                    break;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -47,9 +52,8 @@ public class WorkPackageController extends HttpServlet {
     private void listWorkPackages(HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         String title = request.getParameter("title");
-        Integer status = request.getParameter("status") != null
-                ? Integer.parseInt(request.getParameter("status"))
-                : null;
+        String status = request.getParameter("status");
+
         List<WorkPackage> list = workPackageService.getList(title, status);
         request.setAttribute("workPackages", list);
         request.getRequestDispatcher("/WEB-INF/admin/work-package-list.jsp").forward(request, response);
@@ -65,6 +69,12 @@ public class WorkPackageController extends HttpServlet {
 
     private void showAddForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        ProjectService pSer = new ProjectService();
+        UserService userService = new UserService();
+
+        request.setAttribute("pl", pSer.getProjectsDropDown());
+        request.setAttribute("ul", userService.getAllUsers(null, null, null, null));
+
         request.getRequestDispatcher("/WEB-INF/admin/work-package-add.jsp").forward(request, response);
     }
 
@@ -72,6 +82,11 @@ public class WorkPackageController extends HttpServlet {
             throws Exception {
         int id = Integer.parseInt(request.getParameter("id"));
         WorkPackage workPackage = workPackageService.getOne(id);
+        ProjectService pSer = new ProjectService();
+        UserService userService = new UserService();
+
+        request.setAttribute("pl", pSer.getProjectsDropDown());
+        request.setAttribute("ul", userService.getAllUsers(null, null, null, null));
         request.setAttribute("workPackage", workPackage);
         request.getRequestDispatcher("/WEB-INF/admin/work-package-edit.jsp").forward(request, response);
     }
@@ -81,14 +96,14 @@ public class WorkPackageController extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         int newStatus = Integer.parseInt(request.getParameter("status"));
         workPackageService.changeStatus(id, newStatus);
-        response.sendRedirect("work-package?action=list");
+        response.sendRedirect("WorkPackageController?action=list");
     }
 
     private void deleteWorkPackage(HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         int id = Integer.parseInt(request.getParameter("id"));
         workPackageService.changeStatus(id, 0); // Set status to inactive as "soft delete"
-        response.sendRedirect("work-package?action=list");
+        response.sendRedirect("WorkPackageController?action=list");
     }
 
     @Override
@@ -122,7 +137,7 @@ public class WorkPackageController extends HttpServlet {
                         : null);
 
                 workPackageService.createWorkPackage(workPackage);
-                response.sendRedirect("work-package?action=list");
+                response.sendRedirect("WorkPackageController?action=list");
 
             } else if ("edit".equals(action)) {
                 // Handle updating an existing WorkPackage
@@ -146,14 +161,14 @@ public class WorkPackageController extends HttpServlet {
 
                     workPackageService.updateWorkPackage(workPackage);
                 }
-                response.sendRedirect("work-package?action=list");
+                response.sendRedirect("WorkPackageController?action=list");
 
             } else if ("changeStatus".equals(action)) {
                 // Handle changing the status of a WorkPackage
                 int id = Integer.parseInt(request.getParameter("id"));
                 int newStatus = Integer.parseInt(request.getParameter("status"));
                 workPackageService.changeStatus(id, newStatus);
-                response.sendRedirect("work-package?action=list");
+                response.sendRedirect("WorkPackageController?action=list");
 
             } else {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");

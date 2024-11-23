@@ -10,8 +10,7 @@ public class WorkPackageDAO {
     // Fetch a single work package by ID
     public WorkPackage getOne(int id) throws SQLException {
         String query = "SELECT * FROM work_package WHERE id = ?";
-        try (Connection conn = BaseDAO.getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
+        try (Connection conn = BaseDAO.getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -22,27 +21,32 @@ public class WorkPackageDAO {
     }
 
     // Fetch a list of work packages with optional filters (title and status)
-    public List<WorkPackage> getList(String title, Integer status) throws SQLException {
-        String query = "SELECT * FROM work_package WHERE 1=1";
-        List<Object> params = new ArrayList<>();
-        if (title != null && !title.isEmpty()) {
-            query += " AND title LIKE ?";
-            params.add("%" + title + "%");
-        }
-        if (status != null) {
-            query += " AND status = ?";
-            params.add(status);
-        }
-        try (Connection conn = BaseDAO.getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            for (int i = 0; i < params.size(); i++) {
-                ps.setObject(i + 1, params.get(i));
+    public List<WorkPackage> getList(String title, String status) throws SQLException {
+        List<WorkPackage> list = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM work_package WHERE 1=1";
+            List<Object> params = new ArrayList<>();
+            if (title != null && !title.isEmpty()) {
+                query += " AND title LIKE ?";
+                params.add("%" + title + "%");
             }
-            ResultSet rs = ps.executeQuery();
-            List<WorkPackage> list = new ArrayList<>();
-            while (rs.next()) {
-                list.add(mapResultSetToWorkPackage(rs));
+            if (status != null && status!="") {
+                query += " AND status = ?";
+                params.add(status);
             }
+            System.out.println(query);
+            try (Connection conn = BaseDAO.getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
+                for (int i = 0; i < params.size(); i++) {
+                    ps.setObject(i + 1, params.get(i));
+                }
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    list.add(mapResultSetToWorkPackage(rs));
+                }
+                return list;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
             return list;
         }
     }
@@ -51,8 +55,7 @@ public class WorkPackageDAO {
     public void create(WorkPackage workPackage) throws SQLException {
         String query = "INSERT INTO work_package (created_by, last_updated, title, complexity, planned_effort, status, actual_effort, details, project_id, user_id) "
                 + "VALUES (?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = BaseDAO.getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
+        try (Connection conn = BaseDAO.getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
             setWorkPackageParameters(ps, workPackage);
             ps.executeUpdate();
         }
@@ -61,8 +64,7 @@ public class WorkPackageDAO {
     // Update an existing work package
     public void update(WorkPackage workPackage) throws SQLException {
         String query = "UPDATE work_package SET last_updated = NOW(), title = ?, complexity = ?, planned_effort = ?, status = ?, actual_effort = ?, details = ?, project_id = ?, user_id = ? WHERE id = ?";
-        try (Connection conn = BaseDAO.getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
+        try (Connection conn = BaseDAO.getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
             setWorkPackageParameters(ps, workPackage);
             ps.setInt(10, workPackage.getId());
             ps.executeUpdate();
@@ -72,8 +74,7 @@ public class WorkPackageDAO {
     // Change the status of a work package
     public void changeStatus(int id, int newStatus) throws SQLException {
         String query = "UPDATE work_package SET status = ? WHERE id = ?";
-        try (Connection conn = BaseDAO.getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
+        try (Connection conn = BaseDAO.getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setInt(1, newStatus);
             ps.setInt(2, id);
             ps.executeUpdate();
@@ -82,17 +83,17 @@ public class WorkPackageDAO {
 
     private WorkPackage mapResultSetToWorkPackage(ResultSet rs) throws SQLException {
         return new WorkPackage(
-            rs.getInt("id"),
-            rs.getInt("created_by"),
-            rs.getTimestamp("last_updated"),
-            rs.getString("title"),
-            rs.getString("complexity"),
-            rs.getInt("planned_effort"),
-            rs.getInt("status"),
-            rs.getInt("actual_effort"),
-            rs.getString("details"),
-            rs.getInt("project_id"),
-            rs.getInt("user_id")
+                rs.getInt("id"),
+                rs.getInt("created_by"),
+                rs.getTimestamp("last_updated"),
+                rs.getString("title"),
+                rs.getString("complexity"),
+                rs.getInt("planned_effort"),
+                rs.getInt("status"),
+                rs.getInt("actual_effort"),
+                rs.getString("details"),
+                rs.getInt("project_id"),
+                rs.getInt("user_id")
         );
     }
 
