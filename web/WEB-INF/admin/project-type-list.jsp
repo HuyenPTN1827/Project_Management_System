@@ -148,23 +148,27 @@
                                                             </c:if>
                                                         </td>
                                                         <td>
-                                                            <a href="javascript:void(0);" class="btn btn-link text-primary" 
-                                                               onclick="openProjectTypeModal(${type.id});">Edit</a>
-
-                                                            <a href="<%=request.getContextPath()%>/project-type-config?id=${type.id}" 
-                                                               class="btn btn-link text-info">Configs</a>
+                                                            <a href="javascript:void(0);" class="btn btn-info" 
+                                                               onclick="openProjectTypeModal(${type.id});"><i class="align-middle" data-feather="edit"></i></a>
 
                                                             <c:if test="${type.status eq 'false'}">
                                                                 <a href="<%=request.getContextPath()%>/change-status-project-type?id=${type.id}&status=${type.status}"
-                                                                   class="btn btn-link text-success"
-                                                                   onclick="return confirm('Are you sure you want to activate this project type?');">Activate</a>
+                                                                   class="btn btn-success"
+                                                                   onclick="return confirm('Are you sure you want to activate this project type?');">
+                                                                    <i class="fas fa-check"></i>
+                                                                </a>
                                                             </c:if>
 
                                                             <c:if test="${type.status eq 'true'}">
                                                                 <a href="<%=request.getContextPath()%>/change-status-project-type?id=${type.id}&status=${type.status}"
-                                                                   class="btn btn-link text-danger"
-                                                                   onclick="return confirm('Are you sure you want to deactivate this project type?');">Deactivate</a>
+                                                                   class="btn btn-danger"
+                                                                   onclick="return confirm('Are you sure you want to deactivate this project type?');">
+                                                                    <i class="fas fa-times" style="padding-left: 2px; padding-right: 2px"></i>
+                                                                </a>
                                                             </c:if>
+
+                                                            <a href="<%=request.getContextPath()%>/project-type-config?id=${type.id}" 
+                                                               class="btn btn-secondary"><i class="align-middle" data-feather="settings"></i></a>
                                                         </td>
                                                     </tr>
                                                 </c:forEach>
@@ -179,9 +183,7 @@
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h1 class="modal-title">Project Type Details</h1>
-                                                <button type="button" class="close btn btn-danger" data-dismiss="modal" aria-label="Close" onclick="closeModal();">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
+                                                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" onclick="closeModal();"></button>
                                             </div>
                                             <div class="modal-body">
                                                 <!-- This is where the project-type-detail.jsp will be loaded via AJAX -->

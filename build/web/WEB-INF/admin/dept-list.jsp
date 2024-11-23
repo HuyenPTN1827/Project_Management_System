@@ -109,7 +109,7 @@
                                                     </select>
                                                 </div>
 
-                                                <div class="col-md-7">
+                                                <div class="col-md-8">
                                                     <input type="search" name="keyword" class="form-control"
                                                            placeholder="Enter Department Name or Code" id="keyword" value="${keyword}">
                                                 </div>
@@ -151,22 +151,25 @@
                                                             </c:if>
                                                         </td>
                                                         <td>
-                                                            <a href="javascript:void(0);" class="btn btn-link text-primary" 
-                                                               onclick="openDeptModal(${dept.id});">Edit</a>
+<!--                                                            <a href="javascript:void(0);" class="btn btn-link text-primary" 
+                                                               onclick="openDeptModal(${dept.id});">Edit</a>-->
 
                                                             <a href="<%=request.getContextPath()%>/department-config?id=${dept.id}" 
-                                                               class="btn btn-link text-info">Configs</a>
+                                                               class="btn btn-info"><i class="align-middle" data-feather="edit"></i></a>
 
                                                             <c:if test="${dept.status eq 'false'}">
                                                                 <a href="<%=request.getContextPath()%>/change-status-department?id=${dept.id}&status=${dept.status}"
-                                                                   class="btn btn-link text-success"
-                                                                   onclick="return confirm('Are you sure you want to activate this department?');">Activate</a>
+                                                                   class="btn btn-success" onclick="return confirm('Are you sure you want to activate this department?');">
+                                                                    <i class="fas fa-check"></i>
+                                                                </a>
                                                             </c:if>
 
                                                             <c:if test="${dept.status eq 'true'}">
                                                                 <a href="<%=request.getContextPath()%>/change-status-department?id=${dept.id}&status=${dept.status}"
-                                                                   class="btn btn-link text-danger"
-                                                                   onclick="return confirm('Are you sure you want to deactivate this department?');">Deactivate</a>
+                                                                   class="btn btn-danger"
+                                                                   onclick="return confirm('Are you sure you want to deactivate this department?');">
+                                                                    <i class="fas fa-times" style="padding-left: 2px; padding-right: 2px"></i>
+                                                                </a>
                                                             </c:if>
                                                         </td>
                                                     </tr>
@@ -182,9 +185,7 @@
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h1 class="modal-title">Department Details</h1>
-                                                <button type="button" class="close btn btn-danger" data-dismiss="modal" aria-label="Close" onclick="closeModal();">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
+                                                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" onclick="closeModal();"></button>
                                             </div>
                                             <div class="modal-body">
                                                 <!-- This is where the project-type-detail.jsp will be loaded via AJAX -->

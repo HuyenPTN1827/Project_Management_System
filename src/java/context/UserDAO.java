@@ -175,9 +175,9 @@ public class UserDAO {
             if (keyword != null && !keyword.isEmpty()) {
                 String keywordPattern = "%" + keyword.toLowerCase().trim() + "%";
 
-                stm.setString(index++, "%" + keywordPattern + "%");
-                stm.setString(index++, "%" + keywordPattern + "%");
-                stm.setString(index++, "%" + keywordPattern + "%");
+                stm.setString(index++, keywordPattern);
+                stm.setString(index++, keywordPattern);
+                stm.setString(index++, keywordPattern);
             }
             if (deptId != null) {
                 stm.setInt(index++, deptId);
@@ -514,8 +514,8 @@ public class UserDAO {
             String sql = "SELECT * FROM pms.user WHERE (LOWER(full_name) LIKE ? OR LOWER(email) LIKE ?) AND status = 1 LIMIT 1;";
             try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
                 String keywordPattern = "%" + keyword.toLowerCase().trim() + "%";
-                stm.setString(1, "%" + keywordPattern + "%");
-                stm.setString(2, "%" + keywordPattern + "%");
+                stm.setString(1, keywordPattern);
+                stm.setString(2, keywordPattern);
                 ResultSet rs = stm.executeQuery();
                 while (rs.next()) {
                     u = new User();

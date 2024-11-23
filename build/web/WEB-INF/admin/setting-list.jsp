@@ -155,18 +155,22 @@
                                                         </td>
                                                         <td>
                                                             <a href="<%=request.getContextPath()%>/edit-setting?id=${setting.id}" 
-                                                               class="btn btn-link text-primary">Edit</a>
+                                                               class="btn btn-info"><i class="align-middle" data-feather="edit"></i></a>
 
                                                             <c:if test="${setting.status eq 'false'}">
                                                                 <a href="<%=request.getContextPath()%>/change-status-setting?id=${setting.id}&status=${setting.status}"
-                                                                   class="btn btn-link text-success"
-                                                                   onclick="return confirm('Are you sure you want to activate this setting?');">Activate</a>
+                                                                   class="btn btn-success"
+                                                                   onclick="return confirm('Are you sure you want to activate this setting?');">
+                                                                    <i class="fas fa-check"></i>
+                                                                </a>
                                                             </c:if>
 
                                                             <c:if test="${setting.status eq 'true'}">
                                                                 <a href="<%=request.getContextPath()%>/change-status-setting?id=${setting.id}&status=${setting.status}"
-                                                                   class="btn btn-link text-danger"
-                                                                   onclick="return confirm('Are you sure you want to deactivate this setting?');">Deactivate</a>
+                                                                   class="btn btn-danger"
+                                                                   onclick="return confirm('Are you sure you want to deactivate this setting?');">
+                                                                    <i class="fas fa-times" style="padding-left: 2px; padding-right: 2px"></i>
+                                                                </a>
                                                             </c:if>
                                                         </td>
                                                     </tr>

@@ -16,11 +16,9 @@ import model.*;
 public class ProjectTypeService {
 
     private final ProjectTypeDAO projectTypeDAO;
-    private final ProjectTypeSettingDAO projecTypeSettingDAO;
 
     public ProjectTypeService() {
         this.projectTypeDAO = new ProjectTypeDAO();
-        this.projecTypeSettingDAO = new ProjectTypeSettingDAO();
     }
 
     // HuyenPTNHE160769
@@ -61,43 +59,36 @@ public class ProjectTypeService {
     // TrươngHBHE151011
     // 17/10/2024
     // Get all project type settings
-    public List<ProjectTypeSetting> getAllProjectTypeSettings(String keyword, Boolean statusFilter) throws SQLException {
-        return projecTypeSettingDAO.getAllProjectTypeSettings(keyword, statusFilter);
+    public List<ProjectTypeSetting> getAllProjectTypeSettings(String keyword, Boolean status, String type, int typeId) throws SQLException {
+        return projectTypeDAO.getAllProjectTypeSettings(keyword, status, type, typeId);
     }
 
     // TrươngHBHE151011
     // 17/10/2024
     // Get project type setting by id
     public ProjectTypeSetting getProjectTypeSettingById(int id) throws SQLException {
-        return projecTypeSettingDAO.getProjectTypeSettingById(id);
+        return projectTypeDAO.getProjectTypeSettingById(id);
     }
 
     // TrươngHBHE151011
     // 17/10/2024
     // Create new project type setting
     public void createProjectTypeSetting(ProjectTypeSetting setting) throws SQLException {
-        projecTypeSettingDAO.createProjectTypeSetting(setting);
+        projectTypeDAO.createProjectTypeSetting(setting);
     }
 
     // TrươngHBHE151011
     // 17/10/2024
     // Update an existing project type setting
     public void updateProjectTypeSetting(ProjectTypeSetting setting) throws SQLException {
-        projecTypeSettingDAO.updateProjectTypeSetting(setting);
-    }
-
-    // TrươngHBHE151011
-    // 17/10/2024
-    // Delete project type setting by id
-    public void deleteProjectTypeSetting(int id) throws SQLException {
-        projecTypeSettingDAO.deleteProjectTypeSetting(id);
+        projectTypeDAO.updateProjectTypeSetting(setting);
     }
 
     // TrươngHBHE151011
     // 17/10/2024
     // Change status of project type setting by id
     public void changeStatusProjectTypeSettingById(int id, boolean newStatus) throws SQLException {
-        projecTypeSettingDAO.changeStatusById(id, newStatus);
+        projectTypeDAO.changeStatusById(id, newStatus);
     }
 
     // HuyenPTNHE160769
@@ -145,8 +136,8 @@ public class ProjectTypeService {
     // HuyenPTNHE160769
     // 29/10/2024
     // Get project phases list
-    public List<ProjectPhase> getPhaseList(int typeId) {
-        return projectTypeDAO.getPhaseList(typeId);
+    public List<ProjectPhase> getAllProjectPhase(int typeId, String keyword, Boolean status) {
+        return projectTypeDAO.selectAllProjectPhase(typeId, keyword, status);
     }
     
 //    HuyenPTNHE160769
@@ -182,5 +173,38 @@ public class ProjectTypeService {
     // Admin update a project type criteria information
     public boolean updateProjectTypeCriteria(ProjectTypeCriteria ptc) throws SQLException {
         return projectTypeDAO.updateProjectTypeCriteria(ptc);
+    }
+    
+    //chiennkhe161554
+    
+    // 30/10/2024
+    // Admin get a project phase information by id
+    public ProjectPhase getProjectPhaseById(int id) {
+        return projectTypeDAO.selectProjectPhaseByID(id);
+    }
+
+    // 30/10/2024
+    // Admin add new project phase information
+    public int insertProjectPhase(ProjectPhase phase) throws SQLException {
+        return projectTypeDAO.insertProjectPhase(phase);
+    }
+
+    // 30/10/2024
+    // Admin update a project phase information
+    public boolean updateProjectPhase(ProjectPhase phase) throws SQLException {
+        return projectTypeDAO.updateProjectPhase(phase);
+    }
+
+    // 30/10/2024
+    // Admin change status of a project phase
+    public boolean changeStatusProjectPhase(ProjectPhase phase) throws SQLException {
+        return projectTypeDAO.changeStatusProjectPhase(phase);
+    }
+        
+    // HuyenPTNHE160769
+    // 11/11/2024
+    // Get type list
+    public List<ProjectTypeSetting> getTypeList(int id) {
+        return projectTypeDAO.getTypeList(id);
     }
 }

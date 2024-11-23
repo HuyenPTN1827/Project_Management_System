@@ -182,25 +182,29 @@
                                                         <td>
                                                             <c:if test="${user.status eq '0'}">
                                                                 <a href="<%=request.getContextPath()%>/edit-user?id=${user.id}"
-                                                                   class="btn btn-link text-primary">Edit</a>
+                                                                   class="btn btn-info"><i class="align-middle" data-feather="edit"></i></a>
 
                                                                 <a href="<%=request.getContextPath()%>/change-status-user?id=${user.id}&status=${user.status}"
-                                                                   class="btn btn-link text-success"
-                                                                   onclick="return confirm('Are you sure you want to activate this user?');">Activate</a>
+                                                                   class="btn btn-success"
+                                                                   onclick="return confirm('Are you sure you want to activate this user?');">
+                                                                    <i class="fas fa-check"></i>
+                                                                </a>
                                                             </c:if>
 
                                                             <c:if test="${user.status eq '1'}">
                                                                 <a href="<%=request.getContextPath()%>/edit-user?id=${user.id}"
-                                                                   class="btn btn-link text-primary">Edit</a>
+                                                                   class="btn btn-info"><i class="align-middle" data-feather="edit"></i></a>
 
                                                                 <a href="<%=request.getContextPath()%>/change-status-user?id=${user.id}&status=${user.status}"
-                                                                   class="btn btn-link text-danger"
-                                                                   onclick="return confirm('Are you sure you want to deactivate this user?');">Deactivate</a>
+                                                                   class="btn btn-danger"
+                                                                   onclick="return confirm('Are you sure you want to deactivate this user?');">
+                                                                    <i class="fas fa-times" style="padding-left: 2px; padding-right: 2px"></i>
+                                                                </a>
                                                             </c:if>
 
                                                             <c:if test="${user.status eq '3'}">
                                                                 <a href="<%=request.getContextPath()%>/edit-user?id=${user.id}"
-                                                                   class="btn btn-link text-primary">Edit</a>
+                                                                   class="btn btn-info"><i class="align-middle" data-feather="edit"></i></a>
                                                             </c:if>
                                                         </td>
                                                     </tr>

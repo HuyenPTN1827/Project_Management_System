@@ -24,7 +24,7 @@ public class SettingDAO {
     public List<Setting> getUserRolesList() {
         List<Setting> setting = new ArrayList<>();
 
-        String sql = "SELECT * FROM pms.setting WHERE type = 'User Role' AND status = 1 ORDER BY priority DESC;";
+        String sql = "SELECT * FROM pms.setting WHERE type = 'User Role' ORDER BY priority DESC;";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             ResultSet rs = stm.executeQuery();
@@ -93,8 +93,8 @@ public class SettingDAO {
             if (keyword != null && !keyword.isEmpty()) {
                 String keywordPattern = "%" + keyword.toLowerCase().trim() + "%";
 
-                stm.setString(index++, "%" + keywordPattern + "%");
-                stm.setString(index++, "%" + keywordPattern + "%");
+                stm.setString(index++, keywordPattern);
+                stm.setString(index++, keywordPattern);
             }
             // Set type only if it is not "parent" and not empty
             if (type != null && !type.isEmpty() && !"parent".equals(type)) {
@@ -245,7 +245,7 @@ public class SettingDAO {
     public List<Setting> getTypeList() {
         List<Setting> setting = new ArrayList<>();
 
-        String sql = "SELECT * FROM pms.setting WHERE (type IS NULL OR type = '') AND status = 1;";
+        String sql = "SELECT * FROM pms.setting WHERE (type IS NULL OR type = '');";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             ResultSet rs = stm.executeQuery();

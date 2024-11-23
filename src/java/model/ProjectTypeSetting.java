@@ -22,16 +22,6 @@ public class ProjectTypeSetting {
     public ProjectTypeSetting() {
     }
 
-    public ProjectTypeSetting(int id, String name, String type, String value, int priority, boolean status, String description) {
-        this.id = id;
-        this.name = name;
-        this.type = type;
-        this.value = value;
-        this.priority = priority;
-        this.status = status;
-        this.description = description;
-    }
-
     public ProjectTypeSetting(int id, String name, String type, String value, int priority, boolean status, String description, ProjectType pjType) {
         this.id = id;
         this.name = name;

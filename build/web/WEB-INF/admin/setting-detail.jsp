@@ -87,7 +87,7 @@
                                                     </select>
                                                 </div>
 
-                                                <div class="mb-3 col-md-12">
+                                                <div class="mb-3 col-md-6">
                                                     <label class="form-label">Value</label>
                                                     <input type="text" class="form-control" name="value" placeholder="Enter the Setting value" 
                                                            value="${value}">

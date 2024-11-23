@@ -23,7 +23,7 @@
 
         <link rel="canonical" href="pages-profile.html" />
 
-        <title>Project Type User Details | PMS</title>
+        <title>Department Details | PMS</title>
 
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet">
 
@@ -54,143 +54,85 @@
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
         <div class="row">
             <div class="col-md-12 col-xl-12">
-                <c:if test="${deptUser == null}">
+                <c:if test="${deptUser != null}">
                     <div class="card">
                         <div class="card-header">
-                            <div class="mt-2 mb-2">
-                                <form action="add-department-user" method="post" class="d-flex align-items-center" style="gap: 15px;">
-                                    <input type="hidden" name="deptId" value="${deptId}">
-                                    <div class="col-md-5">
-                                        <input type="search" name="keyword" class="form-control"
-                                               placeholder="Enter Full Name or Email" id="keyword" value="${keyword}">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <button type="submit" class="btn btn-primary">Search</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>       
-                    <div class="card">
-                        <div class="card-body">
-                            <c:if test="${not empty errorMessages}">
-                                <div class="alert alert-danger pt-3 pe-3 ps-3">
-                                    <ul>
-                                        <c:forEach items="${errorMessages}" var="error" >
-                                            <li>${error}</li>
-                                            </c:forEach>
-                                    </ul>
-                                </div>
-                            </c:if>
-
-                            <form action="insert-department-user" method="post" class="row">
-                                <input type="hidden" name="deptId" value="${deptId}">
+                            <form action="update-department-user" method="post" class="row">
                                 <input type="hidden" name="id" value="${deptUser.id}">
+                                <input type="hidden" name="userId" value="${deptUser.user.id}">
+                                <input type="hidden" name="deptId" value="${deptUser.dept.id}">
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Full Name <span style="color: red;">*</span></label>
-                                    <input type="text" class="form-control" name="fullname" placeholder="Enter the Full name" 
-                                           value="${deptUser.full_name}" readonly>
+                                    <label class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" name="fullname" placeholder="Full name" 
+                                           value="${deptUser.user.full_name}" readonly>
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Username</label>
+                                    <input type="text" class="form-control" name="email" placeholder="Username" 
+                                           value="${deptUser.setting.name}" readonly>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Phone</label>
-                                    <input type="text" class="form-control" name="mobile" placeholder="Enter the Phone number"
-                                           value="${deptUser.mobile}" readonly>
+                                    <input type="text" class="form-control" name="mobile" placeholder="Phone number"
+                                           value="${deptUser.user.mobile}" readonly>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Email <span style="color: red;">*</span></label>
-                                    <input type="text" class="form-control" name="email" placeholder="Enter the Email address" 
-                                           value="${deptUser.email}" readonly>
+                                    <label class="form-label">Email</label>
+                                    <input type="text" class="form-control" name="email" placeholder="Email address" 
+                                           value="${deptUser.user.email}" readonly>
+                                </div>
+
+                                <div class="d-flex align-items-center my-4">
+                                    <div class="flex-grow-1 border-top"></div>
+                                    <span class="mx-3">${deptUser.dept.code} Department Manager</span>
+                                    <div class="flex-grow-1 border-top"></div>
+                                </div>
+                                    
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">From</label>
+                                    <input type="readonly" class="form-control" name="start_date" placeholder="dd/MM/yyyy" 
+                                           value="${deptUser.start_date}" readonly>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Project Role <span style="color: red;">*</span></label>
-                                    <select name="roleId" class="form-select" required>
-                                        <option value="" disable hidden>Choose Department Role</option>
-                                        <c:forEach items="${setting}" var="r">
-                                            <option value=${r.id}>${r.name}</option>
-                                        </c:forEach>
-                                    </select>
+                                    <label class="form-label">To</label>
+                                    <input type="text" class="form-control" name="end_date" placeholder="--" 
+                                           value="${deptUser.end_date}" readonly>
                                 </div>
 
-                                <div>
-                                    <button type="submit" class="btn btn-lg btn-success">Submit</button>
-                                </div>
+                                <!--                                <div class="mb-3 col-md-6">
+                                                                    <label class="form-label">Status</label>
+                                                                    <div class="check">
+                                                                        <input class="form-check-input" type="radio" name="status"
+                                <%--<c:if test="${deptUser.status eq 'true'}">--%>
+                                    checked
+                                <%--</c:if>--%>
+                                value="true"> Active
+                         <input class="form-check-input ms-3" type="radio" name="status"
+                                <%--<c:if test="${deptUser.status eq 'false'}">--%>
+                                    checked
+                                <%--</c:if>--%>
+                                value="false"> Inactive
+                     </div>
+                 </div>-->
+
+                                <!--                                <div>
+                                                                    <button type="submit" class="btn btn-lg btn-success">Submit</button>
+                                                                </div>-->
                             </form>
-                        </c:if> 
-
-                        <c:if test="${deptUser != null}">
-                            <div class="card">
-                                <div class="card-header">
-                                    <form action="update-department-user" method="post" class="row">
-                                        <input type="hidden" name="id" value="${deptUser.id}">
-                                        <input type="hidden" name="userId" value="${deptUser.user.id}">
-                                        <input type="hidden" name="deptId" value="${deptUser.dept.id}">
-
-                                        <div class="mb-3 col-md-6">
-                                            <label class="form-label">Full Name <span style="color: red;">*</span></label>
-                                            <input type="text" class="form-control" name="fullname" placeholder="Enter the Full name" 
-                                                   value="${deptUser.user.full_name}" readonly>
-                                        </div>
-
-                                        <div class="mb-3 col-md-6">
-                                            <label class="form-label">Phone</label>
-                                            <input type="text" class="form-control" name="mobile" placeholder="Enter the Phone number"
-                                                   value="${deptUser.user.mobile}" readonly>
-                                        </div>
-
-                                        <div class="mb-3 col-md-6">
-                                            <label class="form-label">Email <span style="color: red;">*</span></label>
-                                            <input type="text" class="form-control" name="email" placeholder="Enter the Email address" 
-                                                   value="${deptUser.user.email}" readonly>
-                                        </div>
-
-                                        <div class="mb-3 col-md-6">
-                                            <label class="form-label">Department Role <span style="color: red;">*</span></label>
-                                            <select name="roleId" class="form-select" required>
-                                                <option value="" disable hidden>Choose Project Role</option>
-                                                <c:forEach items="${setting}" var="r">
-                                                    <option 
-                                                        <c:if test="${deptUser.setting.id eq r.id}">
-                                                            selected="selected"
-                                                        </c:if>
-                                                        value=${r.id}>${r.name}
-                                                    </option>
-                                                </c:forEach>
-                                            </select>
-                                        </div>
-
-                                        <div class="mb-3 col-md-6">
-                                            <label class="form-label">Status</label>
-                                            <div class="check">
-                                                <input class="form-check-input" type="radio" name="status"
-                                                       <c:if test="${deptUser.status eq 'true'}">
-                                                           checked
-                                                       </c:if>
-                                                       value="true"> Active
-                                                <input class="form-check-input ms-3" type="radio" name="status"
-                                                       <c:if test="${deptUser.status eq 'false'}">
-                                                           checked
-                                                       </c:if>
-                                                       value="false"> Inactive
-                                            </div>
-                                        </div>
-
-                                        <div>
-                                            <button type="submit" class="btn btn-lg btn-success">Submit</button>
-                                        </div>
-                                    </form>
-                                </c:if>
-                            </div>
                         </div>
                     </div>
-                </div>
+                </c:if>
+            </div>
+        </div>
 
-                <script src="${pageContext.request.contextPath}/js/app.js"></script>
+        <script src="${pageContext.request.contextPath}/js/app.js"></script>
 
-                <script>
+        <script>
             document.addEventListener("DOMContentLoaded", function (event) {
                 setTimeout(function () {
                     if (localStorage.getItem('popState') !== 'shown') {
@@ -210,6 +152,6 @@
                     }
                 }, 15000);
             });
-                </script>
-                </body>
-                </html>
+        </script>
+    </body>
+</html>
