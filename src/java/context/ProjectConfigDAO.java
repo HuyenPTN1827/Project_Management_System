@@ -297,7 +297,7 @@ public boolean addTeam(Team team) {
                 member.setUserId(rs.getInt("user_id"));
                 member.setStartDate(rs.getDate("start_date"));
                 member.setEndDate(rs.getDate("end_date"));
-                member.setStatus(rs.getInt("status"));
+                member.setStatus(rs.getBoolean("status"));
 
                 members.add(member);
             }

@@ -4,7 +4,7 @@
  */
 package model;
 
-import java.util.Date;
+import java.sql.Date;
 
 /**
  *
@@ -16,12 +16,12 @@ public class TeamMember {
     private int userId;
     private Date startDate;
     private Date endDate;
-    private int status;
+    private boolean status;
 
     public TeamMember() {
     }
 
-    public TeamMember(int id, int teamId, int userId, Date startDate, Date endDate, int status) {
+    public TeamMember(int id, int teamId, int userId, Date startDate, Date endDate, boolean status) {
         this.id = id;
         this.teamId = teamId;
         this.userId = userId;
@@ -70,11 +70,11 @@ public class TeamMember {
         this.endDate = endDate;
     }
 
-    public int getStatus() {
+    public boolean getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
     

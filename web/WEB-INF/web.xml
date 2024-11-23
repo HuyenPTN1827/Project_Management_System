@@ -24,6 +24,18 @@
         <servlet-name>ProjectConfigController</servlet-name>
         <servlet-class>controller.ProjectConfigController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TeamController</servlet-name>
+        <servlet-class>controller.TeamController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>WorkPackageController</servlet-name>
+        <servlet-class>controller.WorkPackageController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TeamMemberController</servlet-name>
+        <servlet-class>controller.TeamMemberController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AuthenticationController</servlet-name>
         <url-pattern>/register-form</url-pattern>
@@ -288,11 +300,11 @@
         <servlet-name>ProjectConfigController</servlet-name>
         <url-pattern>/edit</url-pattern>
     </servlet-mapping>
-     <servlet-mapping>
+    <servlet-mapping>
         <servlet-name>ProjectConfigController</servlet-name>
         <url-pattern>/update</url-pattern>
     </servlet-mapping>
-     <servlet-mapping>
+    <servlet-mapping>
         <servlet-name>ProjectConfigController</servlet-name>
         <url-pattern>/teamlist</url-pattern>
     </servlet-mapping>
@@ -316,7 +328,18 @@
         <servlet-name>ProjectConfigController</servlet-name>
         <url-pattern>/deleteteam</url-pattern>
     </servlet-mapping>
-    
+    <servlet-mapping>
+        <servlet-name>TeamController</servlet-name>
+        <url-pattern>/TeamController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>WorkPackageController</servlet-name>
+        <url-pattern>/WorkPackageController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TeamMemberController</servlet-name>
+        <url-pattern>/TeamMemberController</url-pattern>
+    </servlet-mapping>
     <welcome-file-list>
         <welcome-file>login-form</welcome-file>
         <!--<welcome-file>project-type-management</welcome-file>-->
