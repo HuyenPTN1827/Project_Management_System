@@ -78,8 +78,8 @@ public class DepartmentDAO {
             if (keyword != null && !keyword.isEmpty()) {
                 String keywordPattern = "%" + keyword.toLowerCase().trim() + "%";
 
-                stm.setString(index++, "%" + keywordPattern + "%");
-                stm.setString(index++, "%" + keywordPattern + "%");
+                stm.setString(index++, keywordPattern);
+                stm.setString(index++, keywordPattern);
             }
             if (status != null) {
                 stm.setBoolean(index++, status);
@@ -218,8 +218,8 @@ public class DepartmentDAO {
                      du.role_id, s.name, du.start_date, du.end_date, du.status
                      FROM pms.dept_user du
                      INNER JOIN pms.user u ON du.user_id = u.id
-                     INNER JOIN pms.department d ON du.dept_id = d.id
-                     INNER JOIN pms.setting s ON du.role_id = s.id
+                     INNER JOIN pms.department d ON du.dept_id = d.id 
+                     INNER JOIN pms.setting s ON du.role_id = s.id AND s.name = 'Department Manager'
                      WHERE du.dept_id = ?""";
 
         // Add search conditions if any
@@ -239,7 +239,7 @@ public class DepartmentDAO {
             int index = 2;
             if (keyword != null && !keyword.isEmpty()) {
                 String keywordPattern = "%" + keyword.toLowerCase().trim() + "%";
-                stm.setString(index++, "%" + keywordPattern + "%");
+                stm.setString(index++, keywordPattern);
             }
             if (roleId != null) {
                 stm.setInt(index++, roleId);
@@ -344,7 +344,7 @@ public class DepartmentDAO {
         Department_User du = null;
 
         String sql = """
-                     SELECT du.id, du.user_id, u.full_name, u.email, u.mobile, du.dept_id, 
+                     SELECT du.id, du.user_id, u.full_name, u.email, u.mobile, du.dept_id, d.code, 
                      du.role_id, s.name, du.start_date, du.end_date, du.status
                      FROM pms.dept_user du
                      INNER JOIN pms.user u ON du.user_id = u.id
@@ -382,6 +382,7 @@ public class DepartmentDAO {
 
                 Department d = new Department();
                 d.setId(rs.getInt("du.dept_id"));
+                d.setCode(rs.getString("d.code"));
                 du.setDept(d);
 
                 Setting s = new Setting();

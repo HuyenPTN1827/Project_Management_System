@@ -23710,8 +23710,8 @@ body[data-theme=colored] .simplebar-scrollbar:before{
     display: none;
     position: fixed;
     z-index: 1050;
-    left: 0;
     top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -23719,14 +23719,21 @@ body[data-theme=colored] .simplebar-scrollbar:before{
 }
 
 .modal-dialog {
-    position: relative;
-    margin: 5% auto;
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 80%;
     max-width: 600px;
 }
 
 .modal-content {
     background-color: #F4F6FA;
-    padding: 20px;
     border-radius: 5px;
+    max-height: calc(100vh - 100px); /* Prevent modal from overflowing screen */
+    overflow-y: auto;
+}
+
+.modal-body {
+    padding: 20px;
 }

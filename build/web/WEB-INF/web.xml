@@ -217,8 +217,44 @@
         <url-pattern>/change-status-project-type-criteria</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ProjectTypeSettingController</servlet-name>
-        <url-pattern>/ProjectTypeSetting</url-pattern>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <url-pattern>/add-project-phase</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <url-pattern>/insert-project-phase</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <url-pattern>/edit-project-phase</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <url-pattern>/update-project-phase</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <url-pattern>/change-status-project-phase</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <url-pattern>/add-project-type-setting</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <url-pattern>/insert-project-type-setting</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <url-pattern>/edit-project-type-setting</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <url-pattern>/update-project-type-setting</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectTypeController</servlet-name>
+        <url-pattern>/change-status-project-type-setting</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ProjectListController</servlet-name>

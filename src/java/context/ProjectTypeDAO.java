@@ -47,8 +47,8 @@ public class ProjectTypeDAO {
             if (keyword != null && !keyword.isEmpty()) {
                 String keywordPattern = "%" + keyword.toLowerCase().trim() + "%";
 
-                stm.setString(index++, "%" + keywordPattern + "%");
-                stm.setString(index++, "%" + keywordPattern + "%");
+                stm.setString(index++, keywordPattern);
+                stm.setString(index++, keywordPattern);
             }
             if (status != null) {
                 stm.setBoolean(index++, status);
@@ -222,7 +222,7 @@ public class ProjectTypeDAO {
             int index = 2;
             if (keyword != null && !keyword.isEmpty()) {
                 String keywordPattern = "%" + keyword.toLowerCase().trim() + "%";
-                stm.setString(index++, "%" + keywordPattern + "%");
+                stm.setString(index++, keywordPattern);
             }
             if (roleId != null) {
                 stm.setInt(index++, roleId);
@@ -405,34 +405,6 @@ public class ProjectTypeDAO {
         return rowUpdated;
     }
 
-    // HuyenPTNHE160769
-    // 29/10/2024
-    // Get project phases list
-    public List<ProjectPhase> getPhaseList(int typeId) {
-        List<ProjectPhase> phase = new ArrayList<>();
-
-        String sql = "SELECT * FROM pms.project_phase WHERE type_id = ?;";
-
-        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
-            stm.setInt(1, typeId);
-            ResultSet rs = stm.executeQuery();
-            while (rs.next()) {
-                ProjectPhase p = new ProjectPhase();
-                p.setId(rs.getInt("id"));
-                p.setName(rs.getString("name"));
-
-                ProjectType pt = new ProjectType();
-                pt.setId(rs.getInt("type_id"));
-                p.setPjType(pt);
-
-                phase.add(p);
-            }
-        } catch (SQLException e) {
-            BaseDAO.printSQLException(e);
-        }
-        return phase;
-    }
-
 //    HuyenPTNHE160769
 //    29/10/2024      
 //    Admin select all project type criteria
@@ -462,7 +434,7 @@ public class ProjectTypeDAO {
             int index = 2;
             if (keyword != null && !keyword.isEmpty()) {
                 String keywordPattern = "%" + keyword.toLowerCase().trim() + "%";
-                stm.setString(index++, "%" + keywordPattern + "%");
+                stm.setString(index++, keywordPattern);
             }
             if (phaseId != null) {
                 stm.setInt(index++, phaseId);
@@ -599,5 +571,321 @@ public class ProjectTypeDAO {
         }
         return rowUpdated;
     }
+    
+    // HuyenPTNHE160769
+    // 29/10/2024
+    // Get project phases list
+    public List<ProjectPhase> selectAllProjectPhase(int typeId, String keyword, Boolean status) {
+        List<ProjectPhase> phase = new ArrayList<>();
 
+        String sql = "SELECT * FROM pms.project_phase WHERE type_id = ?";
+
+        // Add search conditions if any
+        if (keyword != null && !keyword.isEmpty()) {
+            sql += " AND LOWER(name) LIKE ?";
+        }
+        if (status != null) {
+            sql += " AND status = ?";
+        }
+        
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            stm.setInt(1, typeId);
+            
+            int index = 2;
+            if (keyword != null && !keyword.isEmpty()) {
+                String keywordPattern = "%" + keyword.toLowerCase().trim() + "%";
+                stm.setString(index++, keywordPattern);
+            }
+            if (status != null) {
+                stm.setBoolean(index++, status);
+            }
+            
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                ProjectPhase p = new ProjectPhase();
+                p.setId(rs.getInt("id"));
+                p.setName(rs.getString("name"));
+                p.setPriority(rs.getInt("priority"));
+                p.setStatus(rs.getBoolean("status"));
+
+                ProjectType pt = new ProjectType();
+                pt.setId(rs.getInt("type_id"));
+                p.setPjType(pt);
+
+                phase.add(p);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return phase;
+    }
+
+// chiennkhe161554
+// 30/10/2024
+// Admin select project phase by id
+    public ProjectPhase selectProjectPhaseByID(int id) {
+        ProjectPhase phase = null;
+
+        String sql = "SELECT * FROM pms.project_phase WHERE id = ?;";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            stm.setInt(1, id);
+
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                phase = new ProjectPhase();
+                phase.setId(rs.getInt("id"));
+                phase.setName(rs.getString("name"));
+                phase.setPriority(rs.getInt("priority"));
+                phase.setDetails(rs.getString("details"));
+                phase.setStatus(rs.getBoolean("status"));
+
+                ProjectType pt = new ProjectType();
+                pt.setId(rs.getInt("type_id"));
+                phase.setPjType(pt);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return phase;
+    }
+
+// chiennkhe161554
+// 30/10/2024
+// Admin add new project phase
+    public int insertProjectPhase(ProjectPhase phase) throws SQLException {
+        int result = 0;
+        String sql = """
+                 INSERT INTO pms.project_phase (name, priority, details, type_id)
+                 VALUES (?, ?, ?, ?);""";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            stm.setString(1, phase.getName());
+            stm.setInt(2, phase.getPriority());
+            stm.setString(3, phase.getDetails());
+            stm.setInt(4, phase.getPjType().getId());
+
+            result = stm.executeUpdate();
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return result;
+    }
+
+// chiennkhe161554
+// 30/10/2024
+// Admin update a project phase
+    public boolean updateProjectPhase(ProjectPhase phase) throws SQLException {
+        boolean rowUpdated = false;
+
+        String sql = "UPDATE pms.project_phase SET name = ?, priority = ?, details = ?, status = ? WHERE id = ?;";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            stm.setString(1, phase.getName());
+            stm.setInt(2, phase.getPriority());
+            stm.setString(3, phase.getDetails());
+            stm.setBoolean(4, phase.isStatus());
+            stm.setInt(5, phase.getId());
+
+            rowUpdated = stm.executeUpdate() > 0;
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return rowUpdated;
+    }
+
+// chiennkhe161554
+// 30/10/2024
+// Admin change status of a project phase
+    public boolean changeStatusProjectPhase(ProjectPhase phase) throws SQLException {
+        boolean rowUpdated = false;
+
+        String sql = "UPDATE pms.project_phase SET status = ? WHERE id = ?;";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            stm.setBoolean(1, phase.isStatus());
+            stm.setInt(2, phase.getId());
+            rowUpdated = stm.executeUpdate() > 0;
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return rowUpdated;
+    }
+
+    // TrươngHBHE151011
+    // 17/10/2024
+    // Get list of ProjectTypeSetting with search by name or value and filter by status
+    public List<ProjectTypeSetting> getAllProjectTypeSettings(String keyword, Boolean status, String type, int typeId) throws SQLException {
+        List<ProjectTypeSetting> list = new ArrayList<>();
+
+        String sql = "SELECT * FROM pms.project_type_setting WHERE type_id = ?";
+
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            sql += (" AND (name LIKE ? OR value LIKE ?)");
+        }
+        if ("parent".equals(type)) {
+            sql += " AND (type IS NULL OR type = '')";
+        } else if (type != null && !type.isEmpty()) {
+            sql += " AND type = ?";
+        }
+        if (status != null) {
+            sql += (" AND status = ?");
+        }
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stmt = cnt.prepareStatement(sql);) {
+            stmt.setInt(1, typeId);
+            int paramIndex = 2;
+
+            // Set parameters for keyword search
+            if (keyword != null && !keyword.trim().isEmpty()) {
+                String searchPattern = "%" + keyword.toLowerCase().trim() + "%";
+                stmt.setString(paramIndex++, searchPattern);
+                stmt.setString(paramIndex++, searchPattern);
+            }
+            // Set type only if it is not "parent" and not empty
+            if (type != null && !type.isEmpty() && !"parent".equals(type)) {
+                stmt.setString(paramIndex++, type);
+            }
+            // Set parameter for status filter
+            if (status != null) {
+                stmt.setBoolean(paramIndex++, status);
+            }
+            System.out.println(sql);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                ProjectTypeSetting s = new ProjectTypeSetting();
+                s.setId(rs.getInt("id"));
+                s.setName(rs.getString("name"));
+                s.setType(rs.getString("type"));
+                s.setValue(rs.getString("value"));
+                s.setPriority(rs.getInt("priority"));
+                s.setStatus(rs.getBoolean("status"));
+                s.setDescription(rs.getString("description"));
+
+                ProjectType pt = new ProjectType();
+                pt.setId(rs.getInt("type_id"));
+                s.setPjType(pt);
+
+                list.add(s);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return list;
+    }
+
+    // TrươngHBHE151011
+    // 17/10/2024
+    // Get ProjectTypeSetting by ID
+    public ProjectTypeSetting getProjectTypeSettingById(int id) throws SQLException {
+        ProjectTypeSetting setting = null;
+        
+        String sql = "SELECT * FROM pms.project_type_setting WHERE id = ?";
+        System.out.println(sql);
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stmt = cnt.prepareStatement(sql);) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                setting = new ProjectTypeSetting();
+                setting.setId(rs.getInt("id"));
+                setting.setName(rs.getString("name"));
+                setting.setType(rs.getString("type"));
+                setting.setValue(rs.getString("value"));
+                setting.setPriority(rs.getInt("priority"));
+                setting.setStatus(rs.getBoolean("status"));
+                setting.setDescription(rs.getString("description"));
+                
+                ProjectType pt = new ProjectType();
+                pt.setId(rs.getInt("type_id"));
+                setting.setPjType(pt);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return setting;
+    }
+
+    // TrươngHBHE151011
+    // 17/10/2024
+    // Create new ProjectTypeSetting
+    public void createProjectTypeSetting(ProjectTypeSetting setting) throws SQLException {
+        String sql = "INSERT INTO pms.project_type_setting (name, type, value, "
+                + "priority, description, type_id) VALUES (?, ?, ?, ?, ?, ?)";
+        System.out.println(sql);
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stmt = cnt.prepareStatement(sql);) {
+            stmt.setString(1, setting.getName());
+            stmt.setString(2, setting.getType());
+            stmt.setString(3, setting.getValue());
+            stmt.setInt(4, setting.getPriority());
+            stmt.setString(5, setting.getDescription());
+            stmt.setInt(6, setting.getPjType().getId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+    }
+
+    // TrươngHBHE151011
+    // 17/10/2024
+    // Update existing ProjectTypeSetting
+    public void updateProjectTypeSetting(ProjectTypeSetting setting) throws SQLException {
+        String sql = "UPDATE pms.project_type_setting SET name = ?, type = ?, value = ?, "
+                + "priority = ?, status = ?, description = ? WHERE id = ?;";
+        System.out.println(sql);
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stmt = cnt.prepareStatement(sql);) {
+            stmt.setString(1, setting.getName());
+            stmt.setString(2, setting.getType());
+            stmt.setString(3, setting.getValue());
+            stmt.setInt(4, setting.getPriority());
+            stmt.setBoolean(5, setting.isStatus());
+            stmt.setString(6, setting.getDescription());
+            stmt.setInt(7, setting.getId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+    }
+
+    // TrươngHBHE151011
+    // 17/10/2024
+    // Change the status of ProjectTypeSetting by ID
+    public void changeStatusById(int id, boolean newStatus) throws SQLException {
+        String sql = "UPDATE pms.project_type_setting SET status = ? WHERE id = ?";
+        System.out.println(sql);
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stmt = cnt.prepareStatement(sql);) {
+            stmt.setBoolean(1, newStatus);
+            stmt.setInt(2, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+    }
+
+    // HuyenPTNHE160769
+    // 11/11/2024
+    // Get type list
+    public List<ProjectTypeSetting> getTypeList(int id) {
+        List<ProjectTypeSetting> setting = new ArrayList<>();
+
+        String sql = "SELECT * FROM pms.project_type_setting WHERE (type IS NULL OR type = '') AND type_id = ?;";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                ProjectTypeSetting s = new ProjectTypeSetting();
+                s.setId(rs.getInt("id"));
+                s.setName(rs.getString("name"));
+                s.setValue(rs.getString("value"));
+                setting.add(s);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return setting;
+    }
 }

@@ -219,7 +219,7 @@ public class DepartmentController extends HttpServlet {
 
         deptService.updateDepartment(d, parentId);
         // Redirect to user-management url
-        response.sendRedirect("department-management");
+        response.sendRedirect("department-config?id=" + id);
     }
 
 //    HuyenPTNHE160769 
@@ -247,25 +247,31 @@ public class DepartmentController extends HttpServlet {
     private void listDepartmentConfig(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         int id = Integer.parseInt(request.getParameter("id"));
         String keyword = request.getParameter("keyword");
-        String roleIdStr = request.getParameter("roleId");
         String statusStr = request.getParameter("status");
+        String activeTab = request.getParameter("activeTab");
 
         // Process the filter value, convert to number or null if not selected
-        Integer roleId = roleIdStr != null && !roleIdStr.isEmpty() ? Integer.valueOf(roleIdStr) : null;
         Boolean status = statusStr != null && !statusStr.isEmpty() ? Boolean.valueOf(statusStr) : null;
 
         Department dept = deptService.getDepartmentById(id);
         List<Department> listDept = deptService.getAllDepartments(null, null);
-        List<Setting> setting = settingService.getDeptRoleList();
-        List<Department_User> deptUser = deptService.getAllDepartmentUsers(keyword, roleId, status, id);
+        List<Department_User> deptUser = deptService.getAllDepartmentUsers(keyword, null, status, id);
+        List<Department> parent = deptService.getDepartmentList();
+        List<User> listManager = userService.getAllUsers(null, null, 3, 1);
 
         request.setAttribute("dept", dept);
+        request.setAttribute("parent", parent);
         request.setAttribute("listDept", listDept);
-        request.setAttribute("setting", setting);
+        request.setAttribute("listManager", listManager);
         request.setAttribute("deptUser", deptUser);
         request.setAttribute("keyword", keyword);
-        request.setAttribute("roleId", roleId);
         request.setAttribute("statusUser", status);
+
+        // Nếu không có activeTab, mặc định là "detail"
+        if (activeTab == null || activeTab.isEmpty()) {
+            activeTab = (keyword != null || status != null) ? "manager" : "detail";
+        }
+        request.setAttribute("activeTab", activeTab);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/dept-config.jsp");
         dispatcher.forward(request, response);
@@ -289,7 +295,7 @@ public class DepartmentController extends HttpServlet {
         du.setDept(d);
 
         deptService.changeStatusDepartmentUser(du);
-        response.sendRedirect("department-config?id=" + deptId);
+        response.sendRedirect("department-config?id=" + deptId + "&activeTab=manager");
     }
 
 //    HuyenPTNHE160769 
@@ -300,16 +306,16 @@ public class DepartmentController extends HttpServlet {
         String keyword = request.getParameter("keyword");
         List<String> errors = new ArrayList<>();
 
-        User deptUser = userService.findUserByFullNameOrEmail(keyword);
-        List<Setting> setting = settingService.getDeptRoleList();
+        User deptUser = userService.findUserByFullNameOrEmail(keyword); // Find user by keyword (email or full name)
+        List<User> deptUserList = userService.getAllUsers(null, deptId, null, 1); // Get all users for the department
 
-        if (deptUser == null && keyword != null) {
+        if (deptUser == null && keyword != null && !keyword.isEmpty()) {
             errors.add("No user found.");
         }
 
         request.setAttribute("deptId", deptId);
-        request.setAttribute("setting", setting);
         request.setAttribute("deptUser", deptUser);
+        request.setAttribute("deptUserList", deptUserList);
         request.setAttribute("keyword", keyword);
         request.setAttribute("errorMessages", errors);
 
@@ -321,14 +327,14 @@ public class DepartmentController extends HttpServlet {
 //    01/11/2024  
 //    Insert department user
     private void insertDeptUser(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
+        int userId = Integer.parseInt(request.getParameter("userId"));
         int deptId = Integer.parseInt(request.getParameter("deptId"));
         int roleId = Integer.parseInt(request.getParameter("roleId"));
 
         Department_User du = new Department_User();
 
         User u = new User();
-        u.setId(id);
+        u.setId(userId);
         du.setUser(u);
 
         Department d = new Department();
@@ -340,7 +346,7 @@ public class DepartmentController extends HttpServlet {
         du.setSetting(setting);
 
         deptService.insertDepartmentUser(du);
-        response.sendRedirect("department-config?id=" + deptId);
+        response.sendRedirect("department-config?id=" + deptId + "&activeTab=manager");
     }
 
 //    HuyenPTNHE160769 
@@ -385,7 +391,7 @@ public class DepartmentController extends HttpServlet {
         du.setSetting(setting);
 
         deptService.updateDepartmentUser(du);
-        response.sendRedirect("department-config?id=" + deptId);
+        response.sendRedirect("department-config?id=" + deptId + "&activeTab=manager");
     }
 
 }
