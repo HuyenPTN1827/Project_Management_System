@@ -10,7 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import model.Milestone;
 import model.Project;
+import model.User;
 
 /**
  *
@@ -331,5 +333,54 @@ public class ProjectDAO {
             BaseDAO.printSQLException(e);
         }
         return projects;
+    }
+
+//    HuyenPTNHE160769
+    public List<Project> getProjectListByUserID(int userId) {
+        List<Project> project = new ArrayList<>();
+
+        String sql = "SELECT p.id, p.name FROM pms.project p "
+                + "JOIN pms.allocation a ON p.id = a.project_id WHERE a.user_id = ?;";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            stm.setInt(1, userId);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Project p = new Project();
+                p.setId(rs.getInt("p.id"));
+                p.setName(rs.getString("p.name"));
+                project.add(p);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return project;
+    }
+
+    public List<Milestone> getMilestonesByProjectId(int userId, Integer projectId) {
+        List<Milestone> milestones = new ArrayList<>();
+        String sql = """
+                     SELECT m.id, m.name FROM pms.milestone m
+                     JOIN pms.allocation a ON m.project_id = a.project_id
+                     WHERE a.user_id = ?""";
+        if (projectId != null) {
+            sql += " AND m.project_id = ?";
+        }
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
+            stm.setInt(1, userId);
+            if (projectId != null) {
+                stm.setInt(2, projectId);
+            }
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Milestone m = new Milestone();
+                m.setId(rs.getInt("m.id"));
+                m.setName(rs.getString("m.name"));
+                milestones.add(m);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return milestones;
     }
 }

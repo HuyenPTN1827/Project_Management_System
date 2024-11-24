@@ -29,10 +29,10 @@ public class SettingService {
     }
 
     // HuyenPTNHE160769
-    // 31/10/2024
-    // Get dept roles list
-    public List<Setting> getDeptRoleList() {
-        return settingDAO.getDepartmentRolesList();
+    // 22/11/2024
+    // Get issue types list
+    public List<Setting> getIssueTypeList() {
+        return settingDAO.getIssueTypeList();
     }
 
     // HuyenPTNHE160769

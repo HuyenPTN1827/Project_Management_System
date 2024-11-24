@@ -356,7 +356,7 @@ public class DepartmentController extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         int deptId = Integer.parseInt(request.getParameter("deptId"));
         Department_User deptUser = deptService.getDepartmentUserById(id);
-        List<Setting> setting = settingService.getDeptRoleList();
+        List<Setting> setting = settingService.getIssueTypeList();
 
         request.setAttribute("deptUser", deptUser);
         request.setAttribute("setting", setting);

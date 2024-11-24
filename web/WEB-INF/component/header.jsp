@@ -5,6 +5,7 @@
 
     <form class="d-none d-sm-inline-block">
         <div class="input-group input-group-navbar">
+            <input type="hidden" name="userId" value="${user.id}"/>
             <input type="text" class="form-control" placeholder="Search?" aria-label="Search">
             <button class="btn" type="button">
                 <i class="align-middle" data-feather="search"></i>
@@ -13,8 +14,11 @@
     </form>
 
     <ul class="navbar-nav d-none d-lg-flex">
-        <li class="nav-item px-2 dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="megaDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
+        <!--<li class="nav-item px-2 dropdown">-->
+        <li class="nav-item px-2">
+            <a class="nav-link"  href="<%=request.getContextPath()%>/issue-management?userId=${user.id}">Issues</a>
+            
+<!--            <a class="nav-link dropdown-toggle" href="#" id="megaDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
                aria-expanded="false">
                 Mega Menu
             </a>
@@ -52,7 +56,7 @@
                         <a class="dropdown-item" href="#">Ajax Sourced Data</a>
                     </div>
                 </div>
-            </div>
+            </div>-->
         </li>
 
         <li class="nav-item dropdown">

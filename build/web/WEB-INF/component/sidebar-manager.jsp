@@ -26,7 +26,7 @@
                 </div>
                 <div class="flex-grow-1 ps-2">
                     <a class="sidebar-user-title dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                        Hello, <strong><%= ((User) session.getAttribute("user")).getFull_name() %></strong>!
+                        Hello, <strong>${user.full_name}</strong>!
                     </a>
                     <div class="dropdown-menu dropdown-menu-start">
                         <a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1" data-feather="user"></i> Profile</a>

@@ -42,12 +42,12 @@ public class SettingDAO {
     }
 
     // HuyenPTNHE160769
-    // 31/10/2024
-    // Get department roles list
-    public List<Setting> getDepartmentRolesList() {
+    // 22/10/2024
+    // Get issue types list
+    public List<Setting> getIssueTypeList() {
         List<Setting> setting = new ArrayList<>();
 
-        String sql = "SELECT * FROM pms.setting WHERE type = 'Department Role' AND status = 1 ORDER BY priority ASC;";
+        String sql = "SELECT * FROM pms.setting WHERE type = 'Issue Type' AND status = 1 ORDER BY priority ASC;";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             ResultSet rs = stm.executeQuery();
