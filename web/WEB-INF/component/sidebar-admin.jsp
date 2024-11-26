@@ -86,6 +86,7 @@
                 </a>
             </li>
 
+            <!--System Admin-->
             <li class="sidebar-item <c:if test="${currentPage == 'department-management' || currentPage == 'project-type-management'
                                                   || currentPage == 'user-management' || currentPage == 'setting-management'}">active</c:if>">
                       <a data-bs-target="#ui" data-bs-toggle="collapse" class="sidebar-link

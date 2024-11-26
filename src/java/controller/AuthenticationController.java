@@ -30,13 +30,12 @@ public class AuthenticationController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private UserService userService;
     private SettingService settingService;
-    
 
     @Override
     public void init() throws ServletException {
         this.userService = new UserService();
         this.settingService = new SettingService();
-        
+
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -128,51 +127,48 @@ public class AuthenticationController extends HttpServlet {
 //        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/guest/register.jsp");
 //        dispatcher.forward(request, response);
 //    }
-    
     //BachHD
-  private void register(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    String fullname = request.getParameter("fullname");
-    String email = request.getParameter("email");
-    String mobile = request.getParameter("mobile");
-    String password = request.getParameter("password");
- 
-    User user = new User();
-    user.setFull_name(fullname);
-    user.setPassword(password);
-    user.setEmail(email);
-    user.setMobile(mobile);
-// Validate user information
-    List<String> validationErrors = userService.validateUser(user);
+    private void register(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String fullname = request.getParameter("fullname");
+        String email = request.getParameter("email");
+        String mobile = request.getParameter("mobile");
+        String password = request.getParameter("password");
 
-    // Kiểm tra giá trị người dùng nhập có lỗi nào không
-    if (!validationErrors.isEmpty()) {
-        request.setAttribute("NOTIFICATION", String.join(", ", validationErrors));
+        User user = new User();
+        user.setFull_name(fullname);
+        user.setPassword(password);
+        user.setEmail(email);
+        user.setMobile(mobile);
+// Validate user information
+        List<String> validationErrors = userService.validateUser(user);
+
+        // Kiểm tra giá trị người dùng nhập có lỗi nào không
+        if (!validationErrors.isEmpty()) {
+            request.setAttribute("NOTIFICATION", String.join(", ", validationErrors));
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/guest/register.jsp");
+            dispatcher.forward(request, response);
+            return; // Dừng xử lý nếu có lỗi
+        }
+        try {
+            int result = userService.registerUser(user);
+
+            if (result == 1) {
+                // Đăng ký thành công
+                request.setAttribute("SUCCESS", "User Registered Successfully!");
+            } else if (result == -1) {
+                // Email đã tồn tại
+                request.setAttribute("NOTIFICATION", "Email already exists. Please use a different email.");
+            } else {
+                // Đăng ký thất bại vì lý do khác
+                request.setAttribute("NOTIFICATION", "Registration failed. Please try again.");
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AuthenticationController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/guest/register.jsp");
         dispatcher.forward(request, response);
-        return; // Dừng xử lý nếu có lỗi
     }
-    try {
-        int result = userService.registerUser(user);
-        
-        if (result == 1) {
-            // Đăng ký thành công
-            request.setAttribute("SUCCESS", "User Registered Successfully!");
-        } else if (result == -1) {
-            // Email đã tồn tại
-            request.setAttribute("NOTIFICATION", "Email already exists. Please use a different email.");
-        } else {
-            // Đăng ký thất bại vì lý do khác
-            request.setAttribute("NOTIFICATION", "Registration failed. Please try again.");
-        }
-    } catch (ClassNotFoundException ex) {
-        Logger.getLogger(AuthenticationController.class.getName()).log(Level.SEVERE, null, ex);
-    }
-
-    RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/guest/register.jsp");
-    dispatcher.forward(request, response);
-}
-
-
 
     private void showLoginForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/login.jsp");
@@ -249,80 +245,70 @@ public class AuthenticationController extends HttpServlet {
 //        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An internal error occurred.");
 //    }
 //}
+    private void login(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
 
-private void login(HttpServletRequest request, HttpServletResponse response) 
-    throws ServletException, IOException {
-    String email = request.getParameter("email");
-    String password = request.getParameter("password");
+        System.out.println("Email: " + email);
+        System.out.println("Password: " + password);
 
-    System.out.println("Email: " + email);
-    System.out.println("Password: " + password);
+        SettingDAO settingDAO = new SettingDAO();
+        List<Setting> userRoles = settingService.getPriorityUserRolesList();
 
-    SettingDAO settingDAO = new SettingDAO();
-    List<Setting> userRoles = settingService.getPriorityUserRolesList(); 
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(password);
 
-    User user = new User();
-    user.setEmail(email);
-    user.setPassword(password);
+        try {
+            User foundUser = userService.loginValidate(user);
+            if (foundUser != null) {
+                System.out.println("User found: " + foundUser.getEmail());
+                int roleId = foundUser.getRole_id();
+                HttpSession session = request.getSession();
+                session.setAttribute("user", foundUser);
+                session.setMaxInactiveInterval(30 * 60);
 
-    try {
-        User foundUser = userService.loginValidate(user);
-        if (foundUser != null) {
-            System.out.println("User found: " + foundUser.getEmail());
-            int roleId = foundUser.getRole_id();
-            HttpSession session = request.getSession();
-            session.setAttribute("user", foundUser);
-            session.setMaxInactiveInterval(1 * 60);
+                Setting userRoleSetting = null;
+                for (Setting role : userRoles) {
+                    System.out.println("Checking role: " + role.getValue() + " with ID: " + roleId);
+                    if (role.getValue().equals(String.valueOf(roleId))) {
+                        userRoleSetting = role;
+                        break;
+                    }
+                }
+                if (userRoleSetting != null) {
+                    session.setAttribute("userRoleSetting", userRoleSetting);
+                    System.out.println("User Role: " + userRoleSetting.getName());
+                    System.out.println("Role Priority: " + userRoleSetting.getPriority());
+                    System.out.println("User found: " + foundUser.getEmail() + ", Role ID: " + foundUser.getRole_id());
 
-            Setting userRoleSetting = null;
-            for (Setting role : userRoles) {
-                System.out.println("Checking role: " + role.getValue() + " with ID: " + roleId);
-              if (role.getValue().equals(String.valueOf(roleId))) { 
-    userRoleSetting = role;
-    break;
-}
-
-
-            }
-
-            if (userRoleSetting != null) {
-                session.setAttribute("userRoleSetting", userRoleSetting);
-                System.out.println("User Role: " + userRoleSetting.getName());
-                System.out.println("Role Priority: " + userRoleSetting.getPriority());
-                System.out.println("User found: " + foundUser.getEmail() + ", Role ID: " + foundUser.getRole_id());
-
-                // Phân quyền dựa vào tên role
-                if (userRoleSetting.getPriority() == 1) { 
-                    System.out.println("Redirecting to user-management");
-                    response.sendRedirect(request.getContextPath() + "/user-management");
-                } else if (userRoleSetting.getPriority() >= 2) { 
-                    System.out.println("Redirecting to member-dashboard");
-                    response.sendRedirect(request.getContextPath() + "/member-dashboard");
+                    // Phân quyền dựa vào tên role
+                    if (userRoleSetting.getPriority() == 1) {
+                        System.out.println("Redirecting to user-management");
+                        response.sendRedirect(request.getContextPath() + "/user-management");
+                    } else if (userRoleSetting.getPriority() >= 2) {
+                        System.out.println("Redirecting to member-dashboard");
+                        response.sendRedirect(request.getContextPath() + "/member-dashboard");
+                    } else {
+                        System.out.println("Unauthorized access!");
+                        response.sendRedirect(request.getContextPath() + "/member/unauthorized.jsp");
+                    }
                 } else {
-                    System.out.println("Unauthorized access!");
+                    System.out.println("User role setting is null!");
                     response.sendRedirect(request.getContextPath() + "/member/unauthorized.jsp");
                 }
             } else {
-                System.out.println("User role setting is null!");
-                response.sendRedirect(request.getContextPath() + "/member/unauthorized.jsp");
+                HttpSession session = request.getSession();
+                session.setAttribute("NOTIFICATION", "Login Failed!");
+                System.out.println("Login Failed!");
+                request.getRequestDispatcher("/WEB-INF/member/login.jsp").forward(request, response);
             }
-        } else {
-            HttpSession session = request.getSession();
-            session.setAttribute("NOTIFICATION", "Login Failed!");
-            System.out.println("Login Failed!");
-            request.getRequestDispatcher("/WEB-INF/member/login.jsp").forward(request, response);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An internal error occurred.");
         }
-    } catch (ClassNotFoundException e) {
-        e.printStackTrace();
-        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An internal error occurred.");
     }
-}
-
-
-
-
-
-
 
     private void logout(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         // Lấy session hiện tại

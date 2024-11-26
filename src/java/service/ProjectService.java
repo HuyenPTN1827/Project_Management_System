@@ -6,6 +6,7 @@ package service;
 
 import context.ProjectDAO;
 import java.util.List;
+import model.Milestone;
 import model.Project;
 
 /**
@@ -56,5 +57,13 @@ public class ProjectService {
 
     public List<Project> getProjectsDropDown() {
         return projectDAO.getProjectsDropDown();
+    }
+    
+    //HuyenPTNHE160769
+    public List<Project> getProjectListByUserID(int userId) {
+        return projectDAO.getProjectListByUserID(userId);
+    }
+    public List<Milestone> getMilestonesByProjectId(int userId, Integer projectId) {
+        return projectDAO.getMilestonesByProjectId(userId, projectId);
     }
 }

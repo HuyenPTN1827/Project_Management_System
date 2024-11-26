@@ -36,6 +36,10 @@
         <servlet-name>TeamMemberController</servlet-name>
         <servlet-class>controller.TeamMemberController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>IssueController</servlet-name>
+        <servlet-class>controller.IssueController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AuthenticationController</servlet-name>
         <url-pattern>/register-form</url-pattern>
@@ -339,6 +343,30 @@
     <servlet-mapping>
         <servlet-name>TeamMemberController</servlet-name>
         <url-pattern>/TeamMemberController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>IssueController</servlet-name>
+        <url-pattern>/issue-management</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>IssueController</servlet-name>
+        <url-pattern>/add-issue</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>IssueController</servlet-name>
+        <url-pattern>/insert-issue</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>IssueController</servlet-name>
+        <url-pattern>/edit-issue</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>IssueController</servlet-name>
+        <url-pattern>/update-issue</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>IssueController</servlet-name>
+        <url-pattern>/change-status-issue</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>login-form</welcome-file>

@@ -329,6 +329,7 @@
                                                             <th>Name</th>
                                                             <th>Type</th>
                                                             <th>Value</th>
+                                                            <th>Priority</th>
                                                             <th>Status</th>
                                                             <th>Action</th>
                                                         </tr>
@@ -340,6 +341,7 @@
                                                                 <td>${type.name}</td>
                                                                 <td>${type.type}</td>
                                                                 <td>${type.value}</td>
+                                                                <td>${type.priority}</td>
                                                                 <td>
                                                                     <c:if test="${type.status eq 'true'}">
                                                                         <span class="badge bg-success">Active</span>
@@ -818,7 +820,7 @@
                                                                                        info: true,
                                                                                        order: [[0, 'desc']], // Default sort by ID column in descending order
                                                                                        columnDefs: [
-                                                                                           {orderable: false, targets: 5} // Disable sorting on the 'Action' column
+                                                                                           {orderable: false, targets: 6} // Disable sorting on the 'Action' column
                                                                                        ],
                                                                                        language: {
                                                                                            paginate: {

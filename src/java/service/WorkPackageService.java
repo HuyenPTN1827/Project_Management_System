@@ -28,4 +28,9 @@ public class WorkPackageService {
     public void changeStatus(int id, int newStatus) throws SQLException {
         workPackageDAO.changeStatus(id, newStatus);
     }
+    
+    //HuyenPTNHE160769
+    public List<WorkPackage> getWorkPackageByProjectId(int userId, Integer projectId) {
+        return workPackageDAO.getWorkPackageByProjectId(userId, projectId);
+    }
 }

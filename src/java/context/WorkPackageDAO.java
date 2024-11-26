@@ -109,4 +109,32 @@ public class WorkPackageDAO {
         ps.setObject(8, workPackage.getProjectId(), Types.INTEGER);
         ps.setObject(9, workPackage.getUserId(), Types.INTEGER);
     }
+    
+    //HuyenPTNHE160769
+    public List<WorkPackage> getWorkPackageByProjectId(int userId, Integer projectId) {
+        List<WorkPackage> scope = new ArrayList<>();
+        String sql = """
+                     SELECT wp.id, wp.title FROM pms.work_package wp
+                     JOIN pms.allocation a ON wp.project_id = a.project_id
+                     WHERE a.user_id = ?""";
+        if (projectId != null) {
+            sql += " AND wp.project_id = ?";
+        }
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
+            stm.setInt(1, userId);
+            if (projectId != null) {
+                stm.setInt(2, projectId);
+            }
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                WorkPackage wp = new WorkPackage();
+                wp.setId(rs.getInt("wp.id"));
+                wp.setTitle(rs.getString("wp.title"));
+                scope.add(wp);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return scope;
+    }
 }
