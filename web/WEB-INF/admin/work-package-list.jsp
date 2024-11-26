@@ -105,50 +105,32 @@
                                             <thead>
                                                 <tr style="text-align: center">
                                                     <th>ID</th>
-                                                    <th>Last Updated</th>
                                                     <th>Title</th>
                                                     <th>complexity</th>
                                                     <th>Planned Effort</th>
+                                                    <th>Last Updated</th>
                                                     <th>Status</th>
                                                     <th>Action</th>
-                                                    
+
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <c:forEach items="${requestScope.workPackages}" var="type">
                                                     <tr style="text-align: center">
                                                         <td>${type.id}</td>
-                                                        <td>${type.lastUpdated}</td>
                                                         <td>${type.title}</td>
                                                         <td>${type.complexity}</td>
                                                         <td>${type.plannedEffort}</td>
-                                                        <td>
-                                                            <c:if test="${type.status eq '1'}">
-                                                                <span class="badge bg-success">Active</span>
-                                                            </c:if>
-                                                            <c:if test="${type.status eq '0'}">
-                                                                <span class="badge bg-danger">Inactive</span>
-                                                            </c:if>
-                                                        </td>
+                                                        <td>${type.lastUpdated}</td>
+                                                        <td>${type.stringStatus}</td>
                                                         <td>
                                                             <a href="./WorkPackageController?action=edit&id=${type.id}&cuId=${param.id}" 
                                                                class="btn btn-link text-primary">Edit</a>
-                                                        
-                                                            <c:if test="${type.status eq '0'}">
-                                                                <a href="./WorkPackageController?action=changeStatus&id=${type.id}&status=1&cuId=${param.id}"
-                                                                   class="btn btn-link text-success"
-                                                                   onclick="return confirm('Are you sure you want to activate this project type?');">Activate</a>
-                                                            </c:if>
 
-                                                            <c:if test="${type.status eq '1'}">
-                                                                <a href="./WorkPackageController?action=changeStatus&id=${type.id}&status=0&cuId=${param.id}"
-                                                                   class="btn btn-link text-danger"
-                                                                   onclick="return confirm('Are you sure you want to deactivate this project type?');">Deactivate</a>
-                                                            </c:if>
-                                                        
+
 <!--                                                            <a href="./WorkPackageController?action=delete&id=${type.id}&cuId=${param.id}"
-                                                               class="btn btn-link text-danger"
-                                                               onclick="return confirm('Are you sure you want to deactivate this project type?');">Delete</a>-->
+       class="btn btn-link text-danger"
+       onclick="return confirm('Are you sure you want to deactivate this project type?');">Delete</a>-->
                                                         </td>
                                                     </tr>
                                                 </c:forEach>
@@ -196,32 +178,32 @@
         <script src="${pageContext.request.contextPath}/js/datatables.js"></script>
 
         <script>
-                                                                       document.addEventListener("DOMContentLoaded", function () {
-                                                                           var datatablesMulti = $("#datatables-multi").DataTable({
-                                                                               responsive: true,
-                                                                               paging: true,
-                                                                               searching: false,
-                                                                               info: true,
-                                                                               order: [[0, 'desc']], // Default sort by ID column in descending order
-                                                                               columnDefs: [
-                                                                                   {orderable: false, targets: 4} // Disable sorting on the 'Action' column
-                                                                               ],
-                                                                               language: {
-                                                                                   paginate: {
-                                                                                       previous: "&laquo;",
-                                                                                       next: "&raquo;"
-                                                                                   },
-                                                                                   info: "_TOTAL_ project type(s) found",
-                                                                                   infoEmpty: "No project type found"
-                                                                               },
-                                                                               dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
-                                                                               initComplete: function () {
-                                                                                   // Add necessary classes for alignment
-                                                                                   $('.dataTables_info').addClass('text-left fw-bolder');
-                                                                                   $('.dataTables_length').addClass('mt-2');
-                                                                               }
-                                                                           });
-                                                                       });
+            document.addEventListener("DOMContentLoaded", function () {
+                var datatablesMulti = $("#datatables-multi").DataTable({
+                    responsive: true,
+                    paging: true,
+                    searching: false,
+                    info: true,
+                    order: [[0, 'desc']], // Default sort by ID column in descending order
+                    columnDefs: [
+                        {orderable: false, targets: 4} // Disable sorting on the 'Action' column
+                    ],
+                    language: {
+                        paginate: {
+                            previous: "&laquo;",
+                            next: "&raquo;"
+                        },
+                        info: "_TOTAL_ project type(s) found",
+                        infoEmpty: "No project type found"
+                    },
+                    dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
+                    initComplete: function () {
+                        // Add necessary classes for alignment
+                        $('.dataTables_info').addClass('text-left fw-bolder');
+                        $('.dataTables_length').addClass('mt-2');
+                    }
+                });
+            });
         </script>
 
         <script>
@@ -245,33 +227,33 @@
                 }, 15000);
             });
         </script>
-              <script>
-                                                                       document.addEventListener("DOMContentLoaded", function () {
-                                                                           var datatablesMulti = $("#datatables-multi5").DataTable({
-                                                                               responsive: true,
-                                                                               paging: true,
-                                                                               searching: false,
-                                                                               info: true,
-                                                                               order: [[0, 'desc']], // Default sort by ID column in descending order
-                                                                               columnDefs: [
-                                                                                   {orderable: false, targets: 4} // Disable sorting on the 'Action' column
-                                                                               ],
-                                                                               language: {
-                                                                                   paginate: {
-                                                                                       previous: "&laquo;",
-                                                                                       next: "&raquo;"
-                                                                                   },
-                                                                                   info: "_TOTAL_ project type(s) found",
-                                                                                   infoEmpty: "No project type found"
-                                                                               },
-                                                                               dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
-                                                                               initComplete: function () {
-                                                                                   // Add necessary classes for alignment
-                                                                                   $('.dataTables_info').addClass('text-left fw-bolder');
-                                                                                   $('.dataTables_length').addClass('mt-2');
-                                                                               }
-                                                                           });
-                                                                       });
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var datatablesMulti = $("#datatables-multi5").DataTable({
+                    responsive: true,
+                    paging: true,
+                    searching: false,
+                    info: true,
+                    order: [[0, 'desc']], // Default sort by ID column in descending order
+                    columnDefs: [
+                        {orderable: false, targets: 4} // Disable sorting on the 'Action' column
+                    ],
+                    language: {
+                        paginate: {
+                            previous: "&laquo;",
+                            next: "&raquo;"
+                        },
+                        info: "_TOTAL_ project type(s) found",
+                        infoEmpty: "No project type found"
+                    },
+                    dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
+                    initComplete: function () {
+                        // Add necessary classes for alignment
+                        $('.dataTables_info').addClass('text-left fw-bolder');
+                        $('.dataTables_length').addClass('mt-2');
+                    }
+                });
+            });
         </script>
     </body>
 

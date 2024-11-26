@@ -332,4 +332,20 @@ public class ProjectDAO {
         }
         return projects;
     }
+
+    public Project getProjectsName(int id ) {
+        String sql = "SELECT * FROM pms.project where id = " + id;
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Project project = new Project();
+                project.setId(rs.getInt("id"));
+                project.setName(rs.getString("name"));
+                return project;
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return null;
+    }
 }

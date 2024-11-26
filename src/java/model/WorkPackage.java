@@ -15,7 +15,7 @@ public class WorkPackage {
     private String details;
     private Integer projectId; // Optional, can be null
     private Integer userId; // Optional, can be null
-
+    private String stringStatus;
     // Default constructor
     public WorkPackage() {
     }
@@ -23,7 +23,7 @@ public class WorkPackage {
     // Full constructor
     public WorkPackage(int id, int createdBy, Timestamp lastUpdated, String title, String complexity,
                        int plannedEffort, int status, Integer actualEffort, String details,
-                       Integer projectId, Integer userId) {
+                       Integer projectId, Integer userId, String stringStatus) {
         this.id = id;
         this.createdBy = createdBy;
         this.lastUpdated = lastUpdated;
@@ -35,6 +35,7 @@ public class WorkPackage {
         this.details = details;
         this.projectId = projectId;
         this.userId = userId;
+        this.stringStatus = stringStatus;
     }
 
     // Getters and Setters
@@ -125,6 +126,14 @@ public class WorkPackage {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public String getStringStatus() {
+        return stringStatus;
+    }
+
+    public void setStringStatus(String stringStatus) {
+        this.stringStatus = stringStatus;
     }
 
     @Override
