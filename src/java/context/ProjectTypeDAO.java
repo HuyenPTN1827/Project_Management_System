@@ -726,7 +726,7 @@ public class ProjectTypeDAO {
         if ("parent".equals(type)) {
             sql += " AND (type IS NULL OR type = '')";
         } else if (type != null && !type.isEmpty()) {
-            sql += " AND type = ?";
+            sql += " AND type like ?";
         }
         if (status != null) {
             sql += (" AND status = ?");
@@ -744,7 +744,7 @@ public class ProjectTypeDAO {
             }
             // Set type only if it is not "parent" and not empty
             if (type != null && !type.isEmpty() && !"parent".equals(type)) {
-                stmt.setString(paramIndex++, type);
+                stmt.setString(paramIndex++, "%" +type + "%");
             }
             // Set parameter for status filter
             if (status != null) {

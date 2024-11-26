@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Milestone;
 import model.Project;
-import model.User;
 
 /**
  *
@@ -361,6 +360,7 @@ public class ProjectDAO {
         return project;
     }
 
+//    HuyenPTNHE160769
     public List<Milestone> getMilestonesByProjectId(int userId, Integer projectId) {
         List<Milestone> milestones = new ArrayList<>();
         String sql = """
@@ -386,5 +386,21 @@ public class ProjectDAO {
             BaseDAO.printSQLException(e);
         }
         return milestones;
+    }
+
+    public Project getProjectsName(int id ) {
+        String sql = "SELECT * FROM pms.project where id = " + id;
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Project project = new Project();
+                project.setId(rs.getInt("id"));
+                project.setName(rs.getString("name"));
+                return project;
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return null;
     }
 }

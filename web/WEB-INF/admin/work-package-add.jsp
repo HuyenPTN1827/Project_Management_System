@@ -110,9 +110,9 @@
                                             <div class="mb-3 col-md-6">
                                                 <label for="complexity">Complexity</label>
                                                 <select id="complexity" name="complexity" class="form-select" required>
-                                                    <option value="Low">Low</option>
-                                                    <option value="Medium">Medium</option>
-                                                    <option value="High">High</option>
+                                                    <c:forEach var="u" items="${cl}">
+                                                        <option value="${u.id}">${u.name}</option>
+                                                    </c:forEach>  
                                                 </select>
                                             </div> 
 
@@ -122,20 +122,13 @@
                                             </div>
 
                                             <div class="mb-3 col-md-6">
-                                                <label class="form-label">Status</label>
-                                                <div class="check">
-                                                    <input class="form-check-input" type="radio" name="status" checked
-                                                           <c:if test="${ptUser.status eq 'true'}">
-                                                               checked
-                                                           </c:if>
-                                                           value="1"> Active
-                                                    <input class="form-check-input ms-3" type="radio" name="status"
-                                                           <c:if test="${ptUser.status eq 'false'}">
-                                                               checked
-                                                           </c:if>
-                                                           value="0"> Inactive
-                                                </div>
-                                            </div>
+                                                <label for="complexity">Status</label>
+                                                <select id="status" name="status" class="form-select" required>
+                                                    <c:forEach var="u" items="${sl}">
+                                                        <option value="${u.id}">${u.name}</option>
+                                                    </c:forEach>  
+                                                </select>
+                                            </div> 
                                             <div class="mb-3 col-md-12">
                                                 <label for="details">Details</label>
                                                 <textarea id="details" name="details" class="form-control"></textarea>

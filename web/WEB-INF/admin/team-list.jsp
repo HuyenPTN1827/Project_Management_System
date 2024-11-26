@@ -95,7 +95,7 @@
 
                                             </form>
 
-                                            <!--<a class="btn btn-primary" href="./TeamController?action=add&cuId=${param.id}">Create new</a>-->
+                                            <a class="btn btn-primary" href="./TeamController?action=add&cuId=${param.id}">Create new</a>
                                         </div>
                                     </div>
                                 </div>
@@ -107,7 +107,7 @@
                                                     <th>ID</th>
                                                     <th>Name</th>
                                                     <th>Topic</th>
-                                                    <th>Details</th>
+                                                    <th>Project</th>
                                                     <th>Status</th>
                                                     <th>Action</th>
                                                     
@@ -119,7 +119,7 @@
                                                         <td>${type.id}</td>
                                                         <td>${type.name}</td>
                                                         <td>${type.topic}</td>
-                                                        <td>${type.details}</td>
+                                                        <td>${type.project.name}</td>
                                                         <td>
                                                             <c:if test="${type.status eq '1'}">
                                                                 <span class="badge bg-success">Active</span>

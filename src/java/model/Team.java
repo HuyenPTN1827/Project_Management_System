@@ -15,6 +15,7 @@ public class Team {
     private String details;
     private int projectId;
     private String status;
+    private Project project;
 
     public Team() {
     }
@@ -74,6 +75,14 @@ public class Team {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
     
     

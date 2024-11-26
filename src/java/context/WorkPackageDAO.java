@@ -9,7 +9,7 @@ public class WorkPackageDAO {
 
     // Fetch a single work package by ID
     public WorkPackage getOne(int id) throws SQLException {
-        String query = "SELECT * FROM work_package WHERE id = ?";
+        String query = "SELECT w.*, t.name FROM work_package w left join project_type_setting t on w.status = t.id  WHERE 1=1 and w.id = ?";
         try (Connection conn = BaseDAO.getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
@@ -24,14 +24,14 @@ public class WorkPackageDAO {
     public List<WorkPackage> getList(String title, String status) throws SQLException {
         List<WorkPackage> list = new ArrayList<>();
         try {
-            String query = "SELECT * FROM work_package WHERE 1=1";
+            String query = "SELECT w.*, t.name FROM work_package w left join project_type_setting t on w.status = t.id  WHERE 1=1 ";
             List<Object> params = new ArrayList<>();
             if (title != null && !title.isEmpty()) {
-                query += " AND title LIKE ?";
+                query += " AND w.title LIKE ?";
                 params.add("%" + title + "%");
             }
             if (status != null && status!="") {
-                query += " AND status = ?";
+                query += " AND w.status = ?";
                 params.add(status);
             }
             System.out.println(query);
@@ -93,7 +93,8 @@ public class WorkPackageDAO {
                 rs.getInt("actual_effort"),
                 rs.getString("details"),
                 rs.getInt("project_id"),
-                rs.getInt("user_id")
+                rs.getInt("user_id"),
+                rs.getString("name")
         );
     }
 

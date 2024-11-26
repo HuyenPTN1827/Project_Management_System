@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Team;
+import service.ProjectService;
 import service.TeamService;
 
 /**
@@ -54,12 +55,16 @@ public class TeamController extends HttpServlet {
             throws Exception, ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         Team team = teamService.getTeamById(id);
+        ProjectService projectService = new ProjectService();
+        request.setAttribute("projects", projectService.getProjectsDropDown());
         request.setAttribute("team", team);
         request.getRequestDispatcher("/WEB-INF/admin/team-detail.jsp").forward(request, response);
     }
 
     private void showAddForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        ProjectService projectService = new ProjectService();
+        request.setAttribute("projects", projectService.getProjectsDropDown());
         request.getRequestDispatcher("/WEB-INF/admin/team-add.jsp").forward(request, response);
     }
 
@@ -67,6 +72,8 @@ public class TeamController extends HttpServlet {
             throws Exception, ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         Team existingTeam = teamService.getTeamById(id);
+         ProjectService projectService = new ProjectService();
+        request.setAttribute("projects", projectService.getProjectsDropDown());
         request.setAttribute("team", existingTeam);
         request.getRequestDispatcher("/WEB-INF/admin/team-edit.jsp").forward(request, response);
     }
@@ -75,7 +82,7 @@ public class TeamController extends HttpServlet {
             throws Exception, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         teamService.deleteTeamById(id);
-        response.sendRedirect("team?action=list");
+        response.sendRedirect("TeamController?action=list");
     }
 
     private void changeStatusTeam(HttpServletRequest request, HttpServletResponse response)
@@ -96,7 +103,7 @@ public class TeamController extends HttpServlet {
 
         Team newTeam = new Team(0, name, topic, description, Integer.valueOf(pid), status);
         teamService.addNewTeam(newTeam);
-        response.sendRedirect("team?action=list");
+        response.sendRedirect("TeamController?action=list");
     }
 
     private void updateTeam(HttpServletRequest request, HttpServletResponse response)
@@ -110,7 +117,7 @@ public class TeamController extends HttpServlet {
 
         Team updatedTeam = new Team(id, name, topic, description, Integer.valueOf(pid), status);
         teamService.updateTeamById(updatedTeam);
-        response.sendRedirect("team?action=list");
+        response.sendRedirect("TeamController?action=list");
     }
 
     @Override

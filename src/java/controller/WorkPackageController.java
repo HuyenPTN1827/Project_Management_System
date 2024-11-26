@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.Date;
 import model.WorkPackage;
 import service.ProjectService;
+import service.ProjectTypeService;
 import service.UserService;
 import service.WorkPackageService;
 
@@ -71,10 +72,15 @@ public class WorkPackageController extends HttpServlet {
             throws ServletException, IOException {
         ProjectService pSer = new ProjectService();
         UserService userService = new UserService();
-
-        request.setAttribute("pl", pSer.getProjectsDropDown());
-        request.setAttribute("ul", userService.getAllUsers(null, null, null, null));
-
+        ProjectTypeService pts = new ProjectTypeService();
+        try {
+            request.setAttribute("sl", pts.getAllProjectTypeSettings("", true, "Scope Status", 2));
+            request.setAttribute("cl", pts.getAllProjectTypeSettings("", true, "Scope Complexity", 2));
+            request.setAttribute("pl", pSer.getProjectsDropDown());
+            request.setAttribute("ul", userService.getAllUsers(null, null, null, null));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         request.getRequestDispatcher("/WEB-INF/admin/work-package-add.jsp").forward(request, response);
     }
 
@@ -84,9 +90,16 @@ public class WorkPackageController extends HttpServlet {
         WorkPackage workPackage = workPackageService.getOne(id);
         ProjectService pSer = new ProjectService();
         UserService userService = new UserService();
+        ProjectTypeService pts = new ProjectTypeService();
 
-        request.setAttribute("pl", pSer.getProjectsDropDown());
-        request.setAttribute("ul", userService.getAllUsers(null, null, null, null));
+        try {
+            request.setAttribute("sl", pts.getAllProjectTypeSettings("", true, "Scope Status ", 2));
+            request.setAttribute("cl", pts.getAllProjectTypeSettings("", true, "Scope Complexity ", 2));
+            request.setAttribute("pl", pSer.getProjectsDropDown());
+            request.setAttribute("ul", userService.getAllUsers(null, null, null, null));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         request.setAttribute("workPackage", workPackage);
         request.getRequestDispatcher("/WEB-INF/admin/work-package-edit.jsp").forward(request, response);
     }
@@ -135,6 +148,7 @@ public class WorkPackageController extends HttpServlet {
                 workPackage.setUserId(request.getParameter("userId") != null
                         ? Integer.parseInt(request.getParameter("userId"))
                         : null);
+                workPackage.setStatus(Integer.parseInt(request.getParameter("status")));
 
                 workPackageService.createWorkPackage(workPackage);
                 response.sendRedirect("WorkPackageController?action=list");

@@ -121,9 +121,9 @@
                                             <div class="mb-3 col-md-6">
                                                 <label for="complexity">Complexity</label>
                                                 <select id="complexity" name="complexity" class="form-select" required>
-                                                    <option value="Low" ${workPackage.complexity=="Low"?"Selected":""}>Low</option>
-                                                    <option value="Medium" ${workPackage.complexity=="Medium"?"Selected":""}>Medium</option>
-                                                    <option value="High" ${workPackage.complexity=="High"?"Selected":""}>High</option>
+                                                    <c:forEach var="u" items="${cl}">
+                                                        <option value="${u.id}" ${workPackage.complexity==u.id?"Selected":""} >${u.name}</option>
+                                                    </c:forEach>  
                                                 </select>
                                             </div> 
 
@@ -136,20 +136,13 @@
                                                 <input type="number" id="plannedEffort" name="Actual" value="${workPackage.actualEffort==0?"":workPackage.actualEffort}"  class="form-control"  readonly="">
                                             </div>
                                             <div class="mb-3 col-md-6">
-                                                <label class="form-label">Status</label>
-                                                <div class="check">
-                                                    <input class="form-check-input" type="radio" name="status" checked
-                                                           <c:if test="${workPackage.status eq '1'}">
-                                                               checked
-                                                           </c:if>
-                                                           value="1"> Active
-                                                    <input class="form-check-input ms-3" type="radio" name="status"
-                                                           <c:if test="${workPackage.status eq '0'}">
-                                                               checked
-                                                           </c:if>
-                                                           value="0"> Inactive
-                                                </div>
-                                            </div>
+                                                <label for="complexity">Status</label>
+                                                <select id="status" name="status" class="form-select" required>
+                                                    <c:forEach var="u" items="${sl}">
+                                                        <option value="${u.id}" ${workPackage.status==u.id?"Selected":""} >${u.name}</option>
+                                                    </c:forEach>  
+                                                </select>
+                                            </div> 
                                             <div class="mb-3 col-md-12">
                                                 <label for="details">Details</label>
                                                 <textarea id="details" name="details" class="form-control">${workPackage.details}</textarea>

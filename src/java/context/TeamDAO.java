@@ -129,6 +129,7 @@ public class TeamDAO {
         team.setDetails(rs.getString("details"));
         team.setProjectId(rs.getObject("project_id") != null ? rs.getInt("project_id") : null);
         team.setStatus(rs.getString("status"));
+        team.setProject(new ProjectDAO().getProjectsName(rs.getInt("project_id")));
         return team;
     }
 }
