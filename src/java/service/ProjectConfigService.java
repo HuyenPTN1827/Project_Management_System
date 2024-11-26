@@ -3,8 +3,10 @@ package service;
 import context.ProjectConfigDAO;
 import model.Milestone;
 import java.util.List;
+import model.Project;
 import model.Team;
 import model.TeamMember;
+import model.User;
 
 public class ProjectConfigService {
 
@@ -18,8 +20,8 @@ public class ProjectConfigService {
         return projectConfigDAO.getMilestonesByProjectId(projectId);
     }
 
-    public List<Milestone> filterAndsearch(String status, String searchKeyword) {
-        return projectConfigDAO.filterAndsearch(status, searchKeyword);
+    public List<Milestone> filterAndsearch(String status, String searchKeyword, String projectId) {
+        return projectConfigDAO.filterAndsearch(status, searchKeyword, projectId);
     }
 
     // Phương thức để lấy một milestone theo ID
@@ -27,44 +29,52 @@ public class ProjectConfigService {
         return projectConfigDAO.getMilestoneById(milestoneId);
     }
 
-    // Phương thức để cập nhật một milestone
-    public void updateMilestone(Milestone milestone) {
-        projectConfigDAO.updateMilestone(milestone);
+    
+
+//lấy danh sách project
+    public List<Project> getAllProjects() {
+        return projectConfigDAO.getAllProjects(); // Gọi phương thức trong DAO để lấy danh sách tất cả project
+    }
+    // Lấy dự án theo ID
+
+    public Project getProjectById(int id) {
+        return projectConfigDAO.getProjectById(id); // Gọi phương thức từ ProjectDAO
     }
 
-    // Phương thức để lấy danh sách đội nhóm theo projectId
-    public List<Team> getTeamsByProjectId(int projectId) {
-        return projectConfigDAO.getTeamsByProjectId(projectId); // Gọi phương thức trong DAO
+    // Lấy danh sách manager (người dùng có role_id = 4)
+    public List<User> getAllManagers() {
+        return projectConfigDAO.getAllManagers(); // Gọi phương thức trong UserDAO để lấy danh sách Manager
     }
-    // Thêm vào ProjectConfigService
 
-public List<Team> searchTeamsByName(String searchKeyword) {
-    // Giả sử bạn có một phương thức truy vấn trong DAO để lấy danh sách nhóm
-    return projectConfigDAO.searchTeamsByName(searchKeyword); // Gọi phương thức tìm kiếm theo keyword và projectId
+    // Phương thức để cập nhật thông tin dự án
+    public boolean updateProject(Project project) {
+        return projectConfigDAO.updateProject(project); // Gọi phương thức trong DAO để cập nhật dự án
+    }
+
+    // Hàm gọi getAllMilestonesParent từ DAO
+    public List<Milestone> getAllMilestonesParent() {
+        return projectConfigDAO.getAllMilestonesParent();
+    }
+
+    // Phương thức addMilestone
+    public boolean addMilestone(Milestone milestone) {
+        // Kiểm tra các thông tin quan trọng của milestone trước khi thêm
+        if (milestone == null || milestone.getName() == null || milestone.getPriority() <= 0) {
+            return false; // Trả về false nếu dữ liệu không hợp lệ
+        }
+
+        // Thực hiện thêm milestone vào cơ sở dữ liệu thông qua DAO
+        return projectConfigDAO.insertMilestone(milestone);
+    }
+    public boolean updateMilestone(Milestone milestone) {
+    // Kiểm tra tính hợp lệ của milestone trước khi cập nhật
+    if (milestone == null || milestone.getId() <= 0 || milestone.getName() == null || milestone.getPriority() <= 0) {
+        return false; // Trả về false nếu dữ liệu không hợp lệ
+    }
+
+    // Thực hiện cập nhật milestone vào cơ sở dữ liệu thông qua DAO
+    return projectConfigDAO.updateMilestone(milestone);
 }
-
-// Phương thức để lấy đội theo ID
-    public Team getTeamById(int teamId) {
-        return projectConfigDAO.getTeamById(teamId);
-    }
-    public void updateTeam(Team team) {
-        projectConfigDAO.updateTeam(team);
-    }
-
-     // Phương thức để lấy danh sách member theo projectId
-    public List<TeamMember> getMembersByProjectId(int projectId) {
-        return projectConfigDAO.getMembersByProjectId(projectId);
-    }
-
-     // Phương thức để thêm một đội mới
-    public boolean addTeam(Team team) {
-        return projectConfigDAO.addTeam(team); // Gọi phương thức trong DAO để thêm đội
-    }
-     // Phương thức để xóa một đội
-    public boolean deleteTeam(int teamId) {
-        return projectConfigDAO.deleteTeam(teamId); // Gọi phương thức trong DAO để xóa đội
-    }
-
  
     
 }

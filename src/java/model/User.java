@@ -16,14 +16,13 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     private int id;
     private String full_name;
-    private String username;
     private String email;
     private String mobile;
     private String password;
     private String notes;
     private int status;
     private int role_id;
-    
+    private String username;
     private Department dept;
     private Setting setting;
     private ArrayList<Department> depts = new ArrayList<>();
@@ -32,8 +31,7 @@ public class User implements Serializable {
     public User() {
     }
 
-    //fix
-    public User(int id, String full_name, String email, String mobile, String password, String notes, int status, int role_id , Department dept, Setting setting) {
+    public User(int id, String full_name, String email, String mobile, String password, String notes, int status, int role_id, String username, Department dept, Setting setting) {
         this.id = id;
         this.full_name = full_name;
         this.email = email;
@@ -42,30 +40,9 @@ public class User implements Serializable {
         this.notes = notes;
         this.status = status;
         this.role_id = role_id;
-        this.dept = dept;
-        this.setting = setting;
-    }
-
-    public User(int id, String full_name, String username, String email, String mobile, String password, String notes, int status, int role_id, Department dept, Setting setting) {
-        this.id = id;
-        this.full_name = full_name;
         this.username = username;
-        this.email = email;
-        this.mobile = mobile;
-        this.password = password;
-        this.notes = notes;
-        this.status = status;
-        this.role_id = role_id;
         this.dept = dept;
         this.setting = setting;
-    }
-
-     public int getRole_id() {
-        return role_id;
-    }
-
-    public void setRole_id(int role_id) {
-        this.role_id = role_id;
     }
 
     public int getId() {
@@ -78,14 +55,6 @@ public class User implements Serializable {
 
     public String getFull_name() {
         return full_name;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public void setFull_name(String full_name) {
@@ -132,6 +101,22 @@ public class User implements Serializable {
         this.status = status;
     }
 
+    public int getRole_id() {
+        return role_id;
+    }
+
+    public void setRole_id(int role_id) {
+        this.role_id = role_id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public Department getDept() {
         return dept;
     }
@@ -164,4 +149,5 @@ public class User implements Serializable {
         this.settings = settings;
     }
 
+   
 }
