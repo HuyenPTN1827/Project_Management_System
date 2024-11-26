@@ -4,7 +4,6 @@
     Author     : HuyenPTNHE160769
 --%>
 
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -58,12 +57,12 @@
                     window.location.href = 'issue-management?userId=' + userId + '&projectId=' + selectedId;
                 }
             }
-        </script></head>
-
+        </script>
+    </head>
 
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
         <div class="wrapper">
-            <% request.setAttribute("currentPage", "department-management"); %>
+            <% request.setAttribute("currentPage", "issue-management"); %>
             <jsp:include page="../component/sidebar-manager.jsp"></jsp:include>
                 <div class="main">
                 <jsp:include page="../component/header.jsp"></jsp:include>
@@ -80,10 +79,8 @@
                                     <div class="card">
                                         <div class="card-header">
                                             <div class="d-flex justify-content-between align-items-center" style="margin: 10px;">
-                                                <!--Nằm bên trái-->
                                                 <form action="issue-management" method="post" class="d-flex align-items-center flex-wrap" style="gap: 10px; width: 97%;">
-                                                    <!--Dòng trên bên trái-->
-                                                    <div class="form-group d-flex align-items-center" style="gap: 10px; width: 97%;">
+                                                    <div class="form-group d-flex align-items-center" style="width: 97%;">
                                                         <input type="hidden" name="userId" value="${user.id}">
 
                                                     <select name="type" class="form-select">
@@ -122,14 +119,26 @@
                                                         </c:forEach>
                                                     </select>
 
-                                                    <select name="scope" class="form-select">
-                                                        <option value="">All Work Packages</option>
-                                                        <c:forEach items="${listScope}" var="wp">
+                                                    <!--                                                    <select name="scope" class="form-select">
+                                                                                                            <option value="">All Work Packages</option>
+                                                    <%--<c:forEach items="${listScope}" var="wp">--%>
+                                                        <option 
+                                                    <%--<c:if test="${scope eq wp.id}">--%>
+                                                        selected="selected"
+                                                    <%--</c:if>--%>
+                                                    value="${wp.id}">${wp.title}
+                                                </option>
+                                                    <%--</c:forEach>--%>
+                                                </select>-->
+
+                                                    <select name="assigner" class="form-select">
+                                                        <option value="">All Assigners</option>
+                                                        <c:forEach items="${listAssigner}" var="u">
                                                             <option 
-                                                                <c:if test="${scope eq wp.id}">
+                                                                <c:if test="${assigner eq u.id}">
                                                                     selected="selected"
                                                                 </c:if>
-                                                                value="${wp.id}">${wp.title}
+                                                                value="${u.id}">${u.full_name} (${(u.username)})
                                                             </option>
                                                         </c:forEach>
                                                     </select>
@@ -187,7 +196,6 @@
                                                     </select>
                                                 </div>
 
-                                                <!--Dòng dưới bên trái-->
                                                 <div class="d-flex align-items-center" style="gap: 10px; width: 97%;">
                                                     <div class="form-group" style="flex: 1;">
                                                         <input type="search" name="keyword" class="form-control" placeholder="Enter the Project Issue" id="keyword" value="${keyword}">
@@ -196,8 +204,7 @@
                                                 </div>
                                             </form>
 
-                                            <!--Nằm bên phải-->
-                                            <a class="btn btn-primary" href="javascript:void(0);" onclick="openDeptModal();">Create new</a>
+                                            <a class="btn btn-primary" href="<%=request.getContextPath()%>/add-issue?userId=${user.id}">Create new</a>
                                         </div>
                                     </div>
                                 </div>
@@ -211,7 +218,8 @@
                                                     <th>Type</th>
                                                     <th>Project</th>
                                                     <th>Milestone</th>
-                                                    <th>Work Package</th>
+                                                    <!--<th>Work Package</th>-->
+                                                    <th>Assigner</th>
                                                     <th>Assignee</th>
                                                     <th>Deadline</th>
                                                     <th>Status</th>
@@ -226,7 +234,8 @@
                                                         <td>${issue.type.name}</td>
                                                         <td>${issue.project.code}</td>
                                                         <td>${issue.milestone.name}</td>
-                                                        <td>${issue.scope.title}</td>
+                                                        <!--<td>${issue.scope.title}</td>-->
+                                                        <td>${issue.created_by.username}</td>
                                                         <td>${issue.assignee.username}</td>
                                                         <td>${issue.deadline}</td>
                                                         <td>
@@ -243,14 +252,14 @@
                                                                 <span class="badge bg-success">Done</span>
                                                             </c:if>
                                                             <c:if test="${issue.status eq '4'}">
-                                                                <span class="badge bg-info">Closed</span>
+                                                                <span class="badge bg-secondary-light">Closed</span>
                                                             </c:if>
                                                             <c:if test="${issue.status eq '5'}">
                                                                 <span class="badge bg-danger">Cancelled</span>
                                                             </c:if>
                                                         </td>
                                                         <td>
-                                                            <a href="<%=request.getContextPath()%>/edit-issue?id=${issue.id}" 
+                                                            <a href="<%=request.getContextPath()%>/edit-issue?id=${issue.id}&userId=${user.id}&projectId=${issue.project.id}" 
                                                                class="btn btn-info"><i class="align-middle" data-feather="edit"></i></a>
                                                         </td>
                                                     </tr>
@@ -259,22 +268,6 @@
                                         </table>
                                     </div>
                                 </div>
-
-                                <!-- Modal -->
-                                <div id="projectTypeModal" class="modal" tabindex="-1" role="dialog">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title">Department Details</h1>
-                                                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" onclick="closeModal();"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <!-- This is where the project-type-detail.jsp will be loaded via AJAX -->
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
                     </div>
@@ -315,32 +308,32 @@
         <script src="${pageContext.request.contextPath}/js/datatables.js"></script>
 
         <script>
-                                                    document.addEventListener("DOMContentLoaded", function () {
-                                                        var datatablesMulti = $("#datatables-multi").DataTable({
-                                                            responsive: true,
-                                                            paging: true,
-                                                            searching: false,
-                                                            info: true,
-                                                            order: [[0, 'desc']], // Default sort by ID column in descending order
-                                                            columnDefs: [
-                                                                {orderable: false, targets: 9} // Disable sorting on the 'Action' column
-                                                            ],
-                                                            language: {
-                                                                paginate: {
-                                                                    previous: "&laquo;",
-                                                                    next: "&raquo;"
+                                                        document.addEventListener("DOMContentLoaded", function () {
+                                                            var datatablesMulti = $("#datatables-multi").DataTable({
+                                                                responsive: true,
+                                                                paging: true,
+                                                                searching: false,
+                                                                info: true,
+                                                                order: [[0, 'desc']], // Default sort by ID column in descending order
+                                                                columnDefs: [
+                                                                    {orderable: false, targets: 9} // Disable sorting on the 'Action' column
+                                                                ],
+                                                                language: {
+                                                                    paginate: {
+                                                                        previous: "&laquo;",
+                                                                        next: "&raquo;"
+                                                                    },
+                                                                    info: "_TOTAL_ issue(s) found",
+                                                                    infoEmpty: "No issue found"
                                                                 },
-                                                                info: "_TOTAL_ issue(s) found",
-                                                                infoEmpty: "No issue found"
-                                                            },
-                                                            dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
-                                                            initComplete: function () {
-                                                                // Add necessary classes for alignment
-                                                                $('.dataTables_info').addClass('text-left fw-bolder');
-                                                                $('.dataTables_length').addClass('mt-2'); // Add necessary margin classes
-                                                            }
+                                                                dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
+                                                                initComplete: function () {
+                                                                    // Add necessary classes for alignment
+                                                                    $('.dataTables_info').addClass('text-left fw-bolder');
+                                                                    $('.dataTables_length').addClass('mt-2'); // Add necessary margin classes
+                                                                }
+                                                            });
                                                         });
-                                                    });
         </script>
 
         <script>

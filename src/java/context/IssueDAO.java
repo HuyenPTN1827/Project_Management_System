@@ -25,22 +25,26 @@ import model.WorkPackage;
 public class IssueDAO {
 
     // Get assignee list
-    public List<User> getAssigneeListByProjectId(int userId, Integer projectId) {
+    public List<User> getMemberListByProjectId(Integer projectId) {
         List<User> user = new ArrayList<>();
+//        String sql = """
+//                     SELECT DISTINCT u.id, u.username, u.full_name
+//                     FROM pms.issue i
+//                     JOIN pms.allocation a ON i.project_id = a.project_id
+//                     JOIN pms.user u ON i.assignee = u.id
+//                     WHERE a.user_id = ?
+//                     AND (u.status = 1 OR u.status = 0)""";
         String sql = """
                      SELECT DISTINCT u.id, u.username, u.full_name
-                     FROM pms.issue i
-                     JOIN pms.allocation a ON i.project_id = a.project_id
-                     JOIN pms.user u ON i.assignee = u.id
-                     WHERE a.user_id = ?
-                     AND (u.status = 1 OR u.status = 0)""";
+                     FROM pms.allocation a
+                     JOIN pms.user u ON a.user_id = u.id
+                     WHERE (u.status = 1 OR u.status = 0)""";
         if (projectId != null) {
-            sql += " AND i.project_id = ?";
+            sql += " AND a.project_id = ?";
         }
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
-            stm.setInt(1, userId);
             if (projectId != null) {
-                stm.setInt(2, projectId);
+                stm.setInt(1, projectId);
             }
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
@@ -58,22 +62,21 @@ public class IssueDAO {
 
     // Get issues list
     public List<Issue> selectAllIssues(int userId, String keyword, Integer project, Integer type,
-            Integer milestone, Integer scope, Integer assignee, Integer status) {
+            Integer milestone, Integer assigner, Integer assignee, Integer status) {
         List<Issue> issue = new ArrayList<>();
 
         String sql = """
-                     SELECT i.id, i.created_by, i.milestone_id, m.name, i.work_package, 
-                     wp.title, i.assignee, u2.username, i.deadline, i.status, i.name, 
+                     SELECT i.id, i.created_by, u1.username, i.milestone_id, m.name, 
+                     i.assignee, u2.username, i.deadline, i.status, i.name, 
                      i.type, s.name, i.project_id, p.code, i.details
                      FROM pms.issue i 
                      JOIN pms.project p ON i.project_id = p.id
                      JOIN pms.milestone m ON i.milestone_id = m.id
-                     JOIN pms.work_package wp ON i.work_package = wp.id
                      JOIN pms.user u1 ON i.created_by = u1.id 
                      JOIN pms.user u2 ON i.assignee = u2.id
                      JOIN pms.setting s ON i.type = s.id
-                     JOIN pms.allocation a ON i.project_id = a.project_id AND i.created_by = a.user_id
-                     WHERE i.created_by = ?""";
+                     JOIN pms.allocation a ON i.project_id = a.project_id
+                     WHERE a.user_id = ?""";
 
         // Add search conditions if any
         if (keyword != null && !keyword.isEmpty()) {
@@ -88,8 +91,11 @@ public class IssueDAO {
         if (milestone != null) {
             sql += " AND i.milestone_id = ?";
         }
-        if (scope != null) {
-            sql += " AND i.work_package = ?";
+//        if (scope != null) {
+//            sql += " AND i.work_package = ?";
+//        }
+        if (assigner != null) {
+            sql += " AND i.created_by = ?";
         }
         if (assignee != null) {
             sql += " AND i.assignee = ?";
@@ -115,8 +121,11 @@ public class IssueDAO {
             if (milestone != null) {
                 stm.setInt(index++, milestone);
             }
-            if (scope != null) {
-                stm.setInt(index++, scope);
+//            if (scope != null) {
+//                stm.setInt(index++, scope);
+//            }
+            if (assigner != null) {
+                stm.setInt(index++, assigner);
             }
             if (assignee != null) {
                 stm.setInt(index++, assignee);
@@ -152,20 +161,21 @@ public class IssueDAO {
                 m.setId(rs.getInt("i.milestone_id"));
                 m.setName(rs.getString("m.name"));
                 i.setMilestone(m);
-
-                WorkPackage wp = new WorkPackage();
-                wp.setId(rs.getInt("i.work_package"));
-                wp.setTitle(rs.getString("wp.title"));
-                i.setScope(wp);
+//
+//                WorkPackage wp = new WorkPackage();
+//                wp.setId(rs.getInt("i.work_package"));
+//                wp.setTitle(rs.getString("wp.title"));
+//                i.setScope(wp);
 
                 User u1 = new User();
-                u1.setId(rs.getInt("i.assignee"));
-                u1.setUsername(rs.getString("u2.username"));
-                i.setAssignee(u1);
+                u1.setId(rs.getInt("i.created_by"));
+                u1.setUsername(rs.getString("u1.username"));
+                i.setCreated_by(u1);
 
                 User u2 = new User();
-                u2.setId(rs.getInt("i.created_by"));
-                i.setCreated_by(u2);
+                u2.setId(rs.getInt("i.assignee"));
+                u2.setUsername(rs.getString("u2.username"));
+                i.setAssignee(u2);
 
                 issue.add(i);
             }
@@ -175,104 +185,123 @@ public class IssueDAO {
         return issue;
     }
 
-//    HuyenPTNHE160769
-//    04/10/2024       
-//    Admin select dept by id
-//    public Department selectDepartmentByID(int id) {
-//        Department d = null;
-//
-//        String sql = "SELECT * FROM pms.department WHERE id = ?;";
-//
-//        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
-//            stm.setInt(1, id);
-//
-//            ResultSet rs = stm.executeQuery();
-//            while (rs.next()) {
-//                d = new Department();
-//                d.setId(rs.getInt("id"));
-//                d.setCode(rs.getString("code"));
-//                d.setName(rs.getString("name"));
-//                d.setDetails(rs.getString("details"));
-//                d.setParentId(rs.getInt("parent"));
-//                d.setStatus(rs.getBoolean("status"));
-//            }
-//        } catch (SQLException e) {
-//            BaseDAO.printSQLException(e);
-//        }
-//        return d;
-//    }
-//
-////    HuyenPTNHE160769
-////    04/10/2024       
-////    Admin add new dept
-//    public int insertDepartment(Department dept, Integer parent) throws SQLException {
-//        int result = 0;
-//        String sql = "INSERT INTO pms.department (code, name, details, parent) "
-//                + "VALUES (?, ?, ?, ?);";
-//
-//        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
-//            stm.setString(1, dept.getCode());
-//            stm.setString(2, dept.getName());
-//            stm.setString(3, dept.getDetails());
-//            // Set parent (allow null)
-//            if (parent != null) {
-//                stm.setInt(4, parent);
-//            } else {
-//                stm.setNull(4, Types.INTEGER);
-//            }
-//
-//            result = stm.executeUpdate();
-//        } catch (SQLException e) {
-//            BaseDAO.printSQLException(e);
-//        }
-//        return result;
-//    }
-//
-////    HuyenPTNHE160769
-////    04/10/2024         
-////    Admin update a dept
-//    public boolean updateDepartment(Department dept, Integer parent) throws SQLException {
-//        boolean rowUpdated = false;
-//
-//        String sql = "UPDATE pms.department SET code = ?, name = ?, details = ?, "
-//                + "parent = ?, status = ? WHERE id = ?;";
-//
-//        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
-//            stm.setString(1, dept.getCode());
-//            stm.setString(2, dept.getName());
-//            stm.setString(3, dept.getDetails());
-//            // Set parent (allow null)
-//            if (parent != null) {
-//                stm.setInt(4, parent);
-//            } else {
-//                stm.setNull(4, Types.INTEGER);
-//            }
-//            stm.setBoolean(5, dept.isStatus());
-//            stm.setInt(6, dept.getId());
-//
-//            rowUpdated = stm.executeUpdate() > 0;
-//        } catch (SQLException e) {
-//            BaseDAO.printSQLException(e);
-//        }
-//        return rowUpdated;
-//    }
-//
-////    HuyenPTNHE160769
-////    04/10/2024      
-////    Admin change status of a dept
-//    public boolean changeStatusDepartment(Department dept) throws SQLException {
-//        boolean rowUpdated = false;
-//
-//        String sql = "UPDATE pms.department SET status = ? WHERE id = ?;";
-//
-//        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
-//            stm.setBoolean(1, dept.isStatus());
-//            stm.setInt(2, dept.getId());
-//
-//            rowUpdated = stm.executeUpdate() > 0;
-//        } catch (SQLException e) {
-//            BaseDAO.printSQLException(e);
-//        }
-//        return rowUpdated;
-//    }
+//    Select issue by id
+    public Issue selectIssueByID(int id) {
+        Issue i = null;
+
+        String sql = """
+                     SELECT i.id, i.created_by, u1.username, i.last_updated, i.milestone_id, m.name, 
+                     i.assignee, u2.username, i.deadline, i.status, i.name, i.type, s.name, 
+                     i.project_id, p.name, p.code, i.details, u1.full_name, u2.full_name
+                     FROM pms.issue i 
+                     JOIN pms.project p ON i.project_id = p.id
+                     JOIN pms.milestone m ON i.milestone_id = m.id
+                     JOIN pms.user u1 ON i.created_by = u1.id 
+                     JOIN pms.user u2 ON i.assignee = u2.id
+                     JOIN pms.setting s ON i.type = s.id
+                     JOIN pms.allocation a ON i.project_id = a.project_id
+                     WHERE i.id = ?;""";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            stm.setInt(1, id);
+
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                i = new Issue();
+                i.setId(rs.getInt("i.id"));
+                i.setName(rs.getString("i.name"));
+                i.setDetails(rs.getString("i.details"));
+                i.setStatus(rs.getInt("i.status"));
+                // Handle potential null values for dates
+                Date deadline = rs.getDate("i.deadline");
+                if (deadline != null) {
+                    i.setDeadline(BaseDAO.MyDateUtil.getUtilDate((java.sql.Date) deadline));
+                }
+                i.setLast_updated(rs.getTimestamp("i.last_updated").toLocalDateTime());
+
+                Setting s = new Setting();
+                s.setId(rs.getInt("i.type"));
+                s.setName(rs.getString("s.name"));
+                i.setType(s);
+
+                Project p = new Project();
+                p.setId(rs.getInt("i.project_id"));
+                p.setCode(rs.getString("p.code"));
+                p.setName(rs.getString("p.name"));
+                i.setProject(p);
+
+                Milestone m = new Milestone();
+                m.setId(rs.getInt("i.milestone_id"));
+                m.setName(rs.getString("m.name"));
+                i.setMilestone(m);
+
+                User u1 = new User();
+                u1.setId(rs.getInt("i.created_by"));
+                u1.setUsername(rs.getString("u1.username"));
+                u1.setFull_name(rs.getString("u1.full_name"));
+                i.setCreated_by(u1);
+
+                User u2 = new User();
+                u2.setId(rs.getInt("i.assignee"));
+                u2.setUsername(rs.getString("u2.username"));
+                u2.setFull_name(rs.getString("u2.full_name"));
+                i.setAssignee(u2);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return i;
+    }
+
+//    Add new issue
+    public int insertIssue(Issue issue) throws SQLException {
+        int result = 0;
+        String sql = """
+                     INSERT INTO pms.issue (created_by, last_updated, milestone_id, 
+                     assignee, deadline, status, name, type, project_id, details)
+                     VALUES (?, NOW(), ?, ?, ?, 0, ?, ?, ?, ?);""";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            stm.setInt(1, issue.getCreated_by().getId());
+            stm.setInt(2, issue.getMilestone().getId());
+            stm.setInt(3, issue.getAssignee().getId());
+            stm.setDate(4, BaseDAO.MyDateUtil.getSQLDate(issue.getDeadline()));
+            stm.setString(5, issue.getName());
+            stm.setInt(6, issue.getType().getId());
+            stm.setInt(7, issue.getProject().getId());
+            stm.setString(8, issue.getDetails());
+
+            result = stm.executeUpdate();
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return result;
+    }
+
+//    Update a issue
+    public boolean updateIssue(Issue issue) throws SQLException {
+        boolean rowUpdated = false;
+
+        String sql = """
+                     UPDATE pms.issue SET last_updated = NOW(), milestone_id = ?, assignee = ?, 
+                     deadline = ?, status = ?, name =?, type = ?, project_id = ?, details = ?
+                     WHERE id = ?;""";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            stm.setInt(1, issue.getMilestone().getId());
+            stm.setInt(2, issue.getAssignee().getId());
+            stm.setDate(3, BaseDAO.MyDateUtil.getSQLDate(issue.getDeadline()));
+            stm.setInt(4, issue.getStatus());
+            stm.setString(5, issue.getName());
+            stm.setInt(6, issue.getType().getId());
+            stm.setInt(7, issue.getProject().getId());
+            stm.setString(8, issue.getDetails());
+            stm.setInt(9, issue.getId());
+
+            rowUpdated = stm.executeUpdate() > 0;
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return rowUpdated;
+    }
 }

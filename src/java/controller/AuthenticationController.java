@@ -267,7 +267,7 @@ public class AuthenticationController extends HttpServlet {
                 int roleId = foundUser.getRole_id();
                 HttpSession session = request.getSession();
                 session.setAttribute("user", foundUser);
-                session.setMaxInactiveInterval(30 * 60);
+                session.setMaxInactiveInterval(300 * 60);
 
                 Setting userRoleSetting = null;
                 for (Setting role : userRoles) {

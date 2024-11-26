@@ -364,10 +364,6 @@
         <servlet-name>IssueController</servlet-name>
         <url-pattern>/update-issue</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>IssueController</servlet-name>
-        <url-pattern>/change-status-issue</url-pattern>
-    </servlet-mapping>
     <welcome-file-list>
         <welcome-file>login-form</welcome-file>
         <!--<welcome-file>project-type-management</welcome-file>-->

@@ -5,13 +5,14 @@
 package service;
 
 import context.IssueDAO;
+import java.sql.SQLException;
 import java.util.List;
 import model.Issue;
 import model.User;
 
 /**
  *
- * @author kelma
+ * @author HuyenPTNHE160769
  */
 public class IssueService {
     private final IssueDAO issueDAO;
@@ -20,15 +21,29 @@ public class IssueService {
         this.issueDAO = new IssueDAO();
     }
     
-    public List<User> getAssigneeListByProjectId(int userId, Integer projectId) {
-        return issueDAO.getAssigneeListByProjectId(userId, projectId);
+    // Get assignees list
+    public List<User> getMemberListByProjectId(Integer projectId) {
+        return issueDAO.getMemberListByProjectId(projectId);
     }
     
-    // HuyenPTNHE160769
-    // 22/10/2024
     // Get issues list
     public List<Issue> getAllIssues(int userId, String keyword, Integer project, Integer type, 
-            Integer milestone, Integer scope, Integer assignee, Integer status) {
-        return issueDAO.selectAllIssues(userId, keyword, project, type, milestone, scope, assignee, status);
+            Integer milestone, Integer assigner, Integer assignee, Integer status) {
+        return issueDAO.selectAllIssues(userId, keyword, project, type, milestone, assigner, assignee, status);
+    }
+    
+    // Get a issue information by id
+    public Issue getIssueById(int id) {
+        return issueDAO.selectIssueByID(id);
+    }
+    
+    // Add new issue information
+    public int insertIssue(Issue issue) throws SQLException {
+        return issueDAO.insertIssue(issue);
+    }
+
+    // Update a issue information
+    public boolean updateIssue(Issue issue) throws SQLException {
+        return issueDAO.updateIssue(issue);
     }
 }

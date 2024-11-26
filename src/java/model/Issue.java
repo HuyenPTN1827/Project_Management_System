@@ -5,7 +5,7 @@
 package model;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -14,7 +14,7 @@ import java.util.Date;
 public class Issue {
 
     private int id;
-    private LocalDate last_updated;
+    private LocalDateTime last_updated;
     private String name;
     private String details;
     private LocalDate deadline;
@@ -30,7 +30,7 @@ public class Issue {
     public Issue() {
     }
 
-    public Issue(int id, LocalDate last_updated, String name, String details, LocalDate deadline, int status, User created_by, User assignee, Milestone milestone, WorkPackage scope, Project project, Setting type) {
+    public Issue(int id, LocalDateTime last_updated, String name, String details, LocalDate deadline, int status, User created_by, User assignee, Milestone milestone, WorkPackage scope, Project project, Setting type) {
         this.id = id;
         this.last_updated = last_updated;
         this.name = name;
@@ -53,11 +53,11 @@ public class Issue {
         this.id = id;
     }
 
-    public LocalDate getLast_updated() {
+    public LocalDateTime getLast_updated() {
         return last_updated;
     }
 
-    public void setLast_updated(LocalDate last_updated) {
+    public void setLast_updated(LocalDateTime last_updated) {
         this.last_updated = last_updated;
     }
 
@@ -67,14 +67,6 @@ public class Issue {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Setting getType() {
-        return type;
-    }
-
-    public void setType(Setting type) {
-        this.type = type;
     }
 
     public String getDetails() {
@@ -99,6 +91,10 @@ public class Issue {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public User getCreated_by() {
+        return created_by;
     }
 
     public void setCreated_by(User created_by) {
@@ -135,6 +131,14 @@ public class Issue {
 
     public void setProject(Project project) {
         this.project = project;
+    }
+
+    public Setting getType() {
+        return type;
+    }
+
+    public void setType(Setting type) {
+        this.type = type;
     }
 
 }
