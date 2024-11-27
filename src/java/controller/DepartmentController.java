@@ -146,7 +146,7 @@ public class DepartmentController extends HttpServlet {
 //    Show form insert department
     private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Call service to get all department for Department dropdown list
-        List<Department> dept = deptService.getDepartmentList();
+        List<Department> dept = deptService.getAllDepartments(null, true);
 
         // Path to user information input form page
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/dept-detail.jsp");
@@ -185,7 +185,7 @@ public class DepartmentController extends HttpServlet {
     private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         Department department = deptService.getDepartmentById(id);
-        List<Department> dept = deptService.getDepartmentList();
+        List<Department> dept = deptService.getAllDepartments(null, true);
 
         request.setAttribute("department", department);
         request.setAttribute("dept", dept);
@@ -256,7 +256,7 @@ public class DepartmentController extends HttpServlet {
         Department dept = deptService.getDepartmentById(id);
         List<Department> listDept = deptService.getAllDepartments(null, null);
         List<Department_User> deptUser = deptService.getAllDepartmentUsers(keyword, null, status, id);
-        List<Department> parent = deptService.getDepartmentList();
+        List<Department> parent = deptService.getAllDepartments(null, true);
         List<User> listManager = userService.getAllUsers(null, null, 3, 1);
 
         request.setAttribute("dept", dept);

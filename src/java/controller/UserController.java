@@ -121,7 +121,7 @@ public class UserController extends HttpServlet {
 
         // Send search results and list depts, roles to JSP page
         List<User> listUser = userService.getAllUsers(keyword, deptId, roleId, status);
-        List<Department> dept = deptService.getDepartmentList();
+        List<Department> dept = deptService.getAllDepartments(null, true);
         List<Setting> role = settingService.getUserRoleList();
 
         // Path to user list page
@@ -145,7 +145,7 @@ public class UserController extends HttpServlet {
     private void showNewForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Call service to get all department for Department dropdown list
-        List<Department> dept = deptService.getDepartmentList();
+        List<Department> dept = deptService.getAllDepartments(null, true);
         // Call service to get all roles for Role dropdown list
         List<Setting> role = settingService.getUserRoleList();
 
@@ -227,7 +227,7 @@ public class UserController extends HttpServlet {
         User user = userService.getUserById(id);
 
         // Call service to get all department for Department dropdown list
-        List<Department> dept = deptService.getDepartmentList();
+        List<Department> dept = deptService.getAllDepartments(null, true);
         // Call service to get all roles for Role dropdown list
         List<Setting> role = settingService.getUserRoleList();
 

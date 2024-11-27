@@ -368,9 +368,6 @@
                                                                         <i class="align-middle" data-feather="edit"></i>
                                                                     </a>
 
-<!--                                                                    <a href="<%=request.getContextPath()%>/edit-project-type-setting?id=${type.id}&typeId=${projectType.id}"
-                                                                       class="btn btn-link text-primary">Edit</a>-->
-
                                                                     <c:if test="${type.status eq 'false'}">
                                                                         <a href="<%=request.getContextPath()%>/change-status-project-type-setting?id=${type.id}&status=${type.status}&typeId=${projectType.id}"
                                                                            class="btn btn-success"
@@ -790,8 +787,6 @@
         <script src="${pageContext.request.contextPath}/js/app.js"></script>
 
         <script src="${pageContext.request.contextPath}/js/datatables.js"></script>
-
-        <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>-->
 
         <script>
                                                                                document.addEventListener("DOMContentLoaded", function () {

@@ -474,7 +474,7 @@ public class UserDAO {
 
     //    HuyenPTNHE160769
     //    25/09/2024        
-    //    Admin change status of an user2
+    //    Admin change status of an user
     public boolean changeStatusUser(User user) throws SQLException {
         boolean rowUpdated = false;
         try (Connection cnt = BaseDAO.getConnection()) {

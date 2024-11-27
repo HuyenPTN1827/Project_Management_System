@@ -18,16 +18,21 @@ public class Allocation {
     private Date endDate;
     private double effortRate;
     private String description;
-    private String status;
+    private boolean status;
     private int deptId;
     private int userId;
     private int projectId;
     private int projectRole;
+    
+    private Department dept;
+    private User user;
+    private Project project;
+    private ProjectTypeSetting role;
 
     public Allocation() {
     }
 
-    public Allocation(int id, int createdBy, Date createdAt, Date lastUpdated, Date updateBy, Date startDate, Date endDate, double effortRate, String description, String status, int deptId, int userId, int projectId, int projectRole) {
+    public Allocation(int id, int createdBy, Date createdAt, Date lastUpdated, Date updateBy, Date startDate, Date endDate, double effortRate, String description, boolean status, int deptId, int userId, int projectId, int projectRole, Department dept, User user, Project project, ProjectTypeSetting role) {
         this.id = id;
         this.createdBy = createdBy;
         this.createdAt = createdAt;
@@ -42,6 +47,10 @@ public class Allocation {
         this.userId = userId;
         this.projectId = projectId;
         this.projectRole = projectRole;
+        this.dept = dept;
+        this.user = user;
+        this.project = project;
+        this.role = role;
     }
 
     public int getId() {
@@ -116,11 +125,11 @@ public class Allocation {
         this.description = description;
     }
 
-    public String getStatus() {
+    public boolean isStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 
@@ -156,5 +165,36 @@ public class Allocation {
         this.projectRole = projectRole;
     }
 
+    public Department getDept() {
+        return dept;
+    }
+
+    public void setDept(Department dept) {
+        this.dept = dept;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    public ProjectTypeSetting getRole() {
+        return role;
+    }
+
+    public void setRole(ProjectTypeSetting role) {
+        this.role = role;
+    }
     
 }

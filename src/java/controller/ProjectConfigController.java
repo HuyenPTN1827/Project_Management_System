@@ -29,16 +29,25 @@ import java.util.Comparator;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import jakarta.servlet.RequestDispatcher;
+import model.Allocation;
+import model.Department;
+import model.ProjectTypeSetting;
+import service.DepartmentService;
+import service.ProjectTypeService;
 
 @WebServlet()
 public class ProjectConfigController extends HttpServlet {
 
     private ProjectConfigService projectConfigService;
+    private DepartmentService deptService;
+    private ProjectTypeService pjTypeService;
 
     @Override
     public void init() throws ServletException {
         // Initialize the ProjectConfigService
         projectConfigService = new ProjectConfigService();
+        deptService = new DepartmentService();
+        pjTypeService = new ProjectTypeService();
     }
 
     /**
@@ -59,7 +68,7 @@ public class ProjectConfigController extends HttpServlet {
                 break;
             case "/updateproject":
                 updateProject(request, response);
-                break;    
+                break;
             case "/filterandsearchmilestone":
                 filterAndsearchMilestone(request, response);
                 break;
@@ -68,14 +77,14 @@ public class ProjectConfigController extends HttpServlet {
                 break;
             case "/updatemilestone":
                 updateMilestone(request, response);
-                break;    
+                break;
             case "/addmilestone":
                 addMilestone(request, response);
                 break;
             case "/delete":
 //                deleteMilestone(request, response);
                 break;
-            
+
             default:
 //                listMilestonesAndTeamsAndMembers(request, response);
                 handleProjectConfig(request, response);
@@ -96,7 +105,7 @@ public class ProjectConfigController extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
     }
-    
+
     // Hàm xử lý logic trang cấu hình dự án
     private void handleProjectConfig(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -116,7 +125,16 @@ public class ProjectConfigController extends HttpServlet {
 
             // Lấy danh sách milestones, teams và members
             System.out.println("Calling listMilestonesAndTeamsAndMembers");
+
+            String activeTab = request.getParameter("activeTab");
+            // Nếu không có activeTab, mặc định là "detail"
+            if (activeTab == null || activeTab.isEmpty()) {
+                activeTab = "detail"; // Tab mặc định là "detail"
+            }
+            request.setAttribute("activeTab", activeTab);
+
             listMilestones(request, response);
+            listAllocation(projectIdParam, request, response);
 
             // Forward đến trang cấu hình dự án
             System.out.println("Forwarding to /WEB-INF/member/project-config.jsp");
@@ -140,56 +158,52 @@ public class ProjectConfigController extends HttpServlet {
     }
 
 // Xử lý danh sách milestones, teams và members
- 
+    protected void listMilestones(HttpServletRequest request, HttpServletResponse response) {
 
-protected void listMilestones(HttpServletRequest request, HttpServletResponse response) {
+        String projectIdParam = request.getParameter("id");
 
-    String projectIdParam = request.getParameter("id");
+        if (projectIdParam == null || projectIdParam.isEmpty()) {
+            System.out.println("Project ID is missing");
+            request.setAttribute("errorMessage", "Project ID is required to list milestones.");
+            return;
+        }
 
-    if (projectIdParam == null || projectIdParam.isEmpty()) {
-        System.out.println("Project ID is missing");
-        request.setAttribute("errorMessage", "Project ID is required to list milestones.");
-        return;
-    }
+        try {
+            int projectId = Integer.parseInt(projectIdParam);
+            System.out.println("Getting milestones for project ID: " + projectId);
 
-    try {
-        int projectId = Integer.parseInt(projectIdParam);
-        System.out.println("Getting milestones for project ID: " + projectId);
+            // Lấy danh sách milestones cho project
+            List<Milestone> milestoneList = projectConfigService.getMilestonesByProjectId(projectId);
+            List<Milestone> parentMilestones = projectConfigService.getAllMilestonesParent();
+            System.out.println("Retrieved milestone list size: " + (milestoneList != null ? milestoneList.size() : 0));
 
-        // Lấy danh sách milestones cho project
-        List<Milestone> milestoneList = projectConfigService.getMilestonesByProjectId(projectId);
-        List<Milestone> parentMilestones = projectConfigService.getAllMilestonesParent();
-        System.out.println("Retrieved milestone list size: " + (milestoneList != null ? milestoneList.size() : 0));
-
-        // Sắp xếp danh sách milestone sao cho milestone có parentMilestone = null lên đầu
-        Collections.sort(milestoneList, new Comparator<Milestone>() {
-            @Override
-            public int compare(Milestone m1, Milestone m2) {
-                // Nếu parentMilestone là null thì ưu tiên sắp xếp lên đầu
-                if (m1.getParentMilestone() == null && m2.getParentMilestone() != null) {
-                    return -1;
-                } else if (m1.getParentMilestone() != null && m2.getParentMilestone() == null) {
-                    return 1;
+            // Sắp xếp danh sách milestone sao cho milestone có parentMilestone = null lên đầu
+            Collections.sort(milestoneList, new Comparator<Milestone>() {
+                @Override
+                public int compare(Milestone m1, Milestone m2) {
+                    // Nếu parentMilestone là null thì ưu tiên sắp xếp lên đầu
+                    if (m1.getParentMilestone() == null && m2.getParentMilestone() != null) {
+                        return -1;
+                    } else if (m1.getParentMilestone() != null && m2.getParentMilestone() == null) {
+                        return 1;
+                    }
+                    // Nếu cả hai đều có parentMilestone, có thể so sánh thêm theo tên hoặc theo tiêu chí khác
+                    return m1.getName().compareTo(m2.getName());
                 }
-                // Nếu cả hai đều có parentMilestone, có thể so sánh thêm theo tên hoặc theo tiêu chí khác
-                return m1.getName().compareTo(m2.getName());
-            }
-        });
+            });
 
-        // Set attribute cho milestoneList, sẽ được sử dụng trong view (JSP hoặc trang tương tự)
-        request.setAttribute("milestoneList", milestoneList);
-        request.setAttribute("parentMilestones", parentMilestones);
+            // Set attribute cho milestoneList, sẽ được sử dụng trong view (JSP hoặc trang tương tự)
+            request.setAttribute("milestoneList", milestoneList);
+            request.setAttribute("parentMilestones", parentMilestones);
 
-    } catch (NumberFormatException e) {
-        System.out.println("Invalid project ID: " + projectIdParam);
-        request.setAttribute("errorMessage", "Invalid project ID.");
-    } catch (Exception e) {
-        System.out.println("Error retrieving project details: " + e.getMessage());
-        request.setAttribute("errorMessage", "Error retrieving project details.");
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid project ID: " + projectIdParam);
+            request.setAttribute("errorMessage", "Invalid project ID.");
+        } catch (Exception e) {
+            System.out.println("Error retrieving project details: " + e.getMessage());
+            request.setAttribute("errorMessage", "Error retrieving project details.");
+        }
     }
-}
-
-
 
 // Xử lý chỉnh sửa dự án
     private void editProject(HttpServletRequest request, HttpServletResponse response) {
@@ -236,297 +250,296 @@ protected void listMilestones(HttpServletRequest request, HttpServletResponse re
         request.setAttribute("errorMessage", errorMessage);
         request.getRequestDispatcher("/WEB-INF/member/project-config.jsp").forward(request, response);
     }
-    
+
     protected void updateProject(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
 
-    // Lấy thông tin từ request
-    int projectId = Integer.parseInt(request.getParameter("projectId"));
-    
-    String projectName = request.getParameter("projectName");
-    String projectCode = request.getParameter("projectCode");
-    int estimatedEffort = Integer.parseInt(request.getParameter("estimatedEffort"));
-    
-    // Chuyển từ String sang Date sử dụng SimpleDateFormat
-    String startDateStr = request.getParameter("startDate");
-    String endDateStr = request.getParameter("endDate");
-    
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    Date startDate = null;
-    Date endDate = null;
-    
-    try {
-        if (startDateStr != null && !startDateStr.isEmpty()) {
-            startDate = dateFormat.parse(startDateStr);  // Chuyển chuỗi startDate thành Date
+        // Lấy thông tin từ request
+        int projectId = Integer.parseInt(request.getParameter("projectId"));
+
+        String projectName = request.getParameter("projectName");
+        String projectCode = request.getParameter("projectCode");
+        int estimatedEffort = Integer.parseInt(request.getParameter("estimatedEffort"));
+
+        // Chuyển từ String sang Date sử dụng SimpleDateFormat
+        String startDateStr = request.getParameter("startDate");
+        String endDateStr = request.getParameter("endDate");
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date startDate = null;
+        Date endDate = null;
+
+        try {
+            if (startDateStr != null && !startDateStr.isEmpty()) {
+                startDate = dateFormat.parse(startDateStr);  // Chuyển chuỗi startDate thành Date
+            }
+            if (endDateStr != null && !endDateStr.isEmpty()) {
+                endDate = dateFormat.parse(endDateStr);  // Chuyển chuỗi endDate thành Date
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error", "Invalid date format. Please use yyyy-MM-dd.");
+            request.getRequestDispatcher("updateProjectForm.jsp").forward(request, response);
+            return;  // Dừng lại nếu có lỗi
         }
-        if (endDateStr != null && !endDateStr.isEmpty()) {
-            endDate = dateFormat.parse(endDateStr);  // Chuyển chuỗi endDate thành Date
+
+        String description = request.getParameter("description");
+        int status = Integer.parseInt(request.getParameter("status"));
+        int departmentId = Integer.parseInt(request.getParameter("department"));
+        int projectManagerId = Integer.parseInt(request.getParameter("projectManager"));
+
+        // Tạo đối tượng Project và cập nhật thông tin
+        Project project = new Project();
+        project.setId(projectId);
+        project.setName(projectName);
+        project.setCode(projectCode);
+        project.setEstimatedEffort(estimatedEffort);
+        project.setStartDate(startDate);
+        project.setEndDate(endDate);
+        project.setDetails(description);
+        project.setStatus(status);
+        project.setDepartmentId(departmentId);
+        project.setUserId(projectManagerId);
+
+        // Gọi service để cập nhật thông tin vào cơ sở dữ liệu
+        boolean isUpdated = projectConfigService.updateProject(project);
+
+        // Kiểm tra nếu update thành công
+        if (isUpdated) {
+            request.setAttribute("message", "Project updated successfully.");
+            request.getRequestDispatcher("/projectconfig").forward(request, response);
+        } else {
+            request.setAttribute("error", "Failed to update the project.");
+            request.getRequestDispatcher("/WEB-INF/member/project-config.jsp").forward(request, response);
         }
-    } catch (Exception e) {
-        e.printStackTrace();
-        request.setAttribute("error", "Invalid date format. Please use yyyy-MM-dd.");
-        request.getRequestDispatcher("updateProjectForm.jsp").forward(request, response);
-        return;  // Dừng lại nếu có lỗi
     }
 
-    String description = request.getParameter("description");
-    int status = Integer.parseInt(request.getParameter("status"));
-    int departmentId = Integer.parseInt(request.getParameter("department"));
-    int projectManagerId = Integer.parseInt(request.getParameter("projectManager"));
-
-    // Tạo đối tượng Project và cập nhật thông tin
-    Project project = new Project();
-    project.setId(projectId);
-    project.setName(projectName);
-    project.setCode(projectCode);
-    project.setEstimatedEffort(estimatedEffort);
-    project.setStartDate(startDate);
-    project.setEndDate(endDate);
-    project.setDetails(description);
-    project.setStatus(status);
-    project.setDepartmentId(departmentId);
-    project.setUserId(projectManagerId);
-
-   
-    // Gọi service để cập nhật thông tin vào cơ sở dữ liệu
-    boolean isUpdated = projectConfigService.updateProject(project);
-
-    // Kiểm tra nếu update thành công
-    if (isUpdated) {
-        request.setAttribute("message", "Project updated successfully.");
-        request.getRequestDispatcher("/projectconfig").forward(request, response);
-    } else {
-        request.setAttribute("error", "Failed to update the project.");
-        request.getRequestDispatcher("/WEB-INF/member/project-config.jsp").forward(request, response);
-    }
-}
-    
     protected void addMilestone(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    // Lấy session và thông tin người dùng từ session
-    HttpSession session = request.getSession(false);
-    User loggedInUser = (User) session.getAttribute("user"); // Lấy đối tượng User từ session
+            throws ServletException, IOException {
+        // Lấy session và thông tin người dùng từ session
+        HttpSession session = request.getSession(false);
+        User loggedInUser = (User) session.getAttribute("user"); // Lấy đối tượng User từ session
 
-    // Kiểm tra nếu người dùng đã đăng nhập
-    if (loggedInUser == null) {
-        request.setAttribute("errorMessage", "User is not logged in.");
-        request.getRequestDispatcher("/WEB-INF/member/projectlist.jsp").forward(request, response);
-        return;
-    }
-
-    // Lấy userId từ loggedInUser và gán vào trường createdBy của milestone
-    int userId = loggedInUser.getId(); // Giả sử User có phương thức getId() trả về userId
-
-    // Lấy thông tin từ form
-    String milestoneName = request.getParameter("milestoneName");
-    String parentMilestoneId = request.getParameter("parentMilestone");
-    String projectIdParam = request.getParameter("projectId"); // Lấy projectId từ form
-    String priority = request.getParameter("priority");
-    String targetDate = request.getParameter("targetDate");
-    String description = request.getParameter("description");
-
-    // Chuyển đổi kiểu dữ liệu từ string sang các kiểu tương ứng
-    int parentMilestone = (parentMilestoneId != null && !parentMilestoneId.isEmpty()) 
-        ? Integer.parseInt(parentMilestoneId) : 0;
-    int priorityValue = (priority != null && !priority.isEmpty()) ? Integer.parseInt(priority) : 0;
-    int projectId = (projectIdParam != null && !projectIdParam.isEmpty()) 
-        ? Integer.parseInt(projectIdParam) : 0; // Chuyển đổi projectId sang kiểu int
-    
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    Date targetDateParsed = null;
-    try {
-        targetDateParsed = new SimpleDateFormat("yyyy-MM-dd").parse(targetDate); 
-    } catch (ParseException e) {
-        e.printStackTrace();  
-        request.setAttribute("error", "Invalid date format."); 
-        request.getRequestDispatcher("/WEB-INF/member/project-config.jsp").forward(request, response);
-        return;
-    }
-
-    // Lấy thời gian hiện tại cho lastUpdated
-    String lastUpdated = dateFormat.format(new Date());
-
-    // Tạo đối tượng Milestone và set các giá trị
-    Milestone milestone = new Milestone();
-    milestone.setCreatedBy(userId); 
-    milestone.setLastUpdated(lastUpdated); // Gán thời gian hiện tại
-    milestone.setName(milestoneName);
-    milestone.setParentMilestone(parentMilestone);
-    milestone.setPriority(priorityValue);
-    milestone.setTargetDate(targetDateParsed);
-    milestone.setDetails(description);
-    milestone.setProjectId(projectId); // Gán projectId
-    milestone.setStatus(0);  // Status mặc định là 0
-
-    // Thêm milestone qua service
-    boolean isAdded = projectConfigService.addMilestone(milestone);
-    List<Project> projectList = projectConfigService.getAllProjects();
-    // Thông báo kết quả và chuyển hướng
-    if (isAdded) {
-        request.setAttribute("message", "Milestone added successfully.");
-        request.setAttribute("projectList", projectList);
-        
-    } else {
-        request.setAttribute("error", "Failed to add milestone.");
-    }
-
-    // Chuyển hướng về trang config project hoặc trang cần thiết
-    request.getRequestDispatcher("/projectconfig").forward(request, response);
-}
-    
-    private void getMilestoneById(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    try {
-        // Lấy ID từ tham số request
-        String idParam = request.getParameter("id");
-        System.out.println("Received ID: " + idParam);
-        
-        int id = Integer.parseInt(idParam);
-        
-        // Lấy thông tin milestone từ service
-        Milestone milestone = projectConfigService.getMilestoneById(id);
-
-        // Kiểm tra nếu không tìm thấy milestone
-        if (milestone == null) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            response.getWriter().write("{\"error\": \"Milestone not found\"}");
+        // Kiểm tra nếu người dùng đã đăng nhập
+        if (loggedInUser == null) {
+            request.setAttribute("errorMessage", "User is not logged in.");
+            request.getRequestDispatcher("/WEB-INF/member/projectlist.jsp").forward(request, response);
             return;
         }
 
-        // Chuyển đối tượng milestone thành JSON
-        Gson gson = new Gson();
-        String milestoneJson = gson.toJson(milestone);
+        // Lấy userId từ loggedInUser và gán vào trường createdBy của milestone
+        int userId = loggedInUser.getId(); // Giả sử User có phương thức getId() trả về userId
 
-        // Đặt kiểu dữ liệu trả về là JSON
-        response.setContentType("application/json");
-        response.getWriter().write(milestoneJson);
-    } catch (NumberFormatException e) {
-        // Xử lý khi id không phải là số hợp lệ
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        response.getWriter().write("{\"error\": \"Invalid ID format\"}");
-    }
-}
+        // Lấy thông tin từ form
+        String milestoneName = request.getParameter("milestoneName");
+        String parentMilestoneId = request.getParameter("parentMilestone");
+        String projectIdParam = request.getParameter("projectId"); // Lấy projectId từ form
+        String priority = request.getParameter("priority");
+        String targetDate = request.getParameter("targetDate");
+        String description = request.getParameter("description");
 
- protected void updateMilestone(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    // Lấy dữ liệu từ form
-    String milestoneIdStr = request.getParameter("id"); // Nhận ID của milestone
-    String milestoneName = request.getParameter("milestonename");
-    String createdByStr = request.getParameter("createdById");
-    String projectIdStr = request.getParameter("project_Id");
-    String parentMilestoneIdStr = request.getParameter("parentMilestoneId");
-    String priorityStr = request.getParameter("priority");
-    String targetDateString = request.getParameter("targetdate");
-    String status = request.getParameter("status");
-    String description = request.getParameter("description");
-    String lastUpdated = request.getParameter("lastupdated");
+        // Chuyển đổi kiểu dữ liệu từ string sang các kiểu tương ứng
+        int parentMilestone = (parentMilestoneId != null && !parentMilestoneId.isEmpty())
+                ? Integer.parseInt(parentMilestoneId) : 0;
+        int priorityValue = (priority != null && !priority.isEmpty()) ? Integer.parseInt(priority) : 0;
+        int projectId = (projectIdParam != null && !projectIdParam.isEmpty())
+                ? Integer.parseInt(projectIdParam) : 0; // Chuyển đổi projectId sang kiểu int
 
-    // Biến lưu lỗi
-    StringBuilder errors = new StringBuilder();
-
-    // Kiểm tra dữ liệu đầu vào
-    int milestoneId = 0;
-    try {
-        milestoneId = Integer.parseInt(milestoneIdStr);
-    } catch (NumberFormatException e) {
-        errors.append("Invalid Milestone ID.<br>");
-    }
-    if (milestoneName == null || milestoneName.trim().isEmpty()) {
-        errors.append("Milestone name cannot be empty.<br>");
-    }
-    int createdBy = 0;
-    try {
-        createdBy = Integer.parseInt(createdByStr);
-    } catch (NumberFormatException e) {
-        errors.append("Invalid Created By ID.<br>");
-    }
-    int projectId = 0;
-    try {
-        projectId = Integer.parseInt(projectIdStr);
-    } catch (NumberFormatException e) {
-        errors.append("Invalid Project ID.<br>");
-    }
-    int parentMilestoneId = 0;
-    try {
-        parentMilestoneId = Integer.parseInt(parentMilestoneIdStr);
-    } catch (NumberFormatException e) {
-        errors.append("Invalid Parent Milestone ID.<br>");
-    }
-    int priority = 0;
-    try {
-        priority = Integer.parseInt(priorityStr);
-    } catch (NumberFormatException e) {
-        errors.append("Invalid Priority.<br>");
-    }
-    Date targetDate = null;
-    SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
-    try {
-        if (targetDateString != null && !targetDateString.isEmpty()) {
-            targetDate = dateFormat.parse(targetDateString);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date targetDateParsed = null;
+        try {
+            targetDateParsed = new SimpleDateFormat("yyyy-MM-dd").parse(targetDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            request.setAttribute("error", "Invalid date format.");
+            request.getRequestDispatcher("/WEB-INF/member/project-config.jsp").forward(request, response);
+            return;
         }
-    } catch (Exception e) {
-        errors.append("Invalid Target Date format.<br>");
-    }
-    int statusInt = 0;
-    try {
-        statusInt = Integer.parseInt(status);
-    } catch (NumberFormatException e) {
-        errors.append("Invalid Status.<br>");
+
+        // Lấy thời gian hiện tại cho lastUpdated
+        String lastUpdated = dateFormat.format(new Date());
+
+        // Tạo đối tượng Milestone và set các giá trị
+        Milestone milestone = new Milestone();
+        milestone.setCreatedBy(userId);
+        milestone.setLastUpdated(lastUpdated); // Gán thời gian hiện tại
+        milestone.setName(milestoneName);
+        milestone.setParentMilestone(parentMilestone);
+        milestone.setPriority(priorityValue);
+        milestone.setTargetDate(targetDateParsed);
+        milestone.setDetails(description);
+        milestone.setProjectId(projectId); // Gán projectId
+        milestone.setStatus(0);  // Status mặc định là 0
+
+        // Thêm milestone qua service
+        boolean isAdded = projectConfigService.addMilestone(milestone);
+        List<Project> projectList = projectConfigService.getAllProjects();
+        // Thông báo kết quả và chuyển hướng
+        if (isAdded) {
+            request.setAttribute("message", "Milestone added successfully.");
+            request.setAttribute("projectList", projectList);
+
+        } else {
+            request.setAttribute("error", "Failed to add milestone.");
+        }
+
+        // Chuyển hướng về trang config project hoặc trang cần thiết
+        request.getRequestDispatcher("/projectconfig").forward(request, response);
     }
 
-    // Nếu có lỗi, trả về trang với thông báo lỗi
-    if (errors.length() > 0) {
-        request.setAttribute("errors", errors.toString());
+    private void getMilestoneById(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            // Lấy ID từ tham số request
+            String idParam = request.getParameter("id");
+            System.out.println("Received ID: " + idParam);
+
+            int id = Integer.parseInt(idParam);
+
+            // Lấy thông tin milestone từ service
+            Milestone milestone = projectConfigService.getMilestoneById(id);
+
+            // Kiểm tra nếu không tìm thấy milestone
+            if (milestone == null) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                response.getWriter().write("{\"error\": \"Milestone not found\"}");
+                return;
+            }
+
+            // Chuyển đối tượng milestone thành JSON
+            Gson gson = new Gson();
+            String milestoneJson = gson.toJson(milestone);
+
+            // Đặt kiểu dữ liệu trả về là JSON
+            response.setContentType("application/json");
+            response.getWriter().write(milestoneJson);
+        } catch (NumberFormatException e) {
+            // Xử lý khi id không phải là số hợp lệ
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\": \"Invalid ID format\"}");
+        }
+    }
+
+    protected void updateMilestone(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Lấy dữ liệu từ form
+        String milestoneIdStr = request.getParameter("id"); // Nhận ID của milestone
+        String milestoneName = request.getParameter("milestonename");
+        String createdByStr = request.getParameter("createdById");
+        String projectIdStr = request.getParameter("project_Id");
+        String parentMilestoneIdStr = request.getParameter("parentMilestoneId");
+        String priorityStr = request.getParameter("priority");
+        String targetDateString = request.getParameter("targetdate");
+        String status = request.getParameter("status");
+        String description = request.getParameter("description");
+        String lastUpdated = request.getParameter("lastupdated");
+
+        // Biến lưu lỗi
+        StringBuilder errors = new StringBuilder();
+
+        // Kiểm tra dữ liệu đầu vào
+        int milestoneId = 0;
+        try {
+            milestoneId = Integer.parseInt(milestoneIdStr);
+        } catch (NumberFormatException e) {
+            errors.append("Invalid Milestone ID.<br>");
+        }
+        if (milestoneName == null || milestoneName.trim().isEmpty()) {
+            errors.append("Milestone name cannot be empty.<br>");
+        }
+        int createdBy = 0;
+        try {
+            createdBy = Integer.parseInt(createdByStr);
+        } catch (NumberFormatException e) {
+            errors.append("Invalid Created By ID.<br>");
+        }
+        int projectId = 0;
+        try {
+            projectId = Integer.parseInt(projectIdStr);
+        } catch (NumberFormatException e) {
+            errors.append("Invalid Project ID.<br>");
+        }
+        int parentMilestoneId = 0;
+        try {
+            parentMilestoneId = Integer.parseInt(parentMilestoneIdStr);
+        } catch (NumberFormatException e) {
+            errors.append("Invalid Parent Milestone ID.<br>");
+        }
+        int priority = 0;
+        try {
+            priority = Integer.parseInt(priorityStr);
+        } catch (NumberFormatException e) {
+            errors.append("Invalid Priority.<br>");
+        }
+        Date targetDate = null;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
+        try {
+            if (targetDateString != null && !targetDateString.isEmpty()) {
+                targetDate = dateFormat.parse(targetDateString);
+            }
+        } catch (Exception e) {
+            errors.append("Invalid Target Date format.<br>");
+        }
+        int statusInt = 0;
+        try {
+            statusInt = Integer.parseInt(status);
+        } catch (NumberFormatException e) {
+            errors.append("Invalid Status.<br>");
+        }
+
+        // Nếu có lỗi, trả về trang với thông báo lỗi
+        if (errors.length() > 0) {
+            request.setAttribute("errors", errors.toString());
+            request.getRequestDispatcher("/WEB-INF/member/project-config.jsp").forward(request, response);
+            return;
+        }
+
+        // Nếu không có lỗi, tiếp tục xử lý cập nhật
+        Milestone milestone = new Milestone();
+        milestone.setId(milestoneId); // Gán ID của milestone
+        milestone.setName(milestoneName);
+        milestone.setCreatedBy(createdBy);
+        milestone.setProjectId(projectId);
+        milestone.setParentMilestone(parentMilestoneId);
+        milestone.setPriority(priority);
+        milestone.setTargetDate(targetDate);
+        milestone.setStatus(statusInt);
+        milestone.setDetails(description);
+        milestone.setLastUpdated(lastUpdated);
+
+        boolean success = projectConfigService.updateMilestone(milestone);
+
+        if (success) {
+            request.getRequestDispatcher("/WEB-INF/member/project-config.jsp").forward(request, response);
+        } else {
+            request.setAttribute("error", "Failed to update the milestone. Please try again.");
+            request.getRequestDispatcher("/WEB-INF/member/project-config.jsp").forward(request, response);
+        }
+    }
+
+    private void filterAndsearchMilestone(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // Lấy các tham số từ request
+        String statusFilterParam = request.getParameter("statusFilter");
+        String searchKeyword = request.getParameter("searchKeyword");
+
+        // Lấy projectId từ request, nếu có
+        String projectId = request.getParameter("projectId");
+
+        // Lấy danh sách milestones đã lọc, truyền vào projectId để lọc theo project hiện tại
+        List<Milestone> milestoneList = projectConfigService.filterAndsearch(statusFilterParam, searchKeyword, projectId);
+
+        // Gửi danh sách milestone đã lọc tới JSP
+        request.setAttribute("milestoneList", milestoneList);
+
+        // Giữ lại giá trị filter cho UI sau khi tải lại
+        request.setAttribute("statusFilter", statusFilterParam);
+        request.setAttribute("searchKeyword", searchKeyword);
+        request.setAttribute("projectId", projectId);  // Giữ lại projectId để hiển thị lựa chọn hiện tại
+
+        // Chuyển hướng đến trang JSP
         request.getRequestDispatcher("/WEB-INF/member/project-config.jsp").forward(request, response);
-        return;
     }
 
-    // Nếu không có lỗi, tiếp tục xử lý cập nhật
-    Milestone milestone = new Milestone();
-    milestone.setId(milestoneId); // Gán ID của milestone
-    milestone.setName(milestoneName);
-    milestone.setCreatedBy(createdBy);
-    milestone.setProjectId(projectId);
-    milestone.setParentMilestone(parentMilestoneId);
-    milestone.setPriority(priority);
-    milestone.setTargetDate(targetDate);
-    milestone.setStatus(statusInt);
-    milestone.setDetails(description);
-    milestone.setLastUpdated(lastUpdated);
-
-    boolean success = projectConfigService.updateMilestone(milestone);
-
-    if (success) {
-        request.getRequestDispatcher("/WEB-INF/member/project-config.jsp").forward(request, response);
-    } else {
-        request.setAttribute("error", "Failed to update the milestone. Please try again.");
-        request.getRequestDispatcher("/WEB-INF/member/project-config.jsp").forward(request, response);
-    }
-}
- private void filterAndsearchMilestone(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    // Lấy các tham số từ request
-    String statusFilterParam = request.getParameter("statusFilter");
-    String searchKeyword = request.getParameter("searchKeyword");
-
-    // Lấy projectId từ request, nếu có
-    String projectId = request.getParameter("projectId");
-
-    // Lấy danh sách milestones đã lọc, truyền vào projectId để lọc theo project hiện tại
-    List<Milestone> milestoneList = projectConfigService.filterAndsearch(statusFilterParam, searchKeyword, projectId);
-    
-    // Gửi danh sách milestone đã lọc tới JSP
-    request.setAttribute("milestoneList", milestoneList);
-
-    // Giữ lại giá trị filter cho UI sau khi tải lại
-    
-    request.setAttribute("statusFilter", statusFilterParam);
-    request.setAttribute("searchKeyword", searchKeyword);
-    request.setAttribute("projectId", projectId);  // Giữ lại projectId để hiển thị lựa chọn hiện tại
-
-    // Chuyển hướng đến trang JSP
-    request.getRequestDispatcher("/WEB-INF/member/project-config.jsp").forward(request, response);
-}
-
-     protected void editMilestone(HttpServletRequest request, HttpServletResponse response)
+    protected void editMilestone(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String milestoneIdParam = request.getParameter("id");
         System.out.println("Milestone ID Param: " + milestoneIdParam);
@@ -563,8 +576,6 @@ protected void listMilestones(HttpServletRequest request, HttpServletResponse re
         }
     }
 
-    
-
     /**
      * Filters milestones based on the status and search keyword.
      *
@@ -573,10 +584,6 @@ protected void listMilestones(HttpServletRequest request, HttpServletResponse re
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
-   
-
-
     /**
      * Handles the HTTP POST method.
      *
@@ -599,5 +606,31 @@ protected void listMilestones(HttpServletRequest request, HttpServletResponse re
     @Override
     public String getServletInfo() {
         return "Project Configuration Controller";
+    }
+
+    private void listAllocation(String projectIdParam, HttpServletRequest request, HttpServletResponse response) {
+        //Project Type User
+        int projectId = Integer.parseInt(projectIdParam);
+        String keywordUser = request.getParameter("keywordUser");
+        String deptIdStr = request.getParameter("deptId");
+        String roleIdStr = request.getParameter("roleId");
+        String statusUserStr = request.getParameter("statusUser");
+
+        Integer deptId = deptIdStr != null && !deptIdStr.isEmpty() ? Integer.valueOf(deptIdStr) : null;
+        Integer roleId = roleIdStr != null && !roleIdStr.isEmpty() ? Integer.valueOf(roleIdStr) : null;
+        Boolean statusUser = statusUserStr != null && !statusUserStr.isEmpty() ? Boolean.valueOf(statusUserStr) : null;
+
+        List<Allocation> allocation = projectConfigService.getAllAllocations(projectId, keywordUser, deptId, roleId, statusUser);
+        List<Department> listDept = deptService.getAllDepartments(null, true);
+        List<ProjectTypeSetting> listRole = pjTypeService.getProjectRoleList(projectId);
+
+        request.setAttribute("listDept", listDept);
+        request.setAttribute("listRole", listRole);
+        request.setAttribute("allocation", allocation);
+        request.setAttribute("keywordUser", keywordUser);
+        request.setAttribute("deptId", deptId);
+        request.setAttribute("roleId", roleId);
+        request.setAttribute("statusUser", statusUser);
+
     }
 }

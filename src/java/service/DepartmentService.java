@@ -23,13 +23,6 @@ public class DepartmentService {
     }
 
     // HuyenPTNHE160769
-    // 29/09/2024
-    // Get depts list
-    public List<Department> getDepartmentList() {
-        return deptDAO.getDepartmentList();
-    }
-
-    // HuyenPTNHE160769
     // 04/10/2024
     // Admin get all depts
     public List<Department> getAllDepartments(String keyword, Boolean status) {

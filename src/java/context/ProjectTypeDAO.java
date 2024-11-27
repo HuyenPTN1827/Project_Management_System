@@ -162,28 +162,26 @@ public class ProjectTypeDAO {
     // HuyenPTNHE160769
     // 29/09/2024
     // Get roles list
-    public List<ProjectTypeSetting> getProjectRolesList(int typeId) {
+    public List<ProjectTypeSetting> getProjectRolesList(int projectId) {
         List<ProjectTypeSetting> pjSetting = new ArrayList<>();
 
         String sql = """
-                     SELECT * FROM pms.project_type_setting 
-                     WHERE type = 'Project Role' 
-                     AND type_id = ?
-                     AND status = 1 ORDER BY priority ASC;""";
+                     SELECT pts.id, pts.name, pts.value FROM pms.project_type_setting pts 
+                     JOIN pms.project_type pt ON pts.type_id = pt.id
+                     JOIN pms.project p ON pt.id = p.type_id
+                     WHERE pts.type = 'Project Role' 
+                     AND pts.status = 1 
+                     AND p.id = ?
+                     ORDER BY pts.priority ASC;""";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
-            stm.setInt(1, typeId);
+            stm.setInt(1, projectId);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 ProjectTypeSetting pts = new ProjectTypeSetting();
                 pts.setId(rs.getInt("id"));
                 pts.setName(rs.getString("name"));
                 pts.setValue(rs.getString("value"));
-
-                ProjectType pt = new ProjectType();
-                pt.setId(rs.getInt("type_id"));
-                pts.setPjType(pt);
-
                 pjSetting.add(pts);
             }
         } catch (SQLException e) {
@@ -260,8 +258,8 @@ public class ProjectTypeDAO {
                 ptu.setPjType(pt);
 
                 Setting s = new Setting();
-                s.setId(rs.getInt("ut.role_id"));  
-                s.setName(rs.getString("pts.name"));  
+                s.setId(rs.getInt("ut.role_id"));
+                s.setName(rs.getString("pts.name"));
                 ptu.setSetting(s);
 
                 ptUsers.add(ptu);
@@ -572,7 +570,7 @@ public class ProjectTypeDAO {
         }
         return rowUpdated;
     }
-    
+
     // HuyenPTNHE160769
     // 29/10/2024
     // Get project phases list
@@ -588,10 +586,10 @@ public class ProjectTypeDAO {
         if (status != null) {
             sql += " AND status = ?";
         }
-        
+
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             stm.setInt(1, typeId);
-            
+
             int index = 2;
             if (keyword != null && !keyword.isEmpty()) {
                 String keywordPattern = "%" + keyword.toLowerCase().trim() + "%";
@@ -600,7 +598,7 @@ public class ProjectTypeDAO {
             if (status != null) {
                 stm.setBoolean(index++, status);
             }
-            
+
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 ProjectPhase p = new ProjectPhase();
@@ -745,7 +743,7 @@ public class ProjectTypeDAO {
             }
             // Set type only if it is not "parent" and not empty
             if (type != null && !type.isEmpty() && !"parent".equals(type)) {
-                stmt.setString(paramIndex++, "%" +type + "%");
+                stmt.setString(paramIndex++, "%" + type + "%");
             }
             // Set parameter for status filter
             if (status != null) {
@@ -781,7 +779,7 @@ public class ProjectTypeDAO {
     // Get ProjectTypeSetting by ID
     public ProjectTypeSetting getProjectTypeSettingById(int id) throws SQLException {
         ProjectTypeSetting setting = null;
-        
+
         String sql = "SELECT * FROM pms.project_type_setting WHERE id = ?";
         System.out.println(sql);
 
@@ -797,7 +795,7 @@ public class ProjectTypeDAO {
                 setting.setPriority(rs.getInt("priority"));
                 setting.setStatus(rs.getBoolean("status"));
                 setting.setDescription(rs.getString("description"));
-                
+
                 ProjectType pt = new ProjectType();
                 pt.setId(rs.getInt("type_id"));
                 setting.setPjType(pt);
@@ -889,4 +887,5 @@ public class ProjectTypeDAO {
         }
         return setting;
     }
+
 }

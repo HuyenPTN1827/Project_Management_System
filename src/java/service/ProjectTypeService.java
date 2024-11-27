@@ -94,8 +94,8 @@ public class ProjectTypeService {
     // HuyenPTNHE160769
     // 17/10/2024
     // Get project roles list
-    public List<ProjectTypeSetting> getProjectRoleList(int typeId) {
-        return projectTypeDAO.getProjectRolesList(typeId);
+    public List<ProjectTypeSetting> getProjectRoleList(int projectId) {
+        return projectTypeDAO.getProjectRolesList(projectId);
     }
     
 //    HuyenPTNHE160769
