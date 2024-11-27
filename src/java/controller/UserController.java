@@ -162,6 +162,7 @@ public class UserController extends HttpServlet {
     private void insertUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         String fullname = request.getParameter("fullname");
+        String username = request.getParameter("username");
         String email = request.getParameter("email");
         String mobile = request.getParameter("mobile");
         String password = request.getParameter("password");
@@ -175,6 +176,7 @@ public class UserController extends HttpServlet {
 
         User u = new User();
         u.setFull_name(fullname);
+        u.setUsername(username);
         u.setEmail(email);
         u.setMobile(mobile);
         u.setPassword(password);
@@ -206,6 +208,7 @@ public class UserController extends HttpServlet {
             // If there is a validation error, return to the form and display an error message
             request.setAttribute("errorMessages", errors);
             request.setAttribute("fullname", fullname);
+            request.setAttribute("username", username);
             request.setAttribute("email", email);
             request.setAttribute("mobile", mobile);
             request.setAttribute("deptId", dept);
@@ -243,6 +246,7 @@ public class UserController extends HttpServlet {
             throws SQLException, IOException, ServletException {
         int id = Integer.parseInt(request.getParameter("id"));
         String fullname = request.getParameter("fullname");
+        String username = request.getParameter("username");
         String email = request.getParameter("email");
         String mobile = request.getParameter("mobile");
         String password = request.getParameter("password");
@@ -258,6 +262,7 @@ public class UserController extends HttpServlet {
         User u = new User();
         u.setId(id);
         u.setFull_name(fullname);
+        u.setUsername(username);
         u.setEmail(email);
         u.setMobile(mobile);
         u.setPassword(password);

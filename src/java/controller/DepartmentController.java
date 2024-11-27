@@ -302,25 +302,25 @@ public class DepartmentController extends HttpServlet {
 //    01/11/2024 
 //    Show form insert department user
     private void showNewFormDeptUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int deptId = Integer.parseInt(request.getParameter("deptId"));
-        String keyword = request.getParameter("keyword");
-        List<String> errors = new ArrayList<>();
-
-        User deptUser = userService.findUserByFullNameOrEmail(keyword); // Find user by keyword (email or full name)
-        List<User> deptUserList = userService.getAllUsers(null, deptId, null, 1); // Get all users for the department
-
-        if (deptUser == null && keyword != null && !keyword.isEmpty()) {
-            errors.add("No user found.");
-        }
-
-        request.setAttribute("deptId", deptId);
-        request.setAttribute("deptUser", deptUser);
-        request.setAttribute("deptUserList", deptUserList);
-        request.setAttribute("keyword", keyword);
-        request.setAttribute("errorMessages", errors);
-
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/dept-user-add.jsp");
-        dispatcher.forward(request, response);
+//        int deptId = Integer.parseInt(request.getParameter("deptId"));
+//        String keyword = request.getParameter("keyword");
+//        List<String> errors = new ArrayList<>();
+//
+//        User deptUser = userService.findUserByFullNameOrEmail(keyword); // Find user by keyword (email or full name)
+//        List<User> deptUserList = userService.getAllUsers(null, deptId, null, 1); // Get all users for the department
+//
+//        if (deptUser == null && keyword != null && !keyword.isEmpty()) {
+//            errors.add("No user found.");
+//        }
+//
+//        request.setAttribute("deptId", deptId);
+//        request.setAttribute("deptUser", deptUser);
+//        request.setAttribute("deptUserList", deptUserList);
+//        request.setAttribute("keyword", keyword);
+//        request.setAttribute("errorMessages", errors);
+//
+//        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/dept-user-add.jsp");
+//        dispatcher.forward(request, response);
     }
 
 //    HuyenPTNHE160769 

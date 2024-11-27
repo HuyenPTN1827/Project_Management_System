@@ -149,7 +149,8 @@ public class UserDAO {
         List<User> user = new ArrayList<>();
 
         String sql = """
-                     SELECT u.id, u.full_name, u.email, u.mobile, d.id, d.code, s.id, s.name, u.status
+                     SELECT u.id, u.full_name, u.username, u.email, u.mobile, 
+                     d.id, d.code, s.id, s.name, u.status
                      FROM pms.user u
                      LEFT JOIN pms.dept_user du ON u.id = du.user_id AND du.end_date IS NULL
                      LEFT JOIN pms.department d ON du.dept_id = d.id
@@ -157,7 +158,10 @@ public class UserDAO {
                      WHERE 1=1""";
         // Add search conditions if any
         if (keyword != null && !keyword.isEmpty()) {
-            sql += " AND (LOWER(u.full_name) LIKE ? OR LOWER(u.email) LIKE ? OR u.mobile LIKE ?)";
+            sql += " AND (LOWER(u.full_name) LIKE ? "
+                    + "OR LOWER(u.username) LIKE ? "
+                    + "OR LOWER(u.email) LIKE ? "
+                    + "OR u.mobile LIKE ?)";
         }
         if (deptId != null) {
             sql += " AND d.id = ?";
@@ -178,6 +182,7 @@ public class UserDAO {
                 stm.setString(index++, keywordPattern);
                 stm.setString(index++, keywordPattern);
                 stm.setString(index++, keywordPattern);
+                stm.setString(index++, keywordPattern);
             }
             if (deptId != null) {
                 stm.setInt(index++, deptId);
@@ -194,6 +199,7 @@ public class UserDAO {
                 User u = new User();
                 u.setId(rs.getInt("u.id"));
                 u.setFull_name(rs.getString("u.full_name"));
+                u.setUsername(rs.getString("u.username"));
                 u.setEmail(rs.getString("u.email"));
                 u.setMobile(rs.getString("u.mobile"));
                 u.setStatus(rs.getInt("u.status"));
@@ -223,7 +229,8 @@ public class UserDAO {
         User u = null;
 
         String sql = """
-                     SELECT u.id, u.full_name, u.email, u.mobile, u.password, d.id, d.name, s.id, s.name, u.notes, u.status
+                     SELECT u.id, u.full_name, u.username, u.email, u.mobile, 
+                     u.password, d.id, d.name, s.id, s.name, u.notes, u.status
                      FROM pms.user u
                      LEFT JOIN pms.dept_user du ON u.id = du.user_id AND du.end_date IS NULL
                      LEFT JOIN pms.department d ON du.dept_id = d.id
@@ -237,6 +244,7 @@ public class UserDAO {
                 u = new User();
                 u.setId(rs.getInt("u.id"));
                 u.setFull_name(rs.getString("u.full_name"));
+                u.setUsername(rs.getString("u.username"));
                 u.setEmail(rs.getString("u.email"));
                 u.setMobile(rs.getString("u.mobile"));
                 u.setPassword(rs.getString("u.password"));
@@ -266,23 +274,24 @@ public class UserDAO {
         int userId = 0;
         int result = 0;
         String userSql = """
-                         INSERT INTO pms.user (full_name, email, mobile, password, notes, role_id)
-                         VALUES (?, ?, ?, ?, ?, ?);""";
+                         INSERT INTO pms.user (full_name, username, email, mobile, password, notes, role_id)
+                         VALUES (?, ?, ?, ?, ?, ?, ?);""";
         String deptUserSql = """
                             INSERT INTO pms.dept_user (user_id, dept_id, status)
                             VALUES (?, ?, 0);""";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement userStm = cnt.prepareStatement(userSql); PreparedStatement deptUserStm = cnt.prepareStatement(deptUserSql);) {
             userStm.setString(1, user.getFull_name());
-            userStm.setString(2, user.getEmail());
-            userStm.setString(3, user.getMobile());
-            userStm.setString(4, user.getPassword());
-            userStm.setString(5, user.getNotes());
+            userStm.setString(2, user.getUsername());
+            userStm.setString(3, user.getEmail());
+            userStm.setString(4, user.getMobile());
+            userStm.setString(5, user.getPassword());
+            userStm.setString(6, user.getNotes());
             // Set role_id (allow null)
             if (roleId != null) {
-                userStm.setInt(6, roleId);
+                userStm.setInt(7, roleId);
             } else {
-                userStm.setNull(6, Types.INTEGER);
+                userStm.setNull(7, Types.INTEGER);
             }
 
             result = userStm.executeUpdate();
@@ -316,21 +325,22 @@ public class UserDAO {
             switch (user.getStatus()) {
                 // If status = 3, dept_user status is not changed
                 case 3 -> {
-                    String updateUserSql = "UPDATE pms.user SET full_name = ?, email = ?, "
-                            + "mobile = ?, notes = ?, role_id = ? "
+                    String updateUserSql = "UPDATE pms.user SET full_name = ?, username = ?, "
+                            + "email = ?, mobile = ?, notes = ?, role_id = ? "
                             + "WHERE id = ? AND status = 3;";
                     try (PreparedStatement updateUserStm = cnt.prepareStatement(updateUserSql)) {
                         updateUserStm.setString(1, user.getFull_name());
-                        updateUserStm.setString(2, user.getEmail());
-                        updateUserStm.setString(3, user.getMobile());
-                        updateUserStm.setString(4, user.getNotes());
+                        updateUserStm.setString(2, user.getUsername());
+                        updateUserStm.setString(3, user.getEmail());
+                        updateUserStm.setString(4, user.getMobile());
+                        updateUserStm.setString(5, user.getNotes());
                         // Set role_id (allow null)
                         if (roleId != null) {
-                            updateUserStm.setInt(5, roleId);
+                            updateUserStm.setInt(6, roleId);
                         } else {
-                            updateUserStm.setNull(5, Types.INTEGER);
+                            updateUserStm.setNull(6, Types.INTEGER);
                         }
-                        updateUserStm.setInt(6, user.getId());
+                        updateUserStm.setInt(7, user.getId());
 
                         rowUpdated = updateUserStm.executeUpdate() > 0;
                     }
@@ -367,21 +377,22 @@ public class UserDAO {
                 // If status = 1 or changes to 1, and dept_id is changed
                 case 1 -> {
                     // Update user
-                    String updateUserSql = "UPDATE pms.user SET full_name = ?, email = ?, "
+                    String updateUserSql = "UPDATE pms.user SET full_name = ?, username = ?, email = ?, "
                             + "mobile = ?, notes = ?, status = ?, role_id = ? WHERE id = ?;";
                     try (PreparedStatement updateUserStm = cnt.prepareStatement(updateUserSql)) {
                         updateUserStm.setString(1, user.getFull_name());
-                        updateUserStm.setString(2, user.getEmail());
-                        updateUserStm.setString(3, user.getMobile());
-                        updateUserStm.setString(4, user.getNotes());
-                        updateUserStm.setInt(5, user.getStatus());
+                        updateUserStm.setString(2, user.getUsername());
+                        updateUserStm.setString(3, user.getEmail());
+                        updateUserStm.setString(4, user.getMobile());
+                        updateUserStm.setString(5, user.getNotes());
+                        updateUserStm.setInt(6, user.getStatus());
                         // Set role_id (allow null)
                         if (roleId != null) {
-                            updateUserStm.setInt(6, roleId);
+                            updateUserStm.setInt(7, roleId);
                         } else {
-                            updateUserStm.setNull(6, Types.INTEGER);
+                            updateUserStm.setNull(7, Types.INTEGER);
                         }
-                        updateUserStm.setInt(7, user.getId());
+                        updateUserStm.setInt(8, user.getId());
 
                         rowUpdated = updateUserStm.executeUpdate() > 0;
                     }
@@ -426,15 +437,16 @@ public class UserDAO {
                 // If status = 0 or changes to 0
                 case 0 -> {
                     // Update user
-                    String updateUserSql = "UPDATE pms.user SET full_name = ?, email = ?, "
+                    String updateUserSql = "UPDATE pms.user SET full_name = ?, username = ?, email = ?, "
                             + "mobile = ?, notes = ?, status = ? WHERE id = ?;";
                     try (PreparedStatement updateUserStm = cnt.prepareStatement(updateUserSql)) {
                         updateUserStm.setString(1, user.getFull_name());
-                        updateUserStm.setString(2, user.getEmail());
-                        updateUserStm.setString(3, user.getMobile());
-                        updateUserStm.setString(4, user.getNotes());
-                        updateUserStm.setInt(5, user.getStatus());
-                        updateUserStm.setInt(6, user.getId());
+                        updateUserStm.setString(2, user.getUsername());
+                        updateUserStm.setString(3, user.getEmail());
+                        updateUserStm.setString(4, user.getMobile());
+                        updateUserStm.setString(5, user.getNotes());
+                        updateUserStm.setInt(6, user.getStatus());
+                        updateUserStm.setInt(7, user.getId());
 
                         rowUpdated = updateUserStm.executeUpdate() > 0;
                     }
@@ -502,45 +514,6 @@ public class UserDAO {
             BaseDAO.printSQLException(e);
         }
         return false;
-    }
-
-//    HuyenPTNHE160769
-//    22/10/2024        
-//    Admin select user by user full name or email
-    public User findUserByFullNameOrEmail(String keyword) {
-        User u = null;
-
-        if (keyword != null) {
-            String sql = "SELECT * FROM pms.user WHERE (LOWER(full_name) LIKE ? OR LOWER(email) LIKE ?) AND status = 1 LIMIT 1;";
-            try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
-                String keywordPattern = "%" + keyword.toLowerCase().trim() + "%";
-                stm.setString(1, keywordPattern);
-                stm.setString(2, keywordPattern);
-                ResultSet rs = stm.executeQuery();
-                while (rs.next()) {
-                    u = new User();
-                    u.setId(rs.getInt("id"));
-                    u.setFull_name(rs.getString("full_name"));
-                    u.setEmail(rs.getString("email"));
-                    u.setMobile(rs.getString("mobile"));
-//                u.setNotes(rs.getString("notes"));
-                    u.setStatus(rs.getInt("status"));
-
-//                Department d = new Department();
-//                d.setId(rs.getInt("d.id"));
-//                d.setCode(rs.getString("d.name"));
-//                u.setDept(d);
-//
-//                Setting s = new Setting();
-//                s.setId(rs.getInt("s.id"));
-//                s.setName(rs.getString("s.name"));
-//                u.setSetting(s);
-                }
-            } catch (SQLException e) {
-                BaseDAO.printSQLException(e);
-            }
-        }
-        return u;
     }
 
 }

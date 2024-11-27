@@ -8,7 +8,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -65,20 +64,20 @@
                         .catch(error => console.log('Error loading the form:', error));
             }
 
-//            function openPTUserModal(typeId, id = null) {
-//                let url = '<%=request.getContextPath()%>/add-project-type-user?typeId=' + typeId; // Default for Create New
-//                if (id) {
-//                    url = '<%=request.getContextPath()%>/edit-project-type-user?typeId=' + typeId + '&id=' + id; // For Edit
-//                }
-//
-//                fetch(url)
-//                        .then(response => response.text())
-//                        .then(data => {
-//                            document.querySelector('#ptUserModal .modal-body').innerHTML = data;
-//                            document.getElementById('ptUserModal').style.display = 'block';
-//                        })
-//                        .catch(error => console.log('Error loading the form:', error));
-//            }
+            function openPTUserModal(typeId, id = null) {
+                let url = '<%=request.getContextPath()%>/add-project-type-user?typeId=' + typeId; // Default for Create New
+                if (id) {
+                    url = '<%=request.getContextPath()%>/edit-project-type-user?typeId=' + typeId + '&id=' + id; // For Edit
+                }
+
+                fetch(url)
+                        .then(response => response.text())
+                        .then(data => {
+                            document.querySelector('#ptUserModal .modal-body').innerHTML = data;
+                            document.getElementById('ptUserModal').style.display = 'block';
+                        })
+                        .catch(error => console.log('Error loading the form:', error));
+            }
 
             function openPhaseModal(typeId, id = null) {
                 let url = '<%=request.getContextPath()%>/add-project-phase?typeId=' + typeId; // Default for Create New
@@ -114,9 +113,9 @@
                 document.getElementById('settingModal').style.display = 'none';
             }
 
-//            function closeptUserModal() {
-//                document.getElementById('ptUserModal').style.display = 'none';
-//            }
+            function closeptUserModal() {
+                document.getElementById('ptUserModal').style.display = 'none';
+            }
 
             function closePhaseModal() {
                 document.getElementById('phaseModal').style.display = 'none';
@@ -124,6 +123,21 @@
 
             function closeptCriteriaModal() {
                 document.getElementById('ptCriteriaModal').style.display = 'none';
+            }
+
+            function filterFunction(dropdownId, inputId) {
+                const input = document.getElementById(inputId);
+                const filter = input.value.toUpperCase();
+                const ul = document.getElementById(dropdownId);
+                const items = ul.getElementsByTagName("a");
+                for (let i = 0; i < items.length; i++) {
+                    const txtValue = items[i].textContent || items[i].innerText;
+                    if (txtValue.toUpperCase().includes(filter)) {
+                        items[i].style.display = "";
+                    } else {
+                        items[i].style.display = "none";
+                    }
+                }
             }
 
             function redirectToConfigPage() {
@@ -182,9 +196,7 @@
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h1 class="modal-title">User Details</h1>
-                                                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" onclick="closeptUserModal();">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
+                                                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" onclick="closeptUserModal();"></button>
                                             </div>
                                             <div class="modal-body">
                                                 <!--This is where the project-type-user-detail.jsp will be loaded via AJAX--> 
@@ -384,21 +396,34 @@
                                             <!-- Project Type Users -->
                                             <div class="tab-pane fade ${activeTab == 'manager' ? 'show active' : ''}" id="project-type-users" role="tabpanel" aria-labelledby="project-type-users-tab">
                                                 <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 15px;">
-                                                    <form action="project-type-config" method="post" class="d-flex align-items-center" style="gap: 15px;">
+                                                    <form action="project-type-config" method="post" class="d-flex align-items-center" style="gap: 10px;">
                                                         <input type="hidden" name="id" value="${projectType.id}">
                                                         <input type="hidden" name="activeTab" value="manager">
 
                                                         <div class="col-md-3">
                                                             <select name="roleId" class="form-select">
                                                                 <option value="">All Project Roles</option>
-                                                                <c:forEach items="${ptSetting}" var="s">
-                                                                    <option 
-                                                                        <c:if test="${roleId eq s.id}">
-                                                                            selected="selected"
-                                                                        </c:if>
-                                                                        value="${s.id}">${s.name}
-                                                                    </option>
-                                                                </c:forEach>
+                                                                <%--<c:forEach items="${ptSetting}" var="s">--%>
+                                                                <!--                                                                    <option 
+                                                                <%--<c:if test="${roleId eq s.id}">--%>
+                                                                    selected="selected"
+                                                                <%--</c:if>--%>
+                                                                value="${s.id}">${s.name}
+                                                            </option>-->
+                                                                <%--</c:forEach>--%>
+
+                                                                <option 
+                                                                    <c:if test="${roleId eq '2'}">
+                                                                        selected="selected"
+                                                                    </c:if>
+                                                                    value="2">PMO Manager
+                                                                </option>
+                                                                <option 
+                                                                    <c:if test="${roleId eq '5'}">
+                                                                        selected="selected"
+                                                                    </c:if>
+                                                                    value="5">Project QA
+                                                                </option>
                                                             </select>
                                                         </div>
 
@@ -420,7 +445,7 @@
                                                             </select>
                                                         </div>
 
-                                                        <div class="col-md-5">
+                                                        <div class="col-md-4">
                                                             <input type="search" name="keywordUser" class="form-control"
                                                                    placeholder="Enter the Full Name" id="keywordUser" value="${keywordUser}">
                                                         </div>
@@ -429,8 +454,52 @@
 
                                                     </form>
 
-                                                    <a class="btn btn-primary" href="<%=request.getContextPath()%>/add-project-type-user?typeId=${projectType.id}">Create new</a>
+                                                    <!--<a class="btn btn-primary" href="<%=request.getContextPath()%>/add-project-type-user?typeId=${projectType.id}">Create new</a>-->
                                                     <!--<a class="btn btn-primary" href="javascript:void(0);" onclick="openPTUserModal(${projectType.id});">Create new</a>-->
+
+                                                    <div class="btn-group ms-4" style="gap: 10px;">
+                                                        <button type="button" class="btn btn-primary dropdown-toggle" 
+                                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                            Add PMO Manager
+                                                        </button>
+                                                        <ul id="pmoDropdown" class="dropdown-menu dropdown-menu-end">
+                                                            <li>
+                                                                <input class="dropdown-item form-control" type="text" 
+                                                                       placeholder="Full name/Username/Email..." id="pmoInput" 
+                                                                       onkeyup="filterFunction('pmoDropdown', 'pmoInput')">
+                                                            </li>
+                                                            <c:forEach items="${listPMO}" var="m">
+                                                                <li>
+                                                                    <hr class="dropdown-divider">
+                                                                    <a class="dropdown-item" 
+                                                                       href="<%=request.getContextPath()%>/insert-project-type-user?typeId=${projectType.id}&userId=${m.id}&roleId=2">
+                                                                        ${m.full_name} (${m.username})
+                                                                    </a>
+                                                                </li>
+                                                            </c:forEach>
+                                                        </ul>
+
+                                                        <button type="button" class="btn btn-primary dropdown-toggle" 
+                                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                            Add Project QA
+                                                        </button>
+                                                        <ul id="qaDropdown" class="dropdown-menu dropdown-menu-end">
+                                                            <li>
+                                                                <input class="dropdown-item form-control" type="text" 
+                                                                       placeholder="Full name/Username/Email..." id="qaInput" 
+                                                                       onkeyup="filterFunction('qaDropdown', 'qaInput')">
+                                                            </li>
+                                                            <c:forEach items="${listQA}" var="m">
+                                                                <li>
+                                                                    <hr class="dropdown-divider">
+                                                                    <a class="dropdown-item" 
+                                                                       href="<%=request.getContextPath()%>/insert-project-type-user?typeId=${projectType.id}&userId=${m.id}&roleId=5">
+                                                                        ${m.full_name} (${m.username})
+                                                                    </a>
+                                                                </li>
+                                                            </c:forEach>
+                                                        </ul>
+                                                    </div>
                                                 </div>
 
                                                 <table id="datatables-multi" class="table table-striped" style="width:100%">
@@ -452,7 +521,7 @@
                                                                 <td hidden>${ptu.id}</td>
                                                                 <td>${ptu.user.id}</td>
                                                                 <td>${ptu.user.full_name}</td>
-                                                                <td>${ptu.ptSetting.name}</td>
+                                                                <td>${ptu.setting.name}</td>
                                                                 <td>${ptu.start_date}</td>
                                                                 <td>${ptu.end_date}</td>
                                                                 <td>
@@ -464,13 +533,10 @@
                                                                     </c:if>
                                                                 </td>
                                                                 <td>
+                                                                    <a href="javascript:void(0);" class="btn btn-info" 
+                                                                       onclick="openPTUserModal(${projectType.id}, ${ptu.id});"><i class="align-middle" data-feather="edit"></i></a>
+
                                                                     <c:if test="${ptu.status eq 'false'}">
-                                                                        <a href="<%=request.getContextPath()%>/edit-project-type-user?id=${ptu.id}&typeId=${projectType.id}"
-                                                                           class="btn btn-info"><i class="align-middle" data-feather="edit"></i></a>
-
-                                                                        <!--                                                                <a href="javascript:void(0);" class="btn btn-link text-primary" 
-                                                                                                                                           onclick="openPTUserModal(${projectType.id}, ${ptu.id});"><i class="align-middle" data-feather="edit"></i></a>-->
-
                                                                         <a href="<%=request.getContextPath()%>/change-status-project-type-user?id=${ptu.id}&status=${ptu.status}&typeId=${projectType.id}"
                                                                            class="btn btn-success"
                                                                            onclick="return confirm('Are you sure you want to activate this user?');">
@@ -479,12 +545,6 @@
                                                                     </c:if>
 
                                                                     <c:if test="${ptu.status eq 'true'}">
-                                                                        <a href="<%=request.getContextPath()%>/edit-project-type-user?id=${ptu.id}&typeId=${projectType.id}"
-                                                                           class="btn btn-info"><i class="align-middle" data-feather="edit"></i></a>
-
-                                                                        <!--                                                                <a href="javascript:void(0);" class="btn btn-link text-primary" 
-                                                                                                                                            onclick="openPTUserModal(${projectType.id}, ${ptu.id});"><i class="align-middle" data-feather="edit"></i></a>-->
-
                                                                         <a href="<%=request.getContextPath()%>/change-status-project-type-user?id=${ptu.id}&status=${ptu.status}&typeId=${projectType.id}"
                                                                            class="btn btn-danger"
                                                                            onclick="return confirm('Are you sure you want to deactivate this user?');">
@@ -731,7 +791,7 @@
 
         <script src="${pageContext.request.contextPath}/js/datatables.js"></script>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>-->
 
         <script>
                                                                                document.addEventListener("DOMContentLoaded", function () {

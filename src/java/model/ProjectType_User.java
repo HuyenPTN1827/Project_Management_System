@@ -19,17 +19,15 @@ public class ProjectType_User {
     private LocalDate end_date;
     private boolean status;
 
-//    private ArrayList<User> users = new ArrayList<>();
-//    private ArrayList<ProjectType> pjTypes = new ArrayList<>();
-//    private ArrayList<ProjectTypeSetting> ptSettings = new ArrayList<>();
     private User user;
     private ProjectType pjType;
     private ProjectTypeSetting ptSetting;
+    private Setting setting;
 
     public ProjectType_User() {
     }
 
-    public ProjectType_User(int id, LocalDate start_date, LocalDate end_date, boolean status, User user, ProjectType pjType, ProjectTypeSetting ptSetting) {
+    public ProjectType_User(int id, LocalDate start_date, LocalDate end_date, boolean status, User user, ProjectType pjType, ProjectTypeSetting ptSetting, Setting setting) {
         this.id = id;
         this.start_date = start_date;
         this.end_date = end_date;
@@ -37,6 +35,7 @@ public class ProjectType_User {
         this.user = user;
         this.pjType = pjType;
         this.ptSetting = ptSetting;
+        this.setting = setting;
     }
 
     public int getId() {
@@ -71,30 +70,6 @@ public class ProjectType_User {
         this.status = status;
     }
 
-//    public ArrayList<User> getUsers() {
-//        return users;
-//    }
-//
-//    public void setUsers(ArrayList<User> users) {
-//        this.users = users;
-//    }
-//
-//    public ArrayList<ProjectType> getPjTypes() {
-//        return pjTypes;
-//    }
-//
-//    public void setPjTypes(ArrayList<ProjectType> pjTypes) {
-//        this.pjTypes = pjTypes;
-//    }
-//
-//    public ArrayList<ProjectTypeSetting> getPtSettings() {
-//        return ptSettings;
-//    }
-//
-//    public void setPtSettings(ArrayList<ProjectTypeSetting> ptSettings) {
-//        this.ptSettings = ptSettings;
-//    }
-
     public User getUser() {
         return user;
     }
@@ -117,6 +92,14 @@ public class ProjectType_User {
 
     public void setPtSetting(ProjectTypeSetting ptSetting) {
         this.ptSetting = ptSetting;
+    }
+
+    public Setting getSetting() {
+        return setting;
+    }
+
+    public void setSetting(Setting setting) {
+        this.setting = setting;
     }
 
 }

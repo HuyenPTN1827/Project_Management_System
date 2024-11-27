@@ -17,6 +17,7 @@ import model.ProjectType;
 import model.ProjectTypeCriteria;
 import model.ProjectTypeSetting;
 import model.ProjectType_User;
+import model.Setting;
 import model.User;
 
 /**
@@ -202,7 +203,7 @@ public class ProjectTypeDAO {
                      ut.start_date, ut.end_date, ut.status FROM pms.user_type ut
                      INNER JOIN pms.user u ON ut.user_id = u.id
                      INNER JOIN pms.project_type pt ON ut.type_id = pt.id
-                     INNER JOIN pms.project_type_setting pts ON ut.role_id = pts.id
+                     INNER JOIN pms.setting pts ON ut.role_id = pts.id
                      WHERE ut.type_id = ?""";
 
         // Add search conditions if any
@@ -258,10 +259,10 @@ public class ProjectTypeDAO {
                 pt.setId(rs.getInt("ut.type_id"));
                 ptu.setPjType(pt);
 
-                ProjectTypeSetting pts = new ProjectTypeSetting();
-                pts.setId(rs.getInt("ut.role_id"));  // Set role_id as the ID
-                pts.setName(rs.getString("pts.name"));  // Set name as a string
-                ptu.setPtSetting(pts);
+                Setting s = new Setting();
+                s.setId(rs.getInt("ut.role_id"));  
+                s.setName(rs.getString("pts.name"));  
+                ptu.setSetting(s);
 
                 ptUsers.add(ptu);
             }
@@ -311,7 +312,7 @@ public class ProjectTypeDAO {
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             stm.setInt(1, ptUser.getUser().getId());
             stm.setInt(2, ptUser.getPjType().getId());
-            stm.setInt(3, ptUser.getPtSetting().getId());
+            stm.setInt(3, ptUser.getSetting().getId());
 
             result = stm.executeUpdate();
         } catch (SQLException e) {
@@ -331,7 +332,7 @@ public class ProjectTypeDAO {
                                           ut.start_date, ut.end_date, ut.status FROM pms.user_type ut
                                           INNER JOIN pms.user u ON ut.user_id = u.id
                                           INNER JOIN pms.project_type pt ON ut.type_id = pt.id
-                                          INNER JOIN pms.project_type_setting pts ON ut.role_id = pts.id
+                                          INNER JOIN pms.setting pts ON ut.role_id = pts.id
                                           WHERE ut.id = ?;""";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
@@ -366,10 +367,10 @@ public class ProjectTypeDAO {
                 pt.setId(rs.getInt("ut.type_id"));
                 ptu.setPjType(pt);
 
-                ProjectTypeSetting pts = new ProjectTypeSetting();
+                Setting pts = new Setting();
                 pts.setId(rs.getInt("ut.role_id"));
                 pts.setName(rs.getString("pts.name"));
-                ptu.setPtSetting(pts);
+                ptu.setSetting(pts);
             }
         } catch (SQLException e) {
             BaseDAO.printSQLException(e);
@@ -395,7 +396,7 @@ public class ProjectTypeDAO {
                 stm = cnt.prepareStatement(activateSql);
                 stm.setBoolean(1, ptUser.isStatus()); // Change to active
             }
-            stm.setInt(2, ptUser.getPtSetting().getId());
+            stm.setInt(2, ptUser.getSetting().getId());
             stm.setInt(3, ptUser.getId());
             stm.setInt(4, ptUser.getPjType().getId());
             rowUpdated = stm.executeUpdate() > 0;
