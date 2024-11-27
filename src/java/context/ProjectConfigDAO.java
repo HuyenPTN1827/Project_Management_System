@@ -7,12 +7,15 @@ package context;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
-import model.Milestone;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import model.Team;
 import model.TeamMember;
+import model.Milestone;
+import model.User;
+import model.Project;
+import service.ProjectService;
 
 /**
  *
@@ -20,29 +23,76 @@ import model.TeamMember;
  */
 public class ProjectConfigDAO {
 
+    public List<Project> getAllProjects() {
+        List<Project> projects = new ArrayList<>();
+        // Cập nhật câu truy vấn để thực hiện JOIN với bảng department
+        String sql = "SELECT p.id, p.name, p.code, p.estimated_effort, p.start_date, p.details, p.end_date, \n"
+                + "       p.last_updated, p.status, p.type_id, p.department_id, d.name AS department_name\n"
+                + "FROM project p\n"
+                + "LEFT JOIN department d ON p.department_id = d.id;"; // Thực hiện JOIN với bảng department
+
+        try (Connection conn = BaseDAO.getConnection(); PreparedStatement stm = conn.prepareStatement(sql)) {
+            ResultSet rs = stm.executeQuery();
+
+            while (rs.next()) {
+                Project project = new Project();
+                project.setId(rs.getInt("id"));
+                project.setName(rs.getString("name"));
+                project.setCode(rs.getString("code"));
+                project.setEstimatedEffort(rs.getInt("estimated_effort"));
+                project.setStartDate(rs.getDate("start_date"));
+                project.setDetails(rs.getString("details"));
+                project.setEndDate(rs.getDate("end_date"));
+                project.setLastUpdated(rs.getDate("last_updated"));
+                project.setStatus(rs.getInt("status"));
+                project.setTypeId(rs.getInt("type_id"));
+                project.setDepartmentId(rs.getInt("department_id"));
+                String departmentName = rs.getString("department_name");
+                System.out.println("Department Namee: " + departmentName);
+                project.setDepartmentName(rs.getString("department_name"));
+
+                // Thêm project vào danh sách
+                projects.add(project);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e); // Xử lý ngoại lệ
+        }
+
+        return projects; // Trả về danh sách các dự án
+    }
+
     public List<Milestone> getMilestonesByProjectId(int projectId) {
         List<Milestone> milestones = new ArrayList<>();
 
-        String sql = "SELECT m.id, m.code, m.name, m.details, m.priority, m.deadline, m.status, m.project_id, m.phase_id "
+        // Truy vấn lấy thông tin từ bảng milestone và project
+        String sql = "SELECT m.id, m.created_by, m.last_updated, m.name, "
+                + "m.parent_milestone, m.priority, m.target_date, m.status, "
+                + "m.actual_date, m.details, m.project_id, p.name AS project_name, "
+                + "pm.name AS parent_milestone_name "
                 + "FROM milestone m "
+                + "LEFT JOIN project p ON m.project_id = p.id "
+                + "LEFT JOIN milestone pm ON m.parent_milestone = pm.id "
                 + "WHERE m.project_id = ?"; // Điều kiện lọc theo projectId
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
-
             stm.setInt(1, projectId); // Thiết lập giá trị cho tham số projectId
             ResultSet rs = stm.executeQuery();
 
             while (rs.next()) {
                 Milestone milestone = new Milestone();
                 milestone.setId(rs.getInt("id"));
-                milestone.setCode(rs.getString("code"));
+                milestone.setCreatedBy(rs.getInt("created_by"));
+                milestone.setLastUpdated(rs.getString("last_updated"));
                 milestone.setName(rs.getString("name"));
+                milestone.setParentMilestone(rs.getInt("parent_milestone")); // Lấy ID của milestone cha
+                milestone.setParentMilestoneName(rs.getString("parent_milestone_name")); // Lấy tên milestone cha
+                milestone.setPriority(rs.getInt("priority"));
+                milestone.setTargetDate(rs.getDate("target_date"));
+                milestone.setStatus(rs.getInt("status"));
+                milestone.setActualDate(rs.getDate("actual_date"));
                 milestone.setDetails(rs.getString("details"));
-                milestone.setPriority(rs.getString("priority"));
-                milestone.setDeadline(rs.getDate("deadline")); // Kiểm tra xem deadline có đúng không
-                milestone.setStatus(rs.getString("status"));
-                milestone.setProjectId(rs.getInt("project_id")); // Đảm bảo tên cột chính xác
-                milestone.setPhaseId(rs.getInt("phase_id")); // Đảm bảo tên cột chính xác
+                milestone.setProjectId(rs.getInt("project_id"));
+                milestone.setProjectName(rs.getString("project_name")); // Lấy tên project
 
                 milestones.add(milestone);
             }
@@ -52,17 +102,57 @@ public class ProjectConfigDAO {
         return milestones; // Trả về danh sách milestone
     }
 
-    public List<Milestone> filterAndsearch(String status, String searchKeyword) {
+    public List<Milestone> getAllMilestonesParent() {
         List<Milestone> milestones = new ArrayList<>();
-        String sql = "SELECT m.id, m.code, m.name, m.details, m.priority, m.deadline, m.status, m.project_id, m.phase_id "
-                + "FROM milestone m WHERE 1=1"; // Bắt đầu với điều kiện luôn đúng
+
+        // Truy vấn lấy thông tin từ bảng milestone mà có parent_milestone là NULL
+        String sql = "SELECT m.id, m.created_by, m.last_updated, m.name, "
+                + "m.parent_milestone, m.priority, m.target_date, m.status, "
+                + "m.actual_date, m.details, m.project_id, p.name AS project_name, "
+                + "pm.name AS parent_milestone_name "
+                + "FROM milestone m "
+                + "LEFT JOIN project p ON m.project_id = p.id "
+                + "LEFT JOIN milestone pm ON m.parent_milestone = pm.id "
+                + "WHERE m.parent_milestone IS NULL"; // Điều kiện lọc các milestone không có parent_milestone
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
+            ResultSet rs = stm.executeQuery();
+
+            while (rs.next()) {
+                Milestone milestone = new Milestone();
+                milestone.setId(rs.getInt("id"));
+                milestone.setCreatedBy(rs.getInt("created_by"));
+                milestone.setLastUpdated(rs.getString("last_updated"));
+                milestone.setName(rs.getString("name"));
+                milestone.setParentMilestone(rs.getInt("parent_milestone_name")); // Lấy tên milestone cha (nếu có)
+                milestone.setPriority(rs.getInt("priority"));
+                milestone.setTargetDate(rs.getDate("target_date"));
+                milestone.setStatus(rs.getInt("status"));
+                milestone.setActualDate(rs.getDate("actual_date"));
+                milestone.setDetails(rs.getString("details"));
+                milestone.setProjectId(rs.getInt("project_id"));
+                milestone.setProjectName(rs.getString("project_name")); // Lấy tên project
+
+                milestones.add(milestone);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e); // Xử lý ngoại lệ
+        }
+        return milestones; // Trả về danh sách milestone không có parent_milestone
+    }
+
+    public List<Milestone> filterAndsearch(String status, String searchKeyword, String projectId) {
+        List<Milestone> milestones = new ArrayList<>();
+        String sql = "SELECT m.id, m.created_by, m.last_updated, m.name, m.parent_milestone, "
+                + "m.priority, m.target_date, m.status, m.actual_date, m.details, m.project_id "
+                + "FROM milestone m WHERE m.project_id = ?"; // Điều kiện lọc theo projectId
 
         // Thêm điều kiện trạng thái nếu không rỗng
         if (status != null && !status.isEmpty()) {
             sql += " AND m.status = ?";
         }
 
-        // Thêm điều kiện tìm kiếm theo tên nếu không rỗng
+        // Thêm điều kiện tìm kiếm theo từ khóa nếu không rỗng
         if (searchKeyword != null && !searchKeyword.isEmpty()) {
             sql += " AND LOWER(m.name) LIKE ?";
         }
@@ -71,6 +161,9 @@ public class ProjectConfigDAO {
 
             int parameterIndex = 1;
 
+            // Thiết lập projectId
+            stm.setString(parameterIndex++, projectId);
+
             // Thiết lập trạng thái nếu có
             if (status != null && !status.isEmpty()) {
                 stm.setString(parameterIndex++, status);
@@ -78,7 +171,7 @@ public class ProjectConfigDAO {
 
             // Thiết lập từ khóa tìm kiếm nếu có
             if (searchKeyword != null && !searchKeyword.isEmpty()) {
-                stm.setString(parameterIndex, "%" + searchKeyword.toLowerCase() + "%");
+                stm.setString(parameterIndex++, "%" + searchKeyword.toLowerCase() + "%");
             }
 
             ResultSet rs = stm.executeQuery();
@@ -86,14 +179,17 @@ public class ProjectConfigDAO {
             while (rs.next()) {
                 Milestone milestone = new Milestone();
                 milestone.setId(rs.getInt("id"));
-                milestone.setCode(rs.getString("code"));
+                milestone.setCreatedBy(rs.getInt("created_by"));
+                milestone.setLastUpdated(rs.getString("last_updated"));
                 milestone.setName(rs.getString("name"));
+                milestone.setParentMilestone(rs.getInt("parent_milestone"));
+                milestone.setPriority(rs.getInt("priority"));
+                milestone.setTargetDate(rs.getDate("target_date"));
+                milestone.setStatus(rs.getInt("status"));
+                milestone.setActualDate(rs.getDate("actual_date"));
                 milestone.setDetails(rs.getString("details"));
-                milestone.setPriority(rs.getString("priority"));
-                milestone.setDeadline(rs.getDate("deadline"));
-                milestone.setStatus(rs.getString("status"));
                 milestone.setProjectId(rs.getInt("project_id"));
-                milestone.setPhaseId(rs.getInt("phase_id"));
+
                 milestones.add(milestone);
             }
         } catch (SQLException e) {
@@ -105,8 +201,16 @@ public class ProjectConfigDAO {
     // Phương thức để lấy một milestone theo ID
     public Milestone getMilestoneById(int milestoneId) {
         Milestone milestone = null;
-        String sql = "SELECT m.id, m.code, m.name, m.details, m.priority, m.deadline, m.status, m.project_id, m.phase_id "
-                + "FROM milestone m WHERE m.id = ?"; // Điều kiện lọc theo milestoneId
+
+        // Truy vấn lấy dữ liệu milestone và tên của parent milestone, kèm theo username của người tạo
+        String sql = "SELECT m.id, m.created_by, u.username, m.last_updated, m.name, m.parent_milestone, "
+                + "m.priority, m.target_date, m.status, m.actual_date, m.details, m.project_id, "
+                + "pm.name AS parent_name, p.name AS project_name " // Lấy tên của project
+                + "FROM milestone m "
+                + "LEFT JOIN milestone pm ON m.parent_milestone = pm.id "
+                + "LEFT JOIN user u ON m.created_by = u.id "
+                + "LEFT JOIN project p ON m.project_id = p.id " // JOIN với bảng project
+                + "WHERE m.id = ?";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
 
@@ -116,14 +220,21 @@ public class ProjectConfigDAO {
             if (rs.next()) {
                 milestone = new Milestone();
                 milestone.setId(rs.getInt("id"));
-                milestone.setCode(rs.getString("code"));
+                milestone.setCreatedbyuserName(rs.getString("username"));
+                milestone.setCreatedBy(rs.getInt("created_by"));// Gán username thay vì ID
+                milestone.setLastUpdated(rs.getString("last_updated"));
                 milestone.setName(rs.getString("name"));
+                milestone.setParentMilestone(rs.getInt("parent_milestone"));
+                milestone.setPriority(rs.getInt("priority"));
+                milestone.setTargetDate(rs.getDate("target_date"));
+                milestone.setStatus(rs.getInt("status"));
+                milestone.setActualDate(rs.getDate("actual_date"));
                 milestone.setDetails(rs.getString("details"));
-                milestone.setPriority(rs.getString("priority"));
-                milestone.setDeadline(rs.getDate("deadline"));
-                milestone.setStatus(rs.getString("status"));
+                milestone.setProjectName(rs.getString("project_name"));
                 milestone.setProjectId(rs.getInt("project_id"));
-                milestone.setPhaseId(rs.getInt("phase_id"));
+
+                // Lấy thêm tên của parent milestone
+                milestone.setParentMilestoneName(rs.getString("parent_name"));
             }
         } catch (SQLException e) {
             BaseDAO.printSQLException(e);
@@ -131,222 +242,235 @@ public class ProjectConfigDAO {
         return milestone; // Trả về milestone tìm được
     }
 
-    // Phương thức để cập nhật một milestone
-    public void updateMilestone(Milestone milestone) {
-        String sql = "UPDATE milestone SET code = ?, name = ?, details = ?, priority = ?, deadline = ?, status = ? "
-                + "WHERE id = ?"; // Cập nhật thông tin milestone
+    public boolean updateMilestone(Milestone milestone) {
+        String sql = "UPDATE milestone SET created_by = ?, last_updated = ?, name = ?, parent_milestone = ?, "
+                + "priority = ?, target_date = ?, status = ?, actual_date = ?, details = ?, project_id = ? "
+                + "WHERE id = ?"; // SQL query to update milestone
+
+        // Result flag to indicate if the update was successful
+        boolean isUpdated = false;
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
 
-            stm.setString(1, milestone.getCode());
-            stm.setString(2, milestone.getName());
-            stm.setString(3, milestone.getDetails());
-            stm.setString(4, milestone.getPriority());
-            stm.setDate(5, new java.sql.Date(milestone.getDeadline().getTime()));
-            stm.setString(6, milestone.getStatus());
-            stm.setInt(7, milestone.getId());
+            // Setting parameters for the SQL query
+            stm.setInt(1, milestone.getCreatedBy());
+            stm.setString(2, milestone.getLastUpdated());
+            stm.setString(3, milestone.getName());
+            stm.setInt(4, milestone.getParentMilestone());
+            stm.setInt(5, milestone.getPriority());
+            stm.setDate(6, new java.sql.Date(milestone.getTargetDate().getTime()));  // Convert java.util.Date to java.sql.Date
+            stm.setInt(7, milestone.getStatus());
 
-            stm.executeUpdate(); // Thực thi câu lệnh cập nhật
+            // Check if actual_date is null or not and set accordingly
+            if (milestone.getActualDate() != null) {
+                stm.setDate(8, new java.sql.Date(milestone.getActualDate().getTime()));  // If actual date exists
+            } else {
+                stm.setNull(8, java.sql.Types.DATE);  // If actual date is null, set it as SQL NULL
+            }
+
+            stm.setString(9, milestone.getDetails());
+            stm.setInt(10, milestone.getProjectId());
+            stm.setInt(11, milestone.getId());
+
+            // Execute the update
+            int rowsAffected = stm.executeUpdate();
+
+            // Check if any rows were updated
+            if (rowsAffected > 0) {
+                isUpdated = true;  // Update was successful
+            }
+
         } catch (SQLException e) {
+            // Log the exception
             BaseDAO.printSQLException(e);
         }
+
+        // Return true if update was successful, otherwise false
+        return isUpdated;
     }
 
-    // Phương thức để lấy danh sách đội nhóm theo projectId
-    public List<Team> getTeamsByProjectId(int projectId) {
-        List<Team> teams = new ArrayList<>();
-        String sql = "SELECT id, name, topic, details, project_id, status FROM team WHERE project_id = ?"; // Thêm điều kiện WHERE
+    public Project getProjectById(int id) {
+        Project project = null; // Khởi tạo project
+
+        // Câu lệnh SQL để lấy thông tin dự án, bao gồm cả tên loại dự án
+        String sql = "SELECT p.id, p.code, p.name, p.details, p.start_date, p.end_date, p.last_updated, "
+                + "p.estimated_effort, p.status, p.type_id, p.department_id, p.user_id, "
+                + "pt.code AS type_code, pt.name AS type_name, d.code AS department_code "
+                + "FROM project p "
+                + "LEFT JOIN project_type pt ON p.type_id = pt.id " // JOIN với bảng project_type
+                + "LEFT JOIN department d ON p.department_id = d.id " // JOIN với bảng department
+                + "WHERE p.id = ?"; // Điều kiện WHERE để tìm dự án theo ID
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
-
-            stm.setInt(1, projectId); // Thiết lập projectId vào PreparedStatement
-
+            stm.setInt(1, id); // Thiết lập ID dự án
             ResultSet rs = stm.executeQuery();
 
-            while (rs.next()) {
-                Team team = new Team();
-                team.setId(rs.getInt("id"));
-                team.setName(rs.getString("name"));
-                team.setTopic(rs.getString("topic"));
-                team.setDetails(rs.getString("details"));
-                team.setProjectId(rs.getInt("project_id"));
-                team.setStatus(rs.getString("status"));
+            if (rs.next()) { // Nếu có kết quả
+                project = new Project(); // Tạo đối tượng Project
+                project.setId(rs.getInt("id"));
+                project.setCode(rs.getString("code"));
+                project.setName(rs.getString("name"));
+                project.setDetails(rs.getString("details"));
+                project.setStartDate(rs.getDate("start_date"));
+                project.setEndDate(rs.getDate("end_date"));
+                project.setLastUpdated(rs.getDate("last_updated"));
+                project.setEstimatedEffort(rs.getInt("estimated_effort"));
+                project.setStatus(rs.getInt("status"));
+                project.setTypeId(rs.getInt("type_id"));
+                project.setDepartmentId(rs.getInt("department_id"));
+                project.setUserId(rs.getInt("user_id"));
+                project.setTypeCode(rs.getString("type_code")); // Mã loại dự án
+                project.setTypeName(rs.getString("type_name")); // Tên loại dự án (mới thêm)
+                project.setDepartmentCode(rs.getString("department_code")); // Mã bộ phận
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e); // Xử lý lỗi SQL
+        }
 
-                teams.add(team);
+        return project; // Trả về Project hoặc null nếu không tìm thấy
+    }
+
+    public List<User> getAllManagers() {
+        List<User> managers = new ArrayList<>();
+
+        // Câu SQL để lấy các manager có role_id = 4
+        String sql = "SELECT id, full_name, email, mobile, password, notes, status, role_id, username "
+                + "FROM user WHERE role_id = 4"; // Lọc theo role_id = 4
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setFull_name(rs.getString("full_name"));
+                user.setEmail(rs.getString("email"));
+                user.setMobile(rs.getString("mobile"));
+                user.setPassword(rs.getString("password"));
+                user.setNotes(rs.getString("notes"));
+                user.setStatus(rs.getInt("status"));
+                user.setRole_id(rs.getInt("role_id"));
+                user.setUsername(rs.getString("username"));
+
+                // Thêm user vào danh sách managers
+                managers.add(user);
             }
         } catch (SQLException e) {
             BaseDAO.printSQLException(e);
         }
-        return teams; // Trả về danh sách đội nhóm theo projectId
+
+        return managers;
     }
-    
- public List<Team> searchTeamsByName(String keyword) {
-    List<Team> teams = new ArrayList<>();
-    String sql = "SELECT * FROM team WHERE name LIKE ?"; // Chỉ tìm kiếm theo tên
-    
-    try (Connection conn = BaseDAO.getConnection();
-         PreparedStatement stmt = conn.prepareStatement(sql)) {
-        stmt.setString(1, "%" + keyword + "%"); // Gán giá trị cho tên
-        
-        ResultSet rs = stmt.executeQuery();
-        while (rs.next()) {
-            // Tạo đối tượng Team từ ResultSet và thêm vào danh sách
-            Team team = new Team();
-            team.setId(rs.getInt("id"));
-            team.setName(rs.getString("name"));
-            team.setTopic(rs.getString("topic"));
-            team.setDetails(rs.getString("details"));
-            team.setProjectId(rs.getInt("project_id")); // Thiết lập projectId
-            team.setStatus(rs.getString("status")); // Thiết lập status
-            teams.add(team);
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-    return teams;
-}
 
-// Phương thức để lấy một đội nhóm theo ID
-public Team getTeamById(int teamId) {
-    Team team = null;
-    String sql = "SELECT id, name, topic, details, project_id, status FROM team WHERE id = ?"; // Điều kiện lọc theo teamId
+    public boolean updateProject(Project project) {
+        String sql = "UPDATE project SET name = ?, code = ?, estimated_effort = ?, "
+                + "start_date = ?, end_date = ?, details = ?, status = ?, department_id = ?, "
+                + "user_id = ?, last_updated = ? WHERE id = ?";
 
-    try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
-        stm.setInt(1, teamId); // Thiết lập giá trị cho tham số teamId
-        ResultSet rs = stm.executeQuery();
+        try (Connection conn = BaseDAO.getConnection(); // Sử dụng BaseDAO.getConnection()
+                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-        if (rs.next()) {
-            team = new Team();
-            team.setId(rs.getInt("id"));
-            team.setName(rs.getString("name"));
-            team.setTopic(rs.getString("topic"));
-            team.setDetails(rs.getString("details"));
-            team.setProjectId(rs.getInt("project_id"));
-            team.setStatus(rs.getString("status"));
-        }
-    } catch (SQLException e) {
-        BaseDAO.printSQLException(e);
-    }
-    return team; // Trả về đội nhóm tìm được
-}
- 
+            // Gán các giá trị từ đối tượng project vào PreparedStatement
+            stmt.setString(1, project.getName());
+            stmt.setString(2, project.getCode());
+            stmt.setInt(3, project.getEstimatedEffort());
+            stmt.setDate(4, new java.sql.Date(project.getStartDate().getTime())); // Chuyển java.util.Date sang java.sql.Date
+            stmt.setDate(5, new java.sql.Date(project.getEndDate().getTime()));   // Chuyển java.util.Date sang java.sql.Date
+            stmt.setString(6, project.getDetails());
+            stmt.setInt(7, project.getStatus());
+            stmt.setInt(8, project.getDepartmentId());
+            stmt.setInt(9, project.getUserId());
+            stmt.setTimestamp(10, new java.sql.Timestamp(System.currentTimeMillis())); // Thêm thời gian hiện tại vào last_updated_at
+            stmt.setInt(11, project.getId()); // Đảm bảo rằng project.getId() trả về id của dự án cần cập nhật
 
-    public void updateTeam(Team team) {
-        String sql = "UPDATE team SET name = ?, topic = ?, details = ?, project_id = ?, status = ? WHERE id = ?";
+            // Thực thi câu lệnh UPDATE và kiểm tra số dòng bị ảnh hưởng
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0; // Nếu có ít nhất 1 dòng được cập nhật, trả về true
 
-        try (Connection conn = BaseDAO.getConnection(); PreparedStatement stm = conn.prepareStatement(sql)) {
-            stm.setString(1, team.getName());
-            stm.setString(2, team.getTopic()); // Giả sử bạn có trường topic trong Team
-            stm.setString(3, team.getDetails()); // Giả sử bạn có trường details trong Team
-            stm.setInt(4, team.getProjectId());
-            stm.setString(5, team.getStatus()); // Giả sử bạn có trường status trong Team
-            stm.setInt(6, team.getId()); // ID của đội nhóm để cập nhật
-
-            // Thực thi câu lệnh cập nhật
-            stm.executeUpdate();
         } catch (SQLException e) {
-            BaseDAO.printSQLException(e);
+            // In thông báo lỗi nếu có vấn đề khi thực thi SQL
+            System.err.println("SQL Error: " + e.getMessage());
+            return false; // Nếu có lỗi xảy ra, trả về false
         }
     }
 
-// Bên trong lớp ProjectConfigDAO
-public boolean addTeam(Team team) {
-    String sql = "INSERT INTO team (name, topic, details, project_id, status) VALUES (?, ?, ?, ?, ?)";
-    boolean isAdded = false;
+// Phương thức thêm một milestone vào cơ sở dữ liệu
+    public boolean insertMilestone(Milestone milestone) {
+        String sql = "INSERT INTO milestone (project_id, name, status, created_by, last_updated, parent_milestone, priority, target_date, actual_date, details) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        boolean isAdded = false;
 
-    try (Connection conn = BaseDAO.getConnection();
-         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = BaseDAO.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-        // Thiết lập các giá trị cho câu lệnh SQL
-        stmt.setString(1, team.getName());
-        stmt.setString(2, team.getTopic());
-        stmt.setString(3, team.getDetails());
-        stmt.setInt(4, team.getProjectId());
-        stmt.setString(5, team.getStatus());
+            // Thiết lập các giá trị cho câu lệnh SQL
+            stmt.setInt(1, milestone.getProjectId()); // project_id
+            stmt.setString(2, milestone.getName()); // name
+            stmt.setInt(3, milestone.getStatus()); // status
+            stmt.setInt(4, milestone.getCreatedBy()); // created_by
+            stmt.setString(5, milestone.getLastUpdated()); // last_updated
 
-        // Thực thi câu lệnh và kiểm tra xem có thêm thành công không
-        isAdded = stmt.executeUpdate() > 0;
-
-    } catch (SQLException e) {
-        BaseDAO.printSQLException(e);
-    }
-
-    return isAdded; // Trả về true nếu thêm thành công, ngược lại trả về false
-}
-
-
-
-    // Phương thức để lấy danh sách thành viên theo projectId
-    public List<TeamMember> getMembersByProjectId(int projectId) {
-        List<TeamMember> members = new ArrayList<>();
-        String sql = "SELECT m.id, m.team_id, m.user_id, m.start_date, m.end_date, m.status "
-                   + "FROM team_member m "
-                   + "JOIN team t ON m.team_id = t.id "
-                   + "WHERE t.project_id = ?"; // Điều kiện lọc theo projectId
-
-        try (Connection cnt = BaseDAO.getConnection(); 
-             PreparedStatement stm = cnt.prepareStatement(sql)) {
-
-            stm.setInt(1, projectId); // Thiết lập giá trị cho tham số projectId
-            ResultSet rs = stm.executeQuery();
-
-            while (rs.next()) {
-                TeamMember member = new TeamMember();
-                member.setId(rs.getInt("id"));
-                member.setTeamId(rs.getInt("team_id"));
-                member.setUserId(rs.getInt("user_id"));
-                member.setStartDate(rs.getDate("start_date"));
-                member.setEndDate(rs.getDate("end_date"));
-                member.setStatus(rs.getBoolean("status"));
-
-                members.add(member);
+            // Xử lý parentMilestone
+            if (milestone.getParentMilestone() > 0) { // Kiểm tra giá trị hợp lệ (> 0)
+                stmt.setInt(6, milestone.getParentMilestone());
+            } else {
+                stmt.setNull(6, java.sql.Types.INTEGER); // Gán null nếu không có parent milestone
             }
+
+            stmt.setInt(7, milestone.getPriority()); // priority
+
+            // Xử lý targetDate
+            if (milestone.getTargetDate() != null) {
+                stmt.setDate(8, new java.sql.Date(milestone.getTargetDate().getTime()));
+            } else {
+                stmt.setNull(8, java.sql.Types.DATE); // Gán null nếu không có target date
+            }
+
+            // Xử lý actualDate
+            if (milestone.getActualDate() != null) {
+                stmt.setDate(9, new java.sql.Date(milestone.getActualDate().getTime()));
+            } else {
+                stmt.setNull(9, java.sql.Types.DATE); // Gán null nếu không có actual date
+            }
+
+            // Xử lý details
+            if (milestone.getDetails() != null && !milestone.getDetails().isEmpty()) {
+                stmt.setString(10, milestone.getDetails()); // Gán giá trị cho details
+            } else {
+                stmt.setNull(10, java.sql.Types.VARCHAR); // Gán null nếu không có details
+            }
+
+            // Thực thi câu lệnh và kiểm tra xem có thêm thành công không
+            isAdded = stmt.executeUpdate() > 0;
+
         } catch (SQLException e) {
-            BaseDAO.printSQLException(e); // Xử lý ngoại lệ
-        }
-        return members; // Trả về danh sách member theo projectId
-    }
-
-
- // Phương thức để xóa một đội theo ID
-    public boolean deleteTeam(int teamId) {
-        String sql = "DELETE FROM team WHERE id = ?";
-        boolean isDeleted = false;
-
-        try (Connection conn = BaseDAO.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            // Thiết lập giá trị cho câu lệnh SQL
-            stmt.setInt(1, teamId);
-
-            // Thực thi câu lệnh và kiểm tra xem có xóa thành công không
-            isDeleted = stmt.executeUpdate() > 0;
-
-        } catch (SQLException e) {
-            BaseDAO.printSQLException(e); // Xử lý ngoại lệ
+            BaseDAO.printSQLException(e); // Ghi log lỗi SQL
         }
 
-        return isDeleted; // Trả về true nếu xóa thành công, ngược lại trả về false
+        return isAdded; // Trả về true nếu thêm thành công, ngược lại trả về false
     }
 
- public static void main(String[] args) {
-    ProjectConfigDAO projectConfigDAO = new ProjectConfigDAO(); // Tạo đối tượng ProjectConfigDAO
-    String keyword = "Dev"; // Từ khóa tìm kiếm, có thể thay đổi tùy ý
-    int projectId = 1; // ID của dự án mà bạn muốn tìm kiếm nhóm
+    public static void main(String[] args) {
+        // Giả sử bạn muốn lấy milestone với ID là 1
+        int milestoneId = 1;
 
-    // Gọi phương thức tìm kiếm
-    List<Team> teams = projectConfigDAO.searchTeamsByName(keyword);
+        // Tạo đối tượng DAO để gọi hàm getMilestoneById
+        ProjectConfigDAO milestoneDAO = new ProjectConfigDAO();
+        Milestone milestone = milestoneDAO.getMilestoneById(milestoneId);
 
-    // In kết quả ra console
-    if (teams.isEmpty()) {
-        System.out.println("Không tìm thấy nhóm nào cho dự án ID: " + projectId + " với từ khóa: " + keyword);
-    } else {
-        System.out.println("Danh sách nhóm tìm thấy cho dự án ID: " + projectId + " với từ khóa: " + keyword);
-        for (Team team : teams) {
-            System.out.println("ID: " + team.getId() + ", Tên nhóm: " + team.getName());
+        // Kiểm tra xem milestone có được trả về hay không
+        if (milestone != null) {
+            System.out.println("Milestone ID: " + milestone.getId());
+            System.out.println("Milestone Name: " + milestone.getName());
+            System.out.println("Created By: " + milestone.getCreatedbyuserName());
+            System.out.println("Project Name: " + milestone.getProjectName());
+            System.out.println("Parent Milestone: " + milestone.getParentMilestoneName());
+            System.out.println("Priority: " + milestone.getPriority());
+            System.out.println("Target Date: " + milestone.getTargetDate());
+            System.out.println("Status: " + milestone.getStatus());
+            System.out.println("Actual Date: " + milestone.getActualDate());
+            System.out.println("Details: " + milestone.getDetails());
+        } else {
+            System.out.println("No milestone found with ID " + milestoneId);
         }
     }
-}
-
 
 }

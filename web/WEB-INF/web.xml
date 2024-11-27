@@ -302,35 +302,19 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ProjectConfigController</servlet-name>
-        <url-pattern>/edit</url-pattern>
+        <url-pattern>/updateproject</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ProjectConfigController</servlet-name>
-        <url-pattern>/update</url-pattern>
+        <url-pattern>/getmilestone</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ProjectConfigController</servlet-name>
-        <url-pattern>/teamlist</url-pattern>
+        <url-pattern>/updatemilestone</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ProjectConfigController</servlet-name>
-        <url-pattern>/searchteam</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ProjectConfigController</servlet-name>
-        <url-pattern>/editteam</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ProjectConfigController</servlet-name>
-        <url-pattern>/updateteam</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ProjectConfigController</servlet-name>
-        <url-pattern>/addteam</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ProjectConfigController</servlet-name>
-        <url-pattern>/deleteteam</url-pattern>
+        <url-pattern>/addmilestone</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>TeamController</servlet-name>

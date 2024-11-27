@@ -6,8 +6,10 @@ package service;
 
 import context.ProjectDAO;
 import java.util.List;
+import model.Allocation;
 import model.Milestone;
 import model.Project;
+import model.User;
 
 /**
  *
@@ -27,12 +29,8 @@ public class ProjectService {
         return projectDAO.getAllProjects();
     }
 
-    public List<Project> getProjectsByCode(String projectCode) {
-        return projectDAO.getProjectsByCode(projectCode); // Gọi phương thức từ ProjectDAO
-    }
     // Tìm kiếm dự án theo trạng thái
-
-    public List<Project> searchProjectsByStatus(boolean status) {
+    public List<Project> searchProjectsByStatus(int status) {
         return projectDAO.getProjectsByStatus(status);
     }
 
@@ -51,18 +49,24 @@ public class ProjectService {
     }
     //edit
 
-    public boolean insertProject(Project project) {
-        return projectDAO.insertProject(project);
+    public boolean insertProject(Project project, Allocation allocation, Milestone milestone) {
+        return projectDAO.insertProject(project, allocation, milestone);
+    }
+// Lấy danh sách manager (người dùng có role_id = 4)
+
+    public List<User> getAllManagers() {
+        return projectDAO.getAllManagers(); // Gọi phương thức trong UserDAO để lấy danh sách Manager
     }
 
     public List<Project> getProjectsDropDown() {
         return projectDAO.getProjectsDropDown();
     }
-    
+
     //HuyenPTNHE160769
     public List<Project> getProjectListByUserID(int userId) {
         return projectDAO.getProjectListByUserID(userId);
     }
+
     public List<Milestone> getMilestonesByProjectId(int userId, Integer projectId) {
         return projectDAO.getMilestonesByProjectId(userId, projectId);
     }

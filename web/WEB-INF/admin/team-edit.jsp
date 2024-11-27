@@ -61,7 +61,7 @@
                     <main class="content">
                         <div class="container-fluid p-0">
                             <a href="<%=request.getContextPath()%>/TeamController">Team list </a>
-                        <span>> Add scope</span>
+                        <span>> Edit Team</span>
                         <h1 class="h1 mt-2 mb-3 col-md-6"> Edit Team</h1>
                         <div class="row">
 
@@ -105,7 +105,11 @@
                                                 <label for="pid">Project</label>
                                                 <select id="pid" name="pid" class="form-select" required>
                                                     <c:forEach var="project" items="${projects}">
-                                                        <option value="${project.id}">${project.name}</option>
+                                                        <option value="${project.id}" 
+                                                                <c:if test="${team.projectId == project.id}">
+                                                                    selected
+                                                                </c:if>
+                                                                >${project.name}</option>
                                                     </c:forEach>
                                                 </select>
                                             </div>

@@ -11,29 +11,37 @@ import java.util.Date;
  * @author Admin
  */
 public class Milestone {
-    private int id;
-    private String code;
-    private String name;
-    private String priority;
-    private String details;
-    private Date deadline;
-    private String status;
-    private int projectId;
-    private int phaseId;
 
+    private int id;
+    private int createdBy;          // người tạo milestone
+    private String lastUpdated;        // thời gian cập nhật cuối cùng
+    private String name;               // tên milestone
+    private Integer parentMilestone;    // milestone cha nếu có
+    private int priority;           // mức độ ưu tiên
+    private Date targetDate;           // ngày dự kiến hoàn thành
+    private int status;             // trạng thái hiện tại
+    private Date actualDate;           // ngày hoàn thành thực tế
+    private String details;            // chi tiết của milestone
+    private int projectId;             // ID của dự án liên quan
+
+    private String parentMilestoneName;
+    private String projectName;
+    private String createdbyuserName;
     public Milestone() {
     }
 
-    public Milestone(int id, String code, String name, String priority, String details, Date deadline, String status, int projectId, int phaseId) {
+    public Milestone(int id, int createdBy, String lastUpdated, String name, Integer parentMilestone, int priority, Date targetDate, int status, Date actualDate, String details, int projectId) {
         this.id = id;
-        this.code = code;
+        this.createdBy = createdBy;
+        this.lastUpdated = lastUpdated;
         this.name = name;
+        this.parentMilestone = parentMilestone;
         this.priority = priority;
-        this.details = details;
-        this.deadline = deadline;
+        this.targetDate = targetDate;
         this.status = status;
+        this.actualDate = actualDate;
+        this.details = details;
         this.projectId = projectId;
-        this.phaseId = phaseId;
     }
 
     public int getId() {
@@ -44,12 +52,20 @@ public class Milestone {
         this.id = id;
     }
 
-    public String getCode() {
-        return code;
+    public int getCreatedBy() {
+        return createdBy;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCreatedBy(int createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(String lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 
     public String getName() {
@@ -60,12 +76,44 @@ public class Milestone {
         this.name = name;
     }
 
-    public String getPriority() {
+    public Integer getParentMilestone() {
+        return parentMilestone;
+    }
+
+    public void setParentMilestone(Integer parentMilestone) {
+        this.parentMilestone = parentMilestone;
+    }
+
+    public int getPriority() {
         return priority;
     }
 
-    public void setPriority(String priority) {
+    public void setPriority(int priority) {
         this.priority = priority;
+    }
+
+    public Date getTargetDate() {
+        return targetDate;
+    }
+
+    public void setTargetDate(Date targetDate) {
+        this.targetDate = targetDate;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public Date getActualDate() {
+        return actualDate;
+    }
+
+    public void setActualDate(Date actualDate) {
+        this.actualDate = actualDate;
     }
 
     public String getDetails() {
@@ -76,22 +124,6 @@ public class Milestone {
         this.details = details;
     }
 
-    public Date getDeadline() {
-        return deadline;
-    }
-
-    public void setDeadline(Date deadline) {
-        this.deadline = deadline;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public int getProjectId() {
         return projectId;
     }
@@ -100,14 +132,28 @@ public class Milestone {
         this.projectId = projectId;
     }
 
-    public int getPhaseId() {
-        return phaseId;
+    public String getProjectName() {
+        return projectName;
     }
 
-    public void setPhaseId(int phaseId) {
-        this.phaseId = phaseId;
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 
-    
-    
+    public String getParentMilestoneName() {
+        return parentMilestoneName;
+    }
+
+    public void setParentMilestoneName(String parentMilestoneName) {
+        this.parentMilestoneName = parentMilestoneName;
+    }
+
+    public String getCreatedbyuserName() {
+        return createdbyuserName;
+    }
+
+    public void setCreatedbyuserName(String createdbyuserName) {
+        this.createdbyuserName = createdbyuserName;
+    }
+   
 }

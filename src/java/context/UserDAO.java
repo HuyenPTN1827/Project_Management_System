@@ -25,18 +25,20 @@ public class UserDAO {
     public int registerUser(User user) throws ClassNotFoundException {
         int result = 0;
 
-        // Kiểm tra xem email đã tồn tại chưa
-        if (checkEmailExist(user.getEmail())) {
-            return -1; // Trả về -1 nếu email đã tồn tại
+        // Kiểm tra xem email hoặc username đã tồn tại chưa
+        if (checkEmailExist(user.getEmail()) || checkUsernameExist(user.getUsername())) {
+            return -1; // Trả về -1 nếu email hoặc username đã tồn tại
         }
 
-        // Thực hiện đăng ký nếu email chưa tồn tại
-        String REGISTER_USER_SQL = "INSERT INTO user (full_name, email, mobile, password) VALUES (?, ?, ?, ?)";
+        // Thực hiện đăng ký nếu email và username chưa tồn tại
+        String REGISTER_USER_SQL = "INSERT INTO user (full_name, username, email, mobile, password) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = BaseDAO.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(REGISTER_USER_SQL)) {
+
             preparedStatement.setString(1, user.getFull_name());
-            preparedStatement.setString(2, user.getEmail());
-            preparedStatement.setString(3, user.getMobile());
-            preparedStatement.setString(4, user.getPassword());
+            preparedStatement.setString(2, user.getUsername()); // Thiết lập username
+            preparedStatement.setString(3, user.getEmail());
+            preparedStatement.setString(4, user.getMobile());
+            preparedStatement.setString(5, user.getPassword());
 
             result = preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -46,7 +48,7 @@ public class UserDAO {
         return result; // Trả về 1 nếu đăng ký thành công
     }
 
-    public User loginValidate(User user) throws ClassNotFoundException {
+     public User loginValidate(User user) throws ClassNotFoundException {
         User foundUser = null;
         String query = """
                    SELECT id, full_name, email, mobile, password, role_id
@@ -516,4 +518,22 @@ public class UserDAO {
         return false;
     }
 
+    //BachHD
+    // Phương thức kiểm tra username đã tồn tại
+    public boolean checkUsernameExist(String username) {
+        String query = "SELECT COUNT(*) FROM user WHERE username = ?";
+        try (Connection con = BaseDAO.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Trả về true nếu username đã tồn tại
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return false;
+    }
+
 }
+
+

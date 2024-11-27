@@ -87,7 +87,7 @@ public class WorkPackageDAO {
                 rs.getInt("created_by"),
                 rs.getTimestamp("last_updated"),
                 rs.getString("title"),
-                rs.getString("complexity"),
+                new ProjectTypeDAO().getProjectTypeSettingById(rs.getInt("complexity")).getValue(),
                 rs.getInt("planned_effort"),
                 rs.getInt("status"),
                 rs.getInt("actual_effort"),

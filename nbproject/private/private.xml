@@ -7,6 +7,24 @@
             <file>file:/D:/Git/Project/Project_Management_System/src/java/controller/UserController.java</file>
             <file>file:/D:/Git/Project/Project_Management_System/src/java/service/UserService.java</file>
             <file>file:/D:/Git/Project/Project_Management_System/web/WEB-INF/admin/user-detail.jsp</file>
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/AuthenticationController.java</file>
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/model/Allocation.java</file>
+            <file>file:/D:/Do%20An/Project_Management_System/web/WEB-INF/component/sidebar-manager.jsp</file>
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/ProjectConfigController.java</file>
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/ProjectTypeController.java</file>
+            <file>file:/D:/Do%20An/Project_Management_System/web/WEB-INF/component/header.jsp</file>
+            <file>file:/D:/Do%20An/Project_Management_System/web/WEB-INF/web.xml</file>
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/model/Project.java</file>
+            <file>file:/D:/Do%20An/Project_Management_System/web/WEB-INF/member/project-config.jsp</file>
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/ProjectListController.java</file>
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/service/TeamService.java</file>
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/context/ProjectConfigDAO.java</file>
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/model/User.java</file>
+            <file>file:/D:/Do%20An/Project_Management_System/web/WEB-INF/member/projectlist.jsp</file>
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/context/ProjectDAO.java</file>
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/service/ProjectConfigService.java</file>
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/service/ProjectService.java</file>
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/model/Milestone.java</file>
         </group>
     </open-files>
 </project-private>
