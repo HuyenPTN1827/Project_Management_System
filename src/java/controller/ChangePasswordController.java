@@ -120,7 +120,10 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         dispatcher.forward(request, response);
     } else {
         // Đổi mật khẩu không thành công (mật khẩu cũ không khớp)
-        response.sendError(HttpServletResponse.SC_FORBIDDEN, "Old password is incorrect");
+       
+        request.setAttribute("ERROR", "Old password is incorrect.");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/change-password.jsp");
+        dispatcher.forward(request, response);
     }
 }
 
