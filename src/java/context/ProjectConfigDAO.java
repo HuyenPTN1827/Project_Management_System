@@ -10,11 +10,14 @@ import java.util.List;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import model.Allocation;
+import model.Department;
 import model.Team;
 import model.TeamMember;
 import model.Milestone;
 import model.User;
 import model.Project;
+import model.ProjectTypeSetting;
 import service.ProjectService;
 
 /**
@@ -473,4 +476,192 @@ public class ProjectConfigDAO {
         }
     }
 
+    
+//    HuyenPTNHE160769    
+//    Select all allocations
+    public List<Allocation> selectAllAllocations(int projectId, String keyword, Integer deptId, Integer roleId, Boolean status) {
+        List<Allocation> allocation = new ArrayList<>();
+
+        String sql = """
+                     SELECT a.project_id, a.id, a.user_id, u.full_name, u.username, a.dept_id, 
+                     d.code, a.start_date, a.end_date, a.project_role, r.name, a.effort_rate, a.status
+                     FROM pms.allocation a
+                     JOIN pms.department d ON a.dept_id = d.id
+                     JOIN pms.user u ON a.user_id = u.id
+                     JOIN pms.project p ON a.project_id = p.id
+                     JOIN pms.project_type_setting r ON a.project_role = r.id
+                     WHERE a.project_id = ?""";
+
+        // Add search conditions if any
+        if (keyword != null && !keyword.isEmpty()) {
+            sql += " AND (LOWER(u.full_name) LIKE ? OR LOWER(u.username) LIKE ?)";
+        }
+        if (deptId != null) {
+            sql += " AND a.dept_id = ?";
+        }
+        if (roleId != null) {
+            sql += " AND a.project_role = ?";
+        }
+        if (status != null) {
+            sql += " AND a.status = ?";
+        }
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            stm.setInt(1, projectId);
+            int index = 2;
+
+            if (keyword != null && !keyword.isEmpty()) {
+                String keywordPattern = "%" + keyword.toLowerCase().trim() + "%";
+
+                stm.setString(index++, keywordPattern);
+                stm.setString(index++, keywordPattern);
+            }
+            if (deptId != null) {
+                stm.setInt(index++, deptId);
+            }
+            if (roleId != null) {
+                stm.setInt(index++, roleId);
+            }
+            if (status != null) {
+                stm.setBoolean(index++, status);
+            }
+
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Allocation a = new Allocation();
+                a.setId(rs.getInt("a.id"));
+                a.setStartDate(rs.getDate("a.start_date"));
+                a.setEndDate(rs.getDate("a.end_date"));
+                a.setEffortRate(rs.getDouble("a.effort_rate"));
+                a.setStatus(rs.getBoolean("a.status"));
+                
+                User u = new User();
+                u.setId(rs.getInt("a.user_id"));
+                u.setFull_name(rs.getString("u.full_name"));
+                u.setUsername(rs.getString("u.username"));
+                a.setUser(u);
+                
+                Department d = new Department();
+                d.setId(rs.getInt("a.dept_id"));
+                d.setCode(rs.getString("d.code"));
+                a.setDept(d);
+                
+                ProjectTypeSetting r = new ProjectTypeSetting();
+                r.setId(rs.getInt("a.project_role"));
+                r.setName(rs.getString("r.name"));
+                a.setRole(r);
+                
+                Project p = new Project();
+                p.setId(rs.getInt("a.project_id"));
+                a.setProject(p);
+
+                allocation.add(a);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+
+        return allocation;
+    }
+//
+////    HuyenPTNHE160769
+////    04/10/2024       
+////    Admin select dept by id
+//    public Department selectDepartmentByID(int id) {
+//        Department d = null;
+//
+//        String sql = "SELECT * FROM pms.department WHERE id = ?;";
+//
+//        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+//            stm.setInt(1, id);
+//
+//            ResultSet rs = stm.executeQuery();
+//            while (rs.next()) {
+//                d = new Department();
+//                d.setId(rs.getInt("id"));
+//                d.setCode(rs.getString("code"));
+//                d.setName(rs.getString("name"));
+//                d.setDetails(rs.getString("details"));
+//                d.setParentId(rs.getInt("parent"));
+//                d.setStatus(rs.getBoolean("status"));
+//            }
+//        } catch (SQLException e) {
+//            BaseDAO.printSQLException(e);
+//        }
+//        return d;
+//    }
+//
+////    HuyenPTNHE160769
+////    04/10/2024       
+////    Admin add new dept
+//    public int insertDepartment(Department dept, Integer parent) throws SQLException {
+//        int result = 0;
+//        String sql = "INSERT INTO pms.department (code, name, details, parent) "
+//                + "VALUES (?, ?, ?, ?);";
+//
+//        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+//            stm.setString(1, dept.getCode());
+//            stm.setString(2, dept.getName());
+//            stm.setString(3, dept.getDetails());
+//            // Set parent (allow null)
+//            if (parent != null) {
+//                stm.setInt(4, parent);
+//            } else {
+//                stm.setNull(4, Types.INTEGER);
+//            }
+//
+//            result = stm.executeUpdate();
+//        } catch (SQLException e) {
+//            BaseDAO.printSQLException(e);
+//        }
+//        return result;
+//    }
+//
+////    HuyenPTNHE160769
+////    04/10/2024         
+////    Admin update a dept
+//    public boolean updateDepartment(Department dept, Integer parent) throws SQLException {
+//        boolean rowUpdated = false;
+//
+//        String sql = "UPDATE pms.department SET code = ?, name = ?, details = ?, "
+//                + "parent = ?, status = ? WHERE id = ?;";
+//
+//        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+//            stm.setString(1, dept.getCode());
+//            stm.setString(2, dept.getName());
+//            stm.setString(3, dept.getDetails());
+//            // Set parent (allow null)
+//            if (parent != null) {
+//                stm.setInt(4, parent);
+//            } else {
+//                stm.setNull(4, Types.INTEGER);
+//            }
+//            stm.setBoolean(5, dept.isStatus());
+//            stm.setInt(6, dept.getId());
+//
+//            rowUpdated = stm.executeUpdate() > 0;
+//        } catch (SQLException e) {
+//            BaseDAO.printSQLException(e);
+//        }
+//        return rowUpdated;
+//    }
+//
+////    HuyenPTNHE160769
+////    04/10/2024      
+////    Admin change status of a dept
+//    public boolean changeStatusDepartment(Department dept) throws SQLException {
+//        boolean rowUpdated = false;
+//
+//        String sql = "UPDATE pms.department SET status = ? WHERE id = ?;";
+//
+//        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+//            stm.setBoolean(1, dept.isStatus());
+//            stm.setInt(2, dept.getId());
+//
+//            rowUpdated = stm.executeUpdate() > 0;
+//        } catch (SQLException e) {
+//            BaseDAO.printSQLException(e);
+//        }
+//        return rowUpdated;
+//    }
 }

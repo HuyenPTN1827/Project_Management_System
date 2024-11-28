@@ -1,8 +1,10 @@
 package service;
 
 import context.ProjectConfigDAO;
+import java.sql.SQLException;
 import model.Milestone;
 import java.util.List;
+import model.Allocation;
 import model.Project;
 import model.Team;
 import model.TeamMember;
@@ -28,8 +30,6 @@ public class ProjectConfigService {
     public Milestone getMilestoneById(int milestoneId) {
         return projectConfigDAO.getMilestoneById(milestoneId);
     }
-
-    
 
 //lấy danh sách project
     public List<Project> getAllProjects() {
@@ -66,15 +66,50 @@ public class ProjectConfigService {
         // Thực hiện thêm milestone vào cơ sở dữ liệu thông qua DAO
         return projectConfigDAO.insertMilestone(milestone);
     }
+
     public boolean updateMilestone(Milestone milestone) {
-    // Kiểm tra tính hợp lệ của milestone trước khi cập nhật
-    if (milestone == null || milestone.getId() <= 0 || milestone.getName() == null || milestone.getPriority() <= 0) {
-        return false; // Trả về false nếu dữ liệu không hợp lệ
+        // Kiểm tra tính hợp lệ của milestone trước khi cập nhật
+        if (milestone == null || milestone.getId() <= 0 || milestone.getName() == null || milestone.getPriority() <= 0) {
+            return false; // Trả về false nếu dữ liệu không hợp lệ
+        }
+
+        // Thực hiện cập nhật milestone vào cơ sở dữ liệu thông qua DAO
+        return projectConfigDAO.updateMilestone(milestone);
     }
 
-    // Thực hiện cập nhật milestone vào cơ sở dữ liệu thông qua DAO
-    return projectConfigDAO.updateMilestone(milestone);
-}
- 
     
+    //HuyenPTNHE160769
+    //Get all allocations
+    public List<Allocation> getAllAllocations(int projectId, String keyword, Integer deptId, Integer roleId, Boolean status) {
+        return projectConfigDAO.selectAllAllocations(projectId, keyword, deptId, roleId, status);
+    }
+//
+//    // HuyenPTNHE160769
+//    // 31/10/2024
+//    // Admin add new dept user information
+//    public int insertDepartmentUser(Allocation deptUser) throws SQLException {
+//        return deptDAO.insertDepartmentUser(deptUser);
+//    }
+//
+//    // HuyenPTNHE160769
+//    // 31/10/2024
+//    // Admin get a dept user information by id
+//    public Allocation getDepartmentUserById(int id) {
+//        return deptDAO.selectDepartmentUserByID(id);
+//    }
+//
+//    // HuyenPTNHE160769
+//    // 31/10/2024
+//    // Admin update a dept user information
+//    public boolean updateDepartmentUser(Allocation deptUser) throws SQLException {
+//        return deptDAO.updateDepartmentUser(deptUser);
+//    }
+//
+//    // HuyenPTNHE160769
+//    // 1/10/2024
+//    // Admin change status of a dept user
+//    public boolean changeStatusDepartmentUser(Department_User deptUser) throws SQLException {
+//        return deptDAO.changeStatusDepartmentUser(deptUser);
+//    }
+
 }

@@ -136,8 +136,8 @@ public class UserService extends BaseServive {
         }
         // Validate password 
         if (!validatePassword(user.getPassword())) {
-            errors.add("Password must include at least 6 characters, one uppercase letter, "
-                    + "one lowercase letter, one digit, and one special character.");
+            errors.add("Password must be at least 6 characters, including uppercase letters, "
+                    + "lowercase letters, numbers and some special characters.");
         }
         return errors;
     }
@@ -158,10 +158,4 @@ public boolean validatePassword(String password) {
         return matcher.matches();
     }
 
-    // HuyenPTNHE160769
-    // 22/10/2024
-    // Admin get an user information by fullname or email
-    public User findUserByFullNameOrEmail(String keyword) {
-        return userDAO.findUserByFullNameOrEmail(keyword);
-    }
 }

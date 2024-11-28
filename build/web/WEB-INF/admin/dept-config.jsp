@@ -8,7 +8,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -253,13 +252,13 @@
                                                         <ul id="myDropdown" class="dropdown-menu dropdown-menu-end">
                                                             <li>
                                                                 <input class="dropdown-item form-control" type="text" 
-                                                                       placeholder="Search by Full name, Username or Email..." id="myInput" onkeyup="filterFunction()">
+                                                                       placeholder="Full name/Username/Email..." id="myInput" onkeyup="filterFunction()">
                                                             </li>
                                                             <c:forEach items="${listManager}" var="m">
                                                                 <li>
                                                                     <hr class="dropdown-divider">
                                                                     <a class="dropdown-item" href="<%=request.getContextPath()%>/insert-department-user?deptId=${dept.id}&userId=${m.id}&roleId=3">
-                                                                        ${m.full_name} - ${m.email}
+                                                                        ${m.full_name} (${m.username})
                                                                     </a>
                                                                 </li>
                                                             </c:forEach>

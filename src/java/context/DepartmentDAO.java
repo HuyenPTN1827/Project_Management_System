@@ -24,31 +24,6 @@ import model.User;
  */
 public class DepartmentDAO {
 
-    // HuyenPTNHE160769
-    // 29/09/2024
-    // Get depts list
-    public List<Department> getDepartmentList() {
-        List<Department> dept = new ArrayList<>();
-        String sql = "SELECT * FROM pms.department WHERE status = 1;";
-
-        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
-            ResultSet rs = stm.executeQuery();
-            while (rs.next()) {
-                Department d = new Department();
-                d.setId(rs.getInt("id"));
-                d.setCode(rs.getString("code"));
-                d.setName(rs.getString("name"));
-                d.setDetails(rs.getString("details"));
-                d.setParentId(rs.getInt("parent"));
-                d.setStatus(rs.getBoolean("status"));
-                dept.add(d);
-            }
-        } catch (SQLException e) {
-            BaseDAO.printSQLException(e);
-        }
-        return dept;
-    }
-
 //    HuyenPTNHE160769
 //    04/10/2024        
 //    Admin select all depts order by id descending

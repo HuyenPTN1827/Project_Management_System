@@ -17,7 +17,6 @@ import model.Milestone;
 import model.Project;
 import model.Allocation;
 import model.User;
-import service.ProjectService;
 
 /**
  *
@@ -65,8 +64,6 @@ public class ProjectDAO {
         }
         return projects;
     }
-
-   
 
     // Tìm kiếm dự án theo trạng thái
     public List<Project> getProjectsByStatus(int status) {
@@ -190,8 +187,8 @@ public class ProjectDAO {
 
         return project; // Trả về đối tượng Project tìm thấy, hoặc null nếu không tìm thấy
     }
-    
-   public boolean updateProject(Project project) {
+
+    public boolean updateProject(Project project) {
         // Cập nhật câu lệnh SQL để loại bỏ trường 'biz_term'
         String sql = "UPDATE project SET code = ?, name = ?, details = ?, start_date = ?, "
                 + "end_date = ?, last_updated = ?, status = ?, type_id = ?, department_id = ?, "
@@ -244,119 +241,119 @@ public class ProjectDAO {
         return false; // Trả về false nếu có lỗi xảy ra
     }
 
-public boolean insertProject(Project project, Allocation allocation, Milestone milestone) {
-    // Chuỗi SQL để chèn vào bảng project
-    String sqlProject = "INSERT INTO project (name, code, estimated_effort, start_date, details, end_date, last_updated, status, type_id, department_id, user_id) "
-            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public boolean insertProject(Project project, Allocation allocation, Milestone milestone) {
+        // Chuỗi SQL để chèn vào bảng project
+        String sqlProject = "INSERT INTO project (name, code, estimated_effort, start_date, details, end_date, last_updated, status, type_id, department_id, user_id) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-    // Chuỗi SQL để chèn vào bảng allocation (dữ liệu liên quan đến phân bổ)
-    String allocationSql = "INSERT INTO allocation (created_by, created_at, last_updated, start_date, "
-            + "status, dept_id, user_id, project_id, project_role) "
-            + "VALUES (?, ?, ?, ?, 1, ?, ?, ?, ?)"; // 'active' là giá trị cố định cho cột status
+        // Chuỗi SQL để chèn vào bảng allocation (dữ liệu liên quan đến phân bổ)
+        String allocationSql = "INSERT INTO allocation (created_by, created_at, last_updated, start_date, "
+                + "status, dept_id, user_id, project_id, project_role) "
+                + "VALUES (?, ?, ?, ?, 1, ?, ?, ?, ?)"; // 'active' là giá trị cố định cho cột status
 
-    // Chuỗi SQL để chèn vào bảng milestone
-    String sqlMilestone = "INSERT INTO milestone (project_id, name, status, created_by, last_updated, parent_milestone, priority, target_date, actual_date) "
-            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        // Chuỗi SQL để chèn vào bảng milestone
+        String sqlMilestone = "INSERT INTO milestone (project_id, name, status, created_by, last_updated, parent_milestone, priority, target_date, actual_date) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-    try (Connection cnt = BaseDAO.getConnection()) {
-        // Bắt đầu transaction để đảm bảo tính toàn vẹn
-        cnt.setAutoCommit(false);
+        try (Connection cnt = BaseDAO.getConnection()) {
+            // Bắt đầu transaction để đảm bảo tính toàn vẹn
+            cnt.setAutoCommit(false);
 
-        try (PreparedStatement stmProject = cnt.prepareStatement(sqlProject, Statement.RETURN_GENERATED_KEYS)) {
-            // Thiết lập các tham số cho PreparedStatement cho bảng project
-            stmProject.setString(1, project.getName());
-            stmProject.setString(2, project.getCode());
-            stmProject.setInt(3, project.getEstimatedEffort());
-            stmProject.setDate(4, new java.sql.Date(project.getStartDate().getTime()));
-            stmProject.setString(5, project.getDetails());
+            try (PreparedStatement stmProject = cnt.prepareStatement(sqlProject, Statement.RETURN_GENERATED_KEYS)) {
+                // Thiết lập các tham số cho PreparedStatement cho bảng project
+                stmProject.setString(1, project.getName());
+                stmProject.setString(2, project.getCode());
+                stmProject.setInt(3, project.getEstimatedEffort());
+                stmProject.setDate(4, new java.sql.Date(project.getStartDate().getTime()));
+                stmProject.setString(5, project.getDetails());
 
-            // Xử lý trường end_date nếu có
-            if (project.getEndDate() != null) {
-                stmProject.setDate(6, new java.sql.Date(project.getEndDate().getTime()));
-            } else {
-                stmProject.setNull(6, java.sql.Types.DATE);
-            }
+                // Xử lý trường end_date nếu có
+                if (project.getEndDate() != null) {
+                    stmProject.setDate(6, new java.sql.Date(project.getEndDate().getTime()));
+                } else {
+                    stmProject.setNull(6, java.sql.Types.DATE);
+                }
 
-            // Thiết lập thời gian hiện tại cho trường last_updated
-            stmProject.setTimestamp(7, new java.sql.Timestamp(System.currentTimeMillis()));
-            stmProject.setInt(8, project.getStatus());
-            stmProject.setInt(9, project.getTypeId());
-            stmProject.setInt(10, project.getDepartmentId());
-            stmProject.setInt(11, project.getUserId());
+                // Thiết lập thời gian hiện tại cho trường last_updated
+                stmProject.setTimestamp(7, new java.sql.Timestamp(System.currentTimeMillis()));
+                stmProject.setInt(8, project.getStatus());
+                stmProject.setInt(9, project.getTypeId());
+                stmProject.setInt(10, project.getDepartmentId());
+                stmProject.setInt(11, project.getUserId());
 
-            // Thực thi câu lệnh và lấy khóa chính được tạo
-            int affectedRows = stmProject.executeUpdate();
-            if (affectedRows > 0) {
-                try (ResultSet generatedKeys = stmProject.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        int projectId = generatedKeys.getInt(1); // Lấy ID của dự án mới tạo
+                // Thực thi câu lệnh và lấy khóa chính được tạo
+                int affectedRows = stmProject.executeUpdate();
+                if (affectedRows > 0) {
+                    try (ResultSet generatedKeys = stmProject.getGeneratedKeys()) {
+                        if (generatedKeys.next()) {
+                            int projectId = generatedKeys.getInt(1); // Lấy ID của dự án mới tạo
 
-                        
-                        milestone.setLastUpdated(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())); // last_updated
-                        milestone.setName(project.getName() + " - Main Milestone"); // milestone_name
-                        milestone.setParentMilestone(null); // NULL vì là milestone cha
-                        milestone.setPriority(1); // Mức độ ưu tiên cao
-                        milestone.setTargetDate(project.getEndDate()); // Ngày dự kiến hoàn thành dự án
-                        milestone.setStatus(0); // Trạng thái mặc định
-                        milestone.setActualDate(null); // Chưa hoàn thành
+                            milestone.setLastUpdated(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())); // last_updated
+                            milestone.setName(project.getName() + " - Main Milestone"); // milestone_name
+                            milestone.setParentMilestone(null); // NULL vì là milestone cha
+                            milestone.setPriority(1); // Mức độ ưu tiên cao
+                            milestone.setTargetDate(project.getEndDate()); // Ngày dự kiến hoàn thành dự án
+                            milestone.setStatus(0); // Trạng thái mặc định
+                            milestone.setActualDate(null); // Chưa hoàn thành
 
-                        // Sau khi chèn dự án, chèn dữ liệu phân bổ vào bảng allocation
-                        try (PreparedStatement stmAllocation = cnt.prepareStatement(allocationSql)) {
-                            stmAllocation.setInt(1, allocation.getCreatedBy()); // created_by
-                            stmAllocation.setTimestamp(2, new java.sql.Timestamp(allocation.getCreatedAt().getTime())); // created_at
-                            stmAllocation.setTimestamp(3, new java.sql.Timestamp(System.currentTimeMillis())); // last_updated
-                            stmAllocation.setDate(4, new java.sql.Date(allocation.getStartDate().getTime())); // start_date
-                            stmAllocation.setInt(5, allocation.getDeptId()); // dept_id
-                            stmAllocation.setInt(6, allocation.getUserId()); // user_id
-                            stmAllocation.setInt(7, projectId); // project_id
-                            stmAllocation.setInt(8, 4); // project_role
+                            // Sau khi chèn dự án, chèn dữ liệu phân bổ vào bảng allocation
+                            try (PreparedStatement stmAllocation = cnt.prepareStatement(allocationSql)) {
+                                stmAllocation.setInt(1, allocation.getCreatedBy()); // created_by
+                                stmAllocation.setTimestamp(2, new java.sql.Timestamp(allocation.getCreatedAt().getTime())); // created_at
+                                stmAllocation.setTimestamp(3, new java.sql.Timestamp(System.currentTimeMillis())); // last_updated
+                                stmAllocation.setDate(4, new java.sql.Date(allocation.getStartDate().getTime())); // start_date
+                                stmAllocation.setInt(5, allocation.getDeptId()); // dept_id
+                                stmAllocation.setInt(6, allocation.getUserId()); // user_id
+                                stmAllocation.setInt(7, projectId); // project_id
+                                stmAllocation.setInt(8, 1); // project_role
 
-                            // Thực thi câu lệnh chèn vào bảng allocation
-                            int allocationRows = stmAllocation.executeUpdate();
-                            if (allocationRows > 0) {
-                                // Sau khi chèn allocation thành công, chèn milestone vào bảng milestone
-                                try (PreparedStatement stmMilestone = cnt.prepareStatement(sqlMilestone)) {
-                                    stmMilestone.setInt(1, projectId); // project_id
-                                    stmMilestone.setString(2, milestone.getName()); // milestone_name
-                                    stmMilestone.setInt(3, milestone.getStatus()); // status
-                                    stmMilestone.setInt(4, milestone.getCreatedBy()); // created_by
-                                    stmMilestone.setString(5, milestone.getLastUpdated()); // last_updated
-                                    stmMilestone.setObject(6, milestone.getParentMilestone()); // parent_milestone
-                                    stmMilestone.setInt(7, milestone.getPriority()); // priority
-                                    stmMilestone.setDate(8, new java.sql.Date(milestone.getTargetDate().getTime())); // target_date
-                                    stmMilestone.setObject(9, milestone.getActualDate()); // actual_date
+                                // Thực thi câu lệnh chèn vào bảng allocation
+                                int allocationRows = stmAllocation.executeUpdate();
+                                if (allocationRows > 0) {
+                                    // Sau khi chèn allocation thành công, chèn milestone vào bảng milestone
+                                    try (PreparedStatement stmMilestone = cnt.prepareStatement(sqlMilestone)) {
+                                        stmMilestone.setInt(1, projectId); // project_id
+                                        stmMilestone.setString(2, milestone.getName()); // milestone_name
+                                        stmMilestone.setInt(3, milestone.getStatus()); // status
+                                        stmMilestone.setInt(4, milestone.getCreatedBy()); // created_by
+                                        stmMilestone.setString(5, milestone.getLastUpdated()); // last_updated
+                                        stmMilestone.setObject(6, milestone.getParentMilestone()); // parent_milestone
+                                        stmMilestone.setInt(7, milestone.getPriority()); // priority
+                                        stmMilestone.setDate(8, new java.sql.Date(milestone.getTargetDate().getTime())); // target_date
+                                        stmMilestone.setObject(9, milestone.getActualDate()); // actual_date
 
-                                    int milestoneRows = stmMilestone.executeUpdate();
-                                    if (milestoneRows > 0) {
-                                        // Commit transaction nếu tất cả các bảng đều được chèn thành công
-                                        cnt.commit();
-                                        project.setId(projectId); // Lưu lại ID dự án vào đối tượng project
-                                        return true;
-                                    } else {
-                                        // Rollback nếu chèn milestone thất bại
-                                        cnt.rollback();
+                                        int milestoneRows = stmMilestone.executeUpdate();
+                                        if (milestoneRows > 0) {
+                                            // Commit transaction nếu tất cả các bảng đều được chèn thành công
+                                            cnt.commit();
+                                            project.setId(projectId); // Lưu lại ID dự án vào đối tượng project
+                                            return true;
+                                        } else {
+                                            // Rollback nếu chèn milestone thất bại
+                                            cnt.rollback();
+                                        }
                                     }
+                                } else {
+                                    // Rollback nếu chèn allocation thất bại
+                                    cnt.rollback();
                                 }
-                            } else {
-                                // Rollback nếu chèn allocation thất bại
-                                cnt.rollback();
                             }
                         }
                     }
                 }
+            } catch (SQLException e) {
+                // Nếu có lỗi, rollback lại toàn bộ giao dịch
+                cnt.rollback();
+                BaseDAO.printSQLException(e);
             }
+
         } catch (SQLException e) {
-            // Nếu có lỗi, rollback lại toàn bộ giao dịch
-            cnt.rollback();
             BaseDAO.printSQLException(e);
         }
 
-    } catch (SQLException e) {
-        BaseDAO.printSQLException(e);
+        return false; // Nếu không thành công, trả về false
     }
 
-    return false; // Nếu không thành công, trả về false
-}
     private void setProjectParameters(PreparedStatement stm, Project project) throws SQLException {
         stm.setString(1, project.getName());          // set name
         stm.setString(2, project.getCode());          // set code
@@ -415,8 +412,6 @@ public boolean insertProject(Project project, Allocation allocation, Milestone m
 
         return managers;
     }
-
-   
 
     public List<Project> getProjectsDropDown() {
         List<Project> projects = new ArrayList<>();
@@ -491,7 +486,7 @@ public boolean insertProject(Project project, Allocation allocation, Milestone m
         return milestones;
     }
 
-    public Project getProjectsName(int id ) {
+    public Project getProjectsName(int id) {
         String sql = "SELECT * FROM pms.project where id = " + id;
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
@@ -506,4 +501,5 @@ public boolean insertProject(Project project, Allocation allocation, Milestone m
         }
         return null;
     }
+
 }

@@ -50,80 +50,80 @@
             gtag('config', 'UA-120946860-10', {'anonymize_ip': true});
         </script>
     </head>
-    <body>
+    <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
         <div class="row">
-            <div class="col-md-12 col-xl-12"></div>
-            <div class="card">
-                <div class="card-body">
-                    <c:if test="${projectType == null}">
-                        <form action="insert-project-type" method="post" class="row">
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label">Name <span style="color: red;">*</span></label>
-                                <input type="text" class="form-control" name="name" placeholder="Enter the Project Type name" 
-                                       value="${name}" required>
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label">Code <span style="color: red;">*</span></label>
-                                <input type="text" class="form-control" name="code" placeholder="Enter the Project Type code" 
-                                       value="${code}" required>
-                            </div>
-
-                            <div class="mb-3 col-md-12">
-                                <label class="form-label">Details</label>
-                                <textarea class="form-control" name="details" 
-                                          placeholder="Enter the Project Type details" rows="3">${details}</textarea>
-                            </div>
-
-                            <div class="d-flex justify-content-end">
-                                <button type="submit" class="btn btn-lg btn-success">Submit</button>
-                            </div>
-                        </form>
-                    </c:if>
-
-                    <c:if test="${projectType != null}">
-                        <form action="update-project-type" method="post" class="row">
-                            <input type="hidden" name="id" value="${projectType.id}">
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label">Name <span style="color: red;">*</span></label>
-                                <input type="text" class="form-control" name="name" value="${projectType.name}" required>
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label">Code <span style="color: red;">*</span></label>
-                                <input type="text" class="form-control" name="code" value="${projectType.code}" required>
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label">Status</label>
-                                <div class="check">
-                                    <input class="form-check-input" type="radio" name="status"
-                                           <c:if test="${projectType.status eq 'true'}">
-                                               checked
-                                           </c:if>
-                                           value="true"> Active
-                                    <input class="form-check-input ms-3" type="radio" name="status"
-                                           <c:if test="${projectType.status eq 'false'}">
-                                               checked
-                                           </c:if>
-                                           value="false"> Inactive
+            <div class="col-md-12 col-xl-12">
+                <div class="card">
+                    <div class="card-body">
+                        <c:if test="${projectType == null}">
+                            <form action="insert-project-type" method="post" class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Name <span style="color: red;">*</span></label>
+                                    <input type="text" class="form-control" name="name" placeholder="Enter the Project Type name" 
+                                           value="${name}" required>
                                 </div>
-                            </div>
 
-                            <div class="mb-3 col-md-12">
-                                <label class="form-label">Details</label>
-                                <textarea class="form-control" name="details" rows="3">${projectType.details}</textarea>
-                            </div>
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Code <span style="color: red;">*</span></label>
+                                    <input type="text" class="form-control" name="code" placeholder="Enter the Project Type code" 
+                                           value="${code}" required>
+                                </div>
 
-                            <div class="d-flex justify-content-end">
-                                <button type="submit" class="btn btn-lg btn-success">Submit</button>
-                            </div>
-                        </form>
-                    </c:if>
+                                <div class="mb-3 col-md-12">
+                                    <label class="form-label">Details</label>
+                                    <textarea class="form-control" name="details" 
+                                              placeholder="Enter the Project Type details" rows="3">${details}</textarea>
+                                </div>
+
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-lg btn-success">Submit</button>
+                                </div>
+                            </form>
+                        </c:if>
+
+                        <c:if test="${projectType != null}">
+                            <form action="update-project-type" method="post" class="row">
+                                <input type="hidden" name="id" value="${projectType.id}">
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Name <span style="color: red;">*</span></label>
+                                    <input type="text" class="form-control" name="name" value="${projectType.name}" required>
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Code <span style="color: red;">*</span></label>
+                                    <input type="text" class="form-control" name="code" value="${projectType.code}" required>
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Status</label>
+                                    <div class="check">
+                                        <input class="form-check-input" type="radio" name="status"
+                                               <c:if test="${projectType.status eq 'true'}">
+                                                   checked
+                                               </c:if>
+                                               value="true"> Active
+                                        <input class="form-check-input ms-3" type="radio" name="status"
+                                               <c:if test="${projectType.status eq 'false'}">
+                                                   checked
+                                               </c:if>
+                                               value="false"> Inactive
+                                    </div>
+                                </div>
+
+                                <div class="mb-3 col-md-12">
+                                    <label class="form-label">Details</label>
+                                    <textarea class="form-control" name="details" rows="3">${projectType.details}</textarea>
+                                </div>
+
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-lg btn-success">Submit</button>
+                                </div>
+                            </form>
+                        </c:if>
+                    </div>
                 </div>
             </div>
         </div>
-
         <script src="${pageContext.request.contextPath}/js/app.js"></script>
 
         <script>

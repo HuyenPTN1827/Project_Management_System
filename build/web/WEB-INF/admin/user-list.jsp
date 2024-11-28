@@ -71,7 +71,7 @@
                                     <div class="card">
                                         <div class="card-header">
                                             <div class="d-flex justify-content-between align-items-center" style="margin: 10px;">
-                                                <form action="user-management" method="post" class="d-flex align-items-center" style="gap: 15px;">
+                                                <form action="user-management" method="post" class="d-flex align-items-center" style="gap: 10px;">
                                                     <div class="col-md-2">
                                                         <select name="deptId" class="form-select " >
                                                             <option value="">All Departments</option>
@@ -126,7 +126,7 @@
 
                                                 <div class="col-md-4">
                                                     <input type="search" name="keyword" class="form-control"
-                                                           placeholder="Enter Full Name or Email or Phone" id="keyword" value="${keyword}">
+                                                           placeholder="FullName/Username/Email/Phone" id="keyword" value="${keyword}">
                                                 </div>
 
                                                 <div class="col-md-2">
@@ -147,6 +147,7 @@
                                                 <tr style="text-align: center">
                                                     <th>ID</th>
                                                     <th>Full Name</th>
+                                                    <th>Username</th>
                                                     <th>Email</th>
                                                     <th>Mobile</th>
                                                     <th>Department</th>
@@ -160,6 +161,7 @@
                                                     <tr style="text-align: center">
                                                         <td>${user.id}</td>
                                                         <td>${user.full_name}</td>
+                                                        <td>${user.username}</td>
                                                         <td>${user.email}</td>
                                                         <td>${user.mobile}</td>
                                                         <c:forEach items="${user.depts}" var="d">
@@ -261,7 +263,7 @@
                                                                                info: true,
                                                                                order: [[0, 'desc']], // Default sort by ID column in descending order
                                                                                columnDefs: [
-                                                                                   {orderable: false, targets: 7} // Disable sorting on the 'Action' column
+                                                                                   {orderable: false, targets: 8} // Disable sorting on the 'Action' column
                                                                                ],
                                                                                language: {
                                                                                    paginate: {

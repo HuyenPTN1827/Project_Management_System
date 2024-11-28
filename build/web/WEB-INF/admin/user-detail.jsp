@@ -89,15 +89,40 @@
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Phone</label>
-                                                    <input type="text" class="form-control" name="mobile" placeholder="Enter the Phone number"
-                                                           value="${mobile}">
+                                                    <label class="form-label">Username <span style="color: red;">*</span></label>
+                                                    <input type="text" class="form-control" name="username" placeholder="Enter the Username" 
+                                                           value="${username}" required>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label">Email <span style="color: red;">*</span></label>
                                                     <input type="text" class="form-control" name="email" placeholder="Enter the Email address" 
                                                            value="${email}" required>
+                                                </div>
+
+                                                <div class="mb-3 col-md-6">
+                                                    <label class="form-label">Password <span style="color: red;">*</span></label>
+                                                    <input type="password" class="form-control" name="password" placeholder="Enter the Password" required>
+                                                </div>
+
+                                                <div class="mb-3 col-md-6">
+                                                    <label class="form-label">Phone</label>
+                                                    <input type="text" class="form-control" name="mobile" placeholder="Enter the Phone number"
+                                                           value="${mobile}">
+                                                </div>
+
+                                                <div class="mb-3 col-md-6">
+                                                    <label class="form-label">Role <span style="color: red;">*</span></label>
+                                                    <select name="role" class="form-select">
+                                                        <c:forEach items="${role}" var="r">
+                                                            <option 
+                                                                <c:if test="${roleId eq r.id}">
+                                                                    selected="selected"
+                                                                </c:if>
+                                                                value=${r.id}>${r.name}
+                                                            </option>
+                                                        </c:forEach>
+                                                    </select>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
@@ -110,25 +135,6 @@
                                                                     selected="selected"
                                                                 </c:if>
                                                                 value=${d.id}>${d.name}
-                                                            </option>
-                                                        </c:forEach>
-                                                    </select>
-                                                </div>
-
-                                                <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Password <span style="color: red;">*</span></label>
-                                                    <input type="password" class="form-control" name="password" placeholder="Enter the Password" required>
-                                                </div>
-
-                                                <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Role <span style="color: red;">*</span></label>
-                                                    <select name="role" class="form-select">
-                                                        <c:forEach items="${role}" var="r">
-                                                            <option 
-                                                                <c:if test="${roleId eq r.id}">
-                                                                    selected="selected"
-                                                                </c:if>
-                                                                value=${r.id}>${r.name}
                                                             </option>
                                                         </c:forEach>
                                                     </select>
@@ -179,15 +185,35 @@
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Phone</label>
-                                                    <input type="text" class="form-control" name="mobile" placeholder="Enter the Phone number"
-                                                           value="${userDetail.mobile}">
+                                                    <label class="form-label">Username <span style="color: red;">*</span></label>
+                                                    <input type="text" class="form-control" name="username" placeholder="Enter the Username" 
+                                                           value="${userDetail.username}" required>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label">Email <span style="color: red;">*</span></label>
                                                     <input type="text" class="form-control" name="email" placeholder="Enter the Email address" 
                                                            value="${userDetail.email}" required>
+                                                </div>
+
+                                                <div class="mb-3 col-md-6">
+                                                    <label class="form-label">Phone</label>
+                                                    <input type="text" class="form-control" name="mobile" placeholder="Enter the Phone number"
+                                                           value="${userDetail.mobile}">
+                                                </div>
+
+                                                <div class="mb-3 col-md-6">
+                                                    <label class="form-label">Role <span style="color: red;">*</span></label>
+                                                    <select name="role" class="form-select">
+                                                        <c:forEach items="${role}" var="r">
+                                                            <option 
+                                                                <c:if test="${userDetail.setting.id eq r.id}">
+                                                                    selected="selected"
+                                                                </c:if>
+                                                                value=${r.id}>${r.name}
+                                                            </option>
+                                                        </c:forEach>
+                                                    </select>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
@@ -206,20 +232,6 @@
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Role <span style="color: red;">*</span></label>
-                                                    <select name="role" class="form-select">
-                                                        <c:forEach items="${role}" var="r">
-                                                            <option 
-                                                                <c:if test="${userDetail.setting.id eq r.id}">
-                                                                    selected="selected"
-                                                                </c:if>
-                                                                value=${r.id}>${r.name}
-                                                            </option>
-                                                        </c:forEach>
-                                                    </select>
-                                                </div>
-
-                                                <div class="mb-3 col-md-6">
                                                     <label class="form-label">Status</label>
 
                                                     <c:if test="${userDetail.status eq '3'}">
@@ -228,19 +240,17 @@
                                                     </c:if>
 
                                                     <c:if test="${userDetail.status ne '3'}">
-                                                        <div class="form-check">
+                                                        <div class="check">
                                                             <input class="form-check-input" type="radio" name="status"
                                                                    <c:if test="${userDetail.status eq '1'}">
                                                                        checked
                                                                    </c:if>
-                                                                   value="1">Active
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="status"
+                                                                   value="1"> Active
+                                                            <input class="form-check-input ms-3" type="radio" name="status"
                                                                    <c:if test="${userDetail.status eq '0'}">
                                                                        checked
                                                                    </c:if>
-                                                                   value="0">Inactive
+                                                                   value="0"> Inactive
                                                         </div>
                                                     </c:if>
                                                 </div>

@@ -20,8 +20,10 @@ import model.ProjectType;
 import model.ProjectTypeCriteria;
 import model.ProjectTypeSetting;
 import model.ProjectType_User;
+import model.Setting;
 import model.User;
 import service.ProjectTypeService;
+import service.SettingService;
 import service.UserService;
 
 /**
@@ -32,11 +34,13 @@ public class ProjectTypeController extends HttpServlet {
 
     private ProjectTypeService ptService;
     private UserService userService;
+    private SettingService settingService;
 
     @Override
     public void init() throws ServletException {
         this.ptService = new ProjectTypeService();
         this.userService = new UserService();
+        this.settingService = new SettingService();
     }
 
 //    HuyenPTNHE160769 
@@ -297,12 +301,16 @@ public class ProjectTypeController extends HttpServlet {
         Integer roleId = roleIdStr != null && !roleIdStr.isEmpty() ? Integer.valueOf(roleIdStr) : null;
         Boolean statusUser = statusUserStr != null && !statusUserStr.isEmpty() ? Boolean.valueOf(statusUserStr) : null;
         List<ProjectType_User> ptUser = ptService.getAllProjectTypeUsers(keywordUser, roleId, statusUser, id);
-        List<ProjectTypeSetting> ptSetting = ptService.getProjectRoleList(id);
-        request.setAttribute("ptSetting", ptSetting);
+//        List<Setting> ptSetting = settingService.getUserRoleList();
+        List<User> listPMO = userService.getAllUsers(null, null, 2, 1);
+        List<User> listQA = userService.getAllUsers(null, null, 5, 1);
+//        request.setAttribute("ptSetting", ptSetting);
         request.setAttribute("ptUser", ptUser);
         request.setAttribute("keywordUser", keywordUser);
         request.setAttribute("roleId", roleId);
         request.setAttribute("statusUser", statusUser);
+        request.setAttribute("listPMO", listPMO);
+        request.setAttribute("listQA", listQA);
 
         //Project Phase
         String keywordPhase = request.getParameter("keywordPhase");
@@ -320,7 +328,7 @@ public class ProjectTypeController extends HttpServlet {
         Integer phaseId = phaseIdStr != null && !phaseIdStr.isEmpty() ? Integer.valueOf(phaseIdStr) : null;
         Boolean statusCriteria = statusCriteriaStr != null && !statusCriteriaStr.isEmpty() ? Boolean.valueOf(statusCriteriaStr) : null;
         List<ProjectTypeCriteria> ptCriteria = ptService.getAllProjectTypeCriteria(keywordCriteria, phaseId, statusCriteria, id);
-         List<ProjectPhase> listPhase = ptService.getAllProjectPhase(id, null, null);
+        List<ProjectPhase> listPhase = ptService.getAllProjectPhase(id, null, null);
         request.setAttribute("listPhase", listPhase);
         request.setAttribute("ptCriteria", ptCriteria);
         request.setAttribute("keywordCriteria", keywordCriteria);
@@ -412,48 +420,48 @@ public class ProjectTypeController extends HttpServlet {
 //    22/10/2024 
 //    Show form insert project type user
     private void showNewFormPTUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int typeId = Integer.parseInt(request.getParameter("typeId"));
-        String keyword = request.getParameter("keyword");
-        List<String> errors = new ArrayList<>();
-
-        User userType = userService.findUserByFullNameOrEmail(keyword);
-        List<ProjectTypeSetting> ptSetting = ptService.getProjectRoleList(typeId);
-
-        if (userType == null && keyword != null) {
-            errors.add("No user found.");
-        }
-
-        request.setAttribute("typeId", typeId);
-        request.setAttribute("ptSetting", ptSetting);
-        request.setAttribute("userType", userType);
-        request.setAttribute("keyword", keyword);
-        request.setAttribute("errorMessages", errors);
-
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/project-type-user-add.jsp");
-        dispatcher.forward(request, response);
+//        int typeId = Integer.parseInt(request.getParameter("typeId"));
+//        String keyword = request.getParameter("keyword");
+//        List<String> errors = new ArrayList<>();
+//
+//        User userType = userService.findUserByFullNameOrEmail(keyword);
+//        List<ProjectTypeSetting> ptSetting = ptService.getProjectRoleList(typeId);
+//
+//        if (userType == null && keyword != null) {
+//            errors.add("No user found.");
+//        }
+//
+//        request.setAttribute("typeId", typeId);
+//        request.setAttribute("ptSetting", ptSetting);
+//        request.setAttribute("userType", userType);
+//        request.setAttribute("keyword", keyword);
+//        request.setAttribute("errorMessages", errors);
+//
+//        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/project-type-user-add.jsp");
+//        dispatcher.forward(request, response);
     }
 
 //    HuyenPTNHE160769 
 //    22/10/2024 
 //    Insert project type user
     private void insertPTUser(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
+        int userId = Integer.parseInt(request.getParameter("userId"));
         int typeId = Integer.parseInt(request.getParameter("typeId"));
-        int roleId = Integer.parseInt(request.getParameter("pjRole"));
+        int roleId = Integer.parseInt(request.getParameter("roleId"));
 
         ProjectType_User ptUser = new ProjectType_User();
 
         User u = new User();
-        u.setId(id);
+        u.setId(userId);
         ptUser.setUser(u);
 
         ProjectType pt = new ProjectType();
         pt.setId(typeId);
         ptUser.setPjType(pt);
 
-        ProjectTypeSetting ptSetting = new ProjectTypeSetting();
-        ptSetting.setId(roleId);
-        ptUser.setPtSetting(ptSetting);
+        Setting r = new Setting();
+        r.setId(roleId);
+        ptUser.setSetting(r);
 
         ptService.insertProjectTypeUser(ptUser);
         response.sendRedirect("project-type-config?id=" + typeId + "&activeTab=manager");
@@ -466,11 +474,11 @@ public class ProjectTypeController extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         int typeId = Integer.parseInt(request.getParameter("typeId"));
         ProjectType_User ptUser = ptService.getProjectTypeUserById(id);
-        List<ProjectTypeSetting> ptSetting = ptService.getProjectRoleList(typeId);
+//        List<ProjectTypeSetting> ptSetting = ptService.getProjectRoleList(typeId);
 
         request.setAttribute("ptUser", ptUser);
-        request.setAttribute("ptSetting", ptSetting);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/project-type-user-edit.jsp");
+//        request.setAttribute("ptSetting", ptSetting);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/project-type-user-detail.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -496,9 +504,9 @@ public class ProjectTypeController extends HttpServlet {
         pt.setId(typeId);
         ptUser.setPjType(pt);
 
-        ProjectTypeSetting ptSetting = new ProjectTypeSetting();
+        Setting ptSetting = new Setting();
         ptSetting.setId(roleId);
-        ptUser.setPtSetting(ptSetting);
+        ptUser.setSetting(ptSetting);
 
         ptService.updateProjectTypeUser(ptUser);
         response.sendRedirect("project-type-config?id=" + typeId + "&activeTab=manager");

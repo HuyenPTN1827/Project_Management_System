@@ -13,13 +13,23 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/icons/icon-48x48.png" />
         <title>Project Configs | PMS</title>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet">
-        <link href="${pageContext.request.contextPath}/css/light.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
-
-
+        
+        <link class="js-stylesheet" href="${pageContext.request.contextPath}/css/light.css" rel="stylesheet">
+        <script src="${pageContext.request.contextPath}/js/settings.js"></script>
+        <script>
+            document.querySelectorAll('.nav-link').forEach(tab => {
+                tab.addEventListener('click', function () {
+                    const url = new URL(window.location);
+                    url.searchParams.set('activeTab', this.id.split('-tab')[0]); // Lấy id tab
+                    history.replaceState(null, '', url);
+                });
+            });
+        </script>
     </head>
     <body>
         <div class="wrapper">
@@ -52,18 +62,19 @@
                                 <ul class="nav nav-tabs card-header-tabs" role="tablist">
 
                                     <li class="nav-item">
-                                        <a class="nav-link active" data-bs-toggle="tab" href="#project" role="tab">Project</a>
-                                    </li>
+                                        <a class="nav-link ${activeTab == 'detail' ? 'active' : ''}" data-bs-toggle="tab" href="#project" role="tab">Project</a>
+                                    </li
+
                                     <li class="nav-item">
-                                        <a class="nav-link" data-bs-toggle="tab" href="#milestones" role="tab">Milestones</a>
+                                        <a class="nav-link ${activeTab == 'milestone' ? 'active' : ''}" data-bs-toggle="tab" href="#milestone" role="tab">Milestones</a>
                                     </li>
 
                                     <li class="nav-item">
-                                        <a class="nav-link" data-bs-toggle="tab" href="#members" role="tab">Members</a>
+                                        <a class="nav-link ${activeTab == 'allocation' ? 'active' : ''}" data-bs-toggle="tab" href="#allocation" role="tab">Allocations</a>
                                     </li>
 
                                     <li class="nav-item">
-                                        <a class="nav-link" data-bs-toggle="tab" href="#team" role="tab" >Teams</a>
+                                        <a class="nav-link ${activeTab == 'milestone' ? 'active' : ''}" data-bs-toggle="tab" href="#team" role="tab" >Teams</a>
                                     </li>
 
 
@@ -72,7 +83,7 @@
                             <div class="card-body">
                                 <div class="tab-content">
 
-                                    <div class="tab-pane fade show active" id="project" role="tabpanel">
+                                    <div class="tab-pane fade ${activeTab == 'detail' ? 'show active' : ''}" id="project" role="tabpanel">
                                         <h2>General Information</h2>
 
                                         <c:if test="${not empty message}">
@@ -87,7 +98,7 @@
                                                 ${error}
                                             </div>
                                         </c:if>
-${errors}
+                                        ${errors}
                                         <style>
                                             .tab-pane {
                                                 padding: 15px;
@@ -222,11 +233,8 @@ ${errors}
                                         </form>
                                     </div>
 
-
-
-
                                     <!-- Milestones Section -->
-                                    <div class="tab-pane fade" id="milestones" role="tabpanel">
+                                    <div class="tab-pane fade ${activeTab == 'milestone' ? 'show active' : ''}" id="milestone" role="tabpanel">
                                         <div class="d-flex justify-content-between mb-3">
                                             <!-- Form lọc và tìm kiếm Milestone -->
                                             <form class="d-flex align-items-center" action="filterandsearchmilestone" method="get" id="filterForm">
@@ -256,24 +264,24 @@ ${errors}
                                             <a href="#" class="btn btn-primary" id="addNewMilestoneButton">Add New</a>
 
                                         </div>
-                                                <style>
-  
-    /* Modal căn giữa theo chiều ngang và dọc */
-#addMilestoneModal .modal-dialog {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* Căn giữa cả chiều ngang và chiều dọc */
-    margin: 0;
-    max-width: 800px; /* Có thể thay đổi theo ý muốn */
-}
+                                        <style>
 
-#addMilestoneModal .modal-content {
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Bóng đổ nhẹ cho modal */
-}
+                                            /* Modal căn giữa theo chiều ngang và dọc */
+                                            #addMilestoneModal .modal-dialog {
+                                                position: fixed;
+                                                top: 50%;
+                                                left: 50%;
+                                                transform: translate(-50%, -50%); /* Căn giữa cả chiều ngang và chiều dọc */
+                                                margin: 0;
+                                                max-width: 800px; /* Có thể thay đổi theo ý muốn */
+                                            }
 
-</style>
+                                            #addMilestoneModal .modal-content {
+                                                border-radius: 8px;
+                                                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Bóng đổ nhẹ cho modal */
+                                            }
+
+                                        </style>
                                         <!-- Modal Thêm Milestone -->
                                         <div class="modal fade" id="addMilestoneModal" tabindex="-1" aria-labelledby="addMilestoneModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
@@ -353,24 +361,24 @@ ${errors}
                                         </div>
                                         <!-- Bao gồm thư viện Bootstrap CSS và JavaScript --> <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/css/bootstrap.min.css" rel="stylesheet"> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.bundle.min.js"></script>
 
-                                                <style>
-  
-    /* Modal căn giữa theo chiều ngang và dọc */
-#editMilestoneModal .modal-dialog {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* Căn giữa cả chiều ngang và chiều dọc */
-    margin: 0;
-    max-width: 800px; /* Có thể thay đổi theo ý muốn */
-}
+                                        <style>
 
-#editMilestoneModal .modal-content {
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Bóng đổ nhẹ cho modal */
-}
+                                            /* Modal căn giữa theo chiều ngang và dọc */
+                                            #editMilestoneModal .modal-dialog {
+                                                position: fixed;
+                                                top: 50%;
+                                                left: 50%;
+                                                transform: translate(-50%, -50%); /* Căn giữa cả chiều ngang và chiều dọc */
+                                                margin: 0;
+                                                max-width: 800px; /* Có thể thay đổi theo ý muốn */
+                                            }
 
-</style>
+                                            #editMilestoneModal .modal-content {
+                                                border-radius: 8px;
+                                                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Bóng đổ nhẹ cho modal */
+                                            }
+
+                                        </style>
                                         <!-- Modal Edit Milestone -->
                                         <div class="modal fade" id="editMilestoneModal" tabindex="-1" aria-labelledby="editMilestoneModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
@@ -659,6 +667,132 @@ ${errors}
 
                                     </div>
 
+                                    <!--Allocations Section-->
+                                    <div class="tab-pane fade ${activeTab == 'allocation' ? 'show active' : ''}" id="allocation" role="tabpanel">
+                                        <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 15px;">
+                                            <form action="projectconfig" method="get" class="d-flex align-items-center" style="gap: 10px;">
+                                                <input type="hidden" name="id" value="${param.id}" />
+                                                <input type="hidden" name="activeTab" value="allocation">
+
+                                                <div class="col-md-2">
+                                                    <select name="deptId" class="form-select">
+                                                        <option value="">All Departments</option>
+                                                        <c:forEach items="${listDept}" var="d">
+                                                            <option 
+                                                                <c:if test="${deptId eq d.id}">
+                                                                    selected="selected"
+                                                                </c:if>
+                                                                value="${d.id}">${d.name}
+                                                            </option>
+                                                        </c:forEach>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-md-2">
+                                                    <select name="roleId" class="form-select">
+                                                        <option value="">All Roles</option>
+                                                        <option value="1">Project Manager</option>
+                                                        <c:forEach items="${listRole}" var="s">
+                                                            <option 
+                                                                <c:if test="${roleId eq s.id}">
+                                                                    selected="selected"
+                                                                </c:if>
+                                                                value="${s.id}">${s.name}
+                                                            </option>
+                                                        </c:forEach>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-md-2">
+                                                    <select name="statusUser" class="form-select">
+                                                        <option value="">All Statuses</option>
+                                                        <option 
+                                                            <c:if test="${statusUser eq 'true'}">
+                                                                selected="selected"
+                                                            </c:if>
+                                                            value="true">Active
+                                                        </option>
+                                                        <option 
+                                                            <c:if test="${statusUser eq 'false'}">
+                                                                selected="selected"
+                                                            </c:if>
+                                                            value="false">Inactive
+                                                        </option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <input type="search" name="keywordUser" class="form-control"
+                                                           placeholder="Full Name/Username/Email" id="keywordUser" value="${keywordUser}">
+                                                </div>
+
+                                                <button type="submit" class="btn btn-primary">Search</button>
+
+                                            </form>
+
+                                            <a class="btn btn-primary" href="javascript:void(0);" onclick="openSettingModal(${param.id});">Create new</a>
+                                        </div>
+
+                                        <table id="datatables-multi2" class="table table-striped" style="width:100%">
+                                            <thead>
+                                                <tr style="text-align: center">
+                                                    <th>ID</th>
+                                                    <th>Member</th>
+                                                    <th>Department</th>
+                                                    <th>From Date</th>
+                                                    <th>To Date</th>
+                                                    <th>Role</th>
+                                                    <th>Effort Rate</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach items="${requestScope.allocation}" var="al">
+                                                    <tr style="text-align: center">
+                                                        <td>${al.id}</td>
+                                                        <td>${al.user.full_name} (${al.user.username})</td>
+                                                        <td>${al.dept.code}</td>
+                                                        <td>${al.startDate}</td>
+                                                        <td>${al.endDate}</td>
+                                                        <td>${al.role.name}</td>
+                                                        <td>${al.effortRate}</td>
+                                                        <td>
+                                                            <c:if test="${al.status eq 'true'}">
+                                                                <span class="badge bg-success">Active</span>
+                                                            </c:if>
+                                                            <c:if test="${al.status eq 'false'}">
+                                                                <span class="badge bg-danger">Inactive</span>
+                                                            </c:if>
+                                                        </td>
+                                                        <td>
+                                                            <a href="javascript:void(0);" class="btn btn-info" 
+                                                               onclick="openSettingModal(${param.id}, ${al.id});">
+                                                                <i class="align-middle" data-feather="edit"></i>
+                                                            </a>
+
+                                                            <c:if test="${al.status eq 'false'}">
+                                                                <a href="<%=request.getContextPath()%>/change-status-project-type-setting?id=${type.id}&status=${type.status}&typeId=${projectType.id}"
+                                                                   class="btn btn-success"
+                                                                   onclick="return confirm('Are you sure you want to activate this allocation?');">
+                                                                    <i class="fas fa-check"></i>
+                                                                </a>
+                                                            </c:if>
+
+                                                            <c:if test="${al.status eq 'true'}">
+                                                                <a href="<%=request.getContextPath()%>/change-status-project-type-setting?id=${type.id}&status=${type.status}&typeId=${projectType.id}"
+                                                                   class="btn btn-danger"
+                                                                   onclick="return confirm('Are you sure you want to deactivate this allocation?');">
+                                                                    <i class="fas fa-times" style="padding-left: 2px; padding-right: 2px"></i>
+                                                                </a>
+                                                            </c:if>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -676,10 +810,40 @@ ${errors}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-<script src="${pageContext.request.contextPath}/js/light.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+
+<script src="${pageContext.request.contextPath}/js/light.js"></script>
+<script src="${pageContext.request.contextPath}/js/app.js"></script>
+<script src="${pageContext.request.contextPath}/js/datatables.js"></script>
 <script>
-                                                                            feather.replace();
+                                                                       feather.replace();
+
+                                                                       document.addEventListener("DOMContentLoaded", function () {
+                                                                           var datatablesMulti = $("#datatables-multi2").DataTable({
+                                                                               responsive: true,
+                                                                               paging: true,
+                                                                               searching: false,
+                                                                               info: true,
+                                                                               order: [[0, 'desc']], // Default sort by ID column in descending order
+                                                                               columnDefs: [
+                                                                                   {orderable: false, targets: 8} // Disable sorting on the 'Action' column
+                                                                               ],
+                                                                               language: {
+                                                                                   paginate: {
+                                                                                       previous: "&laquo;",
+                                                                                       next: "&raquo;"
+                                                                                   },
+                                                                                   info: "_TOTAL_ member(s) found",
+                                                                                   infoEmpty: "No member found"
+                                                                               },
+                                                                               dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
+                                                                               initComplete: function () {
+                                                                                   // Add necessary classes for alignment
+                                                                                   $('.dataTables_info').addClass('text-left fw-bolder');
+                                                                                   $('.dataTables_length').addClass('mt-2'); // Add necessary margin classes
+                                                                               }
+                                                                           });
+                                                                       });
 </script>
 
 </body>
