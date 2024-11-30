@@ -29,9 +29,9 @@
                         Hello, <strong>${user.full_name}</strong>!
                     </a>
                     <div class="dropdown-menu dropdown-menu-start">
-                        <a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
+                        <a class="dropdown-item" href="member-profilecontroller"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Log out</a>
+                        <a class="dropdown-item" href="<%=request.getContextPath()%>/logout">Log out</a>
                     </div>
                     
                 </div>

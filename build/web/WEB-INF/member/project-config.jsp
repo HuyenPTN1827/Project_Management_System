@@ -359,7 +359,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- Bao gồm thư viện Bootstrap CSS và JavaScript --> <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/css/bootstrap.min.css" rel="stylesheet"> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.bundle.min.js"></script>
 
                                         <style>
 
@@ -832,10 +831,7 @@
 
 
 <!-- Bao gồm thư viện jQuery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+
 
 <script src="${pageContext.request.contextPath}/js/light.js"></script>
 <script src="${pageContext.request.contextPath}/js/app.js"></script>

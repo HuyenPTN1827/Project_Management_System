@@ -102,31 +102,46 @@ public class ProfileController extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         UserService userService = new UserService();
+
         if (session != null) {
             User user = (User) session.getAttribute("user");
+
             if (user != null) {
                 String fullname = request.getParameter("fullname");
                 String email = request.getParameter("email");
                 String mobile = request.getParameter("mobile");
 
-                // Cập nhật thông tin người dùng
-                user.setFull_name(fullname);
-                user.setEmail(email);
-                user.setMobile(mobile);
+                // Check if the profile was updated
+                boolean isUpdated = false;
 
-                // Gọi phương thức cập nhật từ UserService
-                boolean isUpdated = userService.updateMember(user);
+                // Check if the new values are different from the current ones
+                if (!fullname.equals(user.getFull_name())
+                        || !email.equals(user.getEmail())
+                        || !mobile.equals(user.getMobile())) {
+
+                    // Cập nhật thông tin người dùng
+                    user.setFull_name(fullname);
+                    user.setEmail(email);
+                    user.setMobile(mobile);
+
+                    // Gọi phương thức cập nhật từ UserService
+                    isUpdated = userService.updateMember(user);
+                }
+
                 if (isUpdated) {
                     // Cập nhật lại session
                     session.setAttribute("user", user);
                     request.setAttribute("message", "Profile updated successfully!");
                 } else {
-                    request.setAttribute("message", "Failed to update profile!");
+                    // Nếu không có thay đổi nào
+                    request.setAttribute("err", "No changes were made.");
                 }
+
                 // Chuyển tiếp sang trang profile.jsp
                 request.setAttribute("memberProfile", user);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/profile.jsp");
                 dispatcher.forward(request, response);
+
             } else {
                 response.sendRedirect(request.getContextPath() + "/login");
             }

@@ -44,6 +44,10 @@
                                                 <input class="form-control form-control-lg" type="text" name="fullname" placeholder="Enter full name" required />
                                             </div>
                                             <div style="margin-top: 10px" class="mb-3">
+                                                <label class="form-label">Username</label>
+                                                <input class="form-control form-control-lg" type="text" name="username" placeholder="Enter username" required />
+                                            </div>
+                                            <div style="margin-top: 10px" class="mb-3">
                                                 <label class="form-label">Email</label>
                                                 <input class="form-control form-control-lg" type="text" name="email" placeholder="Enter email" required />
                                             </div>
@@ -56,6 +60,11 @@
                                                 <input class="form-control form-control-lg" type="password" name="password" placeholder="Enter password" required />
                                                 <small style="color: gray">Use 8 or more characters with a mix of letters, numbers, and symbols</small>
                                             </div>
+                                            <div style="margin-top: 10px" class="mb-3">
+                                                <label class="form-label">Confirm Password</label>
+                                                <input class="form-control form-control-lg" type="password" name="confirmPassword" placeholder="Confirm password" required />
+                                            </div>
+
                                             <p style="color: red;">
                                                 ${NOTIFICATION}
                                             </p>
@@ -80,5 +89,16 @@
         </main>
         <script src="js/app.js"></script>
     </body>
+    <script>
+        document.querySelector("form").addEventListener("submit", function (e) {
+            const password = document.querySelector("input[name='password']").value;
+            const confirmPassword = document.querySelector("input[name='confirmPassword']").value;
+
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                alert("Passwords do not match. Please try again.");
+            }
+        });
+    </script>
 
 </html>
