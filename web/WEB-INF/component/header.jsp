@@ -14,81 +14,50 @@
         </div>
     </form>
 
-    <ul class="navbar-nav d-none d-lg-flex">
-        <!--<li class="nav-item px-2 dropdown">-->
-        <li class="nav-item px-2">
-            <a class="nav-link <c:if test="${currentPage == 'requirement-management'}">active</c:if>"" 
-               href="#">Requirements</a>
-            </li>    
-            <li class="nav-item px-2">
-                <a class="nav-link <c:if test="${currentPage == 'issue-management'}">active</c:if>"" 
-                  href="<%=request.getContextPath()%>/issue-management?userId=${user.id}">Issues</a>
-        </li> 
-        <li class="nav-item px-2">
-            <a class="nav-link <c:if test="${currentPage == 'defect-management'}">active</c:if>"" 
-               href="#">Defects</a>
-            </li>      
-            <li class="nav-item px-2">
-                <a class="nav-link <c:if test="${currentPage == 'timesheet-management'}">active</c:if>"" 
-               href="#">Timesheets</a>
-            </li>
-            
-            <!--                        <a class="nav-link dropdown-toggle" href="#" id="megaDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
-                                       aria-expanded="false">
-                                        Mega Menu
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-start dropdown-mega" aria-labelledby="megaDropdown">
-                                        <div class="d-md-flex align-items-start justify-content-start">
-                                            <div class="dropdown-mega-list">
-                                                <div class="dropdown-header">UI Elements</div>
-                                                <a class="dropdown-item" href="#">Alerts</a>
-                                                <a class="dropdown-item" href="#">Buttons</a>
-                                                <a class="dropdown-item" href="#">Cards</a>
-                                                <a class="dropdown-item" href="#">Carousel</a>
-                                                <a class="dropdown-item" href="#">General</a>
-                                                <a class="dropdown-item" href="#">Grid</a>
-                                                <a class="dropdown-item" href="#">Modals</a>
-                                                <a class="dropdown-item" href="#">Tabs</a>
-                                                <a class="dropdown-item" href="#">Typography</a>
-                                            </div>
-                                            <div class="dropdown-mega-list">
-                                                <div class="dropdown-header">Forms</div>
-                                                <a class="dropdown-item" href="#">Layouts</a>
-                                                <a class="dropdown-item" href="#">Basic Inputs</a>
-                                                <a class="dropdown-item" href="#">Input Groups</a>
-                                                <a class="dropdown-item" href="#">Advanced Inputs</a>
-                                                <a class="dropdown-item" href="#">Editors</a>
-                                                <a class="dropdown-item" href="#">Validation</a>
-                                                <a class="dropdown-item" href="#">Wizard</a>
-                                            </div>
-                                            <div class="dropdown-mega-list">
-                                                <div class="dropdown-header">Tables</div>
-                                                <a class="dropdown-item" href="#">Basic Tables</a>
-                                                <a class="dropdown-item" href="#">Responsive Table</a>
-                                                <a class="dropdown-item" href="#">Table with Buttons</a>
-                                                <a class="dropdown-item" href="#">Column Search</a>
-                                                <a class="dropdown-item" href="#">Muulti Selection</a>
-                                                <a class="dropdown-item" href="#">Ajax Sourced Data</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>-->
+    <div class="d-flex justify-content-between align-items-center">
+        <!-- Menu dropdown mini -->
+        <div class="nav-item dropdown d-lg-none">
+            <a class="nav-link dropdown-toggle text-dark" href="#" role="button" id="menuDropdown" data-bs-toggle="dropdown" 
+               aria-haspopup="true" aria-expanded="false">
+                Menu
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="menuDropdown">
+                <a class="dropdown-item <c:if test="${currentPage == 'requirement-management'}">active</c:if>"" 
+                   href="#">Requirements</a>
 
-<!--            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="resourcesDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
-                   aria-expanded="false">
-                    Resources
-                </a>
-                <div class="dropdown-menu" aria-labelledby="resourcesDropdown">
-                    <a class="dropdown-item" href="https://adminkit.io/" target="_blank"><i class="align-middle me-1" data-feather="home"></i>
-                        Homepage</a>
-                    <a class="dropdown-item" href="https://adminkit.io/docs/" target="_blank"><i class="align-middle me-1" data-feather="book-open"></i>
-                        Documentation</a>
-                    <a class="dropdown-item" href="https://adminkit.io/docs/getting-started/changelog/" target="_blank"><i class="align-middle me-1"
-                                                                                                                           data-feather="edit"></i> Changelog</a>
-                </div>
-            </li>-->
-        </ul>
+                    <a class="dropdown-item <c:if test="${currentPage == 'issue-management'}">active</c:if>"" 
+                   href="<%=request.getContextPath()%>/issue-management?userId=${user.id}">Issues</a>
+
+                <a class="dropdown-item <c:if test="${currentPage == 'defect-management'}">active</c:if>"" 
+                   href="#">Defects</a>
+
+                    <a class="dropdown-item <c:if test="${currentPage == 'timesheet-management'}">active</c:if>"" 
+                       href="#">Timesheets</a>
+
+                </ul>
+            </div>
+
+            <!-- Large menu -->
+            <ul class="navbar-nav d-none d-lg-flex">
+                <li class="nav-item px-2">
+                    <a class="nav-link <c:if test="${currentPage == 'requirement-management'}">active</c:if>"" 
+                       href="#">Requirements</a>
+                </li>    
+                <li class="nav-item px-2">
+                    <a class="nav-link <c:if test="${currentPage == 'issue-management'}">active</c:if>"" 
+                   href="<%=request.getContextPath()%>/issue-management?userId=${user.id}">Issues</a>
+            </li> 
+            <li class="nav-item px-2">
+                <a class="nav-link <c:if test="${currentPage == 'defect-management'}">active</c:if>"" 
+                   href="#">Defects</a>
+                </li>      
+                <li class="nav-item px-2">
+                    <a class="nav-link <c:if test="${currentPage == 'timesheet-management'}">active</c:if>"" 
+                       href="#">Timesheets</a>
+                </li>
+            </ul>
+        </div>
+
 
         <div class="navbar-collapse collapse">
             <ul class="navbar-nav navbar-align">

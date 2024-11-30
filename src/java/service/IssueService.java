@@ -6,6 +6,7 @@ package service;
 
 import context.IssueDAO;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import model.Issue;
 import model.User;
@@ -14,7 +15,7 @@ import model.User;
  *
  * @author HuyenPTNHE160769
  */
-public class IssueService {
+public class IssueService extends BaseServive {
     private final IssueDAO issueDAO;
     
     public IssueService() {
@@ -45,5 +46,16 @@ public class IssueService {
     // Update a issue information
     public boolean updateIssue(Issue issue) throws SQLException {
         return issueDAO.updateIssue(issue);
+    }
+    
+    //Deadline cannot be before today.
+    public List<String> validateDeadline(Issue issue) {
+        List<String> errors = new ArrayList<>();
+        
+        if (!validateStartDates(issue.getDeadline())) {
+            errors.add("Deadline cannot be before today.");
+        }
+        
+        return errors;
     }
 }

@@ -18,7 +18,7 @@
         <title>Project Configs | PMS</title>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-        
+
         <link class="js-stylesheet" href="${pageContext.request.contextPath}/css/light.css" rel="stylesheet">
         <script src="${pageContext.request.contextPath}/js/settings.js"></script>
         <script>
@@ -691,7 +691,12 @@
                                                 <div class="col-md-2">
                                                     <select name="roleId" class="form-select">
                                                         <option value="">All Roles</option>
-                                                        <option value="1">Project Manager</option>
+                                                        <option  
+                                                            <c:if test="${roleId eq 1}">
+                                                                selected="selected"
+                                                            </c:if>
+                                                            value="1">Project Manager
+                                                        </option>
                                                         <c:forEach items="${listRole}" var="s">
                                                             <option 
                                                                 <c:if test="${roleId eq s.id}">
@@ -726,11 +731,14 @@
                                                            placeholder="Full Name/Username/Email" id="keywordUser" value="${keywordUser}">
                                                 </div>
 
-                                                <button type="submit" class="btn btn-primary">Search</button>
-
+                                                <div class="col-md-2">
+                                                    <button type="submit" class="btn btn-primary">Search</button>
+                                                </div>
                                             </form>
 
-                                            <a class="btn btn-primary" href="javascript:void(0);" onclick="openSettingModal(${param.id});">Create new</a>
+                                            <div class="col-md-2 d-flex justify-content-end align-items-end">
+                                                <a class="btn btn-primary" href="javascript:void(0);" onclick="openAllocationModal(${param.id}, ${user.id});">Create new</a>
+                                            </div>
                                         </div>
 
                                         <table id="datatables-multi2" class="table table-striped" style="width:100%">
@@ -767,12 +775,12 @@
                                                         </td>
                                                         <td>
                                                             <a href="javascript:void(0);" class="btn btn-info" 
-                                                               onclick="openSettingModal(${param.id}, ${al.id});">
+                                                               onclick="openAllocationModal(${param.id}, ${user.id}, ${al.id});">
                                                                 <i class="align-middle" data-feather="edit"></i>
                                                             </a>
 
                                                             <c:if test="${al.status eq 'false'}">
-                                                                <a href="<%=request.getContextPath()%>/change-status-project-type-setting?id=${type.id}&status=${type.status}&typeId=${projectType.id}"
+                                                                <a href="<%=request.getContextPath()%>/change-status-allocation?id=${al.id}&status=${al.status}&projectId=${param.id}&userId=${user.id}"
                                                                    class="btn btn-success"
                                                                    onclick="return confirm('Are you sure you want to activate this allocation?');">
                                                                     <i class="fas fa-check"></i>
@@ -780,7 +788,7 @@
                                                             </c:if>
 
                                                             <c:if test="${al.status eq 'true'}">
-                                                                <a href="<%=request.getContextPath()%>/change-status-project-type-setting?id=${type.id}&status=${type.status}&typeId=${projectType.id}"
+                                                                <a href="<%=request.getContextPath()%>/change-status-allocation?id=${al.id}&status=${al.status}&projectId=${param.id}&userId=${user.id}"
                                                                    class="btn btn-danger"
                                                                    onclick="return confirm('Are you sure you want to deactivate this allocation?');">
                                                                     <i class="fas fa-times" style="padding-left: 2px; padding-right: 2px"></i>
@@ -791,6 +799,23 @@
                                                 </c:forEach>
                                             </tbody>
                                         </table>
+                                    </div>
+
+                                    <!--Allocation Modal--> 
+                                    <div id="allocationModal" class="modal" tabindex="-1" role="dialog">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title">
+                                                        Allocation Details
+                                                    </h1>
+                                                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" onclick="closeAllocationModal();"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <!--This is where the allocation-detail.jsp will be loaded via AJAX--> 
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
 
                                 </div>
@@ -816,34 +841,163 @@
 <script src="${pageContext.request.contextPath}/js/app.js"></script>
 <script src="${pageContext.request.contextPath}/js/datatables.js"></script>
 <script>
-                                                                       feather.replace();
+                                                        feather.replace();
 
-                                                                       document.addEventListener("DOMContentLoaded", function () {
-                                                                           var datatablesMulti = $("#datatables-multi2").DataTable({
-                                                                               responsive: true,
-                                                                               paging: true,
-                                                                               searching: false,
-                                                                               info: true,
-                                                                               order: [[0, 'desc']], // Default sort by ID column in descending order
-                                                                               columnDefs: [
-                                                                                   {orderable: false, targets: 8} // Disable sorting on the 'Action' column
-                                                                               ],
-                                                                               language: {
-                                                                                   paginate: {
-                                                                                       previous: "&laquo;",
-                                                                                       next: "&raquo;"
-                                                                                   },
-                                                                                   info: "_TOTAL_ member(s) found",
-                                                                                   infoEmpty: "No member found"
-                                                                               },
-                                                                               dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
-                                                                               initComplete: function () {
-                                                                                   // Add necessary classes for alignment
-                                                                                   $('.dataTables_info').addClass('text-left fw-bolder');
-                                                                                   $('.dataTables_length').addClass('mt-2'); // Add necessary margin classes
-                                                                               }
-                                                                           });
-                                                                       });
+                                                        document.addEventListener("DOMContentLoaded", function () {
+                                                            var datatablesMulti = $("#datatables-multi2").DataTable({
+                                                                responsive: true,
+                                                                paging: true,
+                                                                searching: false,
+                                                                info: true,
+                                                                order: [[0, 'desc']], // Default sort by ID column in descending order
+                                                                columnDefs: [
+                                                                    {orderable: false, targets: 8} // Disable sorting on the 'Action' column
+                                                                ],
+                                                                language: {
+                                                                    paginate: {
+                                                                        previous: "&laquo;",
+                                                                        next: "&raquo;"
+                                                                    },
+                                                                    info: "_TOTAL_ member(s) found",
+                                                                    infoEmpty: "No member found"
+                                                                },
+                                                                dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
+                                                                initComplete: function () {
+                                                                    // Add necessary classes for alignment
+                                                                    $('.dataTables_info').addClass('text-left fw-bolder');
+                                                                    $('.dataTables_length').addClass('mt-2'); // Add necessary margin classes
+                                                                }
+                                                            });
+                                                        });
+
+                                                        function openAllocationModal(projectId, userId, id = null) {
+
+                                                            let url = '<%=request.getContextPath()%>/add-allocation?projectId=' + projectId + '&userId=' + userId; // Default for Create New
+                                                            if (id) {
+                                                                url = '<%=request.getContextPath()%>/edit-allocation?projectId=' + projectId + '&userId=' + userId + '&id=' + id; // For Edit
+                                                            }
+
+                                                            fetch(url)
+                                                                    .then(response => response.text())
+                                                                    .then(data => {
+                                                                        document.querySelector('#allocationModal .modal-body').innerHTML = data;
+                                                                        document.getElementById('allocationModal').style.display = 'block';
+                                                                    })
+                                                                    .catch(error => console.log('Error loading the form:', error));
+                                                        }
+
+                                                        function closeAllocationModal() {
+                                                            document.getElementById('allocationModal').style.display = 'none';
+                                                        }
+
+                                                        function redirectToDetailPage(projectId, userId) {
+                                                            const deptId = document.getElementById("deptDropdown").value;
+                                                            const roleId = document.getElementById("roleId").value;
+                                                            const startDate = document.getElementById("fromDate").value;
+                                                            const endDate = document.getElementById("toDate").value;
+                                                            const effort = document.getElementById("effort").value;
+                                                            const description = document.getElementById("descriptionAllocation").value;
+
+                                                            let url = 'add-allocation?projectId=' + projectId + '&userId=' + userId;
+                                                            if (deptId) {
+                                                                url += '&deptId=' + deptId;
+                                                            }
+                                                            if (roleId) {
+                                                                url += '&roleId=' + roleId;
+                                                            }
+                                                            if (startDate) {
+                                                                url += '&fromDate=' + startDate;
+                                                            }
+                                                            if (endDate) {
+                                                                url += '&toDate=' + endDate;
+                                                            }
+                                                            if (effort) {
+                                                                url += '&effort=' + effort;
+                                                            }
+                                                            if (description) {
+                                                                url += '&descriptionAllocation=' + description;
+                                                            }
+
+                                                            fetch(url)
+                                                                    .then(response => response.text())
+                                                                    .then(data => {
+                                                                        document.querySelector('#allocationModal .modal-body').innerHTML = data;
+                                                                        document.getElementById('allocationModal').style.display = 'block';
+                                                                    })
+                                                                    .catch(error => console.log('Error loading the form:', error));
+                                                        }
+
+                                                        function validateForm(event) {
+                                                            event.preventDefault(); // Ngăn không gửi form ngay lập tức
+                                                            const errorContainer = document.getElementById("errorContainer");
+                                                            const errorList = document.getElementById("errorList");
+                                                            errorList.innerHTML = ""; // Xóa thông báo lỗi cũ
+                                                            errorContainer.classList.add("d-none");
+
+                                                            const fromDate = document.getElementById("fromDate").value;
+                                                            const toDate = document.getElementById("toDate").value;
+                                                            const today = new Date().toISOString().split("T")[0];
+                                                            let hasError = false;
+
+                                                            // Kiểm tra fromDate
+                                                            if (!fromDate) {
+                                                                hasError = true;
+                                                                errorList.innerHTML += "<li>From Date is required.</li>";
+                                                            } else if (fromDate < today) {
+                                                                hasError = true;
+                                                                errorList.innerHTML += "<li>From Date cannot be earlier than today.</li>";
+                                                            }
+
+                                                            // Kiểm tra toDate
+                                                            if (toDate && toDate < fromDate) {
+                                                                hasError = true;
+                                                                errorList.innerHTML += "<li>To Date cannot be earlier than From Date.</li>";
+                                                            }
+
+                                                            // Hiển thị lỗi nếu có
+                                                            if (hasError) {
+                                                                errorContainer.classList.remove("d-none");
+                                                                return false; // Ngăn gửi form
+                                                            }
+
+                                                            // Không có lỗi, gửi form
+                                                            document.getElementById("allocationForm").submit();
+                                                        }
+
+                                                        function validateFormEdit(event) {
+                                                            event.preventDefault(); // Ngăn không gửi form ngay lập tức
+                                                            const errorContainer = document.getElementById("errorContainer");
+                                                            const errorList = document.getElementById("errorList");
+                                                            errorList.innerHTML = ""; // Xóa thông báo lỗi cũ
+                                                            errorContainer.classList.add("d-none");
+
+                                                            const fromDate = document.getElementById("fromDate").value;
+                                                            const toDate = document.getElementById("toDate").value;
+                                                            const today = new Date().toISOString().split("T")[0];
+                                                            let hasError = false;
+
+                                                            // Kiểm tra fromDate
+                                                            if (!fromDate) {
+                                                                hasError = true;
+                                                                errorList.innerHTML += "<li>From Date is required.</li>";
+                                                            }
+
+                                                            // Kiểm tra toDate
+                                                            if (toDate && toDate < fromDate) {
+                                                                hasError = true;
+                                                                errorList.innerHTML += "<li>To Date cannot be earlier than From Date.</li>";
+                                                            }
+
+                                                            // Hiển thị lỗi nếu có
+                                                            if (hasError) {
+                                                                errorContainer.classList.remove("d-none");
+                                                                return false; // Ngăn gửi form
+                                                            }
+
+                                                            // Không có lỗi, gửi form
+                                                            document.getElementById("allocationForm").submit();
+                                                        }
+
 </script>
 
 </body>

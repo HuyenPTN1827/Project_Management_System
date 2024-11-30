@@ -4,6 +4,7 @@
  */
 package service;
 
+import java.time.LocalDate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,5 +47,18 @@ public class BaseServive {
         Matcher matcher = pattern.matcher(password);
         return matcher.matches();
     }
+
+    //Start date cannot be before today
+    public boolean validateStartDates(LocalDate startDate) {
+        LocalDate today = LocalDate.now();
+        return (startDate != null && !startDate.isBefore(today));
+    }
     
+    //End date cannot be before start date
+    public boolean validateEndDates(LocalDate startDate, LocalDate endDate) {
+        if (endDate == null) {
+            return true; // Accept empty endDate
+        }
+        return (startDate != null && !endDate.isBefore(startDate));
+    }
 }

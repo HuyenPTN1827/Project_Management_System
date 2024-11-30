@@ -205,8 +205,8 @@ public class ProjectListController extends HttpServlet {
 
             // Gán các giá trị cho allocation
             allocation.setCreatedBy(userId);
-            allocation.setCreatedAt(new java.util.Date());  // Thiết lập thời gian tạo
-            allocation.setStartDate(java.sql.Date.valueOf(LocalDate.parse(startDateString))); // Ngày bắt đầu
+//            allocation.setCreatedAt(new java.util.Date());  // Thiết lập thời gian tạo
+//            allocation.setStartDate(java.sql.Date.valueOf(LocalDate.parse(startDateString))); // Ngày bắt đầu
             allocation.setDeptId(Integer.parseInt(departmentIdString));
             allocation.setUserId(Integer.parseInt(projectManagerIdString));
             allocation.setProjectRole(4); // Giả sử project_role là 4

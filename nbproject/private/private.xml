@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+        <file>
+            <url>src/java/context/ProjectConfigDAO.java</url>
+            <bookmark id="1">
+                <name/>
+                <line>598</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Git/Project/Project_Management_System/web/WEB-INF/admin/project-type-config.jsp</file>
-            <file>file:/D:/Git/Project/Project_Management_System/src/java/controller/DepartmentController.java</file>
-            <file>file:/D:/Git/Project/Project_Management_System/src/java/service/DepartmentService.java</file>
+            <file>file:/D:/Git/Project/Project_Management_System/web/WEB-INF/member/allocation-detail.jsp</file>
+            <file>file:/D:/Git/Project/Project_Management_System/src/java/controller/ProjectConfigController.java</file>
+            <file>file:/D:/Git/Project/Project_Management_System/src/java/service/BaseServive.java</file>
             <file>file:/D:/Git/Project/Project_Management_System/src/java/context/ProjectConfigDAO.java</file>
-            <file>file:/D:/Git/Project/Project_Management_System/src/java/context/DepartmentDAO.java</file>
+            <file>file:/D:/Git/Project/Project_Management_System/src/java/controller/IssueController.java</file>
+            <file>file:/D:/Git/Project/Project_Management_System/web/WEB-INF/component/sidebar-admin.jsp</file>
+            <file>file:/D:/Git/Project/Project_Management_System/src/java/controller/ProjectTypeController.java</file>
             <file>file:/D:/Git/Project/Project_Management_System/src/java/model/Allocation.java</file>
             <file>file:/D:/Git/Project/Project_Management_System/src/java/service/ProjectConfigService.java</file>
-            <file>file:/D:/Git/Project/Project_Management_System/src/java/controller/UserController.java</file>
-            <file>file:/D:/Git/Project/Project_Management_System/src/java/context/ProjectDAO.java</file>
-            <file>file:/D:/Git/Project/Project_Management_System/src/java/context/ProjectTypeDAO.java</file>
-            <file>file:/D:/Git/Project/Project_Management_System/src/java/controller/ProjectConfigController.java</file>
-            <file>file:/D:/Git/Project/Project_Management_System/src/java/controller/ProjectTypeController.java</file>
-            <file>file:/D:/Git/Project/Project_Management_System/web/WEB-INF/member/projectlist.jsp</file>
-            <file>file:/D:/Git/Project/Project_Management_System/src/java/model/Department.java</file>
+            <file>file:/D:/Git/Project/Project_Management_System/web/WEB-INF/member/issue-detail.jsp</file>
             <file>file:/D:/Git/Project/Project_Management_System/web/WEB-INF/member/project-config.jsp</file>
         </group>
     </open-files>
