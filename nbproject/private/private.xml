@@ -12,17 +12,16 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Git/Project/Project_Management_System/web/WEB-INF/member/allocation-detail.jsp</file>
-            <file>file:/D:/Git/Project/Project_Management_System/src/java/controller/ProjectConfigController.java</file>
-            <file>file:/D:/Git/Project/Project_Management_System/src/java/service/BaseServive.java</file>
-            <file>file:/D:/Git/Project/Project_Management_System/src/java/context/ProjectConfigDAO.java</file>
-            <file>file:/D:/Git/Project/Project_Management_System/src/java/controller/IssueController.java</file>
+            <file>file:/D:/Git/Project/Project_Management_System/web/css/light.css</file>
+            <file>file:/D:/Git/Project/Project_Management_System/src/java/context/UserDAO.java</file>
+            <file>file:/D:/Git/Project/Project_Management_System/web/WEB-INF/component/header.jsp</file>
+            <file>file:/D:/Git/Project/Project_Management_System/web/WEB-INF/member/dashboard.jsp</file>
+            <file>file:/D:/Git/Project/Project_Management_System/web/WEB-INF/component/sidebar.jsp</file>
+            <file>file:/D:/Git/Project/Project_Management_System/web/WEB-INF/component/sidebar-manager.jsp</file>
+            <file>file:/D:/Git/Project/Project_Management_System/src/java/controller/AuthenticationController.java</file>
             <file>file:/D:/Git/Project/Project_Management_System/web/WEB-INF/component/sidebar-admin.jsp</file>
-            <file>file:/D:/Git/Project/Project_Management_System/src/java/controller/ProjectTypeController.java</file>
-            <file>file:/D:/Git/Project/Project_Management_System/src/java/model/Allocation.java</file>
-            <file>file:/D:/Git/Project/Project_Management_System/src/java/service/ProjectConfigService.java</file>
-            <file>file:/D:/Git/Project/Project_Management_System/web/WEB-INF/member/issue-detail.jsp</file>
-            <file>file:/D:/Git/Project/Project_Management_System/web/WEB-INF/member/project-config.jsp</file>
+            <file>file:/D:/Git/Project/Project_Management_System/src/java/service/UserService.java</file>
+            <file>file:/D:/Git/Project/Project_Management_System/src/java/model/User.java</file>
         </group>
     </open-files>
 </project-private>

@@ -55,7 +55,7 @@
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
         <div class="wrapper">
             <% request.setAttribute("currentPage", "user-management"); %>
-            <jsp:include page="../component/sidebar-admin.jsp"></jsp:include>
+            <jsp:include page="../component/sidebar.jsp"></jsp:include>
                 <div class="main">
                 <jsp:include page="../component/header.jsp"></jsp:include>
 
@@ -207,7 +207,7 @@
                                                             <c:if test="${user.status eq '3'}">
                                                                 <a href="<%=request.getContextPath()%>/edit-user?id=${user.id}"
                                                                    class="btn btn-info"><i class="align-middle" data-feather="edit"></i></a>
-                                                            </c:if>
+                                                                </c:if>
                                                         </td>
                                                     </tr>
                                                 </c:forEach>
@@ -267,8 +267,8 @@
                                                                                ],
                                                                                language: {
                                                                                    paginate: {
-                                                                                       previous: "&laquo;",
-                                                                                       next: "&raquo;"
+                                                                                       previous: '<i class="align-middle" data-feather="chevron-left"></i>',
+                                                                                       next: '<i class="align-middle" data-feather="chevron-right"></i>'
                                                                                    },
                                                                                    info: "_TOTAL_ user(s) found",
                                                                                    infoEmpty: "No user found"
@@ -278,7 +278,15 @@
                                                                                    // Add necessary classes for alignment
                                                                                    $('.dataTables_info').addClass('text-left fw-bolder');
                                                                                    $('.dataTables_length').addClass('mt-2'); // Add necessary margin classes
+
+                                                                                   // Replace Feather icons after DataTable initializes
+                                                                                   feather.replace();
                                                                                }
+                                                                           });
+
+                                                                           // Replace Feather icons in case of dynamic changes
+                                                                           datatablesMulti.on('draw', function () {
+                                                                               feather.replace();
                                                                            });
                                                                        });
         </script>

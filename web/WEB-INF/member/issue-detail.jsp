@@ -79,7 +79,7 @@
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
         <div class="wrapper">
             <% request.setAttribute("currentPage", "issue-management"); %>
-            <jsp:include page="../component/sidebar-manager.jsp"></jsp:include>
+            <jsp:include page="../component/sidebar.jsp"></jsp:include>
                 <div class="main">
                 <jsp:include page="../component/header.jsp"></jsp:include>
 

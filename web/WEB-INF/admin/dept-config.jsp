@@ -95,7 +95,7 @@
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
         <div class="wrapper">
             <% request.setAttribute("currentPage", "department-management"); %>
-            <jsp:include page="../component/sidebar-admin.jsp"></jsp:include>
+            <jsp:include page="../component/sidebar.jsp"></jsp:include>
                 <div class="main">
                 <jsp:include page="../component/header.jsp"></jsp:include>
 
@@ -392,8 +392,8 @@
                                                             ],
                                                             language: {
                                                                 paginate: {
-                                                                    previous: "&laquo;",
-                                                                    next: "&raquo;"
+                                                                    previous: '<i class="align-middle" data-feather="chevron-left"></i>',
+                                                                    next: '<i class="align-middle" data-feather="chevron-right"></i>'
                                                                 },
                                                                 info: "_TOTAL_ manager(s) found",
                                                                 infoEmpty: "No manager found"
@@ -403,7 +403,15 @@
                                                                 // Add necessary classes for alignment
                                                                 $('.dataTables_info').addClass('text-left fw-bolder');
                                                                 $('.dataTables_length').addClass('mt-2'); // Add necessary margin classes
+
+                                                                // Replace Feather icons after DataTable initializes
+                                                                feather.replace();
                                                             }
+                                                        });
+
+                                                        // Replace Feather icons in case of dynamic changes
+                                                        datatablesMulti.on('draw', function () {
+                                                            feather.replace();
                                                         });
                                                     });
         </script>

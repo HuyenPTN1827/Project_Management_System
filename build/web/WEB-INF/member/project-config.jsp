@@ -17,7 +17,7 @@
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/icons/icon-48x48.png" />
         <title>Project Configs | PMS</title>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">-->
 
         <link class="js-stylesheet" href="${pageContext.request.contextPath}/css/light.css" rel="stylesheet">
         <script src="${pageContext.request.contextPath}/js/settings.js"></script>
@@ -33,33 +33,22 @@
     </head>
     <body>
         <div class="wrapper">
-            <jsp:include page="../component/sidebar-manager.jsp"></jsp:include>
+
+            <jsp:include page="../component/sidebar.jsp"></jsp:include>
                 <div class="main">
                 <jsp:include page="../component/header.jsp"></jsp:include>
                     <main class="content">
                         <div class="container-fluid p-0">
-                            <!-- Page Title and Project Dropdown -->
-                            <div class="mb-3 d-flex justify-content-between align-items-center">
-                                <h1 class="h1 d-inline align-middle">Project Details</h1>
-                                <div>
-                                    <form action="${pageContext.request.contextPath}/projectconfig" method="get">
-                                    <select name="id" class="form-select" style="width: 300px;" onchange="this.form.submit()">
-                                        <option value="">Select Project</option>
-                                        <c:forEach var="project" items="${projectList}">
-                                            <option value="${project.id}" ${project.id == param.id ? 'selected' : ''}>
-                                                ${project.name}
-                                            </option>
-                                        </c:forEach>
-                                    </select>
-                                </form>
+                            <a href="<%=request.getContextPath()%>/projectlist">Project Management > </a>
 
-                            </div>
+                        <div class="mt-2 mb-3 d-flex justify-content-between align-items-center">
+                            <h1 class="h1 d-inline align-middle">Project Details</h1>
                         </div>
 
                         <!-- Tabs Section -->
                         <div class="card">
-                            <div class="card-header pb-0">
-                                <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                            <div class="card-header">
+                                <ul class="nav nav-tabs" role="tablist">
 
                                     <li class="nav-item">
                                         <a class="nav-link ${activeTab == 'detail' ? 'active' : ''}" data-bs-toggle="tab" href="#project" role="tab">Project</a>
@@ -74,9 +63,22 @@
                                     </li>
 
                                     <li class="nav-item">
-                                        <a class="nav-link ${activeTab == 'milestone' ? 'active' : ''}" data-bs-toggle="tab" href="#team" role="tab" >Teams</a>
+                                        <a class="nav-link ${activeTab == 'team' ? 'active' : ''}" data-bs-toggle="tab" href="#team" role="tab" >Teams</a>
                                     </li>
 
+                                    <li class="nav-item col-md-3 ms-auto">
+                                        <form action="${pageContext.request.contextPath}/projectconfig" method="get">
+                                            <input type="hidden" name="activeTab" value="${activeTab}">
+                                            <select name="id" class="form-select" onchange="this.form.submit()">
+                                                <option value="">Select Project</option>
+                                                <c:forEach var="project" items="${projectList}">
+                                                    <option value="${project.id}" ${project.id == param.id ? 'selected' : ''}>
+                                                        ${project.name}
+                                                    </option>
+                                                </c:forEach>
+                                            </select>
+                                        </form>
+                                    </li>
 
                                 </ul>
                             </div>
@@ -229,7 +231,7 @@
                                                 <textarea class="form-control" id="description" name="description" rows="3">${project.details}</textarea>
                                             </div>
 
-                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                            <button type="submit" class="btn btn-success">Submit</button>
                                         </form>
                                     </div>
 
@@ -463,48 +465,48 @@
 
 
                                         <script>
-                                                                        document.getElementById("addNewMilestoneButton").addEventListener("click", function (event) {
-                                                                            event.preventDefault(); // Ngăn chặn hành động mặc định của liên kết
+                                            document.getElementById("addNewMilestoneButton").addEventListener("click", function (event) {
+                                                event.preventDefault(); // Ngăn chặn hành động mặc định của liên kết
 
-                                                                            // Mở modal
-                                                                            const modal = new bootstrap.Modal(document.getElementById("addMilestoneModal"));
-                                                                            modal.show(); // Hiển thị modal
-                                                                        });
+                                                // Mở modal
+                                                const modal = new bootstrap.Modal(document.getElementById("addMilestoneModal"));
+                                                modal.show(); // Hiển thị modal
+                                            });
 
-                                                                        // Hàm để lấy thời gian hiện tại và định dạng nó
-                                                                        function getCurrentDateTime() {
-                                                                            const now = new Date();
-                                                                            const options = {
-                                                                                year: 'numeric',
-                                                                                month: '2-digit',
-                                                                                day: '2-digit',
-                                                                                hour: '2-digit',
-                                                                                minute: '2-digit',
-                                                                                second: '2-digit',
-                                                                                hour12: false
-                                                                            };
-                                                                            // Định dạng ngày tháng theo "dd/MM/yyyy hh:mm:ss"
-                                                                            const formattedDate = now.toLocaleDateString('en-GB', options).replace(',', '');
-                                                                            return formattedDate.replace(/\/|,|\./g, '/'); // Định dạng dd/MM/yyyy hh:mm:ss
-                                                                        }
+                                            // Hàm để lấy thời gian hiện tại và định dạng nó
+                                            function getCurrentDateTime() {
+                                                const now = new Date();
+                                                const options = {
+                                                    year: 'numeric',
+                                                    month: '2-digit',
+                                                    day: '2-digit',
+                                                    hour: '2-digit',
+                                                    minute: '2-digit',
+                                                    second: '2-digit',
+                                                    hour12: false
+                                                };
+                                                // Định dạng ngày tháng theo "dd/MM/yyyy hh:mm:ss"
+                                                const formattedDate = now.toLocaleDateString('en-GB', options).replace(',', '');
+                                                return formattedDate.replace(/\/|,|\./g, '/'); // Định dạng dd/MM/yyyy hh:mm:ss
+                                            }
 
-                                                                        // Gán giá trị vào trường lastUpdated
-                                                                        document.addEventListener("DOMContentLoaded", function () {
-                                                                            const lastUpdatedField = document.getElementById("lastUpdated");
-                                                                            if (lastUpdatedField) {
-                                                                                lastUpdatedField.value = getCurrentDateTime();
-                                                                            }
-                                                                        });
-                                                                        function updateProjectId() {
-                                                                            // Lấy phần tử select của parent milestone
-                                                                            var parentMilestoneSelect = document.getElementById("parentMilestone");
-                                                                            // Lấy option đang được chọn
-                                                                            var selectedOption = parentMilestoneSelect.options[parentMilestoneSelect.selectedIndex];
-                                                                            // Lấy projectId từ thuộc tính data-project-id
-                                                                            var projectId = selectedOption.getAttribute("data-project-id");
-                                                                            // Gán giá trị projectId vào trường ẩn
-                                                                            document.getElementById("projectId").value = projectId || "";
-                                                                        }
+                                            // Gán giá trị vào trường lastUpdated
+                                            document.addEventListener("DOMContentLoaded", function () {
+                                                const lastUpdatedField = document.getElementById("lastUpdated");
+                                                if (lastUpdatedField) {
+                                                    lastUpdatedField.value = getCurrentDateTime();
+                                                }
+                                            });
+                                            function updateProjectId() {
+                                                // Lấy phần tử select của parent milestone
+                                                var parentMilestoneSelect = document.getElementById("parentMilestone");
+                                                // Lấy option đang được chọn
+                                                var selectedOption = parentMilestoneSelect.options[parentMilestoneSelect.selectedIndex];
+                                                // Lấy projectId từ thuộc tính data-project-id
+                                                var projectId = selectedOption.getAttribute("data-project-id");
+                                                // Gán giá trị projectId vào trường ẩn
+                                                document.getElementById("projectId").value = projectId || "";
+                                            }
 
 
 
@@ -582,12 +584,12 @@
 
 
                                         <!-- Bảng Milestones -->
-                                        <table class="table table-striped">
+                                        <table id="datatables-multi" class="table table-striped" style="width:100%">
                                             <thead>
                                                 <tr>
                                                     <th>ID</th>
-                                                    <th>Project Name</th>
-                                                    <th>Milestone Name</th>
+                                                    <th>Project</th>
+                                                    <th>Milestone</th>
                                                     <th>Parent Milestone</th>
                                                     <th>Priority</th>
                                                     <th>Target Date</th>
@@ -613,18 +615,18 @@
                                                             <td>${milestone.targetDate}</td>
                                                             <td>
                                                                 <c:choose>
-                                                                    <c:when test="${milestone.status == 0}">Pending</c:when>
-                                                                    <c:when test="${milestone.status == 1}">To Do</c:when>
-                                                                    <c:when test="${milestone.status == 2}">Doing</c:when>
-                                                                    <c:when test="${milestone.status == 3}">Done</c:when>
-                                                                    <c:when test="${milestone.status == 4}">Closed</c:when>
-                                                                    <c:when test="${milestone.status == 5}">Cancelled</c:when>
+                                                                    <c:when test="${milestone.status == 0}"><span class="badge bg-secondary">Pending</span></c:when>
+                                                                    <c:when test="${milestone.status == 1}"><span class="badge bg-warning">To Do</span></c:when>
+                                                                    <c:when test="${milestone.status == 2}"><span class="badge bg-primary">Doing</span></c:when>
+                                                                    <c:when test="${milestone.status == 3}"><span class="badge bg-success">Done</span></c:when>
+                                                                    <c:when test="${milestone.status == 4}"><span class="badge bg-secondary-light">Closed</span></c:when>
+                                                                    <c:when test="${milestone.status == 5}"><span class="badge bg-danger">Cancelled</span></c:when>
                                                                     <c:otherwise>Unknown</c:otherwise>
                                                                 </c:choose>
                                                             </td>
                                                             <td>
-                                                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editMilestoneModal" 
-                                                                        onclick="loadMilestone(${milestone.id})">Edit</button>
+                                                                <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#editMilestoneModal" 
+                                                                        onclick="loadMilestone(${milestone.id})"><i class="align-middle" data-feather="edit"></i></button>
 
                                                             </td>
                                                         </tr>
@@ -831,13 +833,49 @@
 
 
 <!-- Bao gồm thư viện jQuery -->
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
 
 <script src="${pageContext.request.contextPath}/js/light.js"></script>
 <script src="${pageContext.request.contextPath}/js/app.js"></script>
 <script src="${pageContext.request.contextPath}/js/datatables.js"></script>
 <script>
-                                                        feather.replace();
+                                                        document.addEventListener("DOMContentLoaded", function () {
+                                                            var datatablesMulti = $("#datatables-multi").DataTable({
+                                                                responsive: true,
+                                                                paging: true,
+                                                                searching: false,
+                                                                info: true,
+                                                                order: [[0, 'desc']], // Default sort by ID column in descending order
+                                                                columnDefs: [
+                                                                    {orderable: false, targets: 7} // Disable sorting on the 'Action' column
+                                                                ],
+                                                                language: {
+                                                                    paginate: {
+                                                                        previous: '<i class="align-middle" data-feather="chevron-left"></i>',
+                                                                        next: '<i class="align-middle" data-feather="chevron-right"></i>'
+                                                                    },
+                                                                    info: "_TOTAL_ milestone(s) found",
+                                                                    infoEmpty: "No milestone found"
+                                                                },
+                                                                dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
+                                                                initComplete: function () {
+                                                                    // Add necessary classes for alignment
+                                                                    $('.dataTables_info').addClass('text-left fw-bolder');
+                                                                    $('.dataTables_length').addClass('mt-2'); // Add necessary margin classes
+
+                                                                    // Replace Feather icons after DataTable initializes
+                                                                    feather.replace();
+                                                                }
+                                                            });
+
+                                                            // Replace Feather icons in case of dynamic changes
+                                                            datatablesMulti.on('draw', function () {
+                                                                feather.replace();
+                                                            });
+                                                        });
 
                                                         document.addEventListener("DOMContentLoaded", function () {
                                                             var datatablesMulti = $("#datatables-multi2").DataTable({

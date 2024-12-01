@@ -19469,6 +19469,8 @@ table.dataTable.fixedHeader-locked{
     width:7ch\0 
 
 
+
+
 }
 .flatpickr-current-month input.cur-year{
     -webkit-appearance:textfield;
@@ -23736,4 +23738,12 @@ body[data-theme=colored] .simplebar-scrollbar:before{
 
 .modal-body {
     padding: 20px;
+}
+
+.custom-logo {
+    font-size: 4rem; /* Tăng kích cỡ chữ lớn hơn h1 (h1 thường ~2-3rem) */
+    font-weight: bold; /* Chữ đậm hơn */
+    color: #007bff; /* Màu xanh theo tông Bootstrap primary */
+    text-transform: uppercase; /* In hoa chữ */
+    letter-spacing: 0.1rem; /* Thêm khoảng cách giữa các ký tự */
 }
