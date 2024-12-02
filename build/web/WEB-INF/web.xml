@@ -318,11 +318,23 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ProjectConfigController</servlet-name>
-        <url-pattern>/add-allocation</url-pattern>
+        <url-pattern>/add-milestone</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ProjectConfigController</servlet-name>
-        <url-pattern>/get-members</url-pattern>
+        <url-pattern>/insert-milestone</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectConfigController</servlet-name>
+        <url-pattern>/edit-milestone</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectConfigController</servlet-name>
+        <url-pattern>/update-milestone</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectConfigController</servlet-name>
+        <url-pattern>/add-allocation</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ProjectConfigController</servlet-name>

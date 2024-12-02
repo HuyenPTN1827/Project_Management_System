@@ -110,11 +110,11 @@ public class ProjectConfigService extends BaseServive {
         List<String> errors = new ArrayList<>();
         
         if (!validateStartDates(allocation.getStartDate())) {
-            errors.add("Start date cannot be before today.");
+            errors.add("Start Date cannot be earlier than today.");
         }
 
         if (!validateEndDates(allocation.getStartDate(), allocation.getEndDate())) {
-            errors.add("End date cannot be before start date.");
+            errors.add("End Date cannot be earlier than Start Date.");
         }
         
         return errors;

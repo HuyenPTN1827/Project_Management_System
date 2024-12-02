@@ -83,6 +83,15 @@ public class ProjectConfigController extends HttpServlet {
                 case "/addmilestone" ->
                     addMilestone(request, response);
 
+                case "/add-milestone" ->
+                    showNewFormMilestone(request, response); // Show form insert milestone
+                case "/insert-milestone" ->
+                    insertMilestone(request, response); // Insert milestone
+                case "/edit-milestone" ->
+                    showEditFormMilestone(request, response); // Show form edit milestone
+                case "/update-milestone" ->
+                    updateMilestone(request, response); // Update milestone
+
                 // Allocation Management
                 case "/add-allocation" ->
                     showNewFormAllocation(request, response); // Show form insert allocation
@@ -778,5 +787,30 @@ public class ProjectConfigController extends HttpServlet {
 
         projectConfigService.changeStatusAllocation(allocation);
         response.sendRedirect("projectconfig?id=" + projectId + "&activeTab=allocation");
+    }
+
+    private void showNewFormMilestone(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int projectId = Integer.parseInt(request.getParameter("projectId"));
+        List<Milestone> parentMilestones = projectConfigService.getAllMilestonesParent();
+
+        request.setAttribute("projectId", projectId);
+        request.setAttribute("parentMilestones", parentMilestones);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/milestone-detail.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void insertMilestone(HttpServletRequest request, HttpServletResponse response) {
+
+    }
+
+    private void showEditFormMilestone(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        int projectId = Integer.parseInt(request.getParameter("projectId"));
+        List<Milestone> parentMilestones = projectConfigService.getAllMilestonesParent();
+
+        request.setAttribute("projectId", projectId);
+        request.setAttribute("parentMilestones", parentMilestones);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/milestone-detail.jsp");
+        dispatcher.forward(request, response);
     }
 }

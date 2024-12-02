@@ -145,9 +145,10 @@
                                     <div class="card-body">
                                         <div class="tab-content" id="myTabContent">
                                             <!-- Department Details -->
-                                            <div class="tab-pane fade ${activeTab == 'detail' ? 'show active' : ''}" id="department-detail" role="tabpanel" aria-labelledby="department-manager-tab">
+                                            <div class="tab-pane fade ${activeTab == 'detail' ? 'show active' : ''}" id="department-detail" role="tabpanel" aria-labelledby="department-detail-tab">
                                                 <div class="row">
                                                     <div class="col-md-12 col-xl-12">
+
                                                         <c:if test="${dept != null}">
                                                             <form action="update-department" method="post" class="row">
                                                                 <input type="hidden" name="id" value="${dept.id}"/>
@@ -418,23 +419,22 @@
 
         <script>
             document.addEventListener("DOMContentLoaded", function (event) {
-                setTimeout(function () {
-                    if (localStorage.getItem('popState') !== 'shown') {
-                        window.notyf.open({
-                            type: "success",
-                            message: "Get access to all 500+ components and 45+ pages with AdminKit PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
-                            duration: 10000,
-                            ripple: true,
-                            dismissible: false,
-                            position: {
-                                x: "left",
-                                y: "bottom"
-                            }
-                        });
-
-                        localStorage.setItem('popState', 'shown');
-                    }
-                }, 15000);
+                // Check URL for 'success' parameter
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('update') === 'success') {
+                    // Show success notification
+                    window.notyf.open({
+                        type: "success",
+                        message: "Department details updated successfully.",
+                        duration: 5000, // Adjust duration as needed
+                        ripple: true,
+                        dismissible: true,
+                        position: {
+                            x: "right",
+                            y: "top"
+                        }
+                    });
+                }
             });
         </script>
     </body>

@@ -218,8 +218,9 @@ public class DepartmentController extends HttpServlet {
         d.setStatus(status);
 
         deptService.updateDepartment(d, parentId);
+//        request.setAttribute("message", "Department details updated successfully.");
         // Redirect to user-management url
-        response.sendRedirect("department-config?id=" + id);
+        response.sendRedirect("department-config?id=" + id + "&update=success");
     }
 
 //    HuyenPTNHE160769 

@@ -73,8 +73,8 @@
                                                     <th>ID</th>
                                                     <th>Name</th>
                                                     <th>Code</th>
-                                                    <th>Type Name</th>
-                                                    <th>Department Name</th>
+                                                    <th>Project Type</th>
+                                                    <th>Department</th>
                                                     <th>Status</th>
                                                     <th>Actions</th>
                                                 </tr>

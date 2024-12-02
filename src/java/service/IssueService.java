@@ -53,7 +53,7 @@ public class IssueService extends BaseServive {
         List<String> errors = new ArrayList<>();
         
         if (!validateStartDates(issue.getDeadline())) {
-            errors.add("Deadline cannot be before today.");
+            errors.add("Deadline cannot be earlier than today.");
         }
         
         return errors;

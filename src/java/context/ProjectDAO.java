@@ -434,7 +434,7 @@ public class ProjectDAO {
         List<Project> project = new ArrayList<>();
 
         String sql = """
-                     SELECT p.id, p.name, p.code FROM pms.project p 
+                     SELECT DISTINCT p.id, p.name, p.code FROM pms.project p 
                      JOIN pms.allocation a ON p.id = a.project_id 
                      WHERE a.user_id = ? 
                      ORDER BY p.id DESC;""";
@@ -459,7 +459,7 @@ public class ProjectDAO {
     public List<Milestone> getMilestonesByProjectId(int userId, Integer projectId) {
         List<Milestone> milestones = new ArrayList<>();
         String sql = """
-                     SELECT m.id, m.name FROM pms.milestone m
+                     SELECT DISTINCT m.id, m.name FROM pms.milestone m
                      JOIN pms.allocation a ON m.project_id = a.project_id
                      WHERE a.user_id = ?""";
         if (projectId != null) {
