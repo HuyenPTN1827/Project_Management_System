@@ -22,7 +22,12 @@ import service.UserService;
  */
 @WebServlet(name = "ProfileController", urlPatterns = {"/member-profilecontroller"})
 public class ProfileController extends HttpServlet {
-
+private UserService userService;
+ @Override
+    public void init() throws ServletException {
+        userService = new UserService();
+        
+    }
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -61,30 +66,41 @@ public class ProfileController extends HttpServlet {
     //    BachHD
     //    28/09/2024 
     // hiển thị trang hồ sơ của người dùng
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Lấy đối tượng HttpSession từ request
-        HttpSession session = request.getSession(false); // Không tạo session mới nếu không tồn tại
-        if (session != null) {
-            // Lấy người dùng từ session
-            User user = (User) session.getAttribute("user");
+ @Override
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    HttpSession session = request.getSession(false);  // Kiểm tra xem session có tồn tại không
+    if (session != null) {
+        User user = (User) session.getAttribute("user");  // Lấy đối tượng user từ session
 
-            if (user != null) {
-                // Set thông tin người dùng vào request để truyền tới profile.jsp
-                request.setAttribute("memberProfile", user);
+        if (user != null) {
+            // Lấy thông tin người dùng với role từ UserService
+            UserService userService = new UserService();
+            User userWithRole = userService.getUserBySessionId(user.getId());
 
-                // Chuyển tiếp sang trang profile.jsp
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/profile.jsp");
-                dispatcher.forward(request, response);
+            if (userWithRole != null) {
+                // Nếu tìm thấy thông tin người dùng và role, thêm vào request
+                request.setAttribute("userProfile", userWithRole);
             } else {
-                // Nếu không tìm thấy người dùng trong session, chuyển hướng về trang đăng nhập
-                response.sendRedirect(request.getContextPath() + "/login");
+                // Nếu không tìm thấy thông tin người dùng, hiển thị lỗi
+                request.setAttribute("error", "User not found.");
             }
+
+            // Chuyển tiếp request đến profile.jsp
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/profile.jsp");
+            dispatcher.forward(request, response);
         } else {
-            // Nếu không có session, chuyển hướng về trang đăng nhập
+            // Nếu không có user trong session, chuyển hướng đến login
             response.sendRedirect(request.getContextPath() + "/login");
         }
+    } else {
+        // Nếu không có session, chuyển hướng đến login
+        response.sendRedirect(request.getContextPath() + "/login");
     }
+}
+
+
+
+
 
     /**
      * Handles the HTTP <code>POST</code> method.

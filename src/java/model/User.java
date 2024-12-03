@@ -22,6 +22,7 @@ public class User implements Serializable {
     private String notes;
     private int status;
     private int role_id;
+    private String role_name;
     private String username;
     private Department dept;
     private Setting setting;
@@ -149,5 +150,14 @@ public class User implements Serializable {
         this.settings = settings;
     }
 
+    public String getRole_name() {
+        return role_name;
+    }
+
+    public void setRole_name(String role_name) {
+        this.role_name = role_name;
+    }
+    
+    
    
 }

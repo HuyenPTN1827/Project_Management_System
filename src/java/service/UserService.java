@@ -158,4 +158,10 @@ public boolean validatePassword(String password) {
         return matcher.matches();
     }
 
+// Lấy thông tin người dùng theo sessionId
+   
+     public User getUserBySessionId(int userId) {
+        return userDAO.getUserBySessionId(userId);
+    }
+
 }

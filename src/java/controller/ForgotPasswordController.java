@@ -50,7 +50,7 @@ public class ForgotPasswordController extends HttpServlet {
         User user = userService.selectUserByEmail(email);
         if (user == null) {
             // Xử lý nếu email không được tìm thấy
-            request.setAttribute("errorMessage", "Email không tồn tại trong hệ thống.");
+            request.setAttribute("errorMessage", "Email does not exist in the system.");
             RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/forgotpassword.jsp");
             dispatcher.forward(request, response);
             return;
@@ -103,9 +103,9 @@ public class ForgotPasswordController extends HttpServlet {
             message.setSubject("Your OTP Code");
             message.setText("Your OTP code is: " + otp);
             Transport.send(message);
-            System.out.println("OTP đã được gửi đến email: " + email);
+            System.out.println("OTP has been sent to email: " + email);
         } catch (MessagingException e) {
-            System.out.println("Gửi email thất bại. Lỗi: " + e.getMessage());
+            System.out.println("Email sending failed. Error: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }

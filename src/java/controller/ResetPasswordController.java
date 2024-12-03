@@ -96,12 +96,12 @@ public class ResetPasswordController extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/member/login.jsp").forward(request, response);
             } else {
                 // Xử lý lỗi
-                request.setAttribute("errorMessage", "Cập nhật mật khẩu không thành công.");
+                request.setAttribute("errorMessage", "Password update failed.");
                 request.getRequestDispatcher("/WEB-INF/member/resetpassword.jsp").forward(request, response);
             }
         } else {
             // Xử lý nếu OTP không hợp lệ
-            request.setAttribute("errorMessage", "OTP không hợp lệ.");
+            request.setAttribute("errorMessage", "Invalid OTP.");
             request.getRequestDispatcher("/WEB-INF/member/resetpassword.jsp").forward(request, response);
         }
     }

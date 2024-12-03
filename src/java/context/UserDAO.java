@@ -533,6 +533,36 @@ public class UserDAO {
         }
         return false;
     }
+    
+    public User getUserBySessionId(int userId) {
+    String query = "SELECT u.id, u.username, u.password, u.full_name, u.email, u.role_id, u.mobile, s.name AS role_name " +
+                   "FROM user u " +
+                   "JOIN setting s ON u.role_id = s.id " +
+                   "WHERE u.id = ?";
+    try (Connection con = BaseDAO.getConnection(); 
+         PreparedStatement ps = con.prepareStatement(query)) {
+        ps.setInt(1, userId);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                // Khởi tạo đối tượng User từ kết quả truy vấn
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setFull_name(rs.getString("full_name"));
+                user.setEmail(rs.getString("email"));
+                user.setMobile(rs.getString("mobile"));
+                user.setRole_id(rs.getInt("role_id"));
+                user.setRole_name(rs.getString("role_name")); // Lấy thêm tên vai trò
+                return user;
+            }
+        }
+    } catch (SQLException e) {
+        BaseDAO.printSQLException(e);
+    }
+    return null; // Trả về null nếu không tìm thấy hoặc xảy ra lỗi
+}
+
 
 }
 
