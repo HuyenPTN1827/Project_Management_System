@@ -79,7 +79,7 @@
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
         <div class="wrapper">
             <% request.setAttribute("currentPage", "issue-management"); %>
-            <jsp:include page="../component/sidebar-manager.jsp"></jsp:include>
+            <jsp:include page="../component/sidebar.jsp"></jsp:include>
                 <div class="main">
                 <jsp:include page="../component/header.jsp"></jsp:include>
 
@@ -96,8 +96,18 @@
                                     <div class="card">
                                         <div class="card-body">
 
+                                            <c:if test="${not empty errorMessages}">
+                                                <div class="alert alert-danger pt-3 pe-3 ps-3">
+                                                    <ul>
+                                                        <c:forEach items="${errorMessages}" var="error" >
+                                                            <li>${error}</li>
+                                                            </c:forEach>
+                                                    </ul>
+                                                </div>
+                                            </c:if>
+                                            
                                             <form action="insert-issue" method="post" class="row">
-                                                <input type="hidden" name="assigner" value="${userId}">
+                                                <input type="hidden" name="userId" value="${userId}">
 
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label">Issue <span style="color: red;">*</span></label>

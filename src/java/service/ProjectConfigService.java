@@ -2,6 +2,8 @@ package service;
 
 import context.ProjectConfigDAO;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import model.Milestone;
 import java.util.List;
 import model.Allocation;
@@ -10,7 +12,7 @@ import model.Team;
 import model.TeamMember;
 import model.User;
 
-public class ProjectConfigService {
+public class ProjectConfigService extends BaseServive {
 
     private ProjectConfigDAO projectConfigDAO;
 
@@ -77,39 +79,44 @@ public class ProjectConfigService {
         return projectConfigDAO.updateMilestone(milestone);
     }
 
-    
     //HuyenPTNHE160769
     //Get all allocations
     public List<Allocation> getAllAllocations(int projectId, String keyword, Integer deptId, Integer roleId, Boolean status) {
         return projectConfigDAO.selectAllAllocations(projectId, keyword, deptId, roleId, status);
     }
-//
-//    // HuyenPTNHE160769
-//    // 31/10/2024
-//    // Admin add new dept user information
-//    public int insertDepartmentUser(Allocation deptUser) throws SQLException {
-//        return deptDAO.insertDepartmentUser(deptUser);
-//    }
-//
-//    // HuyenPTNHE160769
-//    // 31/10/2024
-//    // Admin get a dept user information by id
-//    public Allocation getDepartmentUserById(int id) {
-//        return deptDAO.selectDepartmentUserByID(id);
-//    }
-//
-//    // HuyenPTNHE160769
-//    // 31/10/2024
-//    // Admin update a dept user information
-//    public boolean updateDepartmentUser(Allocation deptUser) throws SQLException {
-//        return deptDAO.updateDepartmentUser(deptUser);
-//    }
-//
-//    // HuyenPTNHE160769
-//    // 1/10/2024
-//    // Admin change status of a dept user
-//    public boolean changeStatusDepartmentUser(Department_User deptUser) throws SQLException {
-//        return deptDAO.changeStatusDepartmentUser(deptUser);
-//    }
 
+    // Add new allocation information
+    public int insertAllocation(Allocation allocation) throws SQLException {
+        return projectConfigDAO.insertAllocation(allocation);
+    }
+
+    // Get an allocation information by id
+    public Allocation getAllocationById(int id) {
+        return projectConfigDAO.selectAllocationByID(id);
+    }
+
+    // Update an allocation information
+    public boolean updateAllocation(Allocation allocation) throws SQLException {
+        return projectConfigDAO.updateAllocation(allocation);
+    }
+
+    // Change status of an allocation
+    public boolean changeStatusAllocation(Allocation allocation) throws SQLException {
+        return projectConfigDAO.changeStatusAllocation(allocation);
+    }
+
+    //Start date cannot be before today, End date cannot be before start date
+    public List<String> validateAllocationDate(Allocation allocation) {
+        List<String> errors = new ArrayList<>();
+        
+        if (!validateStartDates(allocation.getStartDate())) {
+            errors.add("Start Date cannot be earlier than today.");
+        }
+
+        if (!validateEndDates(allocation.getStartDate(), allocation.getEndDate())) {
+            errors.add("End Date cannot be earlier than Start Date.");
+        }
+        
+        return errors;
+    }
 }

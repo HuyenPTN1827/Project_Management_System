@@ -249,7 +249,7 @@ public class ProjectDAO {
         // Chuỗi SQL để chèn vào bảng allocation (dữ liệu liên quan đến phân bổ)
         String allocationSql = "INSERT INTO allocation (created_by, created_at, last_updated, start_date, "
                 + "status, dept_id, user_id, project_id, project_role) "
-                + "VALUES (?, ?, ?, ?, 1, ?, ?, ?, ?)"; // 'active' là giá trị cố định cho cột status
+                + "VALUES (?, NOW(), NOW(), CURDATE(), 1, ?, ?, ?, ?)"; // 'active' là giá trị cố định cho cột status
 
         // Chuỗi SQL để chèn vào bảng milestone
         String sqlMilestone = "INSERT INTO milestone (project_id, name, status, created_by, last_updated, parent_milestone, priority, target_date, actual_date) "
@@ -299,13 +299,10 @@ public class ProjectDAO {
                             // Sau khi chèn dự án, chèn dữ liệu phân bổ vào bảng allocation
                             try (PreparedStatement stmAllocation = cnt.prepareStatement(allocationSql)) {
                                 stmAllocation.setInt(1, allocation.getCreatedBy()); // created_by
-                                stmAllocation.setTimestamp(2, new java.sql.Timestamp(allocation.getCreatedAt().getTime())); // created_at
-                                stmAllocation.setTimestamp(3, new java.sql.Timestamp(System.currentTimeMillis())); // last_updated
-                                stmAllocation.setDate(4, new java.sql.Date(allocation.getStartDate().getTime())); // start_date
-                                stmAllocation.setInt(5, allocation.getDeptId()); // dept_id
-                                stmAllocation.setInt(6, allocation.getUserId()); // user_id
-                                stmAllocation.setInt(7, projectId); // project_id
-                                stmAllocation.setInt(8, 1); // project_role
+                                stmAllocation.setInt(2, allocation.getDeptId()); // dept_id
+                                stmAllocation.setInt(3, allocation.getUserId()); // user_id
+                                stmAllocation.setInt(4, projectId); // project_id
+                                stmAllocation.setInt(5, 1); // project_role
 
                                 // Thực thi câu lệnh chèn vào bảng allocation
                                 int allocationRows = stmAllocation.executeUpdate();
@@ -437,7 +434,7 @@ public class ProjectDAO {
         List<Project> project = new ArrayList<>();
 
         String sql = """
-                     SELECT p.id, p.name, p.code FROM pms.project p 
+                     SELECT DISTINCT p.id, p.name, p.code FROM pms.project p 
                      JOIN pms.allocation a ON p.id = a.project_id 
                      WHERE a.user_id = ? 
                      ORDER BY p.id DESC;""";
@@ -462,7 +459,7 @@ public class ProjectDAO {
     public List<Milestone> getMilestonesByProjectId(int userId, Integer projectId) {
         List<Milestone> milestones = new ArrayList<>();
         String sql = """
-                     SELECT m.id, m.name FROM pms.milestone m
+                     SELECT DISTINCT m.id, m.name FROM pms.milestone m
                      JOIN pms.allocation a ON m.project_id = a.project_id
                      WHERE a.user_id = ?""";
         if (projectId != null) {

@@ -95,7 +95,7 @@
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
         <div class="wrapper">
             <% request.setAttribute("currentPage", "department-management"); %>
-            <jsp:include page="../component/sidebar-admin.jsp"></jsp:include>
+            <jsp:include page="../component/sidebar.jsp"></jsp:include>
                 <div class="main">
                 <jsp:include page="../component/header.jsp"></jsp:include>
 
@@ -145,9 +145,10 @@
                                     <div class="card-body">
                                         <div class="tab-content" id="myTabContent">
                                             <!-- Department Details -->
-                                            <div class="tab-pane fade ${activeTab == 'detail' ? 'show active' : ''}" id="department-detail" role="tabpanel" aria-labelledby="department-manager-tab">
+                                            <div class="tab-pane fade ${activeTab == 'detail' ? 'show active' : ''}" id="department-detail" role="tabpanel" aria-labelledby="department-detail-tab">
                                                 <div class="row">
                                                     <div class="col-md-12 col-xl-12">
+
                                                         <c:if test="${dept != null}">
                                                             <form action="update-department" method="post" class="row">
                                                                 <input type="hidden" name="id" value="${dept.id}"/>
@@ -392,8 +393,8 @@
                                                             ],
                                                             language: {
                                                                 paginate: {
-                                                                    previous: "&laquo;",
-                                                                    next: "&raquo;"
+                                                                    previous: '<i class="align-middle" data-feather="chevron-left"></i>',
+                                                                    next: '<i class="align-middle" data-feather="chevron-right"></i>'
                                                                 },
                                                                 info: "_TOTAL_ manager(s) found",
                                                                 infoEmpty: "No manager found"
@@ -403,30 +404,37 @@
                                                                 // Add necessary classes for alignment
                                                                 $('.dataTables_info').addClass('text-left fw-bolder');
                                                                 $('.dataTables_length').addClass('mt-2'); // Add necessary margin classes
+
+                                                                // Replace Feather icons after DataTable initializes
+                                                                feather.replace();
                                                             }
+                                                        });
+
+                                                        // Replace Feather icons in case of dynamic changes
+                                                        datatablesMulti.on('draw', function () {
+                                                            feather.replace();
                                                         });
                                                     });
         </script>
 
         <script>
             document.addEventListener("DOMContentLoaded", function (event) {
-                setTimeout(function () {
-                    if (localStorage.getItem('popState') !== 'shown') {
-                        window.notyf.open({
-                            type: "success",
-                            message: "Get access to all 500+ components and 45+ pages with AdminKit PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
-                            duration: 10000,
-                            ripple: true,
-                            dismissible: false,
-                            position: {
-                                x: "left",
-                                y: "bottom"
-                            }
-                        });
-
-                        localStorage.setItem('popState', 'shown');
-                    }
-                }, 15000);
+                // Check URL for 'success' parameter
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('update') === 'success') {
+                    // Show success notification
+                    window.notyf.open({
+                        type: "success",
+                        message: "Department details updated successfully.",
+                        duration: 5000, // Adjust duration as needed
+                        ripple: true,
+                        dismissible: true,
+                        position: {
+                            x: "right",
+                            y: "top"
+                        }
+                    });
+                }
             });
         </script>
     </body>

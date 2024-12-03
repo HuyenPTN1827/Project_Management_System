@@ -161,10 +161,10 @@ public class IssueController extends HttpServlet {
         String type = request.getParameter("type");
         String deadline = request.getParameter("deadline");
         String description = request.getParameter("description");
-        
+
         Integer project = projectStr != null && !projectStr.isEmpty() ? Integer.valueOf(projectStr) : null;
         Integer typeId = type != null && !type.isEmpty() ? Integer.valueOf(type) : null;
-        
+
         List<Setting> listType = settingService.getIssueTypeList();
         List<Project> listPj = pjService.getProjectListByUserID(userId);
         List<Milestone> listMilestone = pjService.getMilestonesByProjectId(userId, project);
@@ -184,8 +184,8 @@ public class IssueController extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void insertIssue(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
-        int assigner = Integer.parseInt(request.getParameter("assigner"));
+    private void insertIssue(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
+        int userId = Integer.parseInt(request.getParameter("userId"));
         String name = request.getParameter("name");
         int type = Integer.parseInt(request.getParameter("type"));
         int projectId = Integer.parseInt(request.getParameter("projectId"));
@@ -200,7 +200,7 @@ public class IssueController extends HttpServlet {
         i.setDetails(description);
 
         User u1 = new User();
-        u1.setId(assigner);
+        u1.setId(userId);
         i.setCreated_by(u1);
 
         Setting s = new Setting();
@@ -219,8 +219,24 @@ public class IssueController extends HttpServlet {
         u2.setId(assignee);
         i.setAssignee(u2);
 
-        issueService.insertIssue(i);
-        response.sendRedirect("issue-management?userId=" + assigner);
+        // Validate dates
+        List<String> errors = issueService.validateDeadline(i);
+
+        if (errors.isEmpty()) {
+            issueService.insertIssue(i);
+            response.sendRedirect("issue-management?userId=" + userId);
+        } else {
+            request.setAttribute("errorMessages", errors);
+            request.setAttribute("userId", userId);
+            request.setAttribute("name", name);
+            request.setAttribute("type", type);
+            request.setAttribute("projectId", projectId);
+            request.setAttribute("milestone", milestone);
+            request.setAttribute("assignee", assignee);
+            request.setAttribute("deadline", deadline);
+            request.setAttribute("description", description);
+            showNewForm(request, response);
+        }
     }
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

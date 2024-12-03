@@ -48,7 +48,7 @@ public class UserDAO {
         return result; // Trả về 1 nếu đăng ký thành công
     }
 
-     public User loginValidate(User user) throws ClassNotFoundException {
+    public User loginValidate(User user) throws ClassNotFoundException {
         User foundUser = null;
         String query = """
                    SELECT id, full_name, email, mobile, password, role_id
@@ -174,6 +174,7 @@ public class UserDAO {
         if (status != null) {
             sql += " AND u.status = ?";
         }
+        sql += " ORDER BY u.id DESC;";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             int index = 1;
@@ -564,6 +565,82 @@ public class UserDAO {
 }
 
 
+//    Select all users by deptId 
+    public List<User> selectAllUsersByDept(String keyword, Integer deptId, Integer roleId, Integer status) {
+        List<User> user = new ArrayList<>();
+
+        String sql = """
+                     SELECT u.id, u.full_name, u.username, u.email, u.mobile, 
+                     d.id, d.code, s.id, s.name, u.status
+                     FROM pms.user u
+                     LEFT JOIN pms.dept_user du ON u.id = du.user_id AND du.end_date IS NULL
+                     LEFT JOIN pms.department d ON du.dept_id = d.id
+                     LEFT JOIN pms.setting s ON u.role_id = s.id                  
+                     WHERE 1=1""";
+        // Add search conditions if any
+        if (keyword != null && !keyword.isEmpty()) {
+            sql += " AND (LOWER(u.full_name) LIKE ? "
+                    + "OR LOWER(u.username) LIKE ? "
+                    + "OR LOWER(u.email) LIKE ? "
+                    + "OR u.mobile LIKE ?)";
+        }
+        if (deptId != null) {
+            sql += " AND d.id = ?";
+        }
+        if (roleId != null) {
+            sql += " AND s.id = ?";
+        }
+        if (status != null) {
+            sql += " AND u.status = ?";
+        }
+        sql += "ORDER BY u.id DESC;";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            int index = 1;
+
+            if (keyword != null && !keyword.isEmpty()) {
+                String keywordPattern = "%" + keyword.toLowerCase().trim() + "%";
+
+                stm.setString(index++, keywordPattern);
+                stm.setString(index++, keywordPattern);
+                stm.setString(index++, keywordPattern);
+                stm.setString(index++, keywordPattern);
+            }
+            if (deptId != null) {
+                stm.setInt(index++, deptId);
+            }
+            if (roleId != null) {
+                stm.setInt(index++, roleId);
+            }
+            if (status != null) {
+                stm.setInt(index++, status);
+            }
+
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                User u = new User();
+                u.setId(rs.getInt("u.id"));
+                u.setFull_name(rs.getString("u.full_name"));
+                u.setUsername(rs.getString("u.username"));
+                u.setEmail(rs.getString("u.email"));
+                u.setMobile(rs.getString("u.mobile"));
+                u.setStatus(rs.getInt("u.status"));
+
+                Department d = new Department();
+                d.setId(rs.getInt("d.id"));
+                d.setCode(rs.getString("d.code"));
+                u.getDepts().add(d);
+
+                Setting r = new Setting();
+                r.setId(rs.getInt("s.id"));
+                r.setName(rs.getString("s.name"));
+                u.getSettings().add(r);
+
+                user.add(u);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return user;
+    }
 }
-
-

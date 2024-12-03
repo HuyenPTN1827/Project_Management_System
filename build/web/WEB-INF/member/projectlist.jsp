@@ -30,13 +30,14 @@
     </head>
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
         <div class="wrapper">
-            <jsp:include page="../component/sidebar-manager.jsp"></jsp:include>
+            <% request.setAttribute("currentPage", "project"); %>
+            <jsp:include page="../component/sidebar.jsp"></jsp:include>
                 <div class="main">
                 <jsp:include page="../component/header.jsp"></jsp:include>
                     <main class="content">
                         <div class="container-fluid p-0">
                             <div class="mb-3">
-                                <h1 class="h1 d-inline align-middle">Project List</h1>
+                                <h1 class="h1 d-inline align-middle">Project Management</h1>
                             </div>
                             <div class="row">
                                 <div class="col-md-12 col-xl-12">
@@ -72,8 +73,8 @@
                                                     <th>ID</th>
                                                     <th>Name</th>
                                                     <th>Code</th>
-                                                    <th>Type Name</th>
-                                                    <th>Department Name</th>
+                                                    <th>Project Type</th>
+                                                    <th>Department</th>
                                                     <th>Status</th>
                                                     <th>Actions</th>
                                                 </tr>
@@ -110,8 +111,10 @@
                                                         </td>
 
                                                         <td>
-                                                            <a href="<%=request.getContextPath()%>/edit-project?id=${project.id}" class="btn btn-link text-primary">Edit</a>
-                                                            <a href="<%=request.getContextPath()%>/projectconfig?id=${project.id}" class="btn btn-link text-secondary">Config</a>
+                                                            <!--<a href="<%=request.getContextPath()%>/edit-project?id=${project.id}" class="btn btn-link text-primary">Edit</a>-->
+                                                            <a href="<%=request.getContextPath()%>/projectconfig?id=${project.id}" class="btn btn-secondary">
+                                                                <i class="align-middle" data-feather="settings"></i>
+                                                            </a>
 
                                                         </td>
                                                     </tr>
@@ -145,24 +148,24 @@
                 </footer>
             </div>
         </div>
-                                                <style>
-  
-    /* Modal căn giữa theo chiều ngang và dọc */
-#addNewModal .modal-dialog {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* Căn giữa cả chiều ngang và chiều dọc */
-    margin: 0;
-    max-width: 800px; /* Có thể thay đổi theo ý muốn */
-}
+        <style>
 
-#addNewModal .modal-content {
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Bóng đổ nhẹ cho modal */
-}
+            /* Modal căn giữa theo chiều ngang và dọc */
+            #addNewModal .modal-dialog {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%); /* Căn giữa cả chiều ngang và chiều dọc */
+                margin: 0;
+                max-width: 800px; /* Có thể thay đổi theo ý muốn */
+            }
 
-</style>
+            #addNewModal .modal-content {
+                border-radius: 8px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Bóng đổ nhẹ cho modal */
+            }
+
+        </style>
 
         <!-- Add New Modal -->
         <div class="modal fade" id="addNewModal" tabindex="-1" aria-labelledby="addNewModalLabel" aria-hidden="true">
@@ -276,7 +279,7 @@
                             <!-- Save and Cancel Buttons -->
                             <div>
                                 <button type="submit" class="btn btn-lg btn-success">Submit</button>
-                                <a href="<%=request.getContextPath()%>/project-type-management" class="btn btn-lg btn-light">Cancel</a>
+                                <!--<a href="<%=request.getContextPath()%>/project-type-management" class="btn btn-lg btn-light">Cancel</a>-->
                             </div>
                         </form>
                     </div>
@@ -284,24 +287,46 @@
             </div>
         </div>
 
-       
+
 
         <script>
-                                                        // Initialize DataTables with sorting functionality
-                                                        $(document).ready(function () {
-                                                            $('#datatables-multi').DataTable({
-                                                                "order": [], // Removes default ordering if required
-                                                                "paging": true,
-                                                                "searching": false,
-                                                                "info": true,
-                                                                "autoWidth": false,
-                                                                "columnDefs": [
-                                                                    {"orderable": false, "targets": [8]} // Disable sorting for the Actions column
-                                                                ]
-                                                            });
-                                                        });
+            document.addEventListener("DOMContentLoaded", function () {
+                var datatablesMulti = $("#datatables-multi").DataTable({
+                    responsive: true,
+                    paging: true,
+                    searching: false,
+                    info: true,
+                    order: [[0, 'desc']], // Default sort by ID column in descending order
+                    columnDefs: [
+                        {orderable: false, targets: 6} // Disable sorting on the 'Action' column
+                    ],
+                    language: {
+                        paginate: {
+                            previous: '<i class="align-middle" data-feather="chevron-left"></i>',
+                            next: '<i class="align-middle" data-feather="chevron-right"></i>'
+                        },
+                        info: "_TOTAL_ project(s) found",
+                        infoEmpty: "No project found"
+                    },
+                    dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
+                    initComplete: function () {
+                        // Add necessary classes for alignment
+                        $('.dataTables_info').addClass('text-left fw-bolder');
+                        $('.dataTables_length').addClass('mt-2'); // Add necessary margin classes
+
+                        // Replace Feather icons after DataTable initializes
+                        feather.replace();
+                    }
+                });
+
+                // Replace Feather icons in case of dynamic changes
+                datatablesMulti.on('draw', function () {
+                    feather.replace();
+                });
+            });
         </script>
-        
+
+
         <script src="${pageContext.request.contextPath}/js/app.js"></script>
         <script src="${pageContext.request.contextPath}/js/datatables.js"></script>
     </body>

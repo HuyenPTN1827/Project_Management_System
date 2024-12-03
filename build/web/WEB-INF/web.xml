@@ -317,6 +317,42 @@
         <url-pattern>/addmilestone</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>ProjectConfigController</servlet-name>
+        <url-pattern>/add-milestone</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectConfigController</servlet-name>
+        <url-pattern>/insert-milestone</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectConfigController</servlet-name>
+        <url-pattern>/edit-milestone</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectConfigController</servlet-name>
+        <url-pattern>/update-milestone</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectConfigController</servlet-name>
+        <url-pattern>/add-allocation</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectConfigController</servlet-name>
+        <url-pattern>/insert-allocation</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectConfigController</servlet-name>
+        <url-pattern>/edit-allocation</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectConfigController</servlet-name>
+        <url-pattern>/update-allocation</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectConfigController</servlet-name>
+        <url-pattern>/change-status-allocation</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>TeamController</servlet-name>
         <url-pattern>/TeamController</url-pattern>
     </servlet-mapping>

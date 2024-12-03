@@ -3,7 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package model;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 /**
  *
  * @author Admin
@@ -11,11 +12,11 @@ import java.util.Date;
 public class Allocation {
     private int id;
     private int createdBy;
-    private Date createdAt;
-    private Date lastUpdated;
-    private Date updateBy;
-    private Date startDate;
-    private Date endDate;
+    private LocalDateTime createdAt;
+    private int updateBy;
+    private LocalDateTime lastUpdated;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private double effortRate;
     private String description;
     private boolean status;
@@ -26,18 +27,20 @@ public class Allocation {
     
     private Department dept;
     private User user;
+    private User created_by;
+    private User updated_by;
     private Project project;
     private ProjectTypeSetting role;
 
     public Allocation() {
     }
 
-    public Allocation(int id, int createdBy, Date createdAt, Date lastUpdated, Date updateBy, Date startDate, Date endDate, double effortRate, String description, boolean status, int deptId, int userId, int projectId, int projectRole, Department dept, User user, Project project, ProjectTypeSetting role) {
+    public Allocation(int id, int createdBy, LocalDateTime createdAt, int updateBy, LocalDateTime lastUpdated, LocalDate startDate, LocalDate endDate, double effortRate, String description, boolean status, int deptId, int userId, int projectId, int projectRole, Department dept, User user, User created_by, User updated_by, Project project, ProjectTypeSetting role) {
         this.id = id;
         this.createdBy = createdBy;
         this.createdAt = createdAt;
-        this.lastUpdated = lastUpdated;
         this.updateBy = updateBy;
+        this.lastUpdated = lastUpdated;
         this.startDate = startDate;
         this.endDate = endDate;
         this.effortRate = effortRate;
@@ -49,6 +52,8 @@ public class Allocation {
         this.projectRole = projectRole;
         this.dept = dept;
         this.user = user;
+        this.created_by = created_by;
+        this.updated_by = updated_by;
         this.project = project;
         this.role = role;
     }
@@ -69,43 +74,43 @@ public class Allocation {
         this.createdBy = createdBy;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
-
-    public Date getUpdateBy() {
+    public int getUpdateBy() {
         return updateBy;
     }
 
-    public void setUpdateBy(Date updateBy) {
+    public void setUpdateBy(int updateBy) {
         this.updateBy = updateBy;
     }
 
-    public Date getStartDate() {
+    public LocalDateTime getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(LocalDateTime lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 
@@ -196,5 +201,21 @@ public class Allocation {
     public void setRole(ProjectTypeSetting role) {
         this.role = role;
     }
-    
+
+    public User getCreated_by() {
+        return created_by;
+    }
+
+    public void setCreated_by(User created_by) {
+        this.created_by = created_by;
+    }
+
+    public User getUpdated_by() {
+        return updated_by;
+    }
+
+    public void setUpdated_by(User updated_by) {
+        this.updated_by = updated_by;
+    }
+
 }

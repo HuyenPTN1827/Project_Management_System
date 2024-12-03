@@ -29,11 +29,15 @@ import java.util.Comparator;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import jakarta.servlet.RequestDispatcher;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Allocation;
 import model.Department;
 import model.ProjectTypeSetting;
 import service.DepartmentService;
 import service.ProjectTypeService;
+import service.UserService;
 
 @WebServlet()
 public class ProjectConfigController extends HttpServlet {
@@ -41,6 +45,7 @@ public class ProjectConfigController extends HttpServlet {
     private ProjectConfigService projectConfigService;
     private DepartmentService deptService;
     private ProjectTypeService pjTypeService;
+    private UserService userService;
 
     @Override
     public void init() throws ServletException {
@@ -48,6 +53,7 @@ public class ProjectConfigController extends HttpServlet {
         projectConfigService = new ProjectConfigService();
         deptService = new DepartmentService();
         pjTypeService = new ProjectTypeService();
+        userService = new UserService();
     }
 
     /**
@@ -60,35 +66,49 @@ public class ProjectConfigController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getServletPath();
+        try {
+            String action = request.getServletPath();
 
-        switch (action) {
-            case "/projectconfig":
-                handleProjectConfig(request, response);
-                break;
-            case "/updateproject":
-                updateProject(request, response);
-                break;
-            case "/filterandsearchmilestone":
-                filterAndsearchMilestone(request, response);
-                break;
-            case "/getmilestone":
-                getMilestoneById(request, response);
-                break;
-            case "/updatemilestone":
-                updateMilestone(request, response);
-                break;
-            case "/addmilestone":
-                addMilestone(request, response);
-                break;
-            case "/delete":
-//                deleteMilestone(request, response);
-                break;
+            switch (action) {
+                case "/projectconfig" ->
+                    handleProjectConfig(request, response);
+                case "/updateproject" ->
+                    updateProject(request, response);
+                case "/filterandsearchmilestone" ->
+                    filterAndsearchMilestone(request, response);
+                case "/getmilestone" ->
+                    getMilestoneById(request, response);
+                case "/updatemilestone" ->
+                    updateMilestone(request, response);
+                case "/addmilestone" ->
+                    addMilestone(request, response);
 
-            default:
-//                listMilestonesAndTeamsAndMembers(request, response);
-                handleProjectConfig(request, response);
-                break;
+                case "/add-milestone" ->
+                    showNewFormMilestone(request, response); // Show form insert milestone
+                case "/insert-milestone" ->
+                    insertMilestone(request, response); // Insert milestone
+                case "/edit-milestone" ->
+                    showEditFormMilestone(request, response); // Show form edit milestone
+                case "/update-milestone" ->
+                    updateMilestone(request, response); // Update milestone
+
+                // Allocation Management
+                case "/add-allocation" ->
+                    showNewFormAllocation(request, response); // Show form insert allocation
+                case "/insert-allocation" ->
+                    insertAllocation(request, response); // Insert allocation
+                case "/edit-allocation" ->
+                    showEditFormAllocation(request, response); // Show form edit allocation
+                case "/update-allocation" ->
+                    updateAllocation(request, response); // Update allocation
+                case "/change-status-allocation" ->
+                    changeStatusAllocation(request, response); // Change status allocation
+
+                default ->
+                    handleProjectConfig(request, response);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProjectConfigController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -631,6 +651,168 @@ public class ProjectConfigController extends HttpServlet {
         request.setAttribute("deptId", deptId);
         request.setAttribute("roleId", roleId);
         request.setAttribute("statusUser", statusUser);
+    }
 
+    private void showNewFormAllocation(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int projectId = Integer.parseInt(request.getParameter("projectId"));
+        int userId = Integer.parseInt(request.getParameter("userId"));
+        String dept = request.getParameter("deptId");
+        String role = request.getParameter("roleId");
+        String startDateStr = request.getParameter("fromDate");
+        String endDateStr = request.getParameter("toDate");
+        String effortStr = request.getParameter("effort");
+        String description = request.getParameter("descriptionAllocation");
+
+        Integer deptId = dept != null && !dept.isEmpty() ? Integer.valueOf(dept) : null;
+        Integer roleId = role != null && !role.isEmpty() ? Integer.valueOf(role) : null;
+        LocalDate startDate = startDateStr != null && !startDateStr.isEmpty() ? LocalDate.parse(startDateStr) : null;
+        LocalDate endDate = endDateStr != null && !endDateStr.isEmpty() ? LocalDate.parse(endDateStr) : null;
+        Double effort = effortStr != null && !effortStr.isEmpty() ? Double.valueOf(effortStr) : null;
+
+        Project project = projectConfigService.getProjectById(projectId);
+        List<Department> listDept = deptService.getAllDepartments(null, true);
+        List<ProjectTypeSetting> listRole = pjTypeService.getProjectRoleList(projectId);
+        List<User> listMem = userService.getAllUsers(null, deptId, null, 1);
+
+        request.setAttribute("project", project);
+        request.setAttribute("listDept", listDept);
+        request.setAttribute("listRole", listRole);
+        request.setAttribute("listMem", listMem);
+        request.setAttribute("projectId", projectId);
+        request.setAttribute("userId", userId);
+        request.setAttribute("deptId", deptId);
+        request.setAttribute("roleId", roleId);
+        request.setAttribute("fromDate", startDate);
+        request.setAttribute("toDate", endDate);
+        request.setAttribute("effort", effort);
+        request.setAttribute("descriptionAllocation", description);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/allocation-detail.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void insertAllocation(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
+        int projectId = Integer.parseInt(request.getParameter("projectId"));
+        int userId = Integer.parseInt(request.getParameter("userId"));
+        int deptId = Integer.parseInt(request.getParameter("deptId"));
+        int roleId = Integer.parseInt(request.getParameter("roleId"));
+        int memId = Integer.parseInt(request.getParameter("memId"));
+        LocalDate startDate = LocalDate.parse(request.getParameter("fromDate"));
+        String endDateStr = request.getParameter("toDate");
+        Double effort = Double.valueOf(request.getParameter("effort"));
+        String description = request.getParameter("descriptionAllocation");
+
+        LocalDate endDate = endDateStr != null && !endDateStr.isEmpty() ? LocalDate.parse(endDateStr) : null;
+
+        Allocation al = new Allocation();
+        al.setCreatedBy(userId);
+        al.setStartDate(startDate);
+        al.setEndDate(endDate);
+        al.setEffortRate(effort);
+        al.setDescription(description);
+        al.setDeptId(deptId);
+        al.setUserId(memId);
+        al.setProjectId(projectId);
+        al.setProjectRole(roleId);
+
+        projectConfigService.insertAllocation(al);
+        response.sendRedirect("projectconfig?id=" + projectId + "&activeTab=allocation");
+    }
+
+    private void showEditFormAllocation(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int projectId = Integer.parseInt(request.getParameter("projectId"));
+        int userId = Integer.parseInt(request.getParameter("userId"));
+        int id = Integer.parseInt(request.getParameter("id"));
+//        int deptId = Integer.parseInt(request.getParameter("deptId"));
+
+        Project project = projectConfigService.getProjectById(projectId);
+        Allocation al = projectConfigService.getAllocationById(id);
+        List<Department> listDept = deptService.getAllDepartments(null, true);
+        List<ProjectTypeSetting> listRole = pjTypeService.getProjectRoleList(projectId);
+        List<User> listMem = userService.getAllUsers(null, al.getDept().getId(), null, 1);
+
+        request.setAttribute("project", project);
+        request.setAttribute("al", al);
+        request.setAttribute("listDept", listDept);
+        request.setAttribute("listRole", listRole);
+        request.setAttribute("listMem", listMem);
+        request.setAttribute("projectId", projectId);
+        request.setAttribute("userId", userId);
+//        request.setAttribute("deptId", deptId);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/allocation-detail.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void updateAllocation(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+        int projectId = Integer.parseInt(request.getParameter("projectId"));
+        int userId = Integer.parseInt(request.getParameter("userId"));
+        int id = Integer.parseInt(request.getParameter("id"));
+        int deptId = Integer.parseInt(request.getParameter("deptId"));
+        int roleId = Integer.parseInt(request.getParameter("roleId"));
+        int memId = Integer.parseInt(request.getParameter("memId"));
+        LocalDate startDate = LocalDate.parse(request.getParameter("fromDate"));
+        String endDateStr = request.getParameter("toDate");
+        Double effort = Double.valueOf(request.getParameter("effort"));
+        String description = request.getParameter("descriptionAllocation");
+        boolean status = Boolean.parseBoolean(request.getParameter("statusAllocation"));
+
+        LocalDate endDate = endDateStr != null && !endDateStr.isEmpty() ? LocalDate.parse(endDateStr) : null;
+
+        Allocation al = new Allocation();
+        al.setId(id);
+        al.setUpdateBy(userId);
+        al.setStartDate(startDate);
+        al.setEndDate(endDate);
+        al.setEffortRate(effort);
+        al.setDescription(description);
+        al.setStatus(status);
+        al.setDeptId(deptId);
+        al.setUserId(memId);
+        al.setProjectId(projectId);
+        al.setProjectRole(roleId);
+
+        projectConfigService.updateAllocation(al);
+        response.sendRedirect("projectconfig?id=" + projectId + "&activeTab=allocation");
+    }
+
+    private void changeStatusAllocation(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+        int projectId = Integer.parseInt(request.getParameter("projectId"));
+        int id = Integer.parseInt(request.getParameter("id"));
+        boolean status = Boolean.parseBoolean(request.getParameter("status"));
+        int userId = Integer.parseInt(request.getParameter("userId"));
+
+        Allocation allocation = new Allocation();
+        allocation.setId(id);
+        allocation.setStatus(!status); // If status is true, set to false; if false, set to true
+        allocation.setUpdateBy(userId);
+
+        projectConfigService.changeStatusAllocation(allocation);
+        response.sendRedirect("projectconfig?id=" + projectId + "&activeTab=allocation");
+    }
+
+    private void showNewFormMilestone(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int projectId = Integer.parseInt(request.getParameter("projectId"));
+        List<Milestone> parentMilestones = projectConfigService.getAllMilestonesParent();
+
+        request.setAttribute("projectId", projectId);
+        request.setAttribute("parentMilestones", parentMilestones);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/milestone-detail.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void insertMilestone(HttpServletRequest request, HttpServletResponse response) {
+
+    }
+
+    private void showEditFormMilestone(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        int projectId = Integer.parseInt(request.getParameter("projectId"));
+        List<Milestone> parentMilestones = projectConfigService.getAllMilestonesParent();
+        Milestone milestone = projectConfigService.getMilestoneById(id);
+
+        request.setAttribute("projectId", projectId);
+        request.setAttribute("parentMilestones", parentMilestones);
+        request.setAttribute("milestone", milestone);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/milestone-detail.jsp");
+        dispatcher.forward(request, response);
     }
 }

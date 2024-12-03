@@ -10,6 +10,7 @@ import java.util.List;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import model.Allocation;
 import model.Department;
 import model.Team;
@@ -476,7 +477,6 @@ public class ProjectConfigDAO {
         }
     }
 
-    
 //    HuyenPTNHE160769    
 //    Select all allocations
     public List<Allocation> selectAllAllocations(int projectId, String keyword, Integer deptId, Integer roleId, Boolean status) {
@@ -530,27 +530,33 @@ public class ProjectConfigDAO {
             while (rs.next()) {
                 Allocation a = new Allocation();
                 a.setId(rs.getInt("a.id"));
-                a.setStartDate(rs.getDate("a.start_date"));
-                a.setEndDate(rs.getDate("a.end_date"));
+                Date startDate = rs.getDate("a.start_date");
+                if (startDate != null) {
+                    a.setStartDate(BaseDAO.MyDateUtil.getUtilDate((java.sql.Date) startDate));
+                }
+                Date endDate = rs.getDate("a.end_date");
+                if (endDate != null) {
+                    a.setEndDate(BaseDAO.MyDateUtil.getUtilDate((java.sql.Date) endDate));
+                }
                 a.setEffortRate(rs.getDouble("a.effort_rate"));
                 a.setStatus(rs.getBoolean("a.status"));
-                
+
                 User u = new User();
                 u.setId(rs.getInt("a.user_id"));
                 u.setFull_name(rs.getString("u.full_name"));
                 u.setUsername(rs.getString("u.username"));
                 a.setUser(u);
-                
+
                 Department d = new Department();
                 d.setId(rs.getInt("a.dept_id"));
                 d.setCode(rs.getString("d.code"));
                 a.setDept(d);
-                
+
                 ProjectTypeSetting r = new ProjectTypeSetting();
                 r.setId(rs.getInt("a.project_role"));
                 r.setName(rs.getString("r.name"));
                 a.setRole(r);
-                
+
                 Project p = new Project();
                 p.setId(rs.getInt("a.project_id"));
                 a.setProject(p);
@@ -563,105 +569,168 @@ public class ProjectConfigDAO {
 
         return allocation;
     }
-//
-////    HuyenPTNHE160769
-////    04/10/2024       
-////    Admin select dept by id
-//    public Department selectDepartmentByID(int id) {
-//        Department d = null;
-//
-//        String sql = "SELECT * FROM pms.department WHERE id = ?;";
-//
-//        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
-//            stm.setInt(1, id);
-//
-//            ResultSet rs = stm.executeQuery();
-//            while (rs.next()) {
-//                d = new Department();
-//                d.setId(rs.getInt("id"));
-//                d.setCode(rs.getString("code"));
-//                d.setName(rs.getString("name"));
-//                d.setDetails(rs.getString("details"));
-//                d.setParentId(rs.getInt("parent"));
-//                d.setStatus(rs.getBoolean("status"));
-//            }
-//        } catch (SQLException e) {
-//            BaseDAO.printSQLException(e);
-//        }
-//        return d;
-//    }
-//
-////    HuyenPTNHE160769
-////    04/10/2024       
-////    Admin add new dept
-//    public int insertDepartment(Department dept, Integer parent) throws SQLException {
-//        int result = 0;
-//        String sql = "INSERT INTO pms.department (code, name, details, parent) "
-//                + "VALUES (?, ?, ?, ?);";
-//
-//        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
-//            stm.setString(1, dept.getCode());
-//            stm.setString(2, dept.getName());
-//            stm.setString(3, dept.getDetails());
-//            // Set parent (allow null)
-//            if (parent != null) {
-//                stm.setInt(4, parent);
-//            } else {
-//                stm.setNull(4, Types.INTEGER);
-//            }
-//
-//            result = stm.executeUpdate();
-//        } catch (SQLException e) {
-//            BaseDAO.printSQLException(e);
-//        }
-//        return result;
-//    }
-//
-////    HuyenPTNHE160769
-////    04/10/2024         
-////    Admin update a dept
-//    public boolean updateDepartment(Department dept, Integer parent) throws SQLException {
-//        boolean rowUpdated = false;
-//
-//        String sql = "UPDATE pms.department SET code = ?, name = ?, details = ?, "
-//                + "parent = ?, status = ? WHERE id = ?;";
-//
-//        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
-//            stm.setString(1, dept.getCode());
-//            stm.setString(2, dept.getName());
-//            stm.setString(3, dept.getDetails());
-//            // Set parent (allow null)
-//            if (parent != null) {
-//                stm.setInt(4, parent);
-//            } else {
-//                stm.setNull(4, Types.INTEGER);
-//            }
-//            stm.setBoolean(5, dept.isStatus());
-//            stm.setInt(6, dept.getId());
-//
-//            rowUpdated = stm.executeUpdate() > 0;
-//        } catch (SQLException e) {
-//            BaseDAO.printSQLException(e);
-//        }
-//        return rowUpdated;
-//    }
-//
-////    HuyenPTNHE160769
-////    04/10/2024      
-////    Admin change status of a dept
-//    public boolean changeStatusDepartment(Department dept) throws SQLException {
-//        boolean rowUpdated = false;
-//
-//        String sql = "UPDATE pms.department SET status = ? WHERE id = ?;";
-//
-//        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
-//            stm.setBoolean(1, dept.isStatus());
-//            stm.setInt(2, dept.getId());
-//
-//            rowUpdated = stm.executeUpdate() > 0;
-//        } catch (SQLException e) {
-//            BaseDAO.printSQLException(e);
-//        }
-//        return rowUpdated;
-//    }
+
+//    Select allocation by id
+    public Allocation selectAllocationByID(int id) {
+        Allocation a = null;
+
+        String sql = """
+                     SELECT a.id, a.created_by, u1.full_name, u1.username, a.created_at, 
+                     a.updated_by, u2.full_name, u2.username, a.last_updated,
+                     a.dept_id, d.name, d.code, a.user_id, u3.full_name, u3.username, 
+                     a.project_id, p.name, p.code, a.project_role, r.name,
+                     a.start_date, a.end_date, a.effort_rate, a.description, a.status
+                     FROM pms.allocation a
+                     JOIN pms.department d ON a.dept_id = d.id
+                     JOIN pms.user u1 ON a.created_by = u1.id
+                     LEFT JOIN pms.user u2 ON a.updated_by = u2.id
+                     JOIN pms.user u3 ON a.user_id = u3.id
+                     JOIN pms.project p ON a.project_id = p.id
+                     JOIN pms.project_type_setting r ON a.project_role = r.id
+                     WHERE a.id = ?;""";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            stm.setInt(1, id);
+
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                a = new Allocation();
+                a.setId(rs.getInt("a.id"));
+                a.setCreatedAt(rs.getTimestamp("a.created_at").toLocalDateTime());
+                a.setLastUpdated(rs.getTimestamp("a.last_updated").toLocalDateTime());
+                Date startDate = rs.getDate("a.start_date");
+                if (startDate != null) {
+                    a.setStartDate(BaseDAO.MyDateUtil.getUtilDate((java.sql.Date) startDate));
+                }
+                Date endDate = rs.getDate("a.end_date");
+                if (endDate != null) {
+                    a.setEndDate(BaseDAO.MyDateUtil.getUtilDate((java.sql.Date) endDate));
+                }
+
+                a.setEffortRate(rs.getDouble("a.effort_rate"));
+                a.setDescription(rs.getString("a.description"));
+                a.setStatus(rs.getBoolean("a.status"));
+
+                User u1 = new User();
+                u1.setId(rs.getInt("a.created_by"));
+                u1.setFull_name(rs.getString("u1.full_name"));
+                u1.setUsername(rs.getString("u1.username"));
+                a.setCreated_by(u1);
+
+                // Updated By User (nullable)
+                if (rs.getInt("updated_by") != 0) {
+                    User u2 = new User();
+                    u2.setId(rs.getInt("a.updated_by"));
+                    u2.setFull_name(rs.getString("u2.full_name"));
+                    u2.setUsername(rs.getString("u2.username"));
+                    a.setUpdated_by(u2);
+                }
+
+                User u3 = new User();
+                u3.setId(rs.getInt("a.user_id"));
+                u3.setFull_name(rs.getString("u3.full_name"));
+                u3.setUsername(rs.getString("u3.username"));
+                a.setUser(u3);
+
+                Department d = new Department();
+                d.setId(rs.getInt("a.dept_id"));
+                d.setName(rs.getString("d.name"));
+                d.setCode(rs.getString("d.code"));
+                a.setDept(d);
+
+                ProjectTypeSetting r = new ProjectTypeSetting();
+                r.setId(rs.getInt("a.project_role"));
+                r.setName(rs.getString("r.name"));
+                a.setRole(r);
+
+                Project p = new Project();
+                p.setId(rs.getInt("a.project_id"));
+                p.setName(rs.getString("p.name"));
+                p.setCode(rs.getString("p.code"));
+                a.setProject(p);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return a;
+    }
+
+//    Add new allocation
+    public int insertAllocation(Allocation allocation) throws SQLException {
+        int result = 0;
+        String sql = """
+                     INSERT INTO pms.allocation (created_by, created_at, last_updated, start_date, 
+                     end_date, effort_rate, description, dept_id, user_id, project_id, project_role)
+                     VALUES (?, NOW(), NOW(), ?, ?, ?, ?, ?, ?, ?, ?)""";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            stm.setInt(1, allocation.getCreatedBy());
+            stm.setDate(2, BaseDAO.MyDateUtil.getSQLDate(allocation.getStartDate()));
+            stm.setDate(3, BaseDAO.MyDateUtil.getSQLDate(allocation.getEndDate()));
+            stm.setDouble(4, allocation.getEffortRate());
+            stm.setString(5, allocation.getDescription());
+            stm.setInt(6, allocation.getDeptId());
+            stm.setInt(7, allocation.getUserId());
+            stm.setInt(8, allocation.getProjectId());
+            stm.setInt(9, allocation.getProjectRole());
+            result = stm.executeUpdate();
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return result;
+    }
+
+//    Update an allocation
+    public boolean updateAllocation(Allocation allocation) throws SQLException {
+        boolean rowUpdated = false;
+
+        String sql = """
+                     UPDATE pms.allocation SET updated_by = ?, last_updated = NOW(), 
+                     start_date = ?, end_date = ?, effort_rate = ?, description = ?, 
+                     status = ?, dept_id = ?, user_id = ?, project_id = ?, project_role = ?
+                     WHERE id = ?;""";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            stm.setInt(1, allocation.getUpdateBy());
+            stm.setDate(2, BaseDAO.MyDateUtil.getSQLDate(allocation.getStartDate()));
+            stm.setDate(3, BaseDAO.MyDateUtil.getSQLDate(allocation.getEndDate()));
+            stm.setDouble(4, allocation.getEffortRate());
+            stm.setString(5, allocation.getDescription());
+            stm.setBoolean(6, allocation.isStatus());
+            stm.setInt(7, allocation.getDeptId());
+            stm.setInt(8, allocation.getUserId());
+            stm.setInt(9, allocation.getProjectId());
+            stm.setInt(10, allocation.getProjectRole());
+            stm.setInt(11, allocation.getId());
+
+            rowUpdated = stm.executeUpdate() > 0;
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return rowUpdated;
+    }
+
+//    Change status of an allocation
+    public boolean changeStatusAllocation(Allocation allocation) throws SQLException {
+        boolean rowUpdated = false;
+
+        String activateSql = "UPDATE pms.allocation SET updated_by = ?, last_updated = NOW(), end_date = NULL, status = 1 WHERE id = ?;";
+        String deactivateSql = "UPDATE pms.allocation SET updated_by = ?, last_updated = NOW(), end_date = CURDATE(), status = 0 WHERE id = ?;";
+
+        try (Connection cnt = BaseDAO.getConnection()) {
+            PreparedStatement stm;
+            if (!allocation.isStatus()) { // Check if status is false
+                stm = cnt.prepareStatement(deactivateSql);
+                stm.setInt(1, allocation.getUpdateBy());
+            } else {  // Check if status is true
+                stm = cnt.prepareStatement(activateSql);
+                stm.setInt(1, allocation.getUpdateBy());
+            }
+            stm.setInt(2, allocation.getId());
+            rowUpdated = stm.executeUpdate() > 0;
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return rowUpdated;
+    }
 }
