@@ -370,7 +370,7 @@
                                                             <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" onclick="closeMilestoneModal();"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <!--This is where the project-type-user-list.jsp will be loaded via AJAX--> 
+                                                            <!--This is where the milestone-detail.jsp will be loaded via AJAX--> 
                                                         </div>
                                                     </div>
                                                 </div>

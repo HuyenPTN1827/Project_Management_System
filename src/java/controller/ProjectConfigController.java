@@ -807,9 +807,11 @@ public class ProjectConfigController extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         int projectId = Integer.parseInt(request.getParameter("projectId"));
         List<Milestone> parentMilestones = projectConfigService.getAllMilestonesParent();
+        Milestone milestone = projectConfigService.getMilestoneById(id);
 
         request.setAttribute("projectId", projectId);
         request.setAttribute("parentMilestones", parentMilestones);
+        request.setAttribute("milestone", milestone);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/milestone-detail.jsp");
         dispatcher.forward(request, response);
     }

@@ -57,140 +57,141 @@
                 <div class="card">
                     <div class="card-body">
                         <c:if test="${milestone == null}">
-                            <form action="insert-milestone" method="post">
-                                <div class="row">
-                                    <!-- Created By -->
-                                    <div class="col-md-6 mb-3" hidden>
-                                        <label for="createdBy" class="form-label">Created By</label>
-                                        <input type="text" class="form-control"  name="createdBy" value="${sessionScope.username}" readonly>
-                                    </div>
-
-                                    <!-- Last Updated -->
-                                    <div class="col-md-6 mb-3" hidden>
-                                        <label for="lastUpdated" class="form-label">Last Updated</label>
-                                        <input type="text" class="form-control"  name="lastUpdated" placeholder="dd/MM/yyyy hh:mm:ss" readonly>
-                                    </div>
-
-                                    <!-- Milestone Name -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="milestoneName" class="form-label"><strong>Milestone/Deliverable</strong> <span style="color: red;">*</span></label>
-                                        <input type="text" class="form-control"  name="milestoneName" required>
-                                    </div>
-
-                                    <!-- Parent Milestone -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="parentMilestone" class="form-label">Parent Milestone</label>
-                                        <select class="form-select"  name="parentMilestone" onchange="updateProjectId()" id="parentMilestone">
-                                            <option value="">Select Parent Milestone</option>
-                                            <c:forEach var="milestone" items="${parentMilestones}">
-                                                <!-- Thêm projectId vào attribute data-project-id -->
-                                                <option value="${milestone.id}" data-project-id="${milestone.projectId}">
-                                                    ${milestone.name}
-                                                </option>
-                                            </c:forEach>
-                                        </select>
-                                    </div>
-
-                                    <!-- Trường ẩn để gửi projectId -->
-                                    <input type="hidden" id="projectId" name="projectId" value="${projectId}">
-
-
-                                    <!-- Priority -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="priority" class="form-label">Priority <span style="color: red;">*</span></label>
-                                        <input type="text" class="form-control"  name="priority" required>
-                                    </div>
-
-
-
-                                    <!-- Target Date -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="targetDate" class="form-label">Target Date <span style="color: red;">*</span></label>
-                                        <input type="date" class="form-control"  name="targetDate" required>
-                                    </div>
-
-                                    <!-- Description -->
-                                    <div class="col-md-12 mb-3">
-                                        <label for="description" class="form-label">Description</label>
-                                        <textarea class="form-control"  name="description" rows="3"></textarea>
-                                    </div>
-
-
+                            <form action="insert-milestone" method="post" class="row">
+                                <!-- Created By -->
+                                <div class="col-md-6 mb-3" hidden>
+                                    <label for="createdBy" class="form-label">Created By</label>
+                                    <input type="text" class="form-control"  name="createdBy" value="${sessionScope.username}" readonly>
                                 </div>
 
-                                <!-- Submit Button -->
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <!-- Last Updated -->
+                                <div class="col-md-6 mb-3" hidden>
+                                    <label for="lastUpdated" class="form-label">Last Updated</label>
+                                    <input type="text" class="form-control"  name="lastUpdated" placeholder="dd/MM/yyyy hh:mm:ss" readonly>
+                                </div>
+
+                                <!-- Milestone Name -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="milestoneName" class="form-label"><strong>Milestone/Deliverable</strong> <span style="color: red;">*</span></label>
+                                    <input type="text" class="form-control"  name="milestoneName" required>
+                                </div>
+
+                                <!-- Parent Milestone -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="parentMilestone" class="form-label"><strong>Parent Milestone</strong></label>
+                                    <select class="form-select"  name="parentMilestone" onchange="updateProjectId()" id="parentMilestone">
+                                        <option value="">Select Parent Milestone</option>
+                                        <c:forEach var="milestone" items="${parentMilestones}">
+                                            <!-- Thêm projectId vào attribute data-project-id -->
+                                            <option value="${milestone.id}" data-project-id="${milestone.projectId}">
+                                                ${milestone.name}
+                                            </option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+
+                                <!-- Trường ẩn để gửi projectId -->
+                                <input type="hidden" id="projectId" name="projectId" value="${projectId}">
+
+
+                                <!-- Priority -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="priority" class="form-label"><strong>Priority</strong> <span style="color: red;">*</span></label>
+                                    <input type="number" class="form-control"  name="priority" required>
+                                </div>
+
+
+
+                                <!-- Target Date -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="targetDate" class="form-label"><strong>Target Date</strong> <span style="color: red;">*</span></label>
+                                    <input type="date" class="form-control"  name="targetDate" required>
+                                </div>
+
+                                <!-- Description -->
+                                <div class="col-md-12 mb-3">
+                                    <label for="description" class="form-label"><strong>Description</strong></label>
+                                    <textarea class="form-control"  name="description" rows="3"></textarea>
+                                </div>
+
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-lg btn-success">Submit</button>
+                                </div>
                             </form>
                         </c:if> 
 
                         <c:if test="${milestone != null}">
-                            <form id="editMilestoneForm" action="/PMS/updatemilestone" method="POST">
-                                <div class="row">
-                                    <input type="hidden" id="id" name="id" value="${id}"/>
-                                    <!-- Milestone Name -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="milestoneName" class="form-label">Milestone Name</label>
-                                        <input type="text" class="form-control" id="milestoneName" name="milestonename">
-                                    </div>
+                            <form id="editMilestoneForm" action="/PMS/updatemilestone" method="POST" class="row">
+                                <input type="hidden" id="id" name="id" value="${milestone.id}"/>
 
-                                    <!-- Created By -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="createdBy" class="form-label">Created By</label>
-                                        <input type="hidden" id="createdById" name="createdById" />
-                                        <input type="text" class="form-control" id="createdBy" name="createdBy"  readonly>
-                                    </div>
+                                <!-- Created By -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="createdBy" class="form-label"><strong>Created By</strong></label>
+                                    <input type="hidden" id="createdById" name="createdById" />
+                                    <input type="text" class="form-control" id="createdBy" name="createdBy"  readonly>
+                                </div>
 
-                                    <!-- Project Name (new field) -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="projectname" class="form-label">Project Name</label>
-                                        <input type="hidden" id="project_Id" name="project_Id" />
-                                        <input type="text" class="form-control" id="projectname" name="projectName"  readonly>
-                                    </div>
-                                    <!-- Parent Milestone -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="parentmilestone" class="form-label">Parent Milestone</label>
-                                        <input type="hidden" id="parentMilestoneId" name="parentMilestoneId" />
-                                        <input type="text" class="form-control" id="parentmilestone" name="parentMilestone"  readonly>
-                                    </div>
-                                    <!-- Priority -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="priority" class="form-label">Priority</label>
-                                        <input type="text" class="form-control" id="priority" name="priority">
-                                    </div>
+                                <!-- Last Updated -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="lastupdated" class="form-label"><strong>Last Updated</strong></label>
+                                    <input type="text" class="form-control" id="lastupdated" name="lastupdated" readonly>
+                                </div>
 
-                                    <!-- Target Date -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="targetDate" class="form-label">Target Date</label>
-                                        <input type="text" class="form-control" id="targetDate" name="targetdate" readonly>
-                                    </div>
-                                    <!-- Last Updated -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="lastupdated" class="form-label">Last Updated</label>
-                                        <input type="text" class="form-control" id="lastupdated" name="lastupdated" readonly>
-                                    </div>
+                                <!-- Milestone Name -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="milestoneName" class="form-label"><strong>Milestone/Deliverable</strong> <span style="color: red;">*</span></label>
+                                    <input type="text" class="form-control"  name="milestoneName" required>
+                                </div>
 
+                                <!-- Parent Milestone -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="parentmilestone" class="form-label"><strong>Parent Milestone</strong></label>
+                                    <input type="hidden" id="parentMilestoneId" name="parentMilestoneId" />
+                                    <input type="text" class="form-control" id="parentmilestone" name="parentMilestone">
+                                </div>
 
-                                    <!-- Status -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="status" class="form-label">Status</label>
-                                        <select class="form-control" id="status" name="status">
-                                            <option value="0">Pending</option>
-                                            <option value="1">To Do</option>
-                                            <option value="2">Doing</option>
-                                            <option value="3">Done</option>
-                                            <option value="4">Closed</option>
-                                            <option value="5">Cancelled</option>
-                                        </select>
-                                    </div>
-                                    <!-- Description -->
-                                    <div class="col-md-12 mb-3">
-                                        <label for="detail" class="form-label">Description</label>
-                                        <textarea class="form-control" id="detail" name="description"></textarea>
-                                    </div>
+                                <!-- Trường ẩn để gửi projectId -->
+                                <input type="hidden" id="projectId" name="projectId" value="${projectId}">
 
-                                    <div class="col-md-12 mb-3">
-                                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                                    </div>
+                                <!-- Priority -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="priority" class="form-label"><strong>Priority</strong> <span style="color: red;">*</span></label>
+                                    <input type="number" class="form-control" id="priority" name="priority" required>
+                                </div>
+
+                                <!-- Target Date -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="targetDate" class="form-label"><strong>Target Date</strong> <span style="color: red;">*</span></label>
+                                    <input type="date" class="form-control" id="targetDate" name="targetdate" required>
+                                </div>
+
+                                <!-- Status -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="status" class="form-label"><strong>Status</strong></label>
+                                    <select class="form-control" id="status" name="status">
+                                        <option value="0">Pending</option>
+                                        <option value="1">To Do</option>
+                                        <option value="2">Doing</option>
+                                        <option value="3">Done</option>
+                                        <option value="4">Closed</option>
+                                        <option value="5">Cancelled</option>
+                                    </select>
+                                </div>
+
+                                <!-- Target Date -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="targetDate" class="form-label"><strong>Actual Date</strong></label>
+                                    <input type="date" class="form-control" id="actualDate" name="actualDate">
+                                </div>
+
+                                <!-- Description -->
+                                <div class="col-md-12 mb-3">
+                                    <label for="detail" class="form-label"><strong>Description</strong></label>
+                                    <textarea class="form-control" id="detail" name="description" rows="3"></textarea>
+                                </div>
+
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-lg btn-success">Submit</button>
                                 </div>
                             </form>
                         </c:if>
@@ -202,25 +203,25 @@
         <script src="${pageContext.request.contextPath}/js/app.js"></script>
 
         <script>
-                                            document.addEventListener("DOMContentLoaded", function (event) {
-                                                setTimeout(function () {
-                                                    if (localStorage.getItem('popState') !== 'shown') {
-                                                        window.notyf.open({
-                                                            type: "success",
-                                                            message: "Get access to all 500+ components and 45+ pages with AdminKit PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
-                                                            duration: 10000,
-                                                            ripple: true,
-                                                            dismissible: false,
-                                                            position: {
-                                                                x: "left",
-                                                                y: "bottom"
-                                                            }
-                                                        });
+                                        document.addEventListener("DOMContentLoaded", function (event) {
+                                            setTimeout(function () {
+                                                if (localStorage.getItem('popState') !== 'shown') {
+                                                    window.notyf.open({
+                                                        type: "success",
+                                                        message: "Get access to all 500+ components and 45+ pages with AdminKit PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
+                                                        duration: 10000,
+                                                        ripple: true,
+                                                        dismissible: false,
+                                                        position: {
+                                                            x: "left",
+                                                            y: "bottom"
+                                                        }
+                                                    });
 
-                                                        localStorage.setItem('popState', 'shown');
-                                                    }
-                                                }, 15000);
-                                            });
+                                                    localStorage.setItem('popState', 'shown');
+                                                }
+                                            }, 15000);
+                                        });
         </script>
     </body>
 </html>
