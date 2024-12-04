@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import model.Milestone;
 import java.util.List;
 import model.Allocation;
+import model.Department;
 import model.Project;
 import model.Team;
 import model.TeamMember;
@@ -43,6 +44,10 @@ public class ProjectConfigService extends BaseServive {
         return projectConfigDAO.getProjectById(id); // Gọi phương thức từ ProjectDAO
     }
 
+    public List<Department> getAllDepartment() {
+        return projectConfigDAO.getAllDepartments();
+    }
+
     // Lấy danh sách manager (người dùng có role_id = 4)
     public List<User> getAllManagers() {
         return projectConfigDAO.getAllManagers(); // Gọi phương thức trong UserDAO để lấy danh sách Manager
@@ -53,9 +58,9 @@ public class ProjectConfigService extends BaseServive {
         return projectConfigDAO.updateProject(project); // Gọi phương thức trong DAO để cập nhật dự án
     }
 
-    // Hàm gọi getAllMilestonesParent từ DAO
-    public List<Milestone> getAllMilestonesParent() {
-        return projectConfigDAO.getAllMilestonesParent();
+    // Hàm gọi getMilestoneParentByProjectId từ DAO
+    public List<Milestone> getMilestoneParentByProjectId(int projectId) {
+        return projectConfigDAO.getMilestoneParentByProjectId(projectId);
     }
 
     // Phương thức addMilestone
@@ -108,7 +113,7 @@ public class ProjectConfigService extends BaseServive {
     //Start date cannot be before today, End date cannot be before start date
     public List<String> validateAllocationDate(Allocation allocation) {
         List<String> errors = new ArrayList<>();
-        
+
         if (!validateStartDates(allocation.getStartDate())) {
             errors.add("Start Date cannot be earlier than today.");
         }
@@ -116,7 +121,7 @@ public class ProjectConfigService extends BaseServive {
         if (!validateEndDates(allocation.getStartDate(), allocation.getEndDate())) {
             errors.add("End Date cannot be earlier than Start Date.");
         }
-        
+
         return errors;
     }
 }

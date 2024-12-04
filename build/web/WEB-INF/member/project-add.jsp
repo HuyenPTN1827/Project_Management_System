@@ -22,7 +22,7 @@
 
         <link rel="canonical" href="pages-profile.html" />
 
-        <title>Project Details | PMS</title>
+        <title>Add New Project | PMS</title>
 
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet">
 
@@ -76,13 +76,11 @@
                                 <label class="form-label">Project Type <span style="color: red;">*</span></label>
                                 <select class="form-select" name="type" required>
                                    <option value="" hidden disable>Select Type</option>
-                                    <option value="1" <c:if test="${type == 1}">selected</c:if>>WF</option>
-                                    <option value="2" <c:if test="${type == 2}">selected</c:if>>AG</option>
-                                    <option value="3" <c:if test="${type == 3}">selected</c:if>>SC</option>
-                                    <option value="4" <c:if test="${type == 4}">selected</c:if>>VM</option>
-                                    <option value="5" <c:if test="${type == 5}">selected</c:if>>SM</option>
-                                    <option value="6" <c:if test="${type == 6}">selected</c:if>>IM</option>
-                                    <option value="7" <c:if test="${type == 7}">selected</c:if>>DO</option>
+                                   <c:forEach var="projecttype" items="${listProjectTypes}">
+                                        <option value="${projecttype.id}" <c:if test="${projecttype.id == type}">selected</c:if>>
+                                            ${projecttype.name}
+                                        </option>
+                                    </c:forEach>
                                     </select>
                                 </div>
 
@@ -95,19 +93,14 @@
 
                             <!-- Department Field -->
                             <div class="mb-3 col-md-6">
-                                <label class="form-label">Department <span style="color: red;">*</span></label>
-                                <select class="form-select" name="department" required>
-                                    <option value="" hidden disable>Select Department</option>
-                                    <option value="1">EM</option>
-                                    <option value="2">HR</option>
-                                    <option value="3">F&A</option>
-                                    <option value="4">S&M</option>
-                                    <option value="5">IT</option>
-                                    <option value="6">R&D</option>
-                                    <option value="7">OP</option>
-                                    <option value="8">Legal</option>
-                                    <option value="9">Admin</option>
-                                    <option value="10">CS</option>
+                                <label class="form-label">Department<span style="color: red;">*</span></label>
+                                <select class="form-control" name="department" required>
+                                    <option value="">Select Department</option>
+                                   <c:forEach var="projectdepartment" items="${listDepartments}">
+                                        <option value="${projectdepartment.id}" <c:if test="${projectdepartment.id == department}">selected</c:if>>
+                                            ${projectdepartment.name}
+                                        </option>
+                                    </c:forEach>
                                 </select>
                             </div>
 

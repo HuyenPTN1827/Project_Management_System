@@ -15,8 +15,10 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import model.Allocation;
+import model.Department;
 import model.Milestone;
 import model.Project;
+import model.ProjectType;
 import model.User;
 import service.ProjectService;
 //BachHD
@@ -72,6 +74,7 @@ public class ProjectListController extends HttpServlet {
 
         // Lấy danh sách Manager từ Service
         List<User> managers = projectService.getAllManagers();
+    
 
         // Kiểm tra điều kiện tìm kiếm
         if (status >= 0 && status <= 5) {
@@ -98,7 +101,7 @@ public class ProjectListController extends HttpServlet {
             // Gọi phương thức tìm kiếm các dự án theo trạng thái
             projects = projectService.searchProjectsByStatus(status);
         } else {
-            System.out.println("Trạng thái không hợp lệ. Vui lòng chọn từ 0 đến 5.");
+            System.out.println("Invalid status.");
         }
 
         return projects;
@@ -111,10 +114,13 @@ public class ProjectListController extends HttpServlet {
     private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Lấy danh sách Manager từ Service
         List<User> managers = projectService.getAllManagers();
-        
+        List<ProjectType> projecttypes = projectService.getAllProjectType();
+        List<Department> departments = projectService.getAllDepartment();
         // Path to user information input form page
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/project-detail.jsp");
+        request.setAttribute("listDepartments", departments);
+        request.setAttribute("listProjectTypes", projecttypes);
         request.setAttribute("listManagers", managers);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/project-add.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -138,8 +144,10 @@ public class ProjectListController extends HttpServlet {
             // Kiểm tra các trường bắt buộc
             if (name == null || code == null || departmentIdString == null || typeIdString == null
                     || startDateString == null || endDateString == null || projectManagerIdString == null) {
-                request.setAttribute("errorMessage", "Tất cả các trường bắt buộc phải được điền đầy đủ.");
-                request.getRequestDispatcher("/WEB-INF/member/project-detail.jsp").forward(request, response);
+
+                request.setAttribute("errorMessage", "All required fields must be filled in completely.");
+                request.getRequestDispatcher("/WEB-INF/member/projectlist.jsp").forward(request, response);
+
                 return;
             }
 
@@ -151,8 +159,10 @@ public class ProjectListController extends HttpServlet {
                 LocalDate startDate = LocalDate.parse(startDateString);
                 project.setStartDate(java.sql.Date.valueOf(startDate));
             } catch (DateTimeParseException e) {
-                request.setAttribute("errorMessage", "Định dạng ngày bắt đầu không hợp lệ. Vui lòng sử dụng định dạng yyyy-MM-dd.");
-                request.getRequestDispatcher("/WEB-INF/member/project-detail.jsp").forward(request, response);
+
+                request.setAttribute("errorMessage", "Invalid start date format.");
+                request.getRequestDispatcher("/WEB-INF/member/projectlist.jsp").forward(request, response);
+
                 return;
             }
 
@@ -161,8 +171,10 @@ public class ProjectListController extends HttpServlet {
                 LocalDate endDate = LocalDate.parse(endDateString);
                 project.setEndDate(java.sql.Date.valueOf(endDate));
             } catch (DateTimeParseException e) {
-                request.setAttribute("errorMessage", "Định dạng ngày kết thúc không hợp lệ. Vui lòng sử dụng định dạng yyyy-MM-dd.");
-                request.getRequestDispatcher("/WEB-INF/member/project-detail.jsp").forward(request, response);
+
+                request.setAttribute("errorMessage", "Invalid end date format.");
+                request.getRequestDispatcher("/WEB-INF/member/projectlist.jsp").forward(request, response);
+
                 return;
             }
 
@@ -179,8 +191,10 @@ public class ProjectListController extends HttpServlet {
                 project.setTypeId(typeId);
                 project.setUserId(projectManagerId);
             } catch (NumberFormatException e) {
-                request.setAttribute("errorMessage", "Định dạng số không hợp lệ cho Department, Type hoặc Project Manager.");
-                request.getRequestDispatcher("/WEB-INF/member/project-detail.jsp").forward(request, response);
+
+                request.setAttribute("errorMessage", "Invalid number format for Department, Type or Project Manager.");
+                request.getRequestDispatcher("/WEB-INF/member/projectlist.jsp").forward(request, response);
+
                 return;
             }
 
@@ -191,8 +205,10 @@ public class ProjectListController extends HttpServlet {
                     project.setEstimatedEffort(estimatedEffort);
                 }
             } catch (NumberFormatException e) {
-                request.setAttribute("errorMessage", "Định dạng số không hợp lệ cho Estimated Effort.");
-                request.getRequestDispatcher("/WEB-INF/member/project-detail.jsp").forward(request, response);
+
+                request.setAttribute("errorMessage", "Invalid number format for Estimated Effort.");
+                request.getRequestDispatcher("/WEB-INF/member/projectlist.jsp").forward(request, response);
+
                 return;
             }
 
@@ -236,12 +252,13 @@ public class ProjectListController extends HttpServlet {
             if (success) {
                 response.sendRedirect(request.getContextPath() + "/projectlist");
             } else {
-                request.setAttribute("errorMessage", "Có lỗi khi thêm dự án.");
-                request.getRequestDispatcher("/WEB-INF/member/project-detail.jsp").forward(request, response);
+
+                request.setAttribute("errorMessage", "There was an error adding the project.");
+                request.getRequestDispatcher("/WEB-INF/member/projectlist.jsp").forward(request, response);
             }
         } catch (Exception e) {
-            request.setAttribute("errorMessage", "Có lỗi khi thêm dự án: " + e.getMessage());
-            request.getRequestDispatcher("/WEB-INF/member/project-detail.jsp").forward(request, response);
+            request.setAttribute("errorMessage", "There was an error adding the project: " + e.getMessage());
+            request.getRequestDispatcher("/WEB-INF/member/projectlist.jsp").forward(request, response);
         }
     }
 

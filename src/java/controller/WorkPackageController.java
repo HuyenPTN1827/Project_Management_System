@@ -93,6 +93,7 @@ public class WorkPackageController extends HttpServlet {
         ProjectTypeService pts = new ProjectTypeService();
 
         try {
+            
             request.setAttribute("sl", pts.getAllProjectTypeSettings("", true, "Scope Status ", 2));
             request.setAttribute("cl", pts.getAllProjectTypeSettings("", true, "Scope Complexity ", 2));
             request.setAttribute("pl", pSer.getProjectsDropDown());

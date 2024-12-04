@@ -56,15 +56,15 @@
                                         <div class="card-body">
                                             <form action="changepasswordcontroller" method="post"> <!-- Change action URL as necessary -->
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="oldPassword">Mật khẩu hiện tại:</label>
+                                                    <label class="form-label" for="oldPassword">Current password:</label>
                                                     <input type="password" class="form-control" id="oldPassword" name="oldPassword" required>
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="newPassword">Mật khẩu mới:</label>
+                                                    <label class="form-label" for="newPassword">New password:</label>
                                                     <input type="password" class="form-control" id="newPassword" name="newPassword" required>
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="confirmPassword">Xác nhận mật khẩu mới:</label>
+                                                    <label class="form-label" for="confirmPassword">Confirm new password:</label>
                                                     <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
                                                 </div>
                                                 <p style="color: blue;">
@@ -74,7 +74,7 @@
                                                 ${ERROR}
                                             </p>
                                             <div class="mb-3">
-                                                <input type="submit" value="Đổi Mật Khẩu" class="btn btn-lg btn-primary">
+                                                <input type="submit" value="Change Password" class="btn btn-lg btn-primary">
                                             </div>
                                             <c:if test="${not empty param.error}">
                                                 <div class="error-message">

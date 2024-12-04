@@ -72,7 +72,6 @@
                         <div class="mt-2 mb-3">
                             <h1 class="h1 d-inline align-middle">Project Details</h1>
                         </div>
-
                         <div class="row">
                             <div class="col-md-12 col-xl-12">
                                 <div class="card">
@@ -165,15 +164,21 @@
                                                                 <div class="col-md-6 mb-3">
                                                                     <label for="department" class="form-label"><strong>Department</strong> <span style="color: red;">*</span></label>
                                                                     <select class="form-select" id="department" name="department">
-                                                                        <option value="${project.departmentId}">Dept Name (DeptCode)</option>
-                                                                        <c:forEach var="projectname" items="${projectListName}">
-                                                                            <option value="${projectname.departmentId}" 
-                                                                                    ${projectname.departmentId == project.departmentId ? 'selected' : ''}>
-                                                                                ${projectname.departmentName}
+                                                                        <!-- Mặc định là phòng ban của dự án hiện tại -->
+                                                                        <option value="${project.departmentId}">
+                                                                            ${project.departmentName} 
+                                                                        </option>
+
+                                                                        <!-- Hiển thị danh sách tất cả các phòng ban -->
+                                                                        <c:forEach var="department" items="${departments}">
+                                                                            <option value="${department.id}" 
+                                                                                    ${department.id == project.departmentId ? 'selected' : ''}>
+                                                                                ${department.name} 
                                                                             </option>
                                                                         </c:forEach>
                                                                     </select>
                                                                 </div>
+
                                                             </div>
 
                                                             <div class="row">
@@ -360,7 +365,98 @@
                                                     </tbody>
                                                 </table>
                                             </div>
+                                            <div class="tab-pane fade ${activeTab == 'team' ? 'show active' : ''}" id="team" role="tabpanel" aria-labelledby="team-tab">
+                                                <div class="row">
+                                                    <div class="col-md-12 col-xl-12">
+                                                        <div class="card">
+                                                            <div class="card-header">
+                                                                <div class="d-flex justify-content-between align-items-center" style="margin: 10px;">
+                                                                    <form action="projectconfig" method="get" class="d-flex align-items-center" style="gap: 15px;">
+                                                                        <select name="statusFilter" class="form-select"  style="width: 130px;">
+                                                                            <option value="">All Status</option>
+                                                                            <option 
+                                                                                <c:if test="${param.status eq 'true'}">
+                                                                                    selected="selected"
+                                                                                </c:if>
+                                                                                value="true">Active
+                                                                            </option>
+                                                                            <option 
+                                                                                <c:if test="${param.status eq 'false'}">
+                                                                                    selected="selected"
+                                                                                </c:if>
+                                                                                value="false">Inactive
+                                                                            </option>
+                                                                        </select>
 
+                                                                        <input type="search" name="keyword" class="form-control" style="width: 270px;"
+                                                                               placeholder="Enter Team Name or Code" id="keyword" value="${param.keyword}">
+
+                                                                        <button type="submit" class="btn btn-primary">Search</button>
+
+                                                                    </form>
+
+                                                                    <a class="btn btn-primary" href="./TeamController?action=add&cuId=${param.id}">Create new</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <table id="datatables-multi" class="table table-striped" style="width:100%">
+                                                                    <thead>
+                                                                        <tr style="text-align: center">
+                                                                            <th>ID</th>
+                                                                            <th>Name</th>
+                                                                            <th>Topic</th>
+                                                                            <th>Project</th>
+                                                                            <th>Status</th>
+                                                                            <th>Action</th>
+
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <c:forEach items="${teams}" var="tt">
+                                                                            <tr style="text-align: center">
+                                                                                <td>${tt.id}</td>
+                                                                                <td>${tt.name}</td>
+                                                                                <td>${tt.topic}</td>
+                                                                                <td>${tt.project.name}</td>
+                                                                                <td>
+                                                                                    <c:if test="${tt.status eq '1'}">
+                                                                                        <span class="badge bg-success">Active</span>
+                                                                                    </c:if>
+                                                                                    <c:if test="${tt.status eq '0'}">
+                                                                                        <span class="badge bg-danger">Inactive</span>
+                                                                                    </c:if>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <a href="./TeamController?action=edit&id=${tt.id}&cuId=${param.id}" 
+                                                                                       class="btn btn-link text-primary">Edit</a>
+
+                                                                                    <c:if test="${tt.status eq '0'}">
+                                                                                        <a href="./TeamController?action=changeStatus&id=${tt.id}&status=true&cuId=${param.id}"
+                                                                                           class="btn btn-link text-success"
+                                                                                           onclick="return confirm('Are you sure you want to activate this project type?');">Activate</a>
+                                                                                    </c:if>
+
+                                                                                    <c:if test="${tt.status eq '1'}">
+                                                                                        <a href="./TeamController?action=changeStatus&id=${type.id}&status=false&cuId=${param.id}"
+                                                                                           class="btn btn-link text-danger"
+                                                                                           onclick="return confirm('Are you sure you want to deactivate this project type?');">Deactivate</a>
+                                                                                    </c:if>
+
+                                                                                    <a href="./TeamController?action=delete&id=${tt.id}&cuId=${param.id}"
+                                                                                       class="btn btn-link text-danger"
+                                                                                       onclick="return confirm('Are you sure you want to deactivate this project type?');">Delete</a>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </c:forEach>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <!-- Milestone Modal --> 
                                             <div id="milestoneModal" class="modal" tabindex="-1" role="dialog">
                                                 <div class="modal-dialog" role="document">
@@ -791,25 +887,25 @@
         <script src="${pageContext.request.contextPath}/js/datatables.js"></script>
 
         <script>
-            document.addEventListener("DOMContentLoaded", function (event) {
-                setTimeout(function () {
-                    if (localStorage.getItem('popState') !== 'shown') {
-                        window.notyf.open({
-                            type: "success",
-                            message: "Get access to all 500+ components and 45+ pages with AdminKit PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
-                            duration: 10000,
-                            ripple: true,
-                            dismissible: false,
-                            position: {
-                                x: "left",
-                                y: "bottom"
-                            }
-                        });
+                                                document.addEventListener("DOMContentLoaded", function (event) {
+                                                    setTimeout(function () {
+                                                        if (localStorage.getItem('popState') !== 'shown') {
+                                                            window.notyf.open({
+                                                                type: "success",
+                                                                message: "Get access to all 500+ components and 45+ pages with AdminKit PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
+                                                                duration: 10000,
+                                                                ripple: true,
+                                                                dismissible: false,
+                                                                position: {
+                                                                    x: "left",
+                                                                    y: "bottom"
+                                                                }
+                                                            });
 
-                        localStorage.setItem('popState', 'shown');
-                    }
-                }, 15000);
-            });
+                                                            localStorage.setItem('popState', 'shown');
+                                                        }
+                                                    }, 15000);
+                                                });
         </script>
     </body>
 </html>

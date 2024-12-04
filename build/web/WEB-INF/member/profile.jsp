@@ -41,7 +41,6 @@
         <div class="wrapper">
             <!-- Include sidebar -->
             <jsp:include page="../component/sidebar.jsp"></jsp:include>
-
                 <div class="main">
                     <!-- Include header -->
                 <jsp:include page="../component/header.jsp"></jsp:include>
@@ -58,17 +57,25 @@
                                             <h5 class="card-title mb-0">Profile Details</h5>
                                         </div>
                                         <div class="card-body text-center">
-                                            <img src="img/avatars/avatar-4.jpg" alt="<%= ((User) request.getAttribute("memberProfile")).getFull_name() %>" class="img-fluid rounded-circle mb-2" width="128" height="128" />
-                                        <h5 class="card-title mb-0"><%= ((User) request.getAttribute("memberProfile")).getFull_name() %></h5>
-                                        <div class="text-muted mb-2">Lead Developer</div>
+                                            <img src="img/avatars/avatar-4.jpg" 
+                                                 alt="${userProfile.full_name}" 
+                                            class="img-fluid rounded-circle mb-2" width="128" height="128" />
+                                        <h5 class="card-title mb-0">${userProfile.full_name}</h5>
+                                        <div class="text-muted mb-2">${userProfile.role_name}</div>
                                         <div class="text-muted mb-2">Viet Nam</div>
                                     </div>
                                     <hr class="my-0" />
                                     <div class="card-body">
                                         <h5 class="h6 card-title">About</h5>
                                         <ul class="list-unstyled mb-0">
-                                            <li class="mb-1"><span class="feather-sm me-1"></span> Email: <a href="mailto:<%= ((User) request.getAttribute("memberProfile")).getEmail() %>"><%= ((User) request.getAttribute("memberProfile")).getEmail() %></a></li>
-                                            <li class="mb-1"><span class="feather-sm me-1"></span> Phone: <a href="tel:<%= ((User) request.getAttribute("memberProfile")).getMobile() %>"><%= ((User) request.getAttribute("memberProfile")).getMobile() %></a></li>
+                                            <li class="mb-1">
+                                                <span class="feather-sm me-1"></span> 
+                                                Email: <a href="mailto:${userProfile.email}">${userProfile.email}</a>
+                                            </li>
+                                            <li class="mb-1">
+                                                <span class="feather-sm me-1"></span> 
+                                                Phone: <a href="tel:${userProfile.mobile}">${userProfile.mobile}</a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -85,23 +92,23 @@
                                     </div>
 
                                     <div class="card-body">
-                                        <form action="<%= request.getContextPath() %>/member-profilecontroller" method="post" class="row">
+                                        <form action="${pageContext.request.contextPath}/member-profilecontroller" method="post" class="row">
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="inputName">Full Name</label>
-                                                <input type="text" class="form-control" id="inputName" name="fullname" value="<%= ((User) request.getAttribute("memberProfile")).getFull_name() %>" required>
+                                                <input type="text" class="form-control" id="inputName" name="fullname" value="${userProfile.full_name}" required>
                                             </div>
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="inputEmail4">Email</label>
-                                                <input type="email" class="form-control" id="inputEmail4" name="email" value="<%= ((User) request.getAttribute("memberProfile")).getEmail() %>" required>
+                                                <input type="email" class="form-control" id="inputEmail4" name="email" value="${userProfile.email}" required>
                                             </div>
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="phone">Phone</label>
-                                                <input type="text" class="form-control" id="phone" name="mobile" value="<%= ((User) request.getAttribute("memberProfile")).getMobile() %>" required>
+                                                <input type="text" class="form-control" id="phone" name="mobile" value="${userProfile.mobile}" required>
                                             </div>
 
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="inputCity">Roles</label>
-                                                <input type="text" class="form-control" id="phone" name="mobile" value="<%= ((User) request.getAttribute("memberProfile")).getRole_id() %>" required>
+                                                <input type="text" class="form-control" id="roles" name="roles" value="${userProfile.role_name}" required>
                                             </div>
                                             <div style="color: green;">
                                                 ${message}
@@ -109,7 +116,7 @@
                                             <div style="color: red;">
                                                 ${err}
                                             </div>
-                                            <button style="width: 150px;"  type="submit" class="btn btn-lg btn-primary">Save Changes</button>
+                                            <button style="width: 150px;" type="submit" class="btn btn-lg btn-primary">Save Changes</button>
                                         </form>
                                     </div>
                                 </div>
