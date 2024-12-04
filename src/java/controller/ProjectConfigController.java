@@ -37,6 +37,7 @@ import model.Department;
 import model.ProjectTypeSetting;
 import service.DepartmentService;
 import service.ProjectTypeService;
+import service.TeamService;
 import service.UserService;
 
 @WebServlet()
@@ -129,7 +130,14 @@ public class ProjectConfigController extends HttpServlet {
             throws ServletException, IOException {
         try {
             System.out.println("Start handleProjectConfig");
+            String keyword = request.getParameter("keyword");
+            String status = request.getParameter("status");
+            TeamService teamService = new TeamService();
+            List<Team> teams = teamService.getTeamList(keyword, status);
+            request.setAttribute("teams", teams);
 
+            System.out.println("+================================");
+            System.out.println(teams);
             // Lấy danh sách dự án
             System.out.println("Calling listProjects");
             listProjects(request, response);

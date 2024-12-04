@@ -20,7 +20,7 @@ public class BaseDAO {
 
     private static final String jdbcURL = "jdbc:mysql://localhost:3306/pms";
     private static final String jdbcUsername = "root";
-    private static final String jdbcPassword = "11102001";
+    private static final String jdbcPassword = "123456789";
 
     public static Connection getConnection() {
         Connection connection = null;

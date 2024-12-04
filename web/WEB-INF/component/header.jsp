@@ -41,8 +41,12 @@
             <ul class="navbar-nav d-none d-lg-flex">
                 <li class="nav-item px-2">
                     <a class="nav-link <c:if test="${currentPage == 'requirement-management'}">active</c:if>"
-                       href="#">Requirements</a>
-                </li>    
+                       href="WorkPackageController">Requirements</a>
+                </li>  
+                <li class="nav-item px-2">
+                    <a class="nav-link <c:if test="${currentPage == 'requirement-management'}">active</c:if>"
+                       href="projectconfig">Project config</a>
+                </li>   
                 <li class="nav-item px-2">
                 <c:if test="${user.id == null}">
                     <a class="nav-link" href="<%=request.getContextPath()%>/logout">Issues</a>
