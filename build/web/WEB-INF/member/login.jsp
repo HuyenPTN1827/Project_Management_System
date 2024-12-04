@@ -73,7 +73,7 @@
                                             %>
 
                                             <div class="text-center mt-3">
-                                                <button type="submit" class="btn btn-lg btn-secondary" style="border-radius: 50px; width: 95%">Sign in</button>
+                                                <button type="submit" class="btn btn-lg btn-outline-primary" style="border-radius: 50px; width: 95%">Sign in</button>
                                             </div>
                                             <div style="display: flex; justify-content: space-between; margin: 10px 5px;">
                                                 <label class="form-check">
@@ -85,9 +85,9 @@
                                                 </small>
                                             </div>
                                             <div class="text-center mt-3">
-                                                <a href="register-form" class="btn btn-lg btn-outline-secondary" style="margin-bottom: 10px; border-radius: 50px; width: 95%">Sign up</a>
+                                                <a href="register-form" class="btn btn-lg btn-outline-primary" style="margin-bottom: 10px; border-radius: 50px; width: 95%">Sign up</a>
                                                 <br>
-                                                <a href="index.html" class="btn btn-lg btn-outline-info" style="border-radius: 50px; width: 95%">
+                                                <a href="#" class="btn btn-lg btn-outline-primary" style="border-radius: 50px; width: 95%">
                                                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png" width="23px" alt="alt" /> Continues with Google
                                                 </a>
                                             </div>

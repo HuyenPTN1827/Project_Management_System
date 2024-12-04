@@ -131,7 +131,7 @@ public class UserService extends BaseServive {
         }
         // Validate Vietnamese phone number
         if (!validateMobile(user.getMobile())) {
-            errors.add("Invalid mobile number format. Must start with 03, 05, "
+            errors.add("Invalid mobile number format. Phone number must start with 03, 05, "
                     + "07, 08, or 09 and be 10 digits long.");
         }
         // Validate password 

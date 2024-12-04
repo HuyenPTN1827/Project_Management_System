@@ -51,9 +51,9 @@ public class UserDAO {
     public User loginValidate(User user) throws ClassNotFoundException {
         User foundUser = null;
         String query = """
-                   SELECT id, full_name, email, mobile, password, role_id
-                   FROM pms.user
-                   WHERE email = ? AND password = ?;
+                   SELECT u.id, u.full_name, u.username, u.email, u.mobile, u.password, u.role_id, s.name
+                   FROM pms.user u JOIN pms.setting s ON u.role_id = s.id
+                   WHERE u.email = ? AND u.password = ?;
                    """;
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(query)) {
@@ -65,10 +65,12 @@ public class UserDAO {
                 foundUser = new User();
                 foundUser.setId(rs.getInt("id"));
                 foundUser.setFull_name(rs.getString("full_name"));
+                foundUser.setUsername(rs.getString("username"));
                 foundUser.setEmail(rs.getString("email"));
                 foundUser.setMobile(rs.getString("mobile"));
                 foundUser.setPassword(rs.getString("password"));
                 foundUser.setRole_id(rs.getInt("role_id")); // Set role_id vào user
+                foundUser.setRole_name(rs.getString("name")); // Set role_id vào user
             }
         } catch (SQLException e) {
             BaseDAO.printSQLException(e);

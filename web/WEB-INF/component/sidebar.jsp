@@ -35,7 +35,7 @@
                         </a>
                     </div>
 
-                    <div class="sidebar-user-subtitle">${user.setting.name}</div>
+                    <div class="sidebar-user-subtitle">${user.role_name}</div>
                 </div>
             </div>
         </div>

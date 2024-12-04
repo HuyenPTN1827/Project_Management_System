@@ -23,7 +23,7 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="menuDropdown">
                 <a class="dropdown-item <c:if test="${currentPage == 'requirement-management'}">active</c:if>"" 
-                   href="#">Requirements</a>
+                   href="WorkPackageController">Requirements</a>
 
                     <a class="dropdown-item <c:if test="${currentPage == 'issue-management'}">active</c:if>"" 
                    href="<%=request.getContextPath()%>/issue-management?userId=${user.id}">Issues</a>
@@ -43,10 +43,7 @@
                     <a class="nav-link <c:if test="${currentPage == 'requirement-management'}">active</c:if>"
                        href="WorkPackageController">Requirements</a>
                 </li>  
-                <li class="nav-item px-2">
-                    <a class="nav-link <c:if test="${currentPage == 'requirement-management'}">active</c:if>"
-                       href="projectconfig">Project config</a>
-                </li>   
+
                 <li class="nav-item px-2">
                 <c:if test="${user.id == null}">
                     <a class="nav-link" href="<%=request.getContextPath()%>/logout">Issues</a>
@@ -60,7 +57,8 @@
             <li class="nav-item px-2">
                 <a class="nav-link <c:if test="${currentPage == 'defect-management'}">active</c:if>" 
                    href="#">Defects</a>
-                </li>      
+                </li>   
+                
                 <li class="nav-item px-2">
                     <a class="nav-link <c:if test="${currentPage == 'timesheet-management'}">active</c:if>" 
                        href="#">Timesheets</a>

@@ -3,6 +3,7 @@
     Created on : Sep 12, 2024, 12:23:11 AM
     Author     : kelma
 --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,37 +41,60 @@
                                     <div class="col-md-7">
                                         <form action="<%=request.getContextPath()%>/register" method="post">
                                             <div style="margin-top: 10px" class="mb-3">
-                                                <label class="form-label">Full Name</label>
+                                                <label class="form-label">Full Name <span style="color: red;">*</span></label>
                                                 <input class="form-control form-control-lg" type="text" name="fullname" placeholder="Enter full name" required />
                                             </div>
                                             <div style="margin-top: 10px" class="mb-3">
-                                                <label class="form-label">Username</label>
+                                                <label class="form-label">Username <span style="color: red;">*</span></label>
                                                 <input class="form-control form-control-lg" type="text" name="username" placeholder="Enter username" required />
                                             </div>
                                             <div style="margin-top: 10px" class="mb-3">
-                                                <label class="form-label">Email</label>
+                                                <label class="form-label">Email <span style="color: red;">*</span></label>
                                                 <input class="form-control form-control-lg" type="text" name="email" placeholder="Enter email" required />
                                             </div>
                                             <div style="margin-top: 10px" class="mb-3">
                                                 <label class="form-label">Phone Number</label>
                                                 <input class="form-control form-control-lg" type="text" name="mobile" placeholder="Enter phone number" />
+                                                <small style="color: gray">Phone number must start with 03, 05, 07, 08, or 09 and be 10 digits long.</small>
                                             </div>
                                             <div style="margin-top: 10px" class="mb-3">
-                                                <label class="form-label">Password</label>
+                                                <label class="form-label">Password <span style="color: red;">*</span></label>
                                                 <input class="form-control form-control-lg" type="password" name="password" placeholder="Enter password" required />
-                                                <small style="color: gray">Use 8 or more characters with a mix of letters, numbers, and symbols</small>
+                                                <small style="color: gray">Password must be at least 6 characters, including uppercase letters, lowercase letters, numbers and some special characters.</small>
                                             </div>
                                             <div style="margin-top: 10px" class="mb-3">
-                                                <label class="form-label">Confirm Password</label>
+                                                <label class="form-label">Confirm Password <span style="color: red;">*</span></label>
                                                 <input class="form-control form-control-lg" type="password" name="confirmPassword" placeholder="Confirm password" required />
                                             </div>
 
-                                            <p style="color: red;">
+<!--                                            <p style="color: red;">
                                                 ${NOTIFICATION}
                                             </p>
                                             <p style="color: blue;">
                                                 ${SUCCESS}
-                                            </p>
+                                            </p>-->
+                                            
+                                            <c:if test="${not empty validationErrors}">
+                                                <div class="alert alert-danger pt-3 pe-3 ps-3">
+                                                    <ul>
+                                                        <c:forEach items="${validationErrors}" var="error" >
+                                                            <li>${error}</li>
+                                                            </c:forEach>
+                                                    </ul>
+                                                </div>
+                                            </c:if>
+                                            
+                                            <c:if test="${not empty NOTIFICATION}">
+                                                <div class="alert alert-danger p-3">
+                                                    ${NOTIFICATION}
+                                                </div>
+                                            </c:if>
+                                            
+                                            <c:if test="${not empty SUCCESS}">
+                                                <div class="alert alert-success p-3">
+                                                    ${SUCCESS}
+                                                </div>
+                                            </c:if>
 
                                             <div class="text-center mt-3">
                                                 <button type="submit" class="btn btn-lg btn-primary" style="border-radius: 50px;">Create Account</button>

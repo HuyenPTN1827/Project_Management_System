@@ -146,7 +146,7 @@ public class AuthenticationController extends HttpServlet {
 
         // Kiểm tra giá trị người dùng nhập có lỗi nào không
         if (!validationErrors.isEmpty()) {
-            request.setAttribute("NOTIFICATION", String.join(", ", validationErrors));
+            request.setAttribute("validationErrors", validationErrors);
             RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/guest/register.jsp");
             dispatcher.forward(request, response);
             return; // Dừng xử lý nếu có lỗi

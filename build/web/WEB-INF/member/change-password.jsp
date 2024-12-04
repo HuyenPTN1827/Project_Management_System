@@ -74,7 +74,7 @@
                                                 ${ERROR}
                                             </p>
                                             <div class="mb-3">
-                                                <input type="submit" value="Change Password" class="btn btn-lg btn-primary">
+                                                <input type="submit" value="Change Password" class="btn btn-lg btn-success">
                                             </div>
                                             <c:if test="${not empty param.error}">
                                                 <div class="error-message">

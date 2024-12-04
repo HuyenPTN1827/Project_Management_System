@@ -47,7 +47,7 @@
                                             <img src="https://tatthanh.com.vn/pic/Images/Module/News/images/image(1722).png" width="100px" style="border-radius: 50%;" alt="alt" />
                                         </div>
                                         <div>
-                                            <h1 class="h2">Forgot password</h1>
+                                            <h1 class="h2">Forgot Password</h1>
                                             <p class="lead">
                                                 Already have account? 
                                                 <a style="color: black;" href="<%=request.getContextPath()%>/login-form">Back to Sign in</a>

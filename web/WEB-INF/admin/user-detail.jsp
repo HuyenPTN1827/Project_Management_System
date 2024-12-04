@@ -103,12 +103,14 @@
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label">Password <span style="color: red;">*</span></label>
                                                     <input type="password" class="form-control" name="password" placeholder="Enter the Password" required>
+                                                    <small style="color: gray">Password must be at least 6 characters, including uppercase letters, lowercase letters, numbers and some special characters.</small>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label">Phone</label>
                                                     <input type="text" class="form-control" name="mobile" placeholder="Enter the Phone number"
                                                            value="${mobile}">
+                                                    <small style="color: gray">Phone number must start with 03, 05, 07, 08, or 09 and be 10 digits long.</small>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
@@ -200,6 +202,8 @@
                                                     <label class="form-label">Phone</label>
                                                     <input type="text" class="form-control" name="mobile" placeholder="Enter the Phone number"
                                                            value="${userDetail.mobile}">
+                                                    <small style="color: gray">Phone number must start with 03, 05, 07, 08, or 09 and be 10 digits long.</small>
+
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
