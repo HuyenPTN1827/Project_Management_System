@@ -101,7 +101,7 @@
                                             </div>
 
                                             <div class="mb-3 col-md-6">
-                                                <label for="pid">Project ${projects.size()}</label>
+                                                <label for="pid">Project </label>
                                                 <select id="pid" name="pid" class="form-select" required>
                                                     <c:forEach var="project" items="${projects}">
                                                         <option value="${project.id}">${project.name}</option>

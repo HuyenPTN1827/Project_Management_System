@@ -82,7 +82,7 @@ public class TeamController extends HttpServlet {
             throws Exception, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         teamService.deleteTeamById(id);
-        response.sendRedirect("TeamController?action=list");
+        response.sendRedirect("projectconfig");
     }
 
     private void changeStatusTeam(HttpServletRequest request, HttpServletResponse response)
@@ -90,7 +90,7 @@ public class TeamController extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         boolean newStatus = Boolean.parseBoolean(request.getParameter("status"));
         teamService.changeTeamStatusById(id, newStatus);
-        response.sendRedirect("team?action=list");
+        response.sendRedirect("projectconfig");
     }
 
     private void addTeam(HttpServletRequest request, HttpServletResponse response)
@@ -103,7 +103,7 @@ public class TeamController extends HttpServlet {
 
         Team newTeam = new Team(0, name, topic, description, Integer.valueOf(pid), status);
         teamService.addNewTeam(newTeam);
-        response.sendRedirect("TeamController?action=list");
+        response.sendRedirect("projectconfig");
     }
 
     private void updateTeam(HttpServletRequest request, HttpServletResponse response)
@@ -117,7 +117,7 @@ public class TeamController extends HttpServlet {
 
         Team updatedTeam = new Team(id, name, topic, description, Integer.valueOf(pid), status);
         teamService.updateTeamById(updatedTeam);
-        response.sendRedirect("TeamController?action=list");
+        response.sendRedirect("projectconfig");
     }
 
     @Override

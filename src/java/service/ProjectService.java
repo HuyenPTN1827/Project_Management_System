@@ -61,6 +61,7 @@ public class ProjectService {
     }
 
     public List<Project> getProjectsDropDown() {
+        
         return projectDAO.getProjectsDropDown();
     }
 
