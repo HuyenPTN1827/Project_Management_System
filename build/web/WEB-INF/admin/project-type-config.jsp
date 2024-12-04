@@ -290,7 +290,7 @@
                                                                     <c:if test="${type eq 'parent'}">
                                                                         selected="selected"
                                                                     </c:if>
-                                                                    value="parent">Parent Type
+                                                                    value="parent">Parent Setting
                                                                 </option> 
                                                                 <c:forEach items="${listType}" var="t">
                                                                     <option 
