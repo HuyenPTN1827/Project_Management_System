@@ -154,7 +154,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
                 }
 
                 // Chuyển tiếp sang trang profile.jsp
-                request.setAttribute("memberProfile", user);
+                request.setAttribute("userProfile", user);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/profile.jsp");
                 dispatcher.forward(request, response);
 

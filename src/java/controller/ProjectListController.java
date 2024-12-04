@@ -15,8 +15,10 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import model.Allocation;
+import model.Department;
 import model.Milestone;
 import model.Project;
+import model.ProjectType;
 import model.User;
 import service.ProjectService;
 //BachHD
@@ -72,6 +74,7 @@ public class ProjectListController extends HttpServlet {
 
         // Lấy danh sách Manager từ Service
         List<User> managers = projectService.getAllManagers();
+    
 
         // Kiểm tra điều kiện tìm kiếm
         if (status >= 0 && status <= 5) {
@@ -111,10 +114,13 @@ public class ProjectListController extends HttpServlet {
     private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Lấy danh sách Manager từ Service
         List<User> managers = projectService.getAllManagers();
-        
+        List<ProjectType> projecttypes = projectService.getAllProjectType();
+        List<Department> departments = projectService.getAllDepartment();
         // Path to user information input form page
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/project-detail.jsp");
+        request.setAttribute("listDepartments", departments);
+        request.setAttribute("listProjectTypes", projecttypes);
         request.setAttribute("listManagers", managers);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/project-add.jsp");
         dispatcher.forward(request, response);
     }
 

@@ -7,8 +7,10 @@ package service;
 import context.ProjectDAO;
 import java.util.List;
 import model.Allocation;
+import model.Department;
 import model.Milestone;
 import model.Project;
+import model.ProjectType;
 import model.User;
 
 /**
@@ -69,5 +71,12 @@ public class ProjectService {
 
     public List<Milestone> getMilestonesByProjectId(int userId, Integer projectId) {
         return projectDAO.getMilestonesByProjectId(userId, projectId);
+    }
+    
+     public List<ProjectType> getAllProjectType() {
+        return projectDAO.getAllProjectTypes(); 
+    }
+      public List<Department> getAllDepartment() {
+        return projectDAO.getAllDepartments(); 
     }
 }

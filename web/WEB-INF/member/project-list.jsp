@@ -213,7 +213,7 @@
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h1 class="modal-title">Project Details</h1>
+                                                <h1 class="modal-title">Add New Project</h1>
                                                 <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" onclick="closeModal();"></button>
                                             </div>
                                             <div class="modal-body">

@@ -72,7 +72,6 @@
                         <div class="mt-2 mb-3">
                             <h1 class="h1 d-inline align-middle">Project Details</h1>
                         </div>
-
                         <div class="row">
                             <div class="col-md-12 col-xl-12">
                                 <div class="card">
@@ -165,15 +164,21 @@
                                                                 <div class="col-md-6 mb-3">
                                                                     <label for="department" class="form-label"><strong>Department</strong> <span style="color: red;">*</span></label>
                                                                     <select class="form-select" id="department" name="department">
-                                                                        <option value="${project.departmentId}">Dept Name (DeptCode)</option>
-                                                                        <c:forEach var="projectname" items="${projectListName}">
-                                                                            <option value="${projectname.departmentId}" 
-                                                                                    ${projectname.departmentId == project.departmentId ? 'selected' : ''}>
-                                                                                ${projectname.departmentName}
+                                                                        <!-- Mặc định là phòng ban của dự án hiện tại -->
+                                                                        <option value="${project.departmentId}">
+                                                                            ${project.departmentName} 
+                                                                        </option>
+
+                                                                        <!-- Hiển thị danh sách tất cả các phòng ban -->
+                                                                        <c:forEach var="department" items="${departments}">
+                                                                            <option value="${department.id}" 
+                                                                                    ${department.id == project.departmentId ? 'selected' : ''}>
+                                                                                ${department.name} 
                                                                             </option>
                                                                         </c:forEach>
                                                                     </select>
                                                                 </div>
+
                                                             </div>
 
                                                             <div class="row">
@@ -791,25 +796,25 @@
         <script src="${pageContext.request.contextPath}/js/datatables.js"></script>
 
         <script>
-            document.addEventListener("DOMContentLoaded", function (event) {
-                setTimeout(function () {
-                    if (localStorage.getItem('popState') !== 'shown') {
-                        window.notyf.open({
-                            type: "success",
-                            message: "Get access to all 500+ components and 45+ pages with AdminKit PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
-                            duration: 10000,
-                            ripple: true,
-                            dismissible: false,
-                            position: {
-                                x: "left",
-                                y: "bottom"
-                            }
-                        });
+                                                document.addEventListener("DOMContentLoaded", function (event) {
+                                                    setTimeout(function () {
+                                                        if (localStorage.getItem('popState') !== 'shown') {
+                                                            window.notyf.open({
+                                                                type: "success",
+                                                                message: "Get access to all 500+ components and 45+ pages with AdminKit PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
+                                                                duration: 10000,
+                                                                ripple: true,
+                                                                dismissible: false,
+                                                                position: {
+                                                                    x: "left",
+                                                                    y: "bottom"
+                                                                }
+                                                            });
 
-                        localStorage.setItem('popState', 'shown');
-                    }
-                }, 15000);
-            });
+                                                            localStorage.setItem('popState', 'shown');
+                                                        }
+                                                    }, 15000);
+                                                });
         </script>
     </body>
 </html>
