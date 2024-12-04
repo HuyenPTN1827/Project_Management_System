@@ -53,21 +53,35 @@
 
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
         <div class="wrapper">
-            <% request.setAttribute("currentPage", "team"); %>
-            <jsp:include page="../component/sidebar.jsp"></jsp:include>
+            <% request.setAttribute("currentPage", "project-type-management"); %>
+            <jsp:include page="../component/sidebar-admin.jsp"></jsp:include>
                 <div class="main">
                 <jsp:include page="../component/header.jsp"></jsp:include>
 
                     <main class="content">
                         <div class="container-fluid p-0">
-                            <a href="<%=request.getContextPath()%>/TeamController">Team list </a>
-                        <span>> Add scope</span>
-                        <h1 class="h1 mt-2 mb-3 col-md-6"> Add Team</h1>
+                            <a href="<%=request.getContextPath()%>/project-type-management">Project Types Management > </a>
+                        <a href="<%=request.getContextPath()%>/project-type-config?id=${typeId}">Project Type Configs > </a>
+
+                        <h1 class="h1 mt-2 mb-3"> Add User</h1>
                         <div class="row">
 
                             <div class="col-md-12 col-xl-12">
                                 <div class="card">
-
+                                    <div class="card-header">
+                                        <div class="mt-2 mb-2">
+                                            <form action="add-project-type-user" method="post" class="d-flex align-items-center" style="gap: 15px;">
+                                                <input type="hidden" name="typeId" value="${typeId}">
+                                                <div class="col-md-4">
+                                                    <input type="search" name="keyword" class="form-control"
+                                                           placeholder="Enter Full Name or Email" id="keyword" value="${keyword}">
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <button type="submit" class="btn btn-primary">Search</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>          
 
                                 <div class="card">
@@ -82,55 +96,42 @@
                                             </div>
                                         </c:if>
 
-                                        <form action="TeamController" class="row" method="post">
-                                            <input type="hidden" name="action" value="add">
+                                        <form action="insert-project-type-user" method="post" class="row">
+                                            <input type="hidden" name="typeId" value="${typeId}">
+                                            <input type="hidden" name="id" value="${userType.id}">
 
                                             <div class="mb-3 col-md-6">
-                                                <label for="name">Team Name</label>
-                                                <input type="text" id="name" name="name" class="form-control" value="${team.name}" required>
+                                                <label class="form-label">Full Name <span style="color: red;">*</span></label>
+                                                <input type="text" class="form-control" name="fullname" placeholder="Enter the Full name" 
+                                                       value="${userType.full_name}" readonly>
                                             </div>
 
                                             <div class="mb-3 col-md-6">
-                                                <label for="topic">Topic</label>
-                                                <input type="text" id="topic" name="topic" class="form-control" value="${team.topic}" required>
-                                            </div>
-
-                                            <div class="mb-3 col-md-12">
-                                                <label for="description">Description</label>
-                                                <textarea id="description" name="description" class="form-control" required>${team.details}</textarea>
+                                                <label class="form-label">Phone</label>
+                                                <input type="text" class="form-control" name="mobile" placeholder="Enter the Phone number"
+                                                       value="${userType.mobile}" readonly>
                                             </div>
 
                                             <div class="mb-3 col-md-6">
-                                                <label for="pid">Project </label>
-                                                <select id="pid" name="pid" class="form-select" required>
-                                                    <c:forEach var="project" items="${projects}">
-                                                        <option value="${project.id}">${project.name}</option>
+                                                <label class="form-label">Email <span style="color: red;">*</span></label>
+                                                <input type="text" class="form-control" name="email" placeholder="Enter the Email address" 
+                                                       value="${userType.email}" readonly>
+                                            </div>
+
+                                            <div class="mb-3 col-md-6">
+                                                <label class="form-label">Project Role <span style="color: red;">*</span></label>
+                                                <select name="pjRole" class="form-select" required>
+                                                    <option value="" disable hidden>Choose Project Role</option>
+                                                    <c:forEach items="${ptSetting}" var="r">
+                                                        <option value=${r.id}>${r.name}</option>
                                                     </c:forEach>
                                                 </select>
                                             </div>
 
-                                            <div class="mb-3 col-md-6">
-                                                <label class="form-label">Status</label>
-                                                <div class="check">
-                                                    <input class="form-check-input" type="radio" name="status" checked
-                                                           <c:if test="${team.status eq '1'}">
-                                                               checked
-                                                           </c:if>
-                                                           value="1"> Active
-                                                    <input class="form-check-input ms-3" type="radio" name="status"
-                                                           <c:if test="${team.status eq '0'}">
-                                                               checked
-                                                           </c:if>
-                                                           value="0"> Inactive
-                                                </div>
-                                            </div>
-
-                                            <!-- Submit Button -->
-                                            <div class="col-md-12">
-                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                            <div>
+                                                <button type="submit" class="btn btn-lg btn-success">Submit</button>
                                             </div>
                                         </form>
-
                                     </div>
                                 </div>
                             </div>
@@ -171,25 +172,25 @@
         <script src="${pageContext.request.contextPath}/js/app.js"></script>
 
         <script>
-            document.addEventListener("DOMContentLoaded", function (event) {
-                setTimeout(function () {
-                    if (localStorage.getItem('popState') !== 'shown') {
-                        window.notyf.open({
-                            type: "success",
-                            message: "Get access to all 500+ components and 45+ pages with AdminKit PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
-                            duration: 10000,
-                            ripple: true,
-                            dismissible: false,
-                            position: {
-                                x: "left",
-                                y: "bottom"
-                            }
-                        });
+        document.addEventListener("DOMContentLoaded", function (event) {
+            setTimeout(function () {
+                if (localStorage.getItem('popState') !== 'shown') {
+                    window.notyf.open({
+                        type: "success",
+                        message: "Get access to all 500+ components and 45+ pages with AdminKit PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
+                        duration: 10000,
+                        ripple: true,
+                        dismissible: false,
+                        position: {
+                            x: "left",
+                            y: "bottom"
+                        }
+                    });
 
-                        localStorage.setItem('popState', 'shown');
-                    }
-                }, 15000);
-            });
+                    localStorage.setItem('popState', 'shown');
+                }
+            }, 15000);
+        });
         </script>
     </body>
 </html>

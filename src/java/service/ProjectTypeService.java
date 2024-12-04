@@ -60,6 +60,7 @@ public class ProjectTypeService {
     // 17/10/2024
     // Get all project type settings
     public List<ProjectTypeSetting> getAllProjectTypeSettings(String keyword, Boolean status, String type, int typeId) throws SQLException {
+        
         return projectTypeDAO.getAllProjectTypeSettings(keyword, status, type, typeId);
     }
 

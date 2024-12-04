@@ -53,16 +53,16 @@
 
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
         <div class="wrapper">
-            <% request.setAttribute("currentPage", "team"); %>
+            <% request.setAttribute("currentPage", "scope"); %>
             <jsp:include page="../component/sidebar.jsp"></jsp:include>
                 <div class="main">
                 <jsp:include page="../component/header.jsp"></jsp:include>
 
                     <main class="content">
                         <div class="container-fluid p-0">
-                            <a href="<%=request.getContextPath()%>/TeamController">Team list </a>
+                            <a href="<%=request.getContextPath()%>/WorkPackageController">Scope list </a>
                         <span>> Add scope</span>
-                        <h1 class="h1 mt-2 mb-3 col-md-6"> Add Team</h1>
+                        <h1 class="h1 mt-2 mb-3 col-md-6"> Add Scope</h1>
                         <div class="row">
 
                             <div class="col-md-12 col-xl-12">
@@ -82,53 +82,59 @@
                                             </div>
                                         </c:if>
 
-                                        <form action="TeamController" class="row" method="post">
+                                        <form action="WorkPackageController" class="row" method="post">
                                             <input type="hidden" name="action" value="add">
+                                            <input type="hidden" name="createdBy" value="1">
 
                                             <div class="mb-3 col-md-6">
-                                                <label for="name">Team Name</label>
-                                                <input type="text" id="name" name="name" class="form-control" value="${team.name}" required>
+                                                <label for="title">Title</label>
+                                                <input type="text" id="title" name="title" class="form-control" required>
                                             </div>
-
                                             <div class="mb-3 col-md-6">
-                                                <label for="topic">Topic</label>
-                                                <input type="text" id="topic" name="topic" class="form-control" value="${team.topic}" required>
-                                            </div>
-
-                                            <div class="mb-3 col-md-12">
-                                                <label for="description">Description</label>
-                                                <textarea id="description" name="description" class="form-control" required>${team.details}</textarea>
-                                            </div>
-
-                                            <div class="mb-3 col-md-6">
-                                                <label for="pid">Project </label>
-                                                <select id="pid" name="pid" class="form-select" required>
-                                                    <c:forEach var="project" items="${projects}">
-                                                        <option value="${project.id}">${project.name}</option>
-                                                    </c:forEach>
+                                                <label for="complexity">Project</label>
+                                                <select id="projectId" name="projectId" class="form-select" required>
+                                                    <c:forEach var="u" items="${pl}">
+                                                        <option value="${u.id}">${u.name}</option>
+                                                    </c:forEach>  
                                                 </select>
+                                            </div> 
+                                            <div class="mb-3 col-md-6">
+                                                <label for="complexity">Owner</label>
+                                                <select id="userId" name="userId" class="form-select" required>
+                                                    <c:forEach var="u" items="${ul}">
+                                                        <option value="${u.id}">${u.full_name}</option>
+                                                    </c:forEach>  
+                                                </select>
+                                            </div> 
+
+                                            <div class="mb-3 col-md-6">
+                                                <label for="complexity">Complexity</label>
+                                                <select id="complexity" name="complexity" class="form-select" required>
+                                                    <c:forEach var="u" items="${cl}">
+                                                        <option value="${u.id}">${u.name}</option>
+                                                    </c:forEach>  
+                                                </select>
+                                            </div> 
+
+                                            <div class="mb-3 col-md-6">
+                                                <label for="plannedEffort">Planned Effort</label>
+                                                <input type="number" id="plannedEffort" name="plannedEffort" class="form-control" required>
                                             </div>
 
                                             <div class="mb-3 col-md-6">
-                                                <label class="form-label">Status</label>
-                                                <div class="check">
-                                                    <input class="form-check-input" type="radio" name="status" checked
-                                                           <c:if test="${team.status eq '1'}">
-                                                               checked
-                                                           </c:if>
-                                                           value="1"> Active
-                                                    <input class="form-check-input ms-3" type="radio" name="status"
-                                                           <c:if test="${team.status eq '0'}">
-                                                               checked
-                                                           </c:if>
-                                                           value="0"> Inactive
-                                                </div>
+                                                <label for="complexity">Status</label>
+                                                <select id="status" name="status" class="form-select" required>
+                                                    <c:forEach var="u" items="${sl}">
+                                                        <option value="${u.id}">${u.name}</option>
+                                                    </c:forEach>  
+                                                </select>
+                                            </div> 
+                                            <div class="mb-3 col-md-12">
+                                                <label for="details">Details</label>
+                                                <textarea id="details" name="details" class="form-control"></textarea>
                                             </div>
 
-                                            <!-- Submit Button -->
-                                            <div class="col-md-12">
-                                                <button type="submit" class="btn btn-primary">Submit</button>
-                                            </div>
+                                            <button type="submit" class="btn btn-primary">Submit</button>
                                         </form>
 
                                     </div>

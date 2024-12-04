@@ -1,10 +1,4 @@
-<%-- 
-    Document   : project-type-user-add
-    Created on : Oct 22, 2024, 9:13:36 PM
-    Author     : HuyenPTNHE160769
---%>
 
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,11 +12,11 @@
         <meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
 
         <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/icons/icon-48x48.png" />
+        <link rel="shortcut icon" href="img/icons/icon-48x48.png" />
 
         <link rel="canonical" href="pages-profile.html" />
 
-        <title>Project Type User Details | PMS</title>
+        <title>Profile | AdminKit Demo</title>
 
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet">
 
@@ -32,8 +26,8 @@
 
         <!-- BEGIN SETTINGS -->
         <!-- Remove this after purchasing -->
-        <link class="js-stylesheet" href="${pageContext.request.contextPath}/css/light.css" rel="stylesheet">
-        <script src="${pageContext.request.contextPath}/js/settings.js"></script>
+        <link class="js-stylesheet" href="css/light.css" rel="stylesheet">
+        <script src="js/settings.js"></script>
         <style>body {
                 opacity: 0;
             }
@@ -49,92 +43,71 @@
 
             gtag('config', 'UA-120946860-10', {'anonymize_ip': true});
         </script></head>
-
+   
 
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
         <div class="wrapper">
-            <% request.setAttribute("currentPage", "team"); %>
-            <jsp:include page="../component/sidebar.jsp"></jsp:include>
+            <jsp:include page="./layout/sidebar.jsp"></jsp:include>
                 <div class="main">
-                <jsp:include page="../component/header.jsp"></jsp:include>
+                <jsp:include page="./layout/header.jsp"></jsp:include>
 
-                    <main class="content">
-                        <div class="container-fluid p-0">
-                            <a href="<%=request.getContextPath()%>/TeamController">Team list </a>
-                        <span>> Add scope</span>
-                        <h1 class="h1 mt-2 mb-3 col-md-6"> Add Team</h1>
+                <main class="content">
+                    <div class="container-fluid p-0">
+
+                        <h1 class="h3 mb-3"> Setting Detail</h1>
+
                         <div class="row">
 
                             <div class="col-md-12 col-xl-12">
                                 <div class="card">
-
-                                </div>          
-
-                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="card-title"> Setting Detail</h5>
+                                    </div>
                                     <div class="card-body">
-                                        <c:if test="${not empty errorMessages}">
-                                            <div class="alert alert-danger pt-3 pe-3 ps-3">
-                                                <ul>
-                                                    <c:forEach items="${errorMessages}" var="error" >
-                                                        <li>${error}</li>
-                                                        </c:forEach>
-                                                </ul>
+                                        <form class="row">
+                                            <div class="mb-3 col-md-4">
+                                                <label class="form-label" for="inputName">ID*</label>
+                                                <input type="text" class="form-control" id="inputName" value="Issue #3" placeholder="">
                                             </div>
-                                        </c:if>
-
-                                        <form action="TeamController" class="row" method="post">
-                                            <input type="hidden" name="action" value="add">
-
-                                            <div class="mb-3 col-md-6">
-                                                <label for="name">Team Name</label>
-                                                <input type="text" id="name" name="name" class="form-control" value="${team.name}" required>
+                                            <div class="mb-3 col-md-4">
+                                                <label class="form-label" for="inputName">Name*</label>
+                                                <input type="text" class="form-control" id="inputName" value="Name #3" placeholder="">
                                             </div>
 
-                                            <div class="mb-3 col-md-6">
-                                                <label for="topic">Topic</label>
-                                                <input type="text" id="topic" name="topic" class="form-control" value="${team.topic}" required>
+                                            <div class="mb-3 col-md-4">
+                                                <label class="form-label" for="inputName">Priority*</label>
+                                                <input type="number" class="form-control" id="Description" value="2"  placeholder="">
                                             </div>
-
                                             <div class="mb-3 col-md-12">
-                                                <label for="description">Description</label>
-                                                <textarea id="description" name="description" class="form-control" required>${team.details}</textarea>
+                                                <label class="form-label" for="inputName">Value*</label>
+                                                <input type="text" class="form-control" id="Assignee" value="Marketing" placeholder="">
                                             </div>
-
                                             <div class="mb-3 col-md-6">
-                                                <label for="pid">Project </label>
-                                                <select id="pid" name="pid" class="form-select" required>
-                                                    <c:forEach var="project" items="${projects}">
-                                                        <option value="${project.id}">${project.name}</option>
-                                                    </c:forEach>
+                                                <label class="form-label" for="inputCity">Type*</label>
+                                                <select name="" class="form-select">
+                                                    <option value="">User role</option>
+                                                    <option value="">Business Term</option>
+                                                    <option value="">Defect Severity</option>
                                                 </select>
                                             </div>
-
                                             <div class="mb-3 col-md-6">
-                                                <label class="form-label">Status</label>
-                                                <div class="check">
-                                                    <input class="form-check-input" type="radio" name="status" checked
-                                                           <c:if test="${team.status eq '1'}">
-                                                               checked
-                                                           </c:if>
-                                                           value="1"> Active
-                                                    <input class="form-check-input ms-3" type="radio" name="status"
-                                                           <c:if test="${team.status eq '0'}">
-                                                               checked
-                                                           </c:if>
-                                                           value="0"> Inactive
-                                                </div>
+                                                <label class="form-label" for="inputCity">Status*</label>
+                                                <select name="" class="form-select">
+                                                    <option value="">Active</option>
+                                                    <option value="">Inactive</option>
+                                                </select>
                                             </div>
+                                            <div>
+                                                <button href="" class="btn btn-lg btn-danger" style="display: inline-block; width: 100px">Back</button>
+                                                <button type="submit" class="btn btn-lg btn-primary" style="display: inline-block; width: 100px">Submit</button>
 
-                                            <!-- Submit Button -->
-                                            <div class="col-md-12">
-                                                <button type="submit" class="btn btn-primary">Submit</button>
                                             </div>
                                         </form>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </main>
 
@@ -168,7 +141,7 @@
             </div>
         </div>
 
-        <script src="${pageContext.request.contextPath}/js/app.js"></script>
+        <script src="js/app.js"></script>
 
         <script>
             document.addEventListener("DOMContentLoaded", function (event) {
@@ -191,5 +164,8 @@
                 }, 15000);
             });
         </script>
+
+
     </body>
+
 </html>

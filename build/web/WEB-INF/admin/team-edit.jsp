@@ -61,8 +61,8 @@
                     <main class="content">
                         <div class="container-fluid p-0">
                             <a href="<%=request.getContextPath()%>/TeamController">Team list </a>
-                        <span>> Add scope</span>
-                        <h1 class="h1 mt-2 mb-3 col-md-6"> Add Team</h1>
+                        <span>> Edit Team</span>
+                        <h1 class="h1 mt-2 mb-3 col-md-6"> Edit Team</h1>
                         <div class="row">
 
                             <div class="col-md-12 col-xl-12">
@@ -83,7 +83,8 @@
                                         </c:if>
 
                                         <form action="TeamController" class="row" method="post">
-                                            <input type="hidden" name="action" value="add">
+                                            <input type="hidden" name="action" value="edit">
+                                            <input type="hidden" name="id" value="${team.id}">
 
                                             <div class="mb-3 col-md-6">
                                                 <label for="name">Team Name</label>
@@ -101,10 +102,14 @@
                                             </div>
 
                                             <div class="mb-3 col-md-6">
-                                                <label for="pid">Project </label>
+                                                <label for="pid">Project</label>
                                                 <select id="pid" name="pid" class="form-select" required>
                                                     <c:forEach var="project" items="${projects}">
-                                                        <option value="${project.id}">${project.name}</option>
+                                                        <option value="${project.id}" 
+                                                                <c:if test="${team.projectId == project.id}">
+                                                                    selected
+                                                                </c:if>
+                                                                >${project.name}</option>
                                                     </c:forEach>
                                                 </select>
                                             </div>
@@ -112,7 +117,7 @@
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label">Status</label>
                                                 <div class="check">
-                                                    <input class="form-check-input" type="radio" name="status" checked
+                                                    <input class="form-check-input" type="radio" name="status"
                                                            <c:if test="${team.status eq '1'}">
                                                                checked
                                                            </c:if>

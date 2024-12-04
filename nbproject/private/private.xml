@@ -24,6 +24,7 @@
             <file>file:/C:/Users/Admin/OneDrive/Desktop/sep1/Project_Management_System/src/java/model/Team.java</file>
             <file>file:/C:/Users/Admin/OneDrive/Desktop/sep1/Project_Management_System/src/java/model/ProjectType.java</file>
             <file>file:/C:/Users/Admin/OneDrive/Desktop/sep1/Project_Management_System/src/java/controller/TeamMemberController.java</file>
+            <file>file:/C:/Users/Admin/OneDrive/Desktop/sep1/Project_Management_System/src/java/service/ProjectTypeService.java</file>
             <file>file:/C:/Users/Admin/OneDrive/Desktop/sep1/Project_Management_System/web/WEB-INF/admin/team-add.jsp</file>
             <file>file:/C:/Users/Admin/OneDrive/Desktop/sep1/Project_Management_System/web/WEB-INF/admin/team-detail.jsp</file>
             <file>file:/C:/Users/Admin/OneDrive/Desktop/sep1/Project_Management_System/src/java/service/WorkPackageService.java</file>
@@ -32,6 +33,7 @@
             <file>file:/C:/Users/Admin/OneDrive/Desktop/sep1/Project_Management_System/src/java/context/WorkPackageDAO.java</file>
             <file>file:/C:/Users/Admin/OneDrive/Desktop/sep1/Project_Management_System/src/java/controller/ProjectTypeController.java</file>
             <file>file:/C:/Users/Admin/OneDrive/Desktop/sep1/Project_Management_System/src/java/context/ProjectConfigDAO.java</file>
+            <file>file:/C:/Users/Admin/OneDrive/Desktop/sep1/Project_Management_System/src/java/context/ProjectTypeDAO.java</file>
             <file>file:/C:/Users/Admin/OneDrive/Desktop/sep1/Project_Management_System/src/java/service/ProjectService.java</file>
             <file>file:/C:/Users/Admin/OneDrive/Desktop/sep1/Project_Management_System/src/java/controller/ProjectConfigController.java</file>
             <file>file:/C:/Users/Admin/OneDrive/Desktop/sep1/Project_Management_System/web/WEB-INF/admin/project-type-config.jsp</file>
