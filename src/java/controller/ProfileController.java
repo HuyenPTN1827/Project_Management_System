@@ -114,57 +114,61 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
     //    28/09/2024 
     // updateProfile Member
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-        UserService userService = new UserService();
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    HttpSession session = request.getSession(false);
+    UserService userService = new UserService();
 
-        if (session != null) {
-            User user = (User) session.getAttribute("user");
+    if (session != null) {
+        User user = (User) session.getAttribute("user");
 
-            if (user != null) {
-                String fullname = request.getParameter("fullname");
-                String email = request.getParameter("email");
-                String mobile = request.getParameter("mobile");
+        if (user != null) {
+            String fullname = request.getParameter("fullname");
+            String email = request.getParameter("email");
+            String mobile = request.getParameter("mobile");
 
-                // Check if the profile was updated
-                boolean isUpdated = false;
+            // Check if the profile was updated
+            boolean isUpdated = false;
 
-                // Check if the new values are different from the current ones
-                if (!fullname.equals(user.getFull_name())
-                        || !email.equals(user.getEmail())
-                        || !mobile.equals(user.getMobile())) {
+            // Check if the new values are different from the current ones
+            if (!fullname.equals(user.getFull_name())
+                    || !email.equals(user.getEmail())
+                    || !mobile.equals(user.getMobile())) {
 
-                    // Cập nhật thông tin người dùng
-                    user.setFull_name(fullname);
-                    user.setEmail(email);
-                    user.setMobile(mobile);
+                // Chỉ cập nhật các trường được phép
+                user.setFull_name(fullname);
+                user.setEmail(email);
+                user.setMobile(mobile);
 
-                    // Gọi phương thức cập nhật từ UserService
-                    isUpdated = userService.updateMember(user);
-                }
-
-                if (isUpdated) {
-                    // Cập nhật lại session
-                    session.setAttribute("user", user);
-                    request.setAttribute("message", "Profile updated successfully!");
-                } else {
-                    // Nếu không có thay đổi nào
-                    request.setAttribute("err", "No changes were made.");
-                }
-
-                // Chuyển tiếp sang trang profile.jsp
-                request.setAttribute("userProfile", user);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/profile.jsp");
-                dispatcher.forward(request, response);
-
-            } else {
-                response.sendRedirect(request.getContextPath() + "/login");
+                // Gọi phương thức cập nhật từ UserService
+                isUpdated = userService.updateMember(user);
             }
+
+            if (isUpdated) {
+                // Cập nhật lại session
+                session.setAttribute("user", user);
+                request.setAttribute("message", "Profile updated successfully!");
+            } else {
+                // Nếu không có thay đổi nào
+                request.setAttribute("err", "No changes were made.");
+            }
+
+            // Lấy thông tin đầy đủ của user từ database để tránh mất dữ liệu
+            User updatedUser = userService.getUserBySessionId(user.getId());
+            request.setAttribute("userProfile", updatedUser);
+
+            // Chuyển tiếp sang trang profile.jsp
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/profile.jsp");
+            dispatcher.forward(request, response);
+
         } else {
             response.sendRedirect(request.getContextPath() + "/login");
         }
+    } else {
+        response.sendRedirect(request.getContextPath() + "/login");
     }
+}
+
 
     /**
      * Returns a short description of the servlet.

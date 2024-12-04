@@ -108,7 +108,15 @@
 
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="inputCity">Roles</label>
-                                                <input type="text" class="form-control" id="roles" name="roles" value="${userProfile.role_name}" required>
+                                                <input type="text" class="form-control" id="roles" name="roles" value="${userProfile.role_name}" readonly>
+                                            </div>
+                                            <div class="mb-3 col-md-6">
+                                                <label class="form-label" for="inputCity">User Name</label>
+                                                <input type="text" class="form-control" id="roles" name="username" value="${userProfile.username}" readonly>
+                                            </div>
+                                            <div class="mb-3 col-md-6">
+                                                <label class="form-label" for="inputCity">Department</label>
+                                                <input type="text" class="form-control" id="roles" name="department" value="${userProfile.department}" readonly>
                                             </div>
                                             <div style="color: green;">
                                                 ${message}

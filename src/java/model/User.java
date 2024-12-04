@@ -24,6 +24,7 @@ public class User implements Serializable {
     private int role_id;
     private String role_name;
     private String username;
+    private String department;
     private Department dept;
     private Setting setting;
     private ArrayList<Department> depts = new ArrayList<>();
@@ -156,6 +157,14 @@ public class User implements Serializable {
 
     public void setRole_name(String role_name) {
         this.role_name = role_name;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
     }
     
     
