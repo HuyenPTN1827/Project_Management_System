@@ -82,7 +82,7 @@
                             </ul>
                         </li>-->
 
-            <li class="sidebar-item">
+            <li class="sidebar-item" hidden>
                 <a data-bs-target="#evaluation" data-bs-toggle="collapse" class="sidebar-link collapsed">
                     <i class="align-middle" data-feather="check-circle"></i> <span class="align-middle">Evaluation</span>
                 </a>

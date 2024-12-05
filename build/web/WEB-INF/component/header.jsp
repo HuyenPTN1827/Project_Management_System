@@ -22,16 +22,16 @@
                 Menu
             </a>
             <ul class="dropdown-menu" aria-labelledby="menuDropdown">
-                <a class="dropdown-item <c:if test="${currentPage == 'requirement-management'}">active</c:if>"" 
-                   href="WorkPackageController">Requirements</a>
+                <a class="dropdown-item <c:if test="${currentPage == 'requirement-management'}">active</c:if>"
+                   href="WorkPackageController" hidden>Requirements</a>
 
-                    <a class="dropdown-item <c:if test="${currentPage == 'issue-management'}">active</c:if>"" 
+                    <a class="dropdown-item <c:if test="${currentPage == 'issue-management'}">active</c:if>" 
                    href="<%=request.getContextPath()%>/issue-management?userId=${user.id}">Issues</a>
 
-                <a class="dropdown-item <c:if test="${currentPage == 'defect-management'}">active</c:if>"" 
-                   href="#">Defects</a>
+                <a class="dropdown-item <c:if test="${currentPage == 'defect-management'}">active</c:if>" 
+                   href="#" hidden>Defects</a>
 
-                    <a class="dropdown-item <c:if test="${currentPage == 'timesheet-management'}">active</c:if>"" 
+                    <a class="dropdown-item <c:if test="${currentPage == 'timesheet-management'}">active</c:if>"
                        href="#">Timesheets</a>
 
                 </ul>
@@ -41,7 +41,7 @@
             <ul class="navbar-nav d-none d-lg-flex">
                 <li class="nav-item px-2">
                     <a class="nav-link <c:if test="${currentPage == 'requirement-management'}">active</c:if>"
-                       href="WorkPackageController">Requirements</a>
+                       href="WorkPackageController" hidden>Requirements</a>
                 </li>  
 
                 <li class="nav-item px-2">
@@ -56,7 +56,7 @@
             </li> 
             <li class="nav-item px-2">
                 <a class="nav-link <c:if test="${currentPage == 'defect-management'}">active</c:if>" 
-                   href="#">Defects</a>
+                   href="#" hidden>Defects</a>
                 </li>   
                 
                 <li class="nav-item px-2">

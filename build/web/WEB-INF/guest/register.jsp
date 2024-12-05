@@ -42,29 +42,29 @@
                                         <form action="<%=request.getContextPath()%>/register" method="post">
                                             <div style="margin-top: 10px" class="mb-3">
                                                 <label class="form-label">Full Name <span style="color: red;">*</span></label>
-                                                <input class="form-control form-control-lg" type="text" name="fullname" placeholder="Enter full name" required />
+                                                <input class="form-control form-control-lg" type="text" name="fullname" placeholder="Enter the Full Name" required />
                                             </div>
                                             <div style="margin-top: 10px" class="mb-3">
                                                 <label class="form-label">Username <span style="color: red;">*</span></label>
-                                                <input class="form-control form-control-lg" type="text" name="username" placeholder="Enter username" required />
+                                                <input class="form-control form-control-lg" type="text" name="username" placeholder="Enter the Username" required />
                                             </div>
                                             <div style="margin-top: 10px" class="mb-3">
                                                 <label class="form-label">Email <span style="color: red;">*</span></label>
-                                                <input class="form-control form-control-lg" type="text" name="email" placeholder="Enter email" required />
+                                                <input class="form-control form-control-lg" type="text" name="email" placeholder="Enter the Email address" required />
                                             </div>
-                                            <div style="margin-top: 10px" class="mb-3">
+                                            <div style="margin-top: 10px" class="mb-3" hidden>
                                                 <label class="form-label">Phone Number</label>
                                                 <input class="form-control form-control-lg" type="text" name="mobile" placeholder="Enter phone number" />
                                                 <small style="color: gray">Phone number must start with 03, 05, 07, 08, or 09 and be 10 digits long.</small>
                                             </div>
                                             <div style="margin-top: 10px" class="mb-3">
                                                 <label class="form-label">Password <span style="color: red;">*</span></label>
-                                                <input class="form-control form-control-lg" type="password" name="password" placeholder="Enter password" required />
+                                                <input class="form-control form-control-lg" type="password" name="password" placeholder="Enter the Password" required />
                                                 <small style="color: gray">Password must be at least 6 characters, including uppercase letters, lowercase letters, numbers and some special characters.</small>
                                             </div>
                                             <div style="margin-top: 10px" class="mb-3">
                                                 <label class="form-label">Confirm Password <span style="color: red;">*</span></label>
-                                                <input class="form-control form-control-lg" type="password" name="confirmPassword" placeholder="Confirm password" required />
+                                                <input class="form-control form-control-lg" type="password" name="confirmPassword" placeholder="Confirm the Password" required />
                                             </div>
 
 <!--                                            <p style="color: red;">
@@ -96,8 +96,8 @@
                                                 </div>
                                             </c:if>
 
-                                            <div class="text-center mt-3">
-                                                <button type="submit" class="btn btn-lg btn-primary" style="border-radius: 50px;">Create Account</button>
+                                            <div class="mt-3">
+                                                <button type="submit" class="btn btn-lg btn-primary">Register</button>
                                             </div>
                                         </form>
                                     </div>

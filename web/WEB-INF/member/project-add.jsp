@@ -94,7 +94,7 @@
                             <!-- Department Field -->
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Department<span style="color: red;">*</span></label>
-                                <select class="form-control" name="department" required>
+                                <select class="form-select" name="department" required>
                                     <option value="">Select Department</option>
                                    <c:forEach var="projectdepartment" items="${listDepartments}">
                                         <option value="${projectdepartment.id}" <c:if test="${projectdepartment.id == department}">selected</c:if>>
