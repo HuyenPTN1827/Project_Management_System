@@ -52,7 +52,7 @@ CREATE TABLE `allocation` (
   CONSTRAINT `allocation_ibfk_4` FOREIGN KEY (`dept_id`) REFERENCES `department` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `allocation_ibfk_5` FOREIGN KEY (`created_by`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `allocation_ibfk_6` FOREIGN KEY (`updated_by`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -61,7 +61,7 @@ CREATE TABLE `allocation` (
 
 LOCK TABLES `allocation` WRITE;
 /*!40000 ALTER TABLE `allocation` DISABLE KEYS */;
-INSERT INTO `allocation` VALUES (1,2,'2024-11-22 00:00:00',2,'2024-11-22 00:00:00','2024-11-22',NULL,0,NULL,1,5,55,2,4),(2,2,'2024-11-22 00:00:00',2,'2024-11-22 00:00:00','2024-11-22',NULL,0,NULL,1,5,55,1,4),(3,55,'2024-11-22 00:00:00',55,'2024-11-22 00:00:00','2024-11-22',NULL,0,NULL,1,5,56,2,4);
+INSERT INTO `allocation` VALUES (1,2,'2024-11-22 00:00:00',2,'2024-11-22 00:00:00','2024-11-22',NULL,0,NULL,1,5,55,2,4),(2,2,'2024-11-22 00:00:00',55,'2024-11-29 03:13:01','2024-11-22',NULL,0,NULL,1,5,55,1,4),(3,55,'2024-11-22 00:00:00',55,'2024-11-22 00:00:00','2024-11-22',NULL,0,NULL,1,5,56,2,4),(4,58,'2024-11-27 19:47:46',55,'2024-11-29 03:19:58','2024-11-17',NULL,0,NULL,1,4,60,4,1),(5,58,'2024-11-27 19:52:12',55,'2024-11-29 03:20:04','2024-11-18',NULL,0,NULL,1,4,60,5,1),(6,55,'2024-11-29 18:03:34',NULL,'2024-11-29 18:03:34','2024-11-29',NULL,56,'',1,5,57,1,3),(7,55,'2024-11-29 21:38:53',55,'2024-11-30 18:48:40','2024-11-20','2024-11-27',45,'insert done',1,5,56,1,2),(8,55,'2024-11-29 22:11:26',NULL,'2024-11-29 22:11:26','2024-11-11','2024-11-01',4,'',1,4,60,1,3),(9,55,'2024-11-30 01:54:04',NULL,'2024-11-30 01:54:04','2024-11-12','2024-10-28',40,'',1,6,2,1,4),(10,55,'2024-11-30 13:54:05',55,'2024-12-01 04:07:36','2024-11-20','2024-11-30',6,'',0,5,55,1,2),(11,55,'2024-12-01 04:21:07',55,'2024-12-04 23:42:22','2024-11-19','2024-12-03',9,'Validate done',0,4,60,1,4),(12,58,'2024-12-02 19:17:01',NULL,'2024-12-02 19:17:01','2024-12-02',NULL,0,NULL,1,7,60,6,1),(13,58,'2024-12-02 19:18:26',NULL,'2024-12-02 19:18:26','2024-12-02',NULL,0,NULL,1,7,60,7,1),(14,1,'2024-12-06 21:32:47',NULL,'2024-12-06 21:32:47','2024-12-06',NULL,53,'',1,5,58,4,19);
 /*!40000 ALTER TABLE `allocation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -140,7 +140,7 @@ CREATE TABLE `department` (
 
 LOCK TABLES `department` WRITE;
 /*!40000 ALTER TABLE `department` DISABLE KEYS */;
-INSERT INTO `department` VALUES (1,'EM','Executive Management',NULL,NULL,1),(2,'HR','Human Resources',NULL,1,1),(3,'F&A','Finance and Accounting',NULL,1,1),(4,'S&M','Sales and Marketing',NULL,1,1),(5,'IT','Information Technology','',1,1),(6,'R&D','Research and Development',NULL,1,1),(7,'OP','Operations',NULL,1,1),(8,'Legal','Legal',NULL,1,1),(9,'Admin','Administrative ',NULL,1,1),(10,'CS','Customer Service','',4,0),(15,'TIMD','Test insert Modal Done','Test insert Modal done',5,0),(16,'TIM','Test insert Modal ','',6,0);
+INSERT INTO `department` VALUES (1,'EM','Executive Management',NULL,NULL,1),(2,'HR','Human Resources',NULL,1,1),(3,'F&A','Finance and Accounting',NULL,1,1),(4,'S&M','Sales and Marketing',NULL,1,1),(5,'IT','Information Technology','',1,1),(6,'R&D','Research and Development',NULL,1,1),(7,'OP','Operations',NULL,1,1),(8,'Legal','Legal',NULL,1,1),(9,'Admin','Administrative ',NULL,1,1),(10,'CS','Customer Service','',4,0),(15,'TIMD','Test insert Modal Done','Test insert Modal done',2,0),(16,'TIM','Test insert Modal ','',6,0);
 /*!40000 ALTER TABLE `department` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -166,7 +166,7 @@ CREATE TABLE `dept_user` (
   CONSTRAINT `dept_user_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `dept_user_ibfk_2` FOREIGN KEY (`dept_id`) REFERENCES `department` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `dept_user_ibfk_3` FOREIGN KEY (`role_id`) REFERENCES `setting` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -175,7 +175,7 @@ CREATE TABLE `dept_user` (
 
 LOCK TABLES `dept_user` WRITE;
 /*!40000 ALTER TABLE `dept_user` DISABLE KEYS */;
-INSERT INTO `dept_user` VALUES (61,1,5,'2024-11-21','2024-11-23',0,1),(63,2,7,'2024-11-21',NULL,1,3),(64,56,5,'2024-11-24',NULL,1,7),(65,55,5,'2024-11-24',NULL,1,7);
+INSERT INTO `dept_user` VALUES (61,1,5,'2024-11-21','2024-11-23',0,2),(63,2,7,'2024-11-21','2024-11-27',0,3),(64,56,5,'2024-11-24',NULL,1,5),(65,55,5,'2024-11-24','2024-11-27',0,5),(66,1,5,'2024-11-26',NULL,1,NULL),(67,58,5,'2024-11-27',NULL,1,NULL),(68,57,5,'2024-11-27','2024-12-06',0,NULL),(69,59,3,NULL,NULL,0,NULL),(70,3,6,NULL,NULL,0,NULL),(71,2,6,'2024-11-27','2024-12-06',0,3),(72,55,5,'2024-11-27',NULL,1,NULL),(73,60,4,'2024-11-27','2024-11-29',0,NULL),(74,60,4,'2024-11-29',NULL,1,NULL),(75,2,5,'2024-12-05','2024-12-06',0,3),(76,2,5,'2024-12-06','2024-12-06',0,NULL),(77,2,3,'2024-12-06','2024-12-06',0,NULL),(78,2,5,'2024-12-06',NULL,1,NULL),(79,57,4,'2024-12-06',NULL,1,NULL),(80,64,4,NULL,NULL,0,NULL);
 /*!40000 ALTER TABLE `dept_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -244,7 +244,7 @@ CREATE TABLE `issue` (
   CONSTRAINT `issue_ibfk_4` FOREIGN KEY (`work_package`) REFERENCES `work_package` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `issue_ibfk_5` FOREIGN KEY (`assignee`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `issue_ibfk_6` FOREIGN KEY (`type`) REFERENCES `setting` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -253,7 +253,7 @@ CREATE TABLE `issue` (
 
 LOCK TABLES `issue` WRITE;
 /*!40000 ALTER TABLE `issue` DISABLE KEYS */;
-INSERT INTO `issue` VALUES (1,55,'2024-11-22 00:00:00',1,1,56,'2024-11-24',0,'Issue 1',39,2,NULL),(2,56,'2024-11-26 13:05:48',5,2,55,'2024-11-24',2,'Issue 2',40,1,''),(3,56,'2024-11-26 08:22:06',1,NULL,2,'2024-11-27',1,'Issue 3',41,3,NULL),(4,55,'2024-11-26 13:23:21',4,NULL,56,'2024-11-29',1,'Issue test insert',41,2,'Issue test done'),(5,55,'2024-11-26 13:01:08',7,NULL,55,'2024-11-28',4,'Issue update done',37,1,'');
+INSERT INTO `issue` VALUES (1,55,'2024-11-22 00:00:00',1,1,56,'2024-11-24',0,'Issue 1',39,2,NULL),(2,56,'2024-12-06 21:48:38',5,2,55,'2024-11-24',3,'Issue 2',40,1,''),(3,56,'2024-11-26 08:22:06',1,NULL,2,'2024-11-27',1,'Issue 3',41,3,NULL),(4,55,'2024-11-26 13:23:21',4,NULL,56,'2024-11-29',1,'Issue test insert',41,2,'Issue test done'),(5,55,'2024-12-06 21:48:31',7,NULL,55,'2024-11-28',1,'Issue update done',37,1,''),(6,55,'2024-11-29 00:29:00',4,NULL,56,'2024-11-12',3,'Issue test',43,2,''),(7,55,'2024-12-06 21:50:48',4,NULL,56,'2024-11-29',3,'Issue test',43,2,''),(8,55,'2024-12-06 21:51:10',4,NULL,56,'2024-11-30',3,'Issue test',43,2,''),(9,55,'2024-12-06 21:48:03',4,NULL,56,'2024-11-30',2,'Issue test',43,2,''),(10,55,'2024-11-29 00:29:42',8,NULL,55,'2024-11-30',2,'Issue test 1',38,1,''),(11,55,'2024-11-29 00:29:47',3,NULL,55,'2024-11-29',2,'Issue test 2',39,2,''),(12,58,'2024-12-06 21:51:27',9,NULL,58,'2024-12-06',2,'Issue 3',42,4,''),(13,58,'2024-12-06 21:39:40',9,NULL,60,'2024-12-10',0,'Issue 4',37,4,''),(14,58,'2024-12-07 03:42:11',9,NULL,58,'2024-12-13',1,'Issue 4',41,4,'');
 /*!40000 ALTER TABLE `issue` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -284,7 +284,7 @@ CREATE TABLE `milestone` (
   CONSTRAINT `milestone_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `milestone_ibfk_2` FOREIGN KEY (`phase_id`) REFERENCES `project_phase` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `milestone_ibfk_3` FOREIGN KEY (`created_by`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -293,7 +293,7 @@ CREATE TABLE `milestone` (
 
 LOCK TABLES `milestone` WRITE;
 /*!40000 ALTER TABLE `milestone` DISABLE KEYS */;
-INSERT INTO `milestone` VALUES (1,NULL,'2024-10-06 00:00:00','Iterarion 1',NULL,4,'2024-10-06',0,NULL,NULL,2,1),(2,NULL,'2024-10-06 00:00:00','Iterarion 2',NULL,3,'2024-10-20',1,NULL,NULL,2,2),(3,NULL,'2024-10-06 00:00:00','Iterarion 3',NULL,2,'2024-11-03',2,NULL,NULL,2,3),(4,NULL,'2024-10-06 00:00:00','Iterarion 4',NULL,1,'2024-11-17',2,NULL,NULL,2,4),(5,NULL,'2024-10-06 00:00:00','Iter 1',NULL,4,'2024-10-06',0,NULL,NULL,1,1),(6,NULL,'2024-10-06 00:00:00','Iter 2',NULL,3,'2024-10-20',1,NULL,NULL,1,2),(7,NULL,'2024-10-06 00:00:00','Iter 3',NULL,2,'2024-11-03',2,NULL,NULL,1,3),(8,NULL,'2024-10-06 00:00:00','Iter 4',NULL,1,'2024-11-17',2,NULL,NULL,1,4);
+INSERT INTO `milestone` VALUES (1,NULL,'2024-10-06 00:00:00','Iterarion 1',NULL,4,'2024-10-06',0,NULL,NULL,2,1),(2,NULL,'2024-10-06 00:00:00','Iterarion 2',NULL,3,'2024-10-20',1,NULL,NULL,2,2),(3,NULL,'2024-10-06 00:00:00','Iterarion 3',NULL,2,'2024-11-03',2,NULL,NULL,2,3),(4,NULL,'2024-10-06 00:00:00','Iterarion 4',NULL,1,'2024-11-17',2,NULL,NULL,2,4),(5,NULL,'2024-10-06 00:00:00','Iter 1',NULL,4,'2024-10-06',0,NULL,NULL,1,1),(6,NULL,'2024-10-06 00:00:00','Iter 2',NULL,3,'2024-10-20',1,NULL,NULL,1,2),(7,NULL,'2024-10-06 00:00:00','Iter 3',NULL,2,'2024-11-03',2,NULL,NULL,1,3),(8,NULL,'2024-10-06 00:00:00','Iter 4',NULL,1,'2024-11-17',2,NULL,NULL,1,4),(9,58,'2024-11-27 19:47:45','Project 3 - Main Milestone',NULL,1,'2024-12-07',0,NULL,NULL,4,NULL),(10,58,'2024-11-27 19:52:12','Project 4 - Main Milestone',NULL,1,'2024-12-07',0,NULL,NULL,5,NULL),(11,58,'2024-12-02 19:17:01','Project Test - Main Milestone',NULL,1,'2024-11-17',0,NULL,NULL,6,NULL),(12,58,'2024-12-02 19:18:26','Project Test - Main Milestone',NULL,1,'2024-11-17',0,NULL,NULL,7,NULL);
 /*!40000 ALTER TABLE `milestone` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -345,14 +345,17 @@ CREATE TABLE `project` (
   `type_id` int DEFAULT NULL,
   `department_id` int DEFAULT NULL,
   `user_id` int DEFAULT NULL,
+  `biz_term` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `project_ibfk_1` (`type_id`),
   KEY `project_ibfk_2` (`department_id`),
   KEY `project_ibfk_2_idx` (`user_id`),
+  KEY `project_ibfk_4_idx` (`biz_term`),
   CONSTRAINT `project_ibfk_1` FOREIGN KEY (`type_id`) REFERENCES `project_type` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `project_ibfk_2` FOREIGN KEY (`department_id`) REFERENCES `department` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `project_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `project_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `project_ibfk_4` FOREIGN KEY (`biz_term`) REFERENCES `setting` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -361,7 +364,7 @@ CREATE TABLE `project` (
 
 LOCK TABLES `project` WRITE;
 /*!40000 ALTER TABLE `project` DISABLE KEYS */;
-INSERT INTO `project` VALUES (1,'Project Management System','PMS',5.00,'2024-10-15',NULL,NULL,'2024-10-15 00:00:00',1,2,5,NULL),(2,'Project 1','PJ1',5.00,'2024-10-19',NULL,NULL,'2024-10-19 00:00:00',2,1,6,NULL),(3,'Project 2','PJ2',8.00,'2024-10-19',NULL,NULL,'2024-10-19 00:00:00',1,2,5,NULL);
+INSERT INTO `project` VALUES (1,'Project Management System','PMS',5.00,'2024-10-15',NULL,NULL,'2024-10-15 00:00:00',1,2,5,NULL,NULL),(2,'Project 1','PJ1',5.00,'2024-10-19','','2025-01-10','2024-12-04 23:41:33',2,1,6,60,NULL),(3,'Project 2','PJ2',8.00,'2024-10-19',NULL,NULL,'2024-10-19 00:00:00',1,2,5,NULL,NULL),(4,'Project 3','PRJ3',4.00,'2024-11-17','','2024-12-07','2024-11-27 19:50:00',0,3,4,60,NULL),(5,'Project 4','PRJ4',6.00,'2024-11-18','','2024-12-07','2024-11-28 15:17:50',1,4,4,60,NULL),(6,'Project Test','PRJT',6.00,'2024-11-25','Project Test','2024-11-17','2024-12-02 19:17:02',0,6,7,60,NULL),(7,'Project Test Update','PRJU',6.00,'2024-11-24','Project Test Update','2024-12-05','2024-12-02 19:22:49',0,6,4,60,NULL);
 /*!40000 ALTER TABLE `project` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -476,7 +479,7 @@ CREATE TABLE `project_type_setting` (
   PRIMARY KEY (`id`),
   KEY `project_type_setting_ibfk_1_idx` (`type_id`),
   CONSTRAINT `project_type_setting_ibfk_1` FOREIGN KEY (`type_id`) REFERENCES `project_type` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -485,7 +488,7 @@ CREATE TABLE `project_type_setting` (
 
 LOCK TABLES `project_type_setting` WRITE;
 /*!40000 ALTER TABLE `project_type_setting` DISABLE KEYS */;
-INSERT INTO `project_type_setting` VALUES (1,'Project Manager','Project Role','1',1,1,'Test update',2),(2,'BA','Project Role','2',2,1,NULL,2),(3,'Developer','Project Role','3',3,1,NULL,2),(4,'Tester','Project Role','4',4,1,NULL,2),(6,'Project Role','','Project Role',1,1,'',2),(7,'Test insert done','','Test insert done',8,0,'Test insert done',22),(8,'Test update','Test insert done','Test update',7,0,'Test update',22),(9,'Scope Status ','','Scope Status ',1,1,'',2),(10,'Scope Complexity ','','Scope Complexity ',1,1,'Scope Complexity ',2),(11,'Not Started','Scope Status ','Not Started',3,1,'',2),(12,'In Progress','Scope Status ','In Progress',2,1,'',2),(13,'Completed','Scope Status ','Completed',4,1,'',2),(14,'Blocked','Scope Status ','Blocked',1,1,'',2),(15,'Simple','Scope Complexity ','Simple',3,1,'',2),(16,'Medium','Scope Complexity ','Medium',2,1,'',2),(17,'Complex','Scope Complexity ','Complex',1,1,'',2);
+INSERT INTO `project_type_setting` VALUES (1,'Project Manager','Project Role','1',1,1,'Test update',NULL),(2,'BA','Project Role','2',2,1,NULL,2),(3,'Developer','Project Role','3',3,1,NULL,2),(4,'Tester','Project Role','4',4,1,NULL,2),(6,'Project Role','','Project Role',1,1,'',2),(7,'Test insert','','Test insert ',8,0,'Test insert done',22),(8,'Test update','Test insert done','Test update done',7,0,'Test update',22),(9,'Scope Status ','','Scope Status ',1,1,'',2),(10,'Scope Complexity ','','Scope Complexity ',1,1,'Scope Complexity ',2),(11,'Not Started','Scope Status ','Not Started',3,1,'',2),(12,'In Progress','Scope Status ','In Progress',2,1,'',2),(13,'Completed','Scope Status ','Completed',4,1,'',2),(14,'Blocked','Scope Status ','Blocked',1,1,'',2),(15,'Simple','Scope Complexity ','Simple',3,1,'',2),(16,'Medium','Scope Complexity ','Medium',2,1,'',2),(17,'Complex','Scope Complexity ','Complex',1,1,'',2),(18,'Project Role','','Project Role',1,1,'',3),(19,'Developer','Project Role','Developer',2,1,'',3),(20,'BA','Project Role','BA',1,1,'',3),(21,'Tester','Project Role','Tester',3,1,'',3);
 /*!40000 ALTER TABLE `project_type_setting` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -514,7 +517,7 @@ CREATE TABLE `setting` (
 
 LOCK TABLES `setting` WRITE;
 /*!40000 ALTER TABLE `setting` DISABLE KEYS */;
-INSERT INTO `setting` VALUES (1,'Admin','User Role','1',1,1,NULL),(2,'PMO Manager','User Role','2',2,1,NULL),(3,'Department Manager','User Role','3',3,1,NULL),(4,'Project Manager','User Role','4',4,1,NULL),(5,'Project QA','User Role','5',5,1,NULL),(6,'Team Leader','User Role','6',6,1,NULL),(7,'Member','User Role','7',7,1,NULL),(8,'Critical','Defect Severity','Critical',1,1,'AAAA'),(9,'High','Defect Severity','High',2,1,'Test insert'),(10,'Medium','Defect Severity','Medium',3,1,''),(11,'Low','Defect Severity','Low',4,1,'Test insert'),(29,'User Role',NULL,'User Role',1,1,NULL),(33,'Defect Severity',NULL,'Defect Severity',1,1,''),(36,'Issue Type','','Issue',1,1,'Type of issues'),(37,'Technical Issues','Issue Type','Technical Issues',1,1,''),(38,'Management Issues','Issue Type','Management Issues',2,1,''),(39,'People Issues','Issue Type','People Issues',3,1,''),(40,'Requirement Issues','Issue Type','Requirement Issues',4,1,''),(41,'Quality Issues','Issue Type','Quality Issues',5,1,''),(42,'Development Environment Issues','Issue Type','Development Environment Issues',6,1,''),(43,'Stakeholder Issues','Issue Type','Stakeholder Issues',7,1,'');
+INSERT INTO `setting` VALUES (1,'User Role',NULL,'User Role',1,1,NULL),(2,'Admin','User Role','2',1,1,NULL),(3,'Department Manager','User Role','3',2,1,NULL),(4,'Project Manager','User Role','4',3,1,NULL),(5,'Member','User Role','5',4,1,NULL),(8,'Critical','Defect Severity','Critical',1,1,'AAAA'),(9,'High','Defect Severity','High',2,1,'Test insert'),(10,'Medium','Defect Severity','Medium',3,1,''),(11,'Low','Defect Severity','Low',4,1,'Test insert'),(33,'Defect Severity',NULL,'Defect Severity',1,1,''),(36,'Issue Type','','Issue',1,1,'Type of issues'),(37,'Technical Issues','Issue Type','Technical Issues',1,1,''),(38,'Management Issues','Issue Type','Management Issues',2,1,''),(39,'People Issues','Issue Type','People Issues',3,1,''),(40,'Requirement Issues','Issue Type','Requirement Issues',4,1,''),(41,'Quality Issues','Issue Type','Quality Issues',5,1,''),(42,'Development Environment Issues','Issue Type','Development Environment Issues',6,1,''),(43,'Stakeholder Issues','Issue Type','Stakeholder Issues',7,1,'');
 /*!40000 ALTER TABLE `setting` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -609,7 +612,7 @@ CREATE TABLE `timesheet` (
   CONSTRAINT `timesheet_ibfk_3` FOREIGN KEY (`package_id`) REFERENCES `work_package` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `timesheet_ibfk_4` FOREIGN KEY (`process_id`) REFERENCES `project_type_setting` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `timesheet_ibfk_5` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -618,6 +621,7 @@ CREATE TABLE `timesheet` (
 
 LOCK TABLES `timesheet` WRITE;
 /*!40000 ALTER TABLE `timesheet` DISABLE KEYS */;
+INSERT INTO `timesheet` VALUES (1,55,'2024-12-04 00:00:00','2024-12-04',6,'Test insert',5.00,1,9,4,55,NULL);
 /*!40000 ALTER TABLE `timesheet` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -636,14 +640,14 @@ CREATE TABLE `user` (
   `mobile` varchar(10) DEFAULT NULL,
   `password` varchar(45) NOT NULL,
   `notes` text,
-  `status` int NOT NULL DEFAULT '3',
+  `status` int NOT NULL DEFAULT '2',
   `role_id` int DEFAULT NULL,
   `avatar` longtext,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   KEY `user_ibfk_1` (`role_id`),
   CONSTRAINT `user_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `setting` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -652,7 +656,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'Admin','admin','admin@gmail.com','0904235978','Abc@123','',1,1,NULL),(2,'Phạm Ngọc Huyền','huyenptn','huyenptnhe160769@gmail.com','0355235054','Abc@123','',1,3,NULL),(3,'Đỗ Hải Long','longdh','longdh@gmail.com','0366904861','Abc@123','',3,2,NULL),(55,'Nguyễn Văn A','anv','anv@gmail.com','','Abc@123','',1,7,NULL),(56,'Nguyễn Văn B','bnv','bnv@gmail.com','','Abc@123','',1,7,NULL);
+INSERT INTO `user` VALUES (1,'Admin','admin','admin@gmail.com','0904235978','Abc@123','',1,2,NULL),(2,'Phạm Ngọc Huyền','huyenptn','huyenptnhe160769@gmail.com','0355235054','Abc@123','',1,3,NULL),(3,'Đỗ Hải Long','longdh','longdh@gmail.com','0366904861','Abc@123','',2,5,NULL),(55,'Nguyễn Văn A','anv','anv@gmail.com','','Abc@123','',1,5,NULL),(56,'Nguyễn Văn B','bnv','bnv@gmail.com','','Abc@123','',1,5,NULL),(57,'Trần Thị C','ctt','ctt@gmail.com','','Abc@123','',1,4,NULL),(58,'Hoàng Văn D','dhv','dhv@gmail.com','','Abc@123','',1,5,NULL),(59,'Trương Thu H','htt1','htt1@gmail.com','0377956223','Abc@123','',2,5,NULL),(60,'Trần Văn Hoàng','hoangtv','hoangtv@gmail.com','','Abc@123','',1,4,NULL),(63,'Nguyễn Khánh Linh','linhnk','linhnk@gmail.com','','Abc@123',NULL,2,5,NULL),(64,'Mạc Huyền','mh1827','machuyen@gmail.com','','Abc@123','',2,3,NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -677,8 +681,8 @@ CREATE TABLE `user_type` (
   KEY `user_type_ibfk_3_idx` (`role_id`),
   CONSTRAINT `user_type_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `user_type_ibfk_2` FOREIGN KEY (`type_id`) REFERENCES `project_type` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `user_type_ibfk_3` FOREIGN KEY (`role_id`) REFERENCES `project_type_setting` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3;
+  CONSTRAINT `user_type_ibfk_3` FOREIGN KEY (`role_id`) REFERENCES `setting` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -687,7 +691,7 @@ CREATE TABLE `user_type` (
 
 LOCK TABLES `user_type` WRITE;
 /*!40000 ALTER TABLE `user_type` DISABLE KEYS */;
-INSERT INTO `user_type` VALUES (1,2,2,'2024-10-10',NULL,1,3),(2,3,2,'2024-10-13',NULL,1,1);
+INSERT INTO `user_type` VALUES (11,58,2,'2024-11-27',NULL,1,NULL),(12,57,2,'2024-11-27',NULL,1,NULL);
 /*!40000 ALTER TABLE `user_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -751,4 +755,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-26 13:24:57
+-- Dump completed on 2024-12-07  3:54:17
