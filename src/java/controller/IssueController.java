@@ -108,7 +108,7 @@ public class IssueController extends HttpServlet {
     }// </editor-fold>
 
     private void listIssue(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int userId = Integer.parseInt(request.getParameter("userId"));
+//        int userId = Integer.parseInt(request.getParameter("userId"));
         String typeStr = request.getParameter("type");
         String projectStr = request.getParameter("projectId");
         String milestoneStr = request.getParameter("milestone");
@@ -127,10 +127,10 @@ public class IssueController extends HttpServlet {
         Integer assigner = assignerStr != null && !assignerStr.isEmpty() ? Integer.valueOf(assignerStr) : null;
         Integer status = statusStr != null && !statusStr.isEmpty() ? Integer.valueOf(statusStr) : null;
 
-        List<Issue> listIssue = issueService.getAllIssues(userId, keyword, project, type, milestone, assigner, assignee, status);
+        List<Issue> listIssue = issueService.getAllIssues(keyword, project, type, milestone, assigner, assignee, status);
         List<Setting> listType = settingService.getIssueTypeList();
-        List<Project> listPj = pjService.getProjectListByUserID(userId);
-        List<Milestone> listMilestone = pjService.getMilestonesByProjectId(userId, project);
+        List<Project> listPj = pjService.getAllProjects();
+        List<Milestone> listMilestone = pjService.getMilestonesByProjectId(project);
 //        List<WorkPackage> listScope = scopeService.getWorkPackageByProjectId(userId, project);
         List<User> listAssignee = issueService.getMemberListByProjectId(project);
         List<User> listAssigner = issueService.getMemberListByProjectId(project);
@@ -155,146 +155,175 @@ public class IssueController extends HttpServlet {
     }
 
     private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int userId = Integer.parseInt(request.getParameter("userId"));
-        String projectStr = request.getParameter("projectId");
-        String name = request.getParameter("name");
-        String type = request.getParameter("type");
-        String deadline = request.getParameter("deadline");
-        String description = request.getParameter("description");
+        String user = request.getParameter("userId");
+        if (user != null && !user.isEmpty()) {
+            int userId = Integer.parseInt(user);
+            String projectStr = request.getParameter("projectId");
+            String name = request.getParameter("name");
+            String type = request.getParameter("type");
+            String deadline = request.getParameter("deadline");
+            String statusStr = request.getParameter("status");
+            String description = request.getParameter("description");
 
-        Integer project = projectStr != null && !projectStr.isEmpty() ? Integer.valueOf(projectStr) : null;
-        Integer typeId = type != null && !type.isEmpty() ? Integer.valueOf(type) : null;
+            Integer project = projectStr != null && !projectStr.isEmpty() ? Integer.valueOf(projectStr) : null;
+            Integer typeId = type != null && !type.isEmpty() ? Integer.valueOf(type) : null;
+            Integer status = statusStr != null && !statusStr.isEmpty() ? Integer.valueOf(statusStr) : null;
 
-        List<Setting> listType = settingService.getIssueTypeList();
-        List<Project> listPj = pjService.getProjectListByUserID(userId);
-        List<Milestone> listMilestone = pjService.getMilestonesByProjectId(userId, project);
-        List<User> listAssignee = issueService.getMemberListByProjectId(project);
+            List<Setting> listType = settingService.getIssueTypeList();
+            List<Project> listPj = pjService.getProjectListByUserID(userId);
+            List<Project> listAllPj = pjService.getAllProjects();
+            List<Milestone> listMilestone = pjService.getMilestonesByProjectId(project);
+            List<User> listAssignee = issueService.getMemberListByProjectId(project);
 
-        request.setAttribute("userId", userId);
-        request.setAttribute("projectId", project);
-        request.setAttribute("name", name);
-        request.setAttribute("type", typeId);
-        request.setAttribute("deadline", deadline);
-        request.setAttribute("description", description);
-        request.setAttribute("listType", listType);
-        request.setAttribute("listPj", listPj);
-        request.setAttribute("listMilestone", listMilestone);
-        request.setAttribute("listAssignee", listAssignee);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/issue-detail.jsp");
-        dispatcher.forward(request, response);
+            request.setAttribute("userId", userId);
+            request.setAttribute("projectId", project);
+            request.setAttribute("name", name);
+            request.setAttribute("type", typeId);
+            request.setAttribute("deadline", deadline);
+            request.setAttribute("status", status);
+            request.setAttribute("description", description);
+            request.setAttribute("listType", listType);
+            request.setAttribute("listPj", listPj);
+            request.setAttribute("listAllPj", listAllPj);
+            request.setAttribute("listMilestone", listMilestone);
+            request.setAttribute("listAssignee", listAssignee);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/issue-detail.jsp");
+            dispatcher.forward(request, response);
+        } else {
+            response.sendRedirect("logout");
+        }
     }
 
     private void insertIssue(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
-        int userId = Integer.parseInt(request.getParameter("userId"));
-        String name = request.getParameter("name");
-        int type = Integer.parseInt(request.getParameter("type"));
-        int projectId = Integer.parseInt(request.getParameter("projectId"));
-        int milestone = Integer.parseInt(request.getParameter("milestone"));
-        int assignee = Integer.parseInt(request.getParameter("assignee"));
-        LocalDate deadline = LocalDate.parse(request.getParameter("deadline"));
-        String description = request.getParameter("description");
+        String user = request.getParameter("userId");
+        if (user != null && !user.isEmpty()) {
+            int userId = Integer.parseInt(user);
+            String name = request.getParameter("name");
+            int type = Integer.parseInt(request.getParameter("type"));
+            int projectId = Integer.parseInt(request.getParameter("projectId"));
+            int milestone = Integer.parseInt(request.getParameter("milestone"));
+            int assignee = Integer.parseInt(request.getParameter("assignee"));
+            LocalDate deadline = LocalDate.parse(request.getParameter("deadline"));
+            int status = Integer.parseInt(request.getParameter("status"));
+            String description = request.getParameter("description");
 
-        Issue i = new Issue();
-        i.setName(name);
-        i.setDeadline(deadline);
-        i.setDetails(description);
+            Issue i = new Issue();
+            i.setName(name);
+            i.setDeadline(deadline);
+            i.setStatus(status);
+            i.setDetails(description);
 
-        User u1 = new User();
-        u1.setId(userId);
-        i.setCreated_by(u1);
+            User u1 = new User();
+            u1.setId(userId);
+            i.setCreated_by(u1);
 
-        Setting s = new Setting();
-        s.setId(type);
-        i.setType(s);
+            Setting s = new Setting();
+            s.setId(type);
+            i.setType(s);
 
-        Project p = new Project();
-        p.setId(projectId);
-        i.setProject(p);
+            Project p = new Project();
+            p.setId(projectId);
+            i.setProject(p);
 
-        Milestone m = new Milestone();
-        m.setId(milestone);
-        i.setMilestone(m);
+            Milestone m = new Milestone();
+            m.setId(milestone);
+            i.setMilestone(m);
 
-        User u2 = new User();
-        u2.setId(assignee);
-        i.setAssignee(u2);
+            User u2 = new User();
+            u2.setId(assignee);
+            i.setAssignee(u2);
 
-        // Validate dates
-        List<String> errors = issueService.validateDeadline(i);
+            // Validate dates
+            List<String> errors = issueService.validateDeadline(i);
 
-        if (errors.isEmpty()) {
-            issueService.insertIssue(i);
-            response.sendRedirect("issue-management?userId=" + userId);
-        } else {
-            request.setAttribute("errorMessages", errors);
-            request.setAttribute("userId", userId);
-            request.setAttribute("name", name);
-            request.setAttribute("type", type);
-            request.setAttribute("projectId", projectId);
+            if (errors.isEmpty()) {
+                issueService.insertIssue(i);
+                response.sendRedirect("issue-management?projectId=" + projectId);
+            } else {
+                request.setAttribute("errorMessages", errors);
+//            request.setAttribute("userId", userId);
+//            request.setAttribute("name", name);
+//            request.setAttribute("type", type);
+//            request.setAttribute("projectId", projectId);
             request.setAttribute("milestone", milestone);
             request.setAttribute("assignee", assignee);
-            request.setAttribute("deadline", deadline);
-            request.setAttribute("description", description);
-            showNewForm(request, response);
+//            request.setAttribute("deadline", deadline);
+//            request.setAttribute("description", description);
+                showNewForm(request, response);
+            }
+        } else {
+            response.sendRedirect("logout");
         }
     }
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        int userId = Integer.parseInt(request.getParameter("userId"));
-        int projectId = Integer.parseInt(request.getParameter("projectId"));
-        Issue issue = issueService.getIssueById(id);
-        List<Setting> listType = settingService.getIssueTypeList();
-        List<Project> listPj = pjService.getProjectListByUserID(userId);
-        List<Milestone> listMilestone = pjService.getMilestonesByProjectId(userId, projectId);
-        List<User> listAssignee = issueService.getMemberListByProjectId(projectId);
+        String action = request.getParameter("action");
+        String user = request.getParameter("userId");
+        if (user != null && !user.isEmpty()) {
+            int userId = Integer.parseInt(user);
+            int id = Integer.parseInt(request.getParameter("id"));
+            int projectId = Integer.parseInt(request.getParameter("projectId"));
+            Issue issue = issueService.getIssueById(id);
+            List<Setting> listType = settingService.getIssueTypeList();
+            List<Project> listPj = pjService.getProjectListByUserID(userId);
+            List<Milestone> listMilestone = pjService.getMilestonesByProjectId(projectId);
+            List<User> listAssignee = issueService.getMemberListByProjectId(projectId);
 
-        request.setAttribute("issue", issue);
-        request.setAttribute("listType", listType);
-        request.setAttribute("listPj", listPj);
-        request.setAttribute("listMilestone", listMilestone);
-        request.setAttribute("listAssignee", listAssignee);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/issue-detail.jsp");
-        dispatcher.forward(request, response);
+            request.setAttribute("action", action);
+            request.setAttribute("projectId", projectId);
+            request.setAttribute("issue", issue);
+            request.setAttribute("listType", listType);
+            request.setAttribute("listPj", listPj);
+            request.setAttribute("listMilestone", listMilestone);
+            request.setAttribute("listAssignee", listAssignee);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/issue-detail.jsp");
+            dispatcher.forward(request, response);
+        } else {
+            response.sendRedirect("logout");
+        }
     }
 
     private void updateIssue(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        int userId = Integer.parseInt(request.getParameter("userId"));
-        String name = request.getParameter("name");
-        int type = Integer.parseInt(request.getParameter("type"));
-        int project = Integer.parseInt(request.getParameter("project"));
-        int milestone = Integer.parseInt(request.getParameter("milestone"));
-        int assignee = Integer.parseInt(request.getParameter("assignee"));
-        LocalDate deadline = LocalDate.parse(request.getParameter("deadline"));
-        String description = request.getParameter("description");
-        int status = Integer.parseInt(request.getParameter("status"));
+        String user = request.getParameter("userId");
+        if (user != null && !user.isEmpty()) {
+            int userId = Integer.parseInt(user);
+            int id = Integer.parseInt(request.getParameter("id"));
+            String name = request.getParameter("name");
+            int type = Integer.parseInt(request.getParameter("type"));
+            int project = Integer.parseInt(request.getParameter("project"));
+            int milestone = Integer.parseInt(request.getParameter("milestone"));
+            int assignee = Integer.parseInt(request.getParameter("assignee"));
+            LocalDate deadline = LocalDate.parse(request.getParameter("deadline"));
+            String description = request.getParameter("description");
+            int status = Integer.parseInt(request.getParameter("status"));
 
-        Issue i = new Issue();
-        i.setId(id);
-        i.setName(name);
-        i.setDeadline(deadline);
-        i.setDetails(description);
-        i.setStatus(status);
+            Issue i = new Issue();
+            i.setId(id);
+            i.setName(name);
+            i.setDeadline(deadline);
+            i.setDetails(description);
+            i.setStatus(status);
 
-        Setting s = new Setting();
-        s.setId(type);
-        i.setType(s);
+            Setting s = new Setting();
+            s.setId(type);
+            i.setType(s);
 
-        Project p = new Project();
-        p.setId(project);
-        i.setProject(p);
+            Project p = new Project();
+            p.setId(project);
+            i.setProject(p);
 
-        Milestone m = new Milestone();
-        m.setId(milestone);
-        i.setMilestone(m);
+            Milestone m = new Milestone();
+            m.setId(milestone);
+            i.setMilestone(m);
 
-        User u = new User();
-        u.setId(assignee);
-        i.setAssignee(u);
+            User u = new User();
+            u.setId(assignee);
+            i.setAssignee(u);
 
-        issueService.updateIssue(i);
-        response.sendRedirect("issue-management?userId=" + userId);
+            issueService.updateIssue(i);
+            response.sendRedirect("issue-management?projectId=" + project);
+        } else {
+            response.sendRedirect("logout");
+        }
     }
-
 }

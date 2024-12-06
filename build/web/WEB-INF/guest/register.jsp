@@ -102,7 +102,8 @@
                                         </form>
                                     </div>
                                     <div class="col-md-5" style="display: flex; align-items: center">
-                                        <img width="100%" src="https://tatthanh.com.vn/pic/Images/Module/News/images/image(1722).png" alt="alt"/>
+                                        <!--<img width="100%" src="https://tatthanh.com.vn/pic/Images/Module/News/images/image(1722).png" alt="alt"/>-->
+                                        <img width="100%" src="${pageContext.request.contextPath}/img/logo/PMSLogo-big.jpg" alt="logo"/>
                                     </div>
                                 </div>
                             </div>

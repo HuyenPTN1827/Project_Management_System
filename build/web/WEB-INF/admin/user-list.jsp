@@ -116,10 +116,10 @@
                                                             value="0">Inactive
                                                         </option>
                                                         <option 
-                                                            <c:if test="${status eq 3}">
+                                                            <c:if test="${status eq 2}">
                                                                 selected="selected"
                                                             </c:if>
-                                                            value="3">Unverified
+                                                            value="2">Unverified
                                                         </option>
                                                     </select>
                                                 </div>
@@ -177,7 +177,7 @@
                                                             <c:if test="${user.status eq '1'}">
                                                                 <span class="badge bg-success">Active</span>
                                                             </c:if>
-                                                            <c:if test="${user.status eq '3'}">
+                                                            <c:if test="${user.status eq '2'}">
                                                                 <span class="badge bg-secondary">Unverified</span>
                                                             </c:if>
                                                         </td>
@@ -204,7 +204,7 @@
                                                                 </a>
                                                             </c:if>
 
-                                                            <c:if test="${user.status eq '3'}">
+                                                            <c:if test="${user.status eq '2'}">
                                                                 <a href="<%=request.getContextPath()%>/edit-user?id=${user.id}"
                                                                    class="btn btn-info"><i class="align-middle" data-feather="edit"></i></a>
                                                                 </c:if>

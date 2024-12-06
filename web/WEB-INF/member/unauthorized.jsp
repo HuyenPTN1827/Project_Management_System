@@ -32,7 +32,7 @@
         <form action="login" method="" >
         <h1>Unauthorized Access</h1>
         <p>You do not have permission to access this page.</p>
-        <a href="/login">Back to Login</a>
+        <a href="<%=request.getContextPath()%>/logout">Back to Login</a>
         </form>
     </body>
 </html>

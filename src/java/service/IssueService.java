@@ -28,9 +28,9 @@ public class IssueService extends BaseServive {
     }
     
     // Get issues list
-    public List<Issue> getAllIssues(int userId, String keyword, Integer project, Integer type, 
+    public List<Issue> getAllIssues(String keyword, Integer project, Integer type, 
             Integer milestone, Integer assigner, Integer assignee, Integer status) {
-        return issueDAO.selectAllIssues(userId, keyword, project, type, milestone, assigner, assignee, status);
+        return issueDAO.selectAllIssues(keyword, project, type, milestone, assigner, assignee, status);
     }
     
     // Get a issue information by id

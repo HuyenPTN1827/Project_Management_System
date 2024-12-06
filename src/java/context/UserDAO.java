@@ -31,7 +31,7 @@ public class UserDAO {
         }
 
         // Thực hiện đăng ký nếu email và username chưa tồn tại
-        String REGISTER_USER_SQL = "INSERT INTO user (full_name, username, email, mobile, password) VALUES (?, ?, ?, ?, ?)";
+        String REGISTER_USER_SQL = "INSERT INTO user (full_name, username, email, mobile, password, role_id) VALUES (?, ?, ?, ?, ?, 5)";
         try (Connection connection = BaseDAO.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(REGISTER_USER_SQL)) {
 
             preparedStatement.setString(1, user.getFull_name());

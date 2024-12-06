@@ -61,12 +61,12 @@ public class IssueDAO {
     }
 
     // Get issues list
-    public List<Issue> selectAllIssues(int userId, String keyword, Integer project, Integer type,
+    public List<Issue> selectAllIssues(String keyword, Integer project, Integer type,
             Integer milestone, Integer assigner, Integer assignee, Integer status) {
         List<Issue> issue = new ArrayList<>();
 
         String sql = """
-                     SELECT i.id, i.created_by, u1.username, i.milestone_id, m.name, 
+                     SELECT DISTINCT i.id, i.created_by, u1.username, i.milestone_id, m.name, 
                      i.assignee, u2.username, i.deadline, i.status, i.name, 
                      i.type, s.name, i.project_id, p.code, i.details
                      FROM pms.issue i 
@@ -76,7 +76,7 @@ public class IssueDAO {
                      JOIN pms.user u2 ON i.assignee = u2.id
                      JOIN pms.setting s ON i.type = s.id
                      JOIN pms.allocation a ON i.project_id = a.project_id
-                     WHERE a.user_id = ?""";
+                     WHERE 1=1""";
 
         // Add search conditions if any
         if (keyword != null && !keyword.isEmpty()) {
@@ -105,8 +105,7 @@ public class IssueDAO {
         }
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
-            stm.setInt(1, userId);
-            int index = 2;
+            int index = 1;
 
             if (keyword != null && !keyword.isEmpty()) {
                 String keywordPattern = "%" + keyword.toLowerCase().trim() + "%";
@@ -259,17 +258,18 @@ public class IssueDAO {
         String sql = """
                      INSERT INTO pms.issue (created_by, last_updated, milestone_id, 
                      assignee, deadline, status, name, type, project_id, details)
-                     VALUES (?, NOW(), ?, ?, ?, 0, ?, ?, ?, ?);""";
+                     VALUES (?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?);""";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             stm.setInt(1, issue.getCreated_by().getId());
             stm.setInt(2, issue.getMilestone().getId());
             stm.setInt(3, issue.getAssignee().getId());
             stm.setDate(4, BaseDAO.MyDateUtil.getSQLDate(issue.getDeadline()));
-            stm.setString(5, issue.getName());
-            stm.setInt(6, issue.getType().getId());
-            stm.setInt(7, issue.getProject().getId());
-            stm.setString(8, issue.getDetails());
+            stm.setInt(5, issue.getStatus());
+            stm.setString(6, issue.getName());
+            stm.setInt(7, issue.getType().getId());
+            stm.setInt(8, issue.getProject().getId());
+            stm.setString(9, issue.getDetails());
 
             result = stm.executeUpdate();
         } catch (SQLException e) {

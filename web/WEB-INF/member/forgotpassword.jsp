@@ -44,7 +44,7 @@
                                     <!-- Form bắt đầu -->
                                     <form id="email-form" action="<%=request.getContextPath()%>/forgotpassword" method="post">
                                         <div> 
-                                            <img src="https://tatthanh.com.vn/pic/Images/Module/News/images/image(1722).png" width="100px" style="border-radius: 50%;" alt="alt" />
+                                            <img src="${pageContext.request.contextPath}/img/logo/PMSLogo-big.jpg" width="100px" style="border-radius: 50%;" alt="logo" />
                                         </div>
                                         <div>
                                             <h1 class="h2">Forgot Password</h1>

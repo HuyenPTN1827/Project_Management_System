@@ -114,7 +114,7 @@
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Role <span style="color: red;">*</span></label>
+                                                    <label class="form-label">Role</label>
                                                     <select name="role" class="form-select">
                                                         <c:forEach items="${role}" var="r">
                                                             <option 
@@ -162,19 +162,19 @@
                             <h1 class="h1 mt-2 mb-3"> User Details</h1>
                             <div class="row">
 
+                                <c:if test="${not empty errorMessages}">
+                                    <div class="alert alert-danger pt-3 pe-3 ps-3">
+                                        <ul>
+                                            <c:forEach items="${errorMessages}" var="error" >
+                                                <li>${error}</li>
+                                                </c:forEach>
+                                        </ul>
+                                    </div>
+                                </c:if>
+
                                 <div class="col-md-12 col-xl-12">
                                     <div class="card">
                                         <div class="card-body">
-
-                                            <c:if test="${not empty errorMessages}">
-                                                <div class="alert alert-danger pt-3 pe-3 ps-3">
-                                                    <ul>
-                                                        <c:forEach items="${errorMessages}" var="error" >
-                                                            <li>${error}</li>
-                                                            </c:forEach>
-                                                    </ul>
-                                                </div>
-                                            </c:if>
 
                                             <form action="update-user" method="post" class="row">
                                                 <input type="hidden" name="id" value="${userDetail.id}"/>
@@ -207,7 +207,7 @@
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Role <span style="color: red;">*</span></label>
+                                                    <label class="form-label">Role</label>
                                                     <select name="role" class="form-select">
                                                         <c:forEach items="${role}" var="r">
                                                             <option 

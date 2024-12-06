@@ -47,7 +47,7 @@
 
                     <main class="content">
                         <div class="container-fluid p-0">
-                            <h1 class="h3 mb-3">Profile</h1>
+                            <h1 class="h1 mb-3">Profile</h1>
 
                             <div class="row">
                                 <!-- Tăng độ rộng cho phần Profile Details -->

@@ -458,19 +458,18 @@ public class ProjectDAO {
     }
 
 //    HuyenPTNHE160769
-    public List<Milestone> getMilestonesByProjectId(int userId, Integer projectId) {
+    public List<Milestone> getMilestonesByProjectId(Integer projectId) {
         List<Milestone> milestones = new ArrayList<>();
         String sql = """
                      SELECT DISTINCT m.id, m.name FROM pms.milestone m
                      JOIN pms.allocation a ON m.project_id = a.project_id
-                     WHERE a.user_id = ?""";
+                     WHERE 1=1""";
         if (projectId != null) {
             sql += " AND m.project_id = ?";
         }
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
-            stm.setInt(1, userId);
             if (projectId != null) {
-                stm.setInt(2, projectId);
+                stm.setInt(1, projectId);
             }
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {

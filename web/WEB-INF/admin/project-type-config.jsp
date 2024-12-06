@@ -243,7 +243,7 @@
                                                     Project Type Settings
                                                 </a>
                                             </li>
-                                            <li class="nav-item">
+                                            <li class="nav-item" hidden>
                                                 <a class="nav-link ${activeTab == 'manager' ? 'active' : ''}" id="project-type-users-tab" data-bs-toggle="tab" href="#project-type-users" role="tab" aria-controls="project-type-users" aria-selected="false">
                                                     Project Type Users
                                                 </a>
@@ -253,7 +253,7 @@
                                                     Project Phases
                                                 </a>
                                             </li>
-                                            <li class="nav-item">
+                                            <li class="nav-item" hidden>
                                                 <a class="nav-link ${activeTab == 'criteria' ? 'active' : ''}" id="eval-criteria-tab" data-bs-toggle="tab" href="#eval-criteria" role="tab" aria-controls="eval-criteria" aria-selected="false">
                                                     Eval Criteria
                                                 </a>
@@ -391,7 +391,7 @@
                                             </div>
 
                                             <!-- Project Type Users -->
-                                            <div class="tab-pane fade ${activeTab == 'manager' ? 'show active' : ''}" id="project-type-users" role="tabpanel" aria-labelledby="project-type-users-tab">
+                                            <div hidden class="tab-pane fade ${activeTab == 'manager' ? 'show active' : ''}" id="project-type-users" role="tabpanel" aria-labelledby="project-type-users-tab">
                                                 <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 15px;">
                                                     <form action="project-type-config" method="post" class="d-flex align-items-center" style="gap: 10px;">
                                                         <input type="hidden" name="id" value="${projectType.id}">
@@ -644,7 +644,7 @@
                                             </div>
 
                                             <!-- Eval Criteria -->
-                                            <div class="tab-pane fade ${activeTab == 'criteria' ? 'show active' : ''}" id="eval-criteria" role="tabpanel" aria-labelledby="eval-criteria-tab">
+                                            <div hidden class="tab-pane fade ${activeTab == 'criteria' ? 'show active' : ''}" id="eval-criteria" role="tabpanel" aria-labelledby="eval-criteria-tab">
                                                 <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 15px;">
                                                     <form action="project-type-config" method="post" class="d-flex align-items-center" style="gap: 15px;">
                                                         <input type="hidden" name="id" value="${projectType.id}">

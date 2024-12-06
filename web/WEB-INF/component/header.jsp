@@ -4,7 +4,7 @@
         <i class="hamburger align-self-center"></i>
     </a>
 
-    <form class="d-none d-sm-inline-block">
+    <form class="d-none d-sm-inline-block col-5">
         <div class="input-group input-group-navbar">
             <input type="hidden" name="userId" value="${user.id}"/>
             <input type="text" class="form-control" placeholder="Search?" aria-label="Search">
@@ -26,7 +26,7 @@
                    href="WorkPackageController" hidden>Requirements</a>
 
                     <a class="dropdown-item <c:if test="${currentPage == 'issue-management'}">active</c:if>" 
-                   href="<%=request.getContextPath()%>/issue-management?userId=${user.id}">Issues</a>
+                   href="<%=request.getContextPath()%>/issue-management?projectId=1">Issues</a>
 
                 <a class="dropdown-item <c:if test="${currentPage == 'defect-management'}">active</c:if>" 
                    href="#" hidden>Defects</a>
@@ -44,22 +44,22 @@
                        href="WorkPackageController" hidden>Requirements</a>
                 </li>  
 
-                <li class="nav-item px-2">
+                <li class="nav-item px-1">
                 <c:if test="${user.id == null}">
                     <a class="nav-link" href="<%=request.getContextPath()%>/logout">Issues</a>
                 </c:if>
                 <c:if test="${user.id != null}">
                     <a class="nav-link <c:if test="${currentPage == 'issue-management'}">active</c:if>" 
-                       href="<%=request.getContextPath()%>/issue-management?userId=${user.id}">Issues</a>
+                       href="<%=request.getContextPath()%>/issue-management?projectId=1">Issues</a>
                 </c:if>
 
             </li> 
-            <li class="nav-item px-2">
+            <li class="nav-item px-1">
                 <a class="nav-link <c:if test="${currentPage == 'defect-management'}">active</c:if>" 
                    href="#" hidden>Defects</a>
                 </li>   
                 
-                <li class="nav-item px-2">
+                <li class="nav-item px-1">
                     <a class="nav-link <c:if test="${currentPage == 'timesheet-management'}">active</c:if>" 
                        href="#">Timesheets</a>
                 </li>

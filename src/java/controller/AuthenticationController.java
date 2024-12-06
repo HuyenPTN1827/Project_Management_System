@@ -288,19 +288,22 @@ public class AuthenticationController extends HttpServlet {
                     System.out.println("User found: " + foundUser.getEmail() + ", Role ID: " + foundUser.getRole_id());
 
                     // Phân quyền dựa vào tên role
-                    if (userRoleSetting.getPriority() == 1) {
-                        System.out.println("Redirecting to user-management");
-                        response.sendRedirect(request.getContextPath() + "/user-management");
-                    } else if (userRoleSetting.getPriority() >= 2) {
-                        System.out.println("Redirecting to member-dashboard");
-                        response.sendRedirect(request.getContextPath() + "/member-dashboard");
-                    } else {
-                        System.out.println("Unauthorized access!");
-                        response.sendRedirect(request.getContextPath() + "/member/unauthorized.jsp");
-                    }
+//                    if (userRoleSetting.getPriority() == 1) {
+//                        System.out.println("Redirecting to user-management");
+//                        response.sendRedirect(request.getContextPath() + "/user-management");
+//                    } else if (userRoleSetting.getPriority() >= 2) {
+//                        System.out.println("Redirecting to member-dashboard");
+//                        response.sendRedirect(request.getContextPath() + "/member-dashboard");
+//                    } else {
+//                        System.out.println("Unauthorized access!");
+//                        request.getRequestDispatcher("/WEB-INF/member/unauthorized.jsp").forward(request, response);
+//                    }
+                    System.out.println("Redirecting to member-dashboard");
+                    response.sendRedirect(request.getContextPath() + "/member-dashboard");
                 } else {
                     System.out.println("User role setting is null!");
-                    response.sendRedirect(request.getContextPath() + "/member/unauthorized.jsp");
+                    request.getRequestDispatcher("/WEB-INF/member/unauthorized.jsp").forward(request, response);
+
                 }
             } else {
                 HttpSession session = request.getSession();
