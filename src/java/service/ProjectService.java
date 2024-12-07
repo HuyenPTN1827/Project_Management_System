@@ -70,8 +70,8 @@ public class ProjectService {
         return projectDAO.getProjectListByUserID(userId);
     }
 
-    public List<Milestone> getMilestonesByProjectId(int userId, Integer projectId) {
-        return projectDAO.getMilestonesByProjectId(userId, projectId);
+    public List<Milestone> getMilestonesByProjectId(Integer projectId) {
+        return projectDAO.getMilestonesByProjectId(projectId);
     }
     
      public List<ProjectType> getAllProjectType() {

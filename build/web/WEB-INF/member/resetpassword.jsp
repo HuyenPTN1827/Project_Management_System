@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!--BachHD-->
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -35,11 +36,11 @@
                         <div class="d-table-cell align-middle">
                             <div class="text-center mt-4">
                                 <div>
-                                    <img src="https://tatthanh.com.vn/pic/Images/Module/News/images/image(1722).png" width="100px" style="border-radius: 50%;" alt="alt" />
+                                    <img src="${pageContext.request.contextPath}/img/logo/PMSLogo-big.jpg" width="100px" style="border-radius: 50%;" alt="logo" />
                                 </div>
-                                <h1 class="h2">Khôi phục mật khẩu</h1>
+                                <h1 class="h2">Reset Password</h1>
                                 <p class="lead">
-                                    Đã có tài khoản? <a style="color: black;" href="">Quay lại đăng nhập</a>
+                                    Already have account? <a style="color: black;" href="">Back to Sign in</a>
                                 </p>
                             </div>
                             <div class="card">
@@ -47,22 +48,22 @@
                                     <div class="col-md-12">
                                         <form id="otp-form" action="<%=request.getContextPath()%>/resetpassword" method="post">
                                             <div class="mb-3" style="margin-top: 30px;">
-                                                <label class="form-label">Nhập mã OTP:</label>
-                                                <input class="form-control form-control-lg" type="text" name="otp" placeholder="Nhập mã OTP" required />
+                                                <label class="form-label">Enter OTP:</label>
+                                                <input class="form-control form-control-lg" type="text" name="otp" placeholder="Enter the OTP" required />
                                             </div>
                                             <div class="mb-3" style="margin-top: 30px;">
-                                                <label class="form-label">Mật khẩu mới:</label>
-                                                <input class="form-control form-control-lg" type="password" name="newPassword" placeholder="Nhập mật khẩu mới" required />
+                                                <label class="form-label">New Password:</label>
+                                                <input class="form-control form-control-lg" type="password" name="newPassword" placeholder="Enter the new passowrd" required />
                                             </div>
                                             <div class="mb-3" style="margin-top: 30px;">
-                                                <label class="form-label">Xác nhận mật khẩu:</label>
-                                                <input class="form-control form-control-lg" type="password" name="confirmPassword" placeholder="Nhập lại mật khẩu mới" required />
+                                                <label class="form-label">Confirm Password:</label>
+                                                <input class="form-control form-control-lg" type="password" name="confirmPassword" placeholder="Enter the confirm password" required />
                                             </div>
                                             <p style="color: red;">
                                                 ${ERROR}
                                             </p>
                                             <div class="text-center mt-3">
-                                                <button type="submit" class="btn btn-lg btn-success" style="border-radius: 50px;">Cập nhật mật khẩu</button>
+                                                <button type="submit" class="btn btn-lg btn-success" style="border-radius: 50px;">Update Password</button>
                                             </div>
                                             <c:if test="${not empty errorMessage}">
                                                 <div class="text-danger mt-2">${errorMessage}</div>

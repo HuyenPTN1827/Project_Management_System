@@ -2,15 +2,12 @@
 <nav id="sidebar" class="sidebar js-sidebar">
     <div class="sidebar-content js-simplebar">
         <a class="sidebar-brand" href="<%=request.getContextPath()%>/member-dashboard">
-            <span class="sidebar-brand-text align-middle" style="font-size: 2.5rem; letter-spacing: 0.1rem;">
-                <strong>PMS</strong>
-            </span>
-            <svg class="sidebar-brand-icon align-middle" width="32px" height="32px" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.5"
-                 stroke-linecap="square" stroke-linejoin="miter" color="#FFFFFF" style="margin-left: -3px">
-            <path d="M12 4L20 8.00004L12 12L4 8.00004L12 4Z"></path>
-            <path d="M20 12L12 16L4 12"></path>
-            <path d="M20 16L12 20L4 16"></path>
-            </svg>
+            <div style="display: flex; align-items: center;">
+                <img src="${pageContext.request.contextPath}/img/logo/PMSLogo-big.jpg" width="50px" style="border-radius: 50%;" alt="logo" />
+                <span class="sidebar-brand-text ms-3" style="font-size: 2.5rem; letter-spacing: 0.1rem;">
+                    <strong>PMS</strong>
+                </span>
+            </div>
         </a>
 
         <div class="sidebar-user">
@@ -35,7 +32,7 @@
                         </a>
                     </div>
 
-                    <div class="sidebar-user-subtitle">${user.setting.name}</div>
+                    <div class="sidebar-user-subtitle">${user.role_name}</div>
                 </div>
             </div>
         </div>
@@ -82,7 +79,7 @@
                             </ul>
                         </li>-->
 
-            <li class="sidebar-item">
+            <li class="sidebar-item" hidden>
                 <a data-bs-target="#evaluation" data-bs-toggle="collapse" class="sidebar-link collapsed">
                     <i class="align-middle" data-feather="check-circle"></i> <span class="align-middle">Evaluation</span>
                 </a>
@@ -91,11 +88,6 @@
                     <li class="sidebar-item"><a class="sidebar-link" href="#">Members</a></li>
                 </ul>
             </li>
-
-            <%--<c:if test="${user.role_id == 1}">--%>
-            <!--                <li class="sidebar-header">
-                                System Management
-                            </li>-->
 
             <li class="sidebar-item <c:if test="${currentPage == 'department-management' || currentPage == 'project-type-management'
                                                   || currentPage == 'user-management' || currentPage == 'setting-management'}">active</c:if>">
@@ -115,7 +107,7 @@
                       <li class="sidebar-item <c:if test="${currentPage == 'project-type-management'}">active</c:if>">
                           <a class="sidebar-link" href="<%=request.getContextPath()%>/project-type-management">Project Types</a>
                       </li>
-                      <c:if test="${user.role_id == 1}">
+                      <c:if test="${user.role_id == 2}">
                           <li class="sidebar-item <c:if test="${currentPage == 'user-management'}">active</c:if>">
                               <a class="sidebar-link" href="<%=request.getContextPath()%>/user-management">Users</a>
                           </li>
@@ -125,120 +117,6 @@
                       </c:if>
                   </ul>
             </li>
-            <%-- </c:if>--%>
-
-            <!--            <li class="sidebar-item">
-                            <a data-bs-target="#pages" data-bs-toggle="collapse" class="sidebar-link collapsed">
-                                <i class="align-middle" data-feather="layout"></i> <span class="align-middle">Pages</span>
-                            </a>
-                            <ul id="pages" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
-                                <li class="sidebar-item"><a class="sidebar-link" href="pages-settings.html">Settings</a></li>
-                                <li class="sidebar-item"><a class="sidebar-link" href="pages-projects.html">Projects <span
-                                            class="sidebar-badge badge bg-primary">Pro</span></a></li>
-                                <li class="sidebar-item"><a class="sidebar-link" href="pages-clients.html">Clients <span
-                                            class="sidebar-badge badge bg-primary">Pro</span></a></li>
-                                <li class="sidebar-item"><a class="sidebar-link" href="pages-pricing.html">Pricing <span
-                                            class="sidebar-badge badge bg-primary">Pro</span></a></li>
-                                <li class="sidebar-item"><a class="sidebar-link" href="pages-chat.html">Chat <span
-                                            class="sidebar-badge badge bg-primary">Pro</span></a></li>
-                                <li class="sidebar-item"><a class="sidebar-link" href="pages-blank.html">Blank Page</a></li>
-                            </ul>
-                        </li>
-            
-                        <li class="sidebar-item active">
-                            <a class="sidebar-link" href="pages-profile.html">
-                                <i class="align-middle" data-feather="user"></i> <span class="align-middle">Profile</span>
-                            </a>
-                        </li>
-            
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="pages-invoice.html">
-                                <i class="align-middle" data-feather="credit-card"></i> <span class="align-middle">Invoice</span>
-                            </a>
-                        </li>
-            
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="pages-tasks.html">
-                                <i class="align-middle" data-feather="list"></i> <span class="align-middle">Tasks</span>
-                                <span class="sidebar-badge badge bg-primary">Pro</span>
-                            </a>
-                        </li>
-            
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="calendar.html">
-                                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Calendar</span>
-                                <span class="sidebar-badge badge bg-primary">Pro</span>
-                            </a>
-                        </li>
-            
-                        <li class="sidebar-item">
-                            <a href="#auth" data-bs-toggle="collapse" class="sidebar-link collapsed">
-                                <i class="align-middle" data-feather="users"></i> <span class="align-middle">Auth</span>
-                            </a>
-                            <ul id="auth" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
-                                <li class="sidebar-item"><a class="sidebar-link" href="pages-sign-in.html">Sign In</a></li>
-                                <li class="sidebar-item"><a class="sidebar-link" href="pages-sign-up.html">Sign Up</a></li>
-                                <li class="sidebar-item"><a class="sidebar-link" href="pages-reset-password.html">Reset Password <span
-                                            class="sidebar-badge badge bg-primary">Pro</span></a></li>
-                                <li class="sidebar-item"><a class="sidebar-link" href="pages-404.html">404 Page <span
-                                            class="sidebar-badge badge bg-primary">Pro</span></a></li>
-                                <li class="sidebar-item"><a class="sidebar-link" href="pages-500.html">500 Page <span
-                                            class="sidebar-badge badge bg-primary">Pro</span></a></li>
-                            </ul>
-                        </li>
-            
-                        <li class="sidebar-header">
-                            Components
-                        </li>
-                        <li class="sidebar-item">
-                            <a data-bs-target="#ui" data-bs-toggle="collapse" class="sidebar-link collapsed">
-                                <i class="align-middle" data-feather="briefcase"></i> <span class="align-middle">UI Elements</span>
-                            </a>
-                            <ul id="ui" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
-                                <li class="sidebar-item"><a class="sidebar-link" href="ui-alerts.html">Alerts</a></li>
-                                <li class="sidebar-item"><a class="sidebar-link" href="ui-buttons.html">Buttons</a></li>
-                                <li class="sidebar-item"><a class="sidebar-link" href="ui-cards.html">Cards</a></li>
-                                <li class="sidebar-item"><a class="sidebar-link" href="ui-general.html">General</a></li>
-                                <li class="sidebar-item"><a class="sidebar-link" href="ui-grid.html">Grid</a></li>
-                                <li class="sidebar-item"><a class="sidebar-link" href="ui-modals.html">Modals</a></li>
-                                <li class="sidebar-item"><a class="sidebar-link" href="ui-offcanvas.html">Offcanvas <span
-                                            class="sidebar-badge badge bg-primary">Pro</span></a></li>
-                                <li class="sidebar-item"><a class="sidebar-link" href="ui-placeholders.html">Placeholders <span
-                                            class="sidebar-badge badge bg-primary">Pro</span></a></li>
-                                <li class="sidebar-item"><a class="sidebar-link" href="ui-tabs.html">Tabs <span
-                                            class="sidebar-badge badge bg-primary">Pro</span></a></li>
-                                <li class="sidebar-item"><a class="sidebar-link" href="ui-typography.html">Typography</a></li>
-                            </ul>
-                        </li>
-                        <li class="sidebar-item">
-                            <a data-bs-target="#icons" data-bs-toggle="collapse" class="sidebar-link collapsed">
-                                <i class="align-middle" data-feather="coffee"></i> <span class="align-middle">Icons</span>
-                                <span class="sidebar-badge badge bg-light">1.500+</span>
-                            </a>
-                            <ul id="icons" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
-                                <li class="sidebar-item"><a class="sidebar-link" href="icons-feather.html">Feather</a></li>
-                                <li class="sidebar-item"><a class="sidebar-link" href="icons-font-awesome.html">Font Awesome <span
-                                            class="sidebar-badge badge bg-primary">Pro</span></a></li>
-                            </ul>
-                        </li>
-                        <li class="sidebar-item">
-                            <a data-bs-target="#forms" data-bs-toggle="collapse" class="sidebar-link collapsed">
-                                <i class="align-middle" data-feather="check-circle"></i> <span class="align-middle">Forms</span>
-                            </a>
-                            <ul id="forms" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
-                                <li class="sidebar-item"><a class="sidebar-link" href="forms-basic-inputs.html">Basic Inputs</a></li>
-                                <li class="sidebar-item"><a class="sidebar-link" href="forms-layouts.html">Form Layouts <span
-                                            class="sidebar-badge badge bg-primary">Pro</span></a></li>
-                                <li class="sidebar-item"><a class="sidebar-link" href="forms-input-groups.html">Input Groups <span
-                                            class="sidebar-badge badge bg-primary">Pro</span></a></li>
-                            </ul>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="tables-bootstrap.html">
-                                <i class="align-middle" data-feather="list"></i> <span class="align-middle">Tables</span>
-                            </a>
-                        </li>-->
-
         </ul>
 
     </div>

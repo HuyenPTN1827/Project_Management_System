@@ -128,14 +128,14 @@
                                                 <div class="row">
                                                     <div class="col-md-12 col-xl-12">
                                                         <c:if test="${not empty message}">
-                                                            <div class="alert alert-success pt-3 pe-3 ps-3" role="alert">
+                                                            <div class="alert alert-success p-3" role="alert">
                                                                 ${message}
                                                             </div>
                                                         </c:if>
 
                                                         <!-- Thông báo lỗi -->
                                                         <c:if test="${not empty error}">
-                                                            <div class="alert alert-danger pt-3 pe-3 ps-3" role="alert">
+                                                            <div class="alert alert-danger p-3" role="alert">
                                                                 ${error}
                                                             </div>
                                                         </c:if>

@@ -103,16 +103,18 @@
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label">Password <span style="color: red;">*</span></label>
                                                     <input type="password" class="form-control" name="password" placeholder="Enter the Password" required>
+                                                    <small style="color: gray">Password must be at least 6 characters, including uppercase letters, lowercase letters, numbers and some special characters.</small>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label">Phone</label>
                                                     <input type="text" class="form-control" name="mobile" placeholder="Enter the Phone number"
                                                            value="${mobile}">
+                                                    <small style="color: gray">Phone number must start with 03, 05, 07, 08, or 09 and be 10 digits long.</small>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Role <span style="color: red;">*</span></label>
+                                                    <label class="form-label">Role</label>
                                                     <select name="role" class="form-select">
                                                         <c:forEach items="${role}" var="r">
                                                             <option 
@@ -160,19 +162,19 @@
                             <h1 class="h1 mt-2 mb-3"> User Details</h1>
                             <div class="row">
 
+                                <c:if test="${not empty errorMessages}">
+                                    <div class="alert alert-danger pt-3 pe-3 ps-3">
+                                        <ul>
+                                            <c:forEach items="${errorMessages}" var="error" >
+                                                <li>${error}</li>
+                                                </c:forEach>
+                                        </ul>
+                                    </div>
+                                </c:if>
+
                                 <div class="col-md-12 col-xl-12">
                                     <div class="card">
                                         <div class="card-body">
-
-                                            <c:if test="${not empty errorMessages}">
-                                                <div class="alert alert-danger pt-3 pe-3 ps-3">
-                                                    <ul>
-                                                        <c:forEach items="${errorMessages}" var="error" >
-                                                            <li>${error}</li>
-                                                            </c:forEach>
-                                                    </ul>
-                                                </div>
-                                            </c:if>
 
                                             <form action="update-user" method="post" class="row">
                                                 <input type="hidden" name="id" value="${userDetail.id}"/>
@@ -200,10 +202,12 @@
                                                     <label class="form-label">Phone</label>
                                                     <input type="text" class="form-control" name="mobile" placeholder="Enter the Phone number"
                                                            value="${userDetail.mobile}">
+                                                    <small style="color: gray">Phone number must start with 03, 05, 07, 08, or 09 and be 10 digits long.</small>
+
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Role <span style="color: red;">*</span></label>
+                                                    <label class="form-label">Role</label>
                                                     <select name="role" class="form-select">
                                                         <c:forEach items="${role}" var="r">
                                                             <option 

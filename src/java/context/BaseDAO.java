@@ -22,6 +22,7 @@ public class BaseDAO {
     private static final String jdbcUsername = "root";
     private static final String jdbcPassword = "11102001";
 
+
     public static Connection getConnection() {
         Connection connection = null;
         try {

@@ -161,20 +161,18 @@
 
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label">Status</label>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="status"
+                                                    <div class="check">
+                                                            <input class="form-check-input" type="radio" name="status"
                                                                <c:if test="${setting.status eq 'true'}">
                                                                    checked
                                                                </c:if>
                                                                value="true">Active
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="status"
+                                                            <input class="form-check-input ms-3" type="radio" name="status"
                                                                <c:if test="${setting.status eq 'false'}">
                                                                    checked
                                                                </c:if>
                                                                value="false">Inactive
-                                                    </div>
+                                                        </div>
                                                 </div>
 
                                                 <div class="mb-3 col-md-12">

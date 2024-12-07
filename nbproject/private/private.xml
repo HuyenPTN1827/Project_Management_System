@@ -3,10 +3,21 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/AuthenticationController.java</file>
             <file>file:/D:/Do%20An/Project_Management_System/src/java/service/UserService.java</file>
             <file>file:/D:/Do%20An/Project_Management_System/src/java/service/BaseServive.java</file>
             <file>file:/D:/Do%20An/Project_Management_System/web/WEB-INF/guest/register.jsp</file>
+=======
+            <file>file:/D:/Git/Project/Project_Management_System/src/java/service/IssueService.java</file>
+            <file>file:/D:/Git/Project/Project_Management_System/src/java/context/IssueDAO.java</file>
+            <file>file:/D:/Git/Project/Project_Management_System/web/WEB-INF/guest/register.jsp</file>
+            <file>file:/D:/Git/Project/Project_Management_System/web/WEB-INF/member/issue-list.jsp</file>
+            <file>file:/D:/Git/Project/Project_Management_System/src/java/service/ProjectService.java</file>
+            <file>file:/D:/Git/Project/Project_Management_System/src/java/controller/IssueController.java</file>
+            <file>file:/D:/Git/Project/Project_Management_System/src/java/controller/UserController.java</file>
+            <file>file:/D:/Git/Project/Project_Management_System/src/java/context/ProjectDAO.java</file>
+>>>>>>> 57594519c4386206ea9fedbba2594a8168e1e472
         </group>
     </open-files>
 </project-private>

@@ -47,7 +47,7 @@
 
                     <main class="content">
                         <div class="container-fluid p-0">
-                            <h1 class="h3 mb-3">Profile</h1>
+                            <h1 class="h1 mb-3">Profile</h1>
 
                             <div class="row">
                                 <!-- Tăng độ rộng cho phần Profile Details -->
@@ -97,34 +97,43 @@
                                                 <label class="form-label" for="inputName">Full Name</label>
                                                 <input type="text" class="form-control" id="inputName" name="fullname" value="${userProfile.full_name}" required>
                                             </div>
+                                            
+                                            <div class="mb-3 col-md-6">
+                                                <label class="form-label" for="inputCity">User Name</label>
+                                                <input type="text" class="form-control" id="roles" name="username" value="${userProfile.username}" readonly>
+                                            </div>
+                                            
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="inputEmail4">Email</label>
                                                 <input type="email" class="form-control" id="inputEmail4" name="email" value="${userProfile.email}" required>
                                             </div>
+                                            
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="phone">Phone</label>
                                                 <input type="text" class="form-control" id="phone" name="mobile" value="${userProfile.mobile}" required>
                                             </div>
 
                                             <div class="mb-3 col-md-6">
-                                                <label class="form-label" for="inputCity">Roles</label>
-                                                <input type="text" class="form-control" id="roles" name="roles" value="${userProfile.role_name}" readonly>
-                                            </div>
-                                            <div class="mb-3 col-md-6">
-                                                <label class="form-label" for="inputCity">User Name</label>
-                                                <input type="text" class="form-control" id="roles" name="username" value="${userProfile.username}" readonly>
-                                            </div>
-                                            <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="inputCity">Department</label>
                                                 <input type="text" class="form-control" id="roles" name="department" value="${userProfile.department}" readonly>
                                             </div>
+                                            
+                                            <div class="mb-3 col-md-6">
+                                                <label class="form-label" for="inputCity">Role</label>
+                                                <input type="text" class="form-control" id="roles" name="roles" value="${userProfile.role_name}" readonly>
+                                            </div>
+                                            
                                             <div style="color: green;">
                                                 ${message}
                                             </div>
                                             <div style="color: red;">
                                                 ${err}
                                             </div>
-                                            <button style="width: 150px;" type="submit" class="btn btn-lg btn-primary">Save Changes</button>
+                                            
+                                            <div>
+                                                <button type="submit" class="btn btn-lg btn-success">Save Changes</button>
+                                            </div>
+                                            
                                         </form>
                                     </div>
                                 </div>

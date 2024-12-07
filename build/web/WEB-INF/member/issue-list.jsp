@@ -54,7 +54,7 @@
                 const selectedId = document.getElementById("projectDropdown").value;
                 if (selectedId) {
                     // Redirect to the project type config page with the selected ID
-                    window.location.href = 'issue-management?userId=' + userId + '&projectId=' + selectedId;
+                    window.location.href = 'issue-management?projectId=' + selectedId;
                 }
             }
         </script>
@@ -80,23 +80,10 @@
                                         <div class="card-header">
                                             <div class="d-flex justify-content-between align-items-center" style="margin: 10px;">
                                                 <form action="issue-management" method="post" class="d-flex align-items-center flex-wrap" style="gap: 10px; width: 97%;">
-                                                    <div class="form-group d-flex align-items-center" style="width: 97%;">
-                                                        <input type="hidden" name="userId" value="${user.id}">
-
-                                                    <select name="type" class="form-select">
-                                                        <option value="">All Types</option>
-                                                        <c:forEach items="${listType}" var="t">
-                                                            <option 
-                                                                <c:if test="${type eq t.id}">
-                                                                    selected="selected"
-                                                                </c:if>
-                                                                value="${t.id}">${t.name}
-                                                            </option>
-                                                        </c:forEach>
-                                                    </select>
+                                                    <div class="form-group d-flex align-items-center" style="gap: 10px; width: 97%;">
+                                                        <!--<input type="hidden" name="userId" value="${user.id}">-->
 
                                                     <select name="projectId" id="projectDropdown" class="form-select" onchange="redirectToConfigPage(${user.id})">
-                                                        <option value="">All Projects</option>
                                                         <c:forEach items="${listPj}" var="p">
                                                             <option 
                                                                 <c:if test="${projectId eq p.id}">
@@ -154,6 +141,21 @@
                                                             </option>
                                                         </c:forEach>
                                                     </select>
+                                                </div>
+
+                                                <div class="d-flex align-items-center" style="gap: 10px; width: 97%;">
+                                                    <select name="type" class="form-select">
+                                                        <option value="">All Types</option>
+                                                        <c:forEach items="${listType}" var="t">
+                                                            <option 
+                                                                <c:if test="${type eq t.id}">
+                                                                    selected="selected"
+                                                                </c:if>
+                                                                value="${t.id}">${t.name}
+                                                            </option>
+                                                        </c:forEach>
+                                                    </select>
+
 
                                                     <select name="status" class="form-select">
                                                         <option value="">All Status</option>
@@ -167,37 +169,23 @@
                                                             <c:if test="${status eq '1'}">
                                                                 selected="selected"
                                                             </c:if>
-                                                            value="1">To Do
-                                                        </option>
-                                                        <option 
-                                                            <c:if test="${status eq '2'}">
-                                                                selected="selected"
-                                                            </c:if>
-                                                            value="2">Doing
-                                                        </option>
-                                                        <option 
-                                                            <c:if test="${status eq '3'}">
-                                                                selected="selected"
-                                                            </c:if>
-                                                            value="3">Done
+                                                            value="1">In Progress
                                                         </option>
                                                         <option 
                                                             <c:if test="${status eq '4'}">
                                                                 selected="selected"
                                                             </c:if>
-                                                            value="4">Closed
+                                                            value="2">Closed
                                                         </option>
                                                         <option 
                                                             <c:if test="${status eq '5'}">
                                                                 selected="selected"
                                                             </c:if>
-                                                            value="5">Cancelled
+                                                            value="3">Cancelled
                                                         </option>
                                                     </select>
-                                                </div>
 
-                                                <div class="d-flex align-items-center" style="gap: 10px; width: 97%;">
-                                                    <div class="form-group" style="flex: 1;">
+                                                    <div class="form-group" style="width: 210%;">
                                                         <input type="search" name="keyword" class="form-control" placeholder="Enter the Project Issue" id="keyword" value="${keyword}">
                                                     </div>
                                                     <button type="submit" class="btn btn-primary">Search</button>
@@ -243,24 +231,32 @@
                                                                 <span class="badge bg-secondary">Pending</span>
                                                             </c:if>
                                                             <c:if test="${issue.status eq '1'}">
-                                                                <span class="badge bg-warning">To Do</span>
+                                                                <span class="badge bg-primary">In progress</span>
                                                             </c:if>
                                                             <c:if test="${issue.status eq '2'}">
-                                                                <span class="badge bg-primary">Doing</span>
+                                                                <span class="badge bg-success">Closed</span>
                                                             </c:if>
                                                             <c:if test="${issue.status eq '3'}">
-                                                                <span class="badge bg-success">Done</span>
-                                                            </c:if>
-                                                            <c:if test="${issue.status eq '4'}">
-                                                                <span class="badge bg-secondary-light">Closed</span>
-                                                            </c:if>
-                                                            <c:if test="${issue.status eq '5'}">
                                                                 <span class="badge bg-danger">Cancelled</span>
                                                             </c:if>
                                                         </td>
                                                         <td>
-                                                            <a href="<%=request.getContextPath()%>/edit-issue?id=${issue.id}&userId=${user.id}&projectId=${issue.project.id}" 
-                                                               class="btn btn-info"><i class="align-middle" data-feather="edit"></i></a>
+                                                            <c:if test="${user.role_id eq 5}">
+                                                                <c:if test="${user.id eq issue.created_by.id || user.id eq issue.assignee.id}">
+                                                                    <a href="<%=request.getContextPath()%>/edit-issue?action=edit&id=${issue.id}&userId=${user.id}&projectId=${issue.project.id}" 
+                                                                       class="btn btn-info"><i class="align-middle" data-feather="edit"></i></a>
+                                                                    </c:if>
+                                                                    <c:if test="${user.id ne issue.created_by.id && user.id ne issue.assignee.id}">
+                                                                    <a href="<%=request.getContextPath()%>/edit-issue?action=view&id=${issue.id}&userId=${user.id}&projectId=${issue.project.id}" 
+                                                                       class="btn btn-info"><i class="align-middle" data-feather="eye"></i></a>
+                                                                    </c:if>
+                                                                </c:if>
+
+                                                            <c:if test="${user.role_id ne 5}">
+                                                                <a href="<%=request.getContextPath()%>/edit-issue?action=edit&id=${issue.id}&userId=${user.id}&projectId=${issue.project.id}" 
+                                                                   class="btn btn-info"><i class="align-middle" data-feather="edit"></i></a>
+                                                                </c:if>
+
                                                         </td>
                                                     </tr>
                                                 </c:forEach>
