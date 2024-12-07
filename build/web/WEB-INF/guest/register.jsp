@@ -41,28 +41,28 @@
                                         <form action="<%=request.getContextPath()%>/register" method="post">
                                             <div style="margin-top: 10px" class="mb-3">
                                                 <label class="form-label">Full Name</label>
-                                                <input class="form-control form-control-lg" type="text" name="fullname" placeholder="Enter full name" required />
+                                                <input class="form-control form-control-lg" type="text" name="fullname" placeholder="Enter full name" value="${fullname}" />
                                             </div>
                                             <div style="margin-top: 10px" class="mb-3">
                                                 <label class="form-label">Username</label>
-                                                <input class="form-control form-control-lg" type="text" name="username" placeholder="Enter username" required />
+                                                <input class="form-control form-control-lg" type="text" name="username" placeholder="Enter username" value="${username}"/>
                                             </div>
                                             <div style="margin-top: 10px" class="mb-3">
                                                 <label class="form-label">Email</label>
-                                                <input class="form-control form-control-lg" type="text" name="email" placeholder="Enter email" required />
+                                                <input class="form-control form-control-lg" type="text" name="email" placeholder="Enter email" value="${email}"/>
                                             </div>
                                             <div style="margin-top: 10px" class="mb-3">
                                                 <label class="form-label">Phone Number</label>
-                                                <input class="form-control form-control-lg" type="text" name="mobile" placeholder="Enter phone number" />
+                                                <input class="form-control form-control-lg" type="text" name="mobile" placeholder="Enter phone number" value="${mobile}"/>
                                             </div>
                                             <div style="margin-top: 10px" class="mb-3">
                                                 <label class="form-label">Password</label>
-                                                <input class="form-control form-control-lg" type="password" name="password" placeholder="Enter password" required />
-                                                <small style="color: gray">Use 8 or more characters with a mix of letters, numbers, and symbols</small>
+                                                <input class="form-control form-control-lg" type="password" name="password" placeholder="Enter password" value="${password}"/>
+                                                <small style="color: gray">Use 6 or more characters with a mix of letters, numbers, and symbols</small>
                                             </div>
                                             <div style="margin-top: 10px" class="mb-3">
                                                 <label class="form-label">Confirm Password</label>
-                                                <input class="form-control form-control-lg" type="password" name="confirmPassword" placeholder="Confirm password" required />
+                                                <input class="form-control form-control-lg" type="password" name="confirmPassword" placeholder="Confirm password" value="${confirmpassword}"/>
                                             </div>
 
                                             <p style="color: red;">
@@ -73,7 +73,7 @@
                                             </p>
 
                                             <div class="text-center mt-3">
-                                                <button type="submit" class="btn btn-lg btn-primary" style="border-radius: 50px;">Create Account</button>
+                                                <button type="submit" class="btn btn-lg btn-primary" style="border-radius: 50px;">Register Account</button>
                                             </div>
                                         </form>
                                     </div>
@@ -89,16 +89,6 @@
         </main>
         <script src="js/app.js"></script>
     </body>
-    <script>
-        document.querySelector("form").addEventListener("submit", function (e) {
-            const password = document.querySelector("input[name='password']").value;
-            const confirmPassword = document.querySelector("input[name='confirmPassword']").value;
-
-            if (password !== confirmPassword) {
-                e.preventDefault();
-                alert("Passwords do not match. Please try again.");
-            }
-        });
-    </script>
+   
 
 </html>

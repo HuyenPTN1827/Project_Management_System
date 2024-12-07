@@ -134,6 +134,7 @@ public class AuthenticationController extends HttpServlet {
         String email = request.getParameter("email");
         String mobile = request.getParameter("mobile");
         String password = request.getParameter("password");
+        String confirmPassword = request.getParameter("confirmPassword");
 
         User user = new User();
         user.setFull_name(fullname);
@@ -141,11 +142,18 @@ public class AuthenticationController extends HttpServlet {
         user.setPassword(password);
         user.setEmail(email);
         user.setMobile(mobile);
+
 // Validate user information
-        List<String> validationErrors = userService.validateUser(user);
+        List<String> validationErrors = userService.validateUserRegister(user, confirmPassword);
 
         // Kiểm tra giá trị người dùng nhập có lỗi nào không
         if (!validationErrors.isEmpty()) {
+            request.setAttribute("fullname", fullname);
+            request.setAttribute("username", username);
+            request.setAttribute("email", email);
+            request.setAttribute("mobile", mobile);
+            request.setAttribute("password", password);
+            request.setAttribute("confirmpassword", confirmPassword);
             request.setAttribute("NOTIFICATION", String.join(", ", validationErrors));
             RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/guest/register.jsp");
             dispatcher.forward(request, response);
@@ -167,7 +175,12 @@ public class AuthenticationController extends HttpServlet {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(AuthenticationController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        request.setAttribute("fullname", fullname);
+        request.setAttribute("username", username);
+        request.setAttribute("email", email);
+        request.setAttribute("mobile", mobile);
+        request.setAttribute("password", password);
+        request.setAttribute("confirmpassword", confirmPassword);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/guest/register.jsp");
         dispatcher.forward(request, response);
     }
