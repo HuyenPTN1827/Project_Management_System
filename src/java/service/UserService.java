@@ -174,9 +174,6 @@ public class UserService extends BaseServive {
         if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
             errors.add("Email is required.");
         }
-        if (user.getMobile() == null || user.getMobile().trim().isEmpty()) {
-            errors.add("Phone number is required.");
-        }
         if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
             errors.add("Password is required.");
         }
@@ -205,5 +202,21 @@ public class UserService extends BaseServive {
 
         return errors;
     }
+    
+public void updateUserStatus(String email, int status) {
+    try {
+        // Kiểm tra kết nối và thực hiện cập nhật
+        System.out.println("Updating user status for User ID: " + email + " to status: " + status);
+        userDAO.updateUserStatus(email, status);
+        System.out.println("User status updated successfully.");
+    } catch (Exception e) {
+        // In ra lỗi nếu có
+        System.err.println("Error updating user status: " + e.getMessage());
+        e.printStackTrace();
+    }
+}
+
+
+
 
 }

@@ -126,6 +126,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             String fullname = request.getParameter("fullname");
             String email = request.getParameter("email");
             String mobile = request.getParameter("mobile");
+            String username = request.getParameter("username");
 
             // Check if the profile was updated
             boolean isUpdated = false;
@@ -133,13 +134,14 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             // Check if the new values are different from the current ones
             if (!fullname.equals(user.getFull_name())
                     || !email.equals(user.getEmail())
-                    || !mobile.equals(user.getMobile())) {
+                    || !mobile.equals(user.getMobile())
+                    || !username.equals(user.getUsername())) {
 
                 // Chỉ cập nhật các trường được phép
                 user.setFull_name(fullname);
                 user.setEmail(email);
                 user.setMobile(mobile);
-
+                user.setUsername(username);
                 // Gọi phương thức cập nhật từ UserService
                 isUpdated = userService.updateMember(user);
             }

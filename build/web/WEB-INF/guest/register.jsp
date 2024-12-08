@@ -52,12 +52,6 @@
                                             <div style="margin-top: 10px" class="mb-3">
                                                 <label class="form-label">Email <span style="color: red;">*</span></label>
                                                 <input class="form-control form-control-lg" type="text" name="email" placeholder="Enter the Email address" value="${email}"/>
-
-                                            </div>
-                                            <div style="margin-top: 10px" class="mb-3" hidden>
-                                                <label class="form-label">Phone Number</label>
-                                                <input class="form-control form-control-lg" type="text" name="mobile" placeholder="Enter phone number" value="${mobile}"/>
-                                                <small style="color: gray">Phone number must start with 03, 05, 07, 08, or 09 and be 10 digits long.</small>
                                             </div>
                                             <div style="margin-top: 10px" class="mb-3">
                                                 <label class="form-label">Password <span style="color: red;">*</span></label>
@@ -69,23 +63,7 @@
                                                 <input class="form-control form-control-lg" type="password" name="confirmPassword" placeholder="Confirm the Password" value="${confirmpassword}"/>
                                             </div>
 
-<!--                                            <p style="color: red;">
-                                                ${NOTIFICATION}
-                                            </p>
-                                            <p style="color: blue;">
-                                                ${SUCCESS}
-                                            </p>-->
-                                            
-                                            <c:if test="${not empty validationErrors}">
-                                                <div class="alert alert-danger pt-3 pe-3 ps-3">
-                                                    <ul>
-                                                        <c:forEach items="${validationErrors}" var="error" >
-                                                            <li>${error}</li>
-                                                            </c:forEach>
-                                                    </ul>
-                                                </div>
-                                            </c:if>
-                                            
+                                          
                                             <c:if test="${not empty NOTIFICATION}">
                                                 <div class="alert alert-danger p-3">
                                                     ${NOTIFICATION}

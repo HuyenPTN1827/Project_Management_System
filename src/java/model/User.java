@@ -167,6 +167,9 @@ public class User implements Serializable {
         this.department = department;
     }
     
-    
+    @Override
+    public String toString() {
+        return email;
+    }
    
 }

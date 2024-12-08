@@ -95,22 +95,22 @@
                                         <form action="${pageContext.request.contextPath}/member-profilecontroller" method="post" class="row">
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="inputName">Full Name</label>
-                                                <input type="text" class="form-control" id="inputName" name="fullname" value="${userProfile.full_name}" required>
+                                                <input type="text" class="form-control" id="inputName" name="fullname" value="${userProfile.full_name}" >
                                             </div>
                                             
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="inputCity">User Name</label>
-                                                <input type="text" class="form-control" id="roles" name="username" value="${userProfile.username}" readonly>
+                                                <input type="text" class="form-control" id="roles" name="username" value="${userProfile.username}" >
                                             </div>
                                             
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="inputEmail4">Email</label>
-                                                <input type="email" class="form-control" id="inputEmail4" name="email" value="${userProfile.email}" required>
+                                                <input type="email" class="form-control" id="inputEmail4" name="email" value="${userProfile.email}" >
                                             </div>
                                             
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="phone">Phone</label>
-                                                <input type="text" class="form-control" id="phone" name="mobile" value="${userProfile.mobile}" required>
+                                                <input type="text" class="form-control" id="phone" name="mobile" value="${userProfile.mobile}" >
                                             </div>
 
                                             <div class="mb-3 col-md-6">

@@ -175,11 +175,9 @@
                                     <label for="status" class="form-label"><strong>Status</strong></label>
                                     <select class="form-control" id="status" name="status">
                                         <option value="0" <c:if test="${milestone.status == 0}">selected</c:if>>Pending</option>
-                                        <option value="1" <c:if test="${milestone.status == 1}">selected</c:if>>To Do</option>
-                                        <option value="2" <c:if test="${milestone.status == 2}">selected</c:if>>Doing</option>
-                                        <option value="3" <c:if test="${milestone.status == 3}">selected</c:if>>Done</option>
-                                        <option value="4" <c:if test="${milestone.status == 4}">selected</c:if>>Closed</option>
-                                        <option value="5" <c:if test="${milestone.status == 5}">selected</c:if>>Cancelled</option>
+                                        <option value="1" <c:if test="${milestone.status == 1}">selected</c:if>>Doing</option>
+                                        <option value="2" <c:if test="${milestone.status == 2}">selected</c:if>>Closed</option>
+                                        <option value="3" <c:if test="${milestone.status == 3}">selected</c:if>>Cancelled</option>
                                         </select>
                                     </div>
 

@@ -31,14 +31,13 @@ public class UserDAO {
         }
 
         // Thực hiện đăng ký nếu email và username chưa tồn tại
-        String REGISTER_USER_SQL = "INSERT INTO user (full_name, username, email, mobile, password, role_id) VALUES (?, ?, ?, ?, ?, 5)";
+        String REGISTER_USER_SQL = "INSERT INTO user (full_name, username, email, password, role_id) VALUES (?, ?, ?, ?, 5)";
         try (Connection connection = BaseDAO.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(REGISTER_USER_SQL)) {
 
             preparedStatement.setString(1, user.getFull_name());
             preparedStatement.setString(2, user.getUsername()); // Thiết lập username
             preparedStatement.setString(3, user.getEmail());
-            preparedStatement.setString(4, user.getMobile());
-            preparedStatement.setString(5, user.getPassword());
+            preparedStatement.setString(4, user.getPassword());
 
             result = preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -48,35 +47,38 @@ public class UserDAO {
         return result; // Trả về 1 nếu đăng ký thành công
     }
 
-    public User loginValidate(User user) throws ClassNotFoundException {
-        User foundUser = null;
-        String query = """
-                   SELECT u.id, u.full_name, u.username, u.email, u.mobile, u.password, u.role_id, s.name
-                   FROM pms.user u JOIN pms.setting s ON u.role_id = s.id
-                   WHERE u.email = ? AND u.password = ?;
-                   """;
+   public User loginValidate(User user) throws ClassNotFoundException {
+    User foundUser = null;
+    String query = """
+               SELECT u.id, u.full_name, u.username, u.email, u.mobile, u.password, u.role_id, u.status, s.name
+               FROM pms.user u 
+               JOIN pms.setting s ON u.role_id = s.id
+               WHERE u.email = ? AND u.password = ?;
+               """;
 
-        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(query)) {
-            stm.setString(1, user.getEmail());
-            stm.setString(2, user.getPassword());
+    try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(query)) {
+        stm.setString(1, user.getEmail());
+        stm.setString(2, user.getPassword());
 
-            ResultSet rs = stm.executeQuery();
-            if (rs.next()) {
-                foundUser = new User();
-                foundUser.setId(rs.getInt("id"));
-                foundUser.setFull_name(rs.getString("full_name"));
-                foundUser.setUsername(rs.getString("username"));
-                foundUser.setEmail(rs.getString("email"));
-                foundUser.setMobile(rs.getString("mobile"));
-                foundUser.setPassword(rs.getString("password"));
-                foundUser.setRole_id(rs.getInt("role_id")); // Set role_id vào user
-                foundUser.setRole_name(rs.getString("name")); // Set role_id vào user
-            }
-        } catch (SQLException e) {
-            BaseDAO.printSQLException(e);
+        ResultSet rs = stm.executeQuery();
+        if (rs.next()) {
+            foundUser = new User();
+            foundUser.setId(rs.getInt("id"));
+            foundUser.setFull_name(rs.getString("full_name"));
+            foundUser.setUsername(rs.getString("username"));
+            foundUser.setEmail(rs.getString("email"));
+            foundUser.setMobile(rs.getString("mobile"));
+            foundUser.setPassword(rs.getString("password"));
+            foundUser.setRole_id(rs.getInt("role_id")); // Set role_id vào user
+            foundUser.setRole_name(rs.getString("name")); // Set role_name vào user
+            foundUser.setStatus(rs.getInt("status")); // Set status vào user
         }
-        return foundUser; // Trả về người dùng đã tìm thấy hoặc null
+    } catch (SQLException e) {
+        BaseDAO.printSQLException(e);
     }
+    return foundUser; // Trả về người dùng đã tìm thấy hoặc null
+}
+
 
     public User selectUserByEmail(String email) {
         User user = null;
@@ -111,25 +113,27 @@ public class UserDAO {
 //updateMember
 // Phương thức cập nhật thông tin người dùng vào cơ sở dữ liệu
     public boolean updateMember(User user) {
-        String query = "UPDATE user SET full_name = ?, email = ?, mobile = ? WHERE id = ?";
+    String query = "UPDATE user SET full_name = ?, email = ?, mobile = ?, username = ? WHERE id = ?";
 
-        try (Connection conn = BaseDAO.getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
+    try (Connection conn = BaseDAO.getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
 
-            ps.setString(1, user.getFull_name());
-            ps.setString(2, user.getEmail());
-            ps.setString(3, user.getMobile());
-            ps.setInt(4, user.getId());
-            System.out.println("User ID: " + user.getId());
+        ps.setString(1, user.getFull_name());
+        ps.setString(2, user.getEmail());
+        ps.setString(3, user.getMobile());
+        ps.setString(4, user.getUsername()); // Thiết lập giá trị cho username
+        ps.setInt(5, user.getId());
+        System.out.println("User ID: " + user.getId());
 
-            int rowsUpdated = ps.executeUpdate();
-            return rowsUpdated > 0;  // Nếu có ít nhất 1 dòng bị ảnh hưởng thì trả về true
+        int rowsUpdated = ps.executeUpdate();
+        return rowsUpdated > 0;  // Nếu có ít nhất 1 dòng bị ảnh hưởng thì trả về true
 
-        } catch (SQLException e) {
-            BaseDAO.printSQLException(e);
-        }
-
-        return false;  // Trả về false nếu có lỗi
+    } catch (SQLException e) {
+        BaseDAO.printSQLException(e);
     }
+
+    return false;  // Trả về false nếu có lỗi
+}
+
 
 //BachHD
 //28/9
@@ -651,4 +655,24 @@ public class UserDAO {
         }
         return user;
     }
+    
+ public void updateUserStatus(String email, int status) {
+    String sql = "UPDATE user SET status = ? WHERE email = ?";
+    try (Connection connection = BaseDAO.getConnection();
+         PreparedStatement statement = connection.prepareStatement(sql)) {
+        
+        statement.setInt(1, status); // Trạng thái (0, 1, hoặc 2)
+        statement.setString(2, email); // Email người dùng
+
+        int rowsUpdated = statement.executeUpdate();
+        if (rowsUpdated > 0) {
+            System.out.println("User status updated successfully for email: " + email);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+
+
+
 }
