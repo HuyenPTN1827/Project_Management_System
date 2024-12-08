@@ -57,15 +57,29 @@
             </li>
 
             <li class="sidebar-item <c:if test="${activeTab == 'milestone'}">active</c:if>">
-                <a class="sidebar-link" href="<%= request.getContextPath() %>/projectconfig?activeTab=milestone">
-                    <i class="align-middle" data-feather="server"></i> <span class="align-middle">Milestones</span>
-                </a>
+                <c:if test="${user.role_id == 5}">
+                    <a class="sidebar-link" href="<%= request.getContextPath() %>/projectconfig?activeTab=milestone&action=view">
+                        <i class="align-middle" data-feather="server"></i> <span class="align-middle">Milestones</span>
+                    </a>
+                </c:if>
+                <c:if test="${user.role_id != 5}">
+                    <a class="sidebar-link" href="<%= request.getContextPath() %>/projectconfig?activeTab=milestone&action=edit">
+                        <i class="align-middle" data-feather="server"></i> <span class="align-middle">Milestones</span>
+                    </a>
+                </c:if>
             </li>
 
             <li class="sidebar-item <c:if test="${activeTab == 'allocation'}">active</c:if>">
-                <a class="sidebar-link" href="<%= request.getContextPath() %>/projectconfig?activeTab=allocation">
-                    <i class="align-middle" data-feather="users"></i> <span class="align-middle">HR Allocations</span>
-                </a>
+                <c:if test="${user.role_id == 5}">
+                    <a class="sidebar-link" href="<%= request.getContextPath() %>/projectconfig?activeTab=allocation&action=view">
+                        <i class="align-middle" data-feather="users"></i> <span class="align-middle">HR Allocations</span>
+                    </a>
+                </c:if>
+                <c:if test="${user.role_id != 5}">
+                    <a class="sidebar-link" href="<%= request.getContextPath() %>/projectconfig?activeTab=allocation&action=edit">
+                        <i class="align-middle" data-feather="users"></i> <span class="align-middle">HR Allocations</span>
+                    </a>
+                </c:if>
             </li>
 
             <!--            <li class="sidebar-item">

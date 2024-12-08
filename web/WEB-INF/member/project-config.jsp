@@ -100,6 +100,7 @@
 
                         <div class="mt-2 mb-3">
                             <h1 class="h1 d-inline align-middle">Project Configs</h1>
+                            <input type="hidden" id="action" value="${action}"/>
                         </div>
                         <div class="row">
                             <div class="col-md-12 col-xl-12">
@@ -137,6 +138,7 @@
                                             <li class="nav-item col-md-3 ms-auto">
                                                 <form action="${pageContext.request.contextPath}/projectconfig" method="get">
                                                     <input type="hidden" name="activeTab" value="${activeTab}">
+                                                    <input type="hidden" name="action" value="${action}"/>
                                                     <select name="id" class="form-select" onchange="this.form.submit()">
                                                         <option value="" hidden disable>Select Project</option>
                                                         <c:forEach var="project" items="${projectList}">
@@ -172,99 +174,187 @@
                                                         ${errors}
 
                                                         <form action="updateproject" method="post">
-                                                            <!-- Hidden input to include project ID -->
-                                                            <input type="hidden" name="projectId" value="${project.id}" />
+                                                            <c:if test="${action == 'edit'}">
+                                                                <!-- Hidden input to include project ID -->
+                                                                <input type="hidden" name="projectId" value="${project.id}" />
 
-                                                            <div class="row">
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label for="projectName" class="form-label"><strong>Name</strong> <span style="color: red;">*</span></label>
-                                                                    <input type="text" class="form-control" id="projectName" name="projectName" placeholder="Project Name" value="${project.name}">
+                                                                <div class="row">
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="projectName" class="form-label"><strong>Name</strong> <span style="color: red;">*</span></label>
+                                                                        <input type="text" class="form-control" id="projectName" name="projectName" placeholder="Project Name" value="${project.name}">
+                                                                    </div>
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="projectCode" class="form-label"><strong>Code</strong> <span style="color: red;">*</span></label>
+                                                                        <input type="text" class="form-control" id="projectCode" name="projectCode" placeholder="PrjCode" value="${project.code}">
+                                                                    </div>
                                                                 </div>
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label for="projectCode" class="form-label"><strong>Code</strong> <span style="color: red;">*</span></label>
-                                                                    <input type="text" class="form-control" id="projectCode" name="projectCode" placeholder="PrjCode" value="${project.code}">
-                                                                </div>
-                                                            </div>
 
-                                                            <div class="row">
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label for="projectType" class="form-label"><strong>Project Type</strong></label>
-                                                                    <input type="text" class="form-control" id="projectType" name="projectType" placeholder="Project Type" value="${project.typeName}" readonly>
-                                                                </div>
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label for="department" class="form-label"><strong>Department</strong> <span style="color: red;">*</span></label>
-                                                                    <select class="form-select" id="department" name="department">
-                                                                        <!-- Mặc định là phòng ban của dự án hiện tại -->
-                                                                        <option value="${project.departmentId}">
-                                                                            ${project.departmentName} 
-                                                                        </option>
-
-                                                                        <!-- Hiển thị danh sách tất cả các phòng ban -->
-                                                                        <c:forEach var="department" items="${departments}">
-                                                                            <option value="${department.id}" 
-                                                                                    ${department.id == project.departmentId ? 'selected' : ''}>
-                                                                                ${department.name} 
+                                                                <div class="row">
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="projectType" class="form-label"><strong>Project Type</strong></label>
+                                                                        <input type="text" class="form-control" id="projectType" name="projectType" placeholder="Project Type" value="${project.typeName}" readonly>
+                                                                    </div>
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="department" class="form-label"><strong>Department</strong> <span style="color: red;">*</span></label>
+                                                                        <select class="form-select" id="department" name="department">
+                                                                            <!-- Mặc định là phòng ban của dự án hiện tại -->
+                                                                            <option hidden value="${project.departmentId}">
+                                                                                ${project.departmentName} 
                                                                             </option>
-                                                                        </c:forEach>
-                                                                    </select>
+
+                                                                            <!-- Hiển thị danh sách tất cả các phòng ban -->
+                                                                            <c:forEach var="department" items="${departments}">
+                                                                                <option value="${department.id}" 
+                                                                                        ${department.id == project.departmentId ? 'selected' : ''}>
+                                                                                    ${department.name} 
+                                                                                </option>
+                                                                            </c:forEach>
+                                                                        </select>
+                                                                    </div>
+
                                                                 </div>
 
-                                                            </div>
-
-                                                            <div class="row">
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label for="estimatedEffort" class="form-label"><strong>Estimated Effort (man-days)</strong> <span style="color: red;">*</span></label>
-                                                                    <input type="number" class="form-control" id="estimatedEffort" name="estimatedEffort" value="${project.estimatedEffort}">
-                                                                </div>
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label for="projectManager" class="form-label"><strong>Project Manager</strong> <span style="color: red;">*</span></label>
-                                                                    <select class="form-select" id="projectManager" name="projectManager">
-                                                                        <option value="${project.userId}">Full Name (UserName)</option>
-                                                                        <!-- Duyệt qua danh sách userList -->
-                                                                        <c:forEach var="user" items="${listManagers}">
-                                                                            <option value="${user.id}" ${user.id == project.userId ? 'selected' : ''}>
-                                                                                ${user.full_name} 
-                                                                            </option>
-                                                                        </c:forEach>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="row">
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label for="startDate" class="form-label"><strong>Start Date</strong> <span style="color: red;">*</span></label>
-                                                                    <input type="date" class="form-control" id="startDate" name="startDate" value="${project.startDate}">
-                                                                </div>
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label for="endDate" class="form-label"><strong>End Date</strong></label>
-                                                                    <input type="date" class="form-control" id="endDate" name="endDate" value="${project.endDate}">
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="row">
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label for="status" class="form-label"><strong>Status</strong></label>
-                                                                    <select class="form-select" id="status" name="status">
-                                                                        <option value="">Status Name</option>
-                                                                        <option value="0" ${project.status == 0 ? 'selected' : ''}>Pending</option>
-                                                                        <option value="1" ${project.status == 1 ? 'selected' : ''}>Doing</option>
-                                                                        <option value="2" ${project.status == 2 ? 'selected' : ''}>Closed</option>
-                                                                        <option value="3" ${project.status == 3 ? 'selected' : ''}>Cancelled</option>
-                                                                    </select>
+                                                                <div class="row">
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="estimatedEffort" class="form-label"><strong>Estimated Effort (man-days)</strong> <span style="color: red;">*</span></label>
+                                                                        <input type="number" class="form-control" id="estimatedEffort" name="estimatedEffort" value="${project.estimatedEffort}">
+                                                                    </div>
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="projectManager" class="form-label"><strong>Project Manager</strong> <span style="color: red;">*</span></label>
+                                                                        <select class="form-select" id="projectManager" name="projectManager">
+                                                                            <option hidden value="${project.userId}">Full Name (UserName)</option>
+                                                                            <!-- Duyệt qua danh sách userList -->
+                                                                            <c:forEach var="user" items="${listManagers}">
+                                                                                <option value="${user.id}" ${user.id == project.userId ? 'selected' : ''}>
+                                                                                    ${user.full_name} 
+                                                                                </option>
+                                                                            </c:forEach>
+                                                                        </select>
+                                                                    </div>
                                                                 </div>
 
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label for="lastUpdated" class="form-label"><strong>Last Updated At</strong></label>
-                                                                    <input type="date" class="form-control" id="lastUpdated" value="${project.lastUpdated}" readonly>
+                                                                <div class="row">
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="startDate" class="form-label"><strong>Start Date</strong> <span style="color: red;">*</span></label>
+                                                                        <input type="date" class="form-control" id="startDate" name="startDate" value="${project.startDate}">
+                                                                    </div>
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="endDate" class="form-label"><strong>End Date</strong></label>
+                                                                        <input type="date" class="form-control" id="endDate" name="endDate" value="${project.endDate}">
+                                                                    </div>
                                                                 </div>
-                                                            </div>
 
-                                                            <div class="mb-3">
-                                                                <label for="description" class="form-label"><strong>Description</strong></label>
-                                                                <textarea class="form-control" id="description" name="description" rows="3">${project.details}</textarea>
-                                                            </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="status" class="form-label"><strong>Status</strong></label>
+                                                                        <select class="form-select" id="status" name="status">
+                                                                            <option value="">Status Name</option>
+                                                                            <option value="0" ${project.status == 0 ? 'selected' : ''}>Pending</option>
+                                                                            <option value="1" ${project.status == 1 ? 'selected' : ''}>Doing</option>
+                                                                            <option value="2" ${project.status == 2 ? 'selected' : ''}>Closed</option>
+                                                                            <option value="3" ${project.status == 3 ? 'selected' : ''}>Cancelled</option>
+                                                                        </select>
+                                                                    </div>
 
-                                                            <button type="submit" class="btn btn-lg btn-success" onclick="return validateAndSubmitForm(event, ${param.id});">Submit</button>
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="lastUpdated" class="form-label"><strong>Last Updated At</strong></label>
+                                                                        <input type="date" class="form-control" id="lastUpdated" value="${project.lastUpdated}" readonly>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="mb-3">
+                                                                    <label for="description" class="form-label"><strong>Description</strong></label>
+                                                                    <textarea class="form-control" id="description" name="description" rows="3">${project.details}</textarea>
+                                                                </div>
+
+                                                                <button type="submit" class="btn btn-lg btn-success" onclick="return validateAndSubmitForm(event, ${param.id});">Submit</button>
+                                                            </c:if>
+
+                                                            <c:if test="${action == 'view'}">
+                                                                <!-- Hidden input to include project ID -->
+                                                                <input type="hidden" name="projectId" value="${project.id}" />
+
+                                                                <div class="row">
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="projectName" class="form-label"><strong>Name</strong> <span style="color: red;">*</span></label>
+                                                                        <input type="text" class="form-control" id="projectName" name="projectName" placeholder="Project Name" value="${project.name}" readonly>
+                                                                    </div>
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="projectCode" class="form-label"><strong>Code</strong> <span style="color: red;">*</span></label>
+                                                                        <input type="text" class="form-control" id="projectCode" name="projectCode" placeholder="PrjCode" value="${project.code}" readonly>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="row">
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="projectType" class="form-label"><strong>Project Type</strong></label>
+                                                                        <input type="text" class="form-control" id="projectType" name="projectType" placeholder="Project Type" value="${project.typeName}" readonly>
+                                                                    </div>
+
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="department" class="form-label"><strong>Department</strong> <span style="color: red;">*</span></label>
+                                                                        <input type="text" class="form-control" id="department" name="department" placeholder="Department" value="${project.departmentName}" readonly>
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="row">
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="estimatedEffort" class="form-label"><strong>Estimated Effort (man-days)</strong> <span style="color: red;">*</span></label>
+                                                                        <input type="number" class="form-control" id="estimatedEffort" name="estimatedEffort" value="${project.estimatedEffort}" readonly>
+                                                                    </div>
+
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="projectManager" class="form-label"><strong>Project Manager</strong> <span style="color: red;">*</span></label>
+                                                                        <input type="tex6" class="form-control" id="projectManager" name="projectManager" value="${user.full_name}" readonly>
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="row">
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="startDate" class="form-label"><strong>Start Date</strong> <span style="color: red;">*</span></label>
+                                                                        <input type="date" class="form-control" id="startDate" name="startDate" value="${project.startDate}" readonly>
+                                                                    </div>
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="endDate" class="form-label"><strong>End Date</strong></label>
+                                                                        <input type="date" class="form-control" id="endDate" name="endDate" value="${project.endDate}" readonly>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="row">
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="status" class="form-label"><strong>Status</strong></label>
+                                                                        <c:if test="${project.status eq '0'}">
+                                                                            <input type="text" class="form-control" placeholder="Project Status" 
+                                                                                   value="Pending" readonly>
+                                                                        </c:if>
+                                                                        <c:if test="${dept.status eq '1'}">
+                                                                            <input type="text" class="form-control" placeholder="Project Status" 
+                                                                                   value="Doing" readonly>
+                                                                        </c:if>
+                                                                        <c:if test="${dept.status eq '2'}">
+                                                                            <input type="text" class="form-control" placeholder="Project Status" 
+                                                                                   value="Closed" readonly>
+                                                                        </c:if>
+                                                                        <c:if test="${dept.status eq '3'}">
+                                                                            <input type="text" class="form-control" placeholder="Project Status" 
+                                                                                   value="Cancelled" readonly>
+                                                                        </c:if>
+                                                                    </div>
+
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="lastUpdated" class="form-label"><strong>Last Updated At</strong></label>
+                                                                        <input type="date" class="form-control" id="lastUpdated" value="${project.lastUpdated}" readonly>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="mb-3">
+                                                                    <label for="description" class="form-label"><strong>Description</strong></label>
+                                                                    <textarea class="form-control" id="description" name="description" rows="3" readonly>${project.details}</textarea>
+                                                                </div>
+
+                                                            </c:if>
                                                         </form>
                                                     </div>
                                                 </div>
@@ -296,18 +386,21 @@
                                             <div class="tab-pane fade ${activeTab == 'milestone' ? 'show active' : ''}" id="milestone" role="tabpanel" aria-labelledby="milestone-tab">
                                                 <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 15px;">
 
-                                                        <!-- Dropdown lọc trạng thái -->
-                                                        <div class="col-md-4">
-                                                            <select class="form-select me-2" name="statusFilter" id="statusFilter" onchange="this.form.submit()">
-                                                                <option value="">All Status</option>
-                                                                <option value="0" ${param.statusFilter == '0' ? 'selected' : ''}>Pending</option>
-                                                                <option value="1" ${param.statusFilter == '1' ? 'selected' : ''}>Doing</option>
-                                                                <option value="2" ${param.statusFilter == '2' ? 'selected' : ''}>Closed</option>
-                                                                <option value="3" ${param.statusFilter == '3' ? 'selected' : ''}>Cancelled</option>
-                                                            </select>
-                                                        </div>
+                                                    <!--                                                     Dropdown lọc trạng thái 
+                                                                                                        <div class="col-md-4">
+                                                                                                            <select class="form-select me-2" name="statusFilter" id="statusFilter" onchange="this.form.submit()">
+                                                                                                                <option value="">All Status</option>
+                                                                                                                <option value="0" ${param.statusFilter == '0' ? 'selected' : ''}>Pending</option>
+                                                                                                                <option value="1" ${param.statusFilter == '1' ? 'selected' : ''}>Doing</option>
+                                                                                                                <option value="2" ${param.statusFilter == '2' ? 'selected' : ''}>Closed</option>
+                                                                                                                <option value="3" ${param.statusFilter == '3' ? 'selected' : ''}>Cancelled</option>
+                                                                                                            </select>
+                                                                                                        </div>-->
 
-                                                    <a class="btn btn-primary" href="javascript:void(0);" onclick="openMilestoneModal(${param.id});">Create new</a>
+                                                    <h3 class="h3 d-inline align-middle">Milestones List</h3>
+                                                    <c:if test="${action == 'edit'}">
+                                                        <a class="btn btn-primary" href="javascript:void(0);" onclick="openMilestoneModal(${param.id});">Create new</a>
+                                                    </c:if>
                                                 </div>
 
                                                 <table id="datatables-multi" class="table table-striped" style="width:100%">
@@ -344,13 +437,18 @@
                                                                         </c:choose>
                                                                     </td>
                                                                     <td>
-                                                                        <!--<button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#editMilestoneModal" 
-                                                                            onclick="loadMilestone(${milestone.id})"><i class="align-middle" data-feather="edit"></i></button>-->
-
-                                                                        <a href="javascript:void(0);" class="btn btn-info" 
-                                                                           onclick="openMilestoneModal(${param.id}, ${milestone.id});">
-                                                                            <i class="align-middle" data-feather="edit"></i>
-                                                                        </a>
+                                                                        <c:if test="${action == 'edit'}">
+                                                                            <a href="javascript:void(0);" class="btn btn-info" 
+                                                                               onclick="openMilestoneModal(${param.id}, ${milestone.id});">
+                                                                                <i class="align-middle" data-feather="edit"></i>
+                                                                            </a>
+                                                                        </c:if>
+                                                                        <c:if test="${action == 'view'}">
+                                                                            <a href="javascript:void(0);" class="btn btn-info" 
+                                                                               onclick="openMilestoneModal(${param.id}, ${milestone.id});">
+                                                                                <i class="align-middle" data-feather="eye"></i>
+                                                                            </a>
+                                                                        </c:if>
                                                                     </td>
                                                                 </tr>
                                                             </c:if>
@@ -376,15 +474,18 @@
                                                                         </c:choose>
                                                                     </td>
                                                                     <td>
-                                                                        <!-- Nút Edit -->
-                                                                        <!--                                                                        <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#editMilestoneModal" 
-                                                                                                                                                        onclick="loadMilestone(${milestone.id})"><i class="align-middle" data-feather="edit"></i></button>-->
-
-                                                                        <a href="javascript:void(0);" class="btn btn-info" 
-                                                                           onclick="openMilestoneModal(${param.id}, ${milestone.id});">
-                                                                            <i class="align-middle" data-feather="edit"></i>
-                                                                        </a>
-
+                                                                        <c:if test="${action == 'edit'}">
+                                                                            <a href="javascript:void(0);" class="btn btn-info" 
+                                                                               onclick="openMilestoneModal(${param.id}, ${milestone.id});">
+                                                                                <i class="align-middle" data-feather="edit"></i>
+                                                                            </a>
+                                                                        </c:if>
+                                                                        <c:if test="${action == 'view'}">
+                                                                            <a href="javascript:void(0);" class="btn btn-info" 
+                                                                               onclick="openMilestoneModal(${param.id}, ${milestone.id});">
+                                                                                <i class="align-middle" data-feather="eye"></i>
+                                                                            </a>
+                                                                        </c:if>
                                                                     </td>
                                                                 </tr>
                                                             </c:if>
@@ -445,6 +546,7 @@
                                                 });
 
                                                 function openMilestoneModal(projectId, id = null) {
+                                                    const action = document.getElementById("action").value;
                                                     if (!projectId) {
                                                         const errorMessage = "Please select a Project first!";
                                                         localStorage.setItem('errorNotification', errorMessage); // Lưu thông báo lỗi
@@ -452,9 +554,9 @@
                                                         return; // Thoát hàm nếu projectId không hợp lệ
                                                     }
 
-                                                    let url = '<%=request.getContextPath()%>/add-milestone?projectId=' + projectId; // Default cho Create New
+                                                    let url = '<%=request.getContextPath()%>/add-milestone?projectId=' + projectId + '&action=' + action; // Default cho Create New
                                                     if (id) {
-                                                        url = '<%=request.getContextPath()%>/edit-milestone?projectId=' + projectId + '&id=' + id; // Cho Edit
+                                                        url = '<%=request.getContextPath()%>/edit-milestone?projectId=' + projectId + '&id=' + id + '&action=' + action; // Cho Edit
                                                     }
 
                                                     fetch(url)
@@ -474,9 +576,10 @@
                                             <!--Allocations Tab-->
                                             <div class="tab-pane fade ${activeTab == 'allocation' ? 'show active' : ''}" id="allocation" role="tabpanel" aria-labelledby="allocation-tab">
                                                 <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 15px;">
-                                                    <form action="projectconfig" method="get" class="d-flex align-items-center" style="gap: 10px;">
+                                                    <form action="projectconfig" method="post" class="d-flex align-items-center" style="gap: 10px;">
                                                         <input type="hidden" name="id" value="${param.id}" />
                                                         <input type="hidden" name="activeTab" value="allocation">
+                                                        <input type="hidden" name="action" value="${action}">
 
                                                         <div class="col-md-2">
                                                             <select name="deptId" class="form-select">
@@ -534,15 +637,17 @@
                                                             <input type="search" name="keywordUser" class="form-control"
                                                                    placeholder="Full Name/Username/Email" id="keywordUser" value="${keywordUser}">
                                                         </div>
-
                                                         <div class="col-md-2">
                                                             <button type="submit" class="btn btn-primary">Search</button>
                                                         </div>
+
                                                     </form>
 
-                                                    <div class="col-md-2 d-flex justify-content-end align-items-end">
-                                                        <a class="btn btn-primary" href="javascript:void(0);" onclick="openAllocationModal(${param.id});">Create new</a>
-                                                    </div>
+                                                    <c:if test="${action == 'edit'}">
+                                                        <div class="col-md-2 d-flex justify-content-end align-items-end">
+                                                            <a class="btn btn-primary" href="javascript:void(0);" onclick="openAllocationModal(${param.id});">Create new</a>
+                                                        </div>
+                                                    </c:if>
                                                 </div>
 
                                                 <table id="datatables-multi2" class="table table-striped" style="width:100%">
@@ -578,24 +683,33 @@
                                                                     </c:if>
                                                                 </td>
                                                                 <td>
-                                                                    <a href="javascript:void(0);" class="btn btn-info" 
-                                                                       onclick="openAllocationModal(${param.id}, ${al.id});">
-                                                                        <i class="align-middle" data-feather="edit"></i>
-                                                                    </a>
-
-                                                                    <c:if test="${al.status eq 'false'}">
-                                                                        <a href="<%=request.getContextPath()%>/change-status-allocation?id=${al.id}&status=${al.status}&projectId=${param.id}&userId=${user.id}"
-                                                                           class="btn btn-success"
-                                                                           onclick="return confirm('Are you sure you want to activate this allocation?');">
-                                                                            <i class="fas fa-check"></i>
+                                                                    <c:if test="${action == 'edit'}">
+                                                                        <a href="javascript:void(0);" class="btn btn-info" 
+                                                                           onclick="openAllocationModal(${param.id}, ${al.id});">
+                                                                            <i class="align-middle" data-feather="edit"></i>
                                                                         </a>
-                                                                    </c:if>
 
-                                                                    <c:if test="${al.status eq 'true'}">
-                                                                        <a href="<%=request.getContextPath()%>/change-status-allocation?id=${al.id}&status=${al.status}&projectId=${param.id}&userId=${user.id}"
-                                                                           class="btn btn-danger"
-                                                                           onclick="return confirm('Are you sure you want to deactivate this allocation?');">
-                                                                            <i class="fas fa-times" style="padding-left: 2px; padding-right: 2px"></i>
+                                                                        <c:if test="${al.status eq 'false'}">
+                                                                            <a href="<%=request.getContextPath()%>/change-status-allocation?id=${al.id}&status=${al.status}&projectId=${param.id}&userId=${user.id}"
+                                                                               class="btn btn-success"
+                                                                               onclick="return confirm('Are you sure you want to activate this allocation?');">
+                                                                                <i class="fas fa-check"></i>
+                                                                            </a>
+                                                                        </c:if>
+
+                                                                        <c:if test="${al.status eq 'true'}">
+                                                                            <a href="<%=request.getContextPath()%>/change-status-allocation?id=${al.id}&status=${al.status}&projectId=${param.id}&userId=${user.id}"
+                                                                               class="btn btn-danger"
+                                                                               onclick="return confirm('Are you sure you want to deactivate this allocation?');">
+                                                                                <i class="fas fa-times" style="padding-left: 2px; padding-right: 2px"></i>
+                                                                            </a>
+                                                                        </c:if>
+                                                                    </c:if>
+                                                                    
+                                                                    <c:if test="${action == 'view'}">
+                                                                        <a href="javascript:void(0);" class="btn btn-info" 
+                                                                           onclick="openAllocationModal(${param.id}, ${al.id});">
+                                                                            <i class="align-middle" data-feather="eye"></i>
                                                                         </a>
                                                                     </c:if>
                                                                 </td>
@@ -659,6 +773,7 @@
                                                 });
 
                                                 function openAllocationModal(projectId, id = null) {
+                                                    const action = document.getElementById("action").value;
                                                     if (!projectId) {
                                                         const errorMessage = "Please select a Project first!";
                                                         localStorage.setItem('errorNotification', errorMessage); // Lưu thông báo lỗi
@@ -668,7 +783,7 @@
 
                                                     let url = '<%=request.getContextPath()%>/add-allocation?projectId=' + projectId; // Default cho Create New
                                                     if (id) {
-                                                        url = '<%=request.getContextPath()%>/edit-allocation?projectId=' + projectId + '&id=' + id; // Cho Edit
+                                                        url = '<%=request.getContextPath()%>/edit-allocation?projectId=' + projectId + '&id=' + id + '&action=' + action; // Cho Edit
                                                     }
 
                                                     fetch(url)

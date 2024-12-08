@@ -153,11 +153,13 @@ public class ProjectConfigController extends HttpServlet {
             System.out.println("Calling listMilestonesAndTeamsAndMembers");
 
             String activeTab = request.getParameter("activeTab");
+            String action = request.getParameter("action");
             // Nếu không có activeTab, mặc định là "detail"
             if (activeTab == null || activeTab.isEmpty()) {
                 activeTab = "detail"; // Tab mặc định là "detail"
             }
             request.setAttribute("activeTab", activeTab);
+            request.setAttribute("action", action);
 
             listMilestones(request, response);
             listAllocation(projectIdParam, request, response);
@@ -313,7 +315,7 @@ public class ProjectConfigController extends HttpServlet {
             request.setAttribute("projectListName", projectListName);
             request.setAttribute("departments", departments); // Thêm danh sách phòng ban
 
-            request.getRequestDispatcher("/projectconfig").forward(request, response);
+            request.getRequestDispatcher("/projectconfig?id=" + projectId + "&action=edit&activeTab=detail").forward(request, response);
             return;  // Dừng lại nếu mã code đã tồn tại
         }
 
@@ -335,7 +337,7 @@ public class ProjectConfigController extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Invalid date format. Please use yyyy-MM-dd.");
-            request.getRequestDispatcher("/projectconfig").forward(request, response);
+            request.getRequestDispatcher("/projectconfig?id=" + projectId + "&action=edit&activeTab=detail").forward(request, response);
             return;  // Dừng lại nếu có lỗi
         }
 
@@ -393,7 +395,7 @@ public class ProjectConfigController extends HttpServlet {
             request.setAttribute("projectListName", projectListName);
             request.setAttribute("departments", departments);
             request.setAttribute("message", "Project updated successfully.");
-            request.getRequestDispatcher("/projectconfig").forward(request, response);
+            request.getRequestDispatcher("/projectconfig?id=" + projectId + "&action=edit&activeTab=detail").forward(request, response);
         } else {
             // Sau khi cập nhật thành công, lấy lại thông tin dự án và các dữ liệu liên quan
             Project updatedProject = projectConfigService.getProjectById(projectId);  // Lấy dự án mới nhất từ database
@@ -407,7 +409,7 @@ public class ProjectConfigController extends HttpServlet {
             request.setAttribute("projectListName", projectListName);
             request.setAttribute("departments", departments);
             request.setAttribute("error", "Failed to update the project.");
-            request.getRequestDispatcher("/projectconfig").forward(request, response);
+            request.getRequestDispatcher("/projectconfig?id=" + projectId + "&action=edit&activeTab=detail").forward(request, response);
         }
     }
 
@@ -434,6 +436,7 @@ public class ProjectConfigController extends HttpServlet {
         String priority = request.getParameter("priority");
         String targetDate = request.getParameter("targetDate");
         String description = request.getParameter("description");
+//        String action = request.getParameter("action");
 
         // Chuyển đổi kiểu dữ liệu từ string sang các kiểu tương ứng
         int parentMilestone = (parentMilestoneId != null && !parentMilestoneId.isEmpty())
@@ -475,13 +478,16 @@ public class ProjectConfigController extends HttpServlet {
         if (isAdded) {
             request.setAttribute("message", "Milestone added successfully.");
             request.setAttribute("projectList", projectList);
+            request.setAttribute("projectList", projectList);
+//            request.setAttribute("action", action);
+//            request.setAttribute("actionTab", milestone);
 
         } else {
             request.setAttribute("error", "Failed to add milestone.");
         }
 
         // Chuyển hướng về trang config project hoặc trang cần thiết
-        request.getRequestDispatcher("/projectconfig").forward(request, response);
+        request.getRequestDispatcher("/projectconfig?id=" + projectId + "&action=edit&activeTab=milestone").forward(request, response);
     }
 
     private void getMilestoneById(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -593,7 +599,7 @@ public class ProjectConfigController extends HttpServlet {
         // Nếu có lỗi, trả về trang với thông báo lỗi
         if (errors.length() > 0) {
             request.setAttribute("errors", errors.toString());
-            request.getRequestDispatcher("/WEB-INF/member/project-config.jsp").forward(request, response);
+            request.getRequestDispatcher("/projectconfig?id=" + projectId + "&action=edit&activeTab=milestone").forward(request, response);
             return;
         }
 
@@ -613,10 +619,10 @@ public class ProjectConfigController extends HttpServlet {
         boolean success = projectConfigService.updateMilestone(milestone);
 
         if (success) {
-            request.getRequestDispatcher("/WEB-INF/member/project-config.jsp").forward(request, response);
+            request.getRequestDispatcher("/projectconfig?id=" + projectId + "&action=edit&activeTab=milestone").forward(request, response);
         } else {
             request.setAttribute("error", "Failed to update the milestone. Please try again.");
-            request.getRequestDispatcher("/WEB-INF/member/project-config.jsp").forward(request, response);
+            request.getRequestDispatcher("/projectconfig?id=" + projectId + "&action=edit&activeTab=milestone").forward(request, response);
         }
     }
 
@@ -647,6 +653,7 @@ public class ProjectConfigController extends HttpServlet {
     protected void editMilestone(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String milestoneIdParam = request.getParameter("id");
+
         System.out.println("Milestone ID Param: " + milestoneIdParam);
 
         if (milestoneIdParam != null) {
@@ -800,7 +807,7 @@ public class ProjectConfigController extends HttpServlet {
         al.setProjectRole(roleId);
 
         projectConfigService.insertAllocation(al);
-        response.sendRedirect("projectconfig?id=" + projectId + "&activeTab=allocation");
+        response.sendRedirect("projectconfig?id=" + projectId + "&action=edit&activeTab=allocation");
     }
 
     private void showEditFormAllocation(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -808,6 +815,7 @@ public class ProjectConfigController extends HttpServlet {
 //        int userId = Integer.parseInt(request.getParameter("userId"));
         int id = Integer.parseInt(request.getParameter("id"));
 //        int deptId = Integer.parseInt(request.getParameter("deptId"));
+        String action = request.getParameter("action");
 
         Project project = projectConfigService.getProjectById(projectId);
         Allocation al = projectConfigService.getAllocationById(id);
@@ -821,6 +829,7 @@ public class ProjectConfigController extends HttpServlet {
         request.setAttribute("listRole", listRole);
         request.setAttribute("listMem", listMem);
         request.setAttribute("projectId", projectId);
+        request.setAttribute("action", action);
 //        request.setAttribute("userId", userId);
 //        request.setAttribute("deptId", deptId);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/allocation-detail.jsp");
@@ -856,7 +865,7 @@ public class ProjectConfigController extends HttpServlet {
         al.setProjectRole(roleId);
 
         projectConfigService.updateAllocation(al);
-        response.sendRedirect("projectconfig?id=" + projectId + "&activeTab=allocation");
+        response.sendRedirect("projectconfig?id=" + projectId + "&action=edit&activeTab=allocation");
     }
 
     private void changeStatusAllocation(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
@@ -871,12 +880,13 @@ public class ProjectConfigController extends HttpServlet {
         allocation.setUpdateBy(userId);
 
         projectConfigService.changeStatusAllocation(allocation);
-        response.sendRedirect("projectconfig?id=" + projectId + "&activeTab=allocation");
+        response.sendRedirect("projectconfig?id=" + projectId + "&action=edit&activeTab=allocation");
     }
 
     private void showNewFormMilestone(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Lấy projectId từ tham số request
         int projectId = Integer.parseInt(request.getParameter("projectId"));
+        String action = request.getParameter("action");
 
         // Lấy danh sách milestone dựa trên projectId
         List<Milestone> parentMilestones = projectConfigService.getMilestoneParentByProjectId(projectId);
@@ -884,6 +894,7 @@ public class ProjectConfigController extends HttpServlet {
         // Đưa dữ liệu vào request attribute
         request.setAttribute("projectId", projectId);
         request.setAttribute("parentMilestones", parentMilestones);
+        request.setAttribute("action", action);
 
         // Chuyển tiếp đến milestone-detail.jsp
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/milestone-detail.jsp");
@@ -893,12 +904,16 @@ public class ProjectConfigController extends HttpServlet {
     private void showEditFormMilestone(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         int projectId = Integer.parseInt(request.getParameter("projectId"));
+        String action = request.getParameter("action");
+
         List<Milestone> parentMilestones = projectConfigService.getMilestoneParentByProjectId(projectId);
         Milestone milestone = projectConfigService.getMilestoneById(id);
 
         request.setAttribute("projectId", projectId);
         request.setAttribute("parentMilestones", parentMilestones);
         request.setAttribute("milestone", milestone);
+        request.setAttribute("action", action);
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/milestone-detail.jsp");
         dispatcher.forward(request, response);
     }

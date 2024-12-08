@@ -161,136 +161,254 @@
                         </c:if>
 
                         <c:if test="${al != null}">
-                            <form action="update-allocation" id="allocationForm" method="post" 
-                                  class="row" onsubmit="return validateFormEdit(event)">
-                                <input type="hidden" name="projectId" value="${projectId}">
-                                <input type="hidden" name="userId" value="${user.id}">
-                                <input type="hidden" name="id" value="${al.id}">
+                            <c:if test="${action == 'edit'}">
+                                <form action="update-allocation" id="allocationForm" method="post" 
+                                      class="row" onsubmit="return validateFormEdit(event)">
+                                    <input type="hidden" name="projectId" value="${projectId}">
+                                    <input type="hidden" name="userId" value="${user.id}">
+                                    <input type="hidden" name="id" value="${al.id}">
 
-                                <div class="mb-3 col-md-6">
-                                    <label class="form-label"><strong>Created By</strong></label>
-                                    <input type="text" class="form-control" placeholder="Full Name (Username)" 
-                                           value="${al.created_by.full_name} (${al.created_by.username})" readonly>
-                                </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <label class="form-label"><strong>Created At</strong></label>
-                                    <input type="datetime-local" class="form-control" placeholder="dd/MM/yyyy hh:mm:ss" 
-                                           value="${al.createdAt}" readonly>
-                                </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <label class="form-label"><strong>Updated By</strong></label>
-                                    <input type="text" class="form-control" placeholder="Full Name (Username)" 
-                                           readonly
-                                           <c:choose>
-                                               <c:when test="${al.updated_by != null}">
-                                                   value="${al.updated_by.full_name} (${al.updated_by.username})"
-                                               </c:when>
-                                               <c:otherwise>
-                                                   value=""
-                                               </c:otherwise>
-                                           </c:choose>>
-                                </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <label class="form-label"><strong>Last Updated</strong></label>
-                                    <input type="datetime-local" class="form-control" placeholder="dd/MM/yyyy hh:mm:ss" 
-                                           value="${al.lastUpdated}" readonly>
-                                </div>
-
-                                <div class="d-flex align-items-center my-4">
-                                    <div class="flex-grow-1 border-top"></div>
-                                    <!--<span class="mx-3">Department Manager</span>-->
-                                    <div class="flex-grow-1 border-top"></div>
-                                </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <label class="form-label"><strong>Department</strong></label>
-                                    <input type="hidden" class="form-control" name="deptId"
-                                           value="${al.dept.id}">
-                                    <input type="text" class="form-control" placeholder="Department (Department Code)" 
-                                           value="${al.dept.name} (${al.dept.code})" readonly>
-                                </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <label class="form-label"><strong>Member</strong></label>
-                                    <input type="hidden" class="form-control" name="memId"
-                                           value="${al.user.id}">
-                                    <input type="text" class="form-control" placeholder="Full Name (Username)" 
-                                           value="${al.user.full_name} (${al.user.username})" readonly>
-                                </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <label class="form-label"><strong>Project</strong></label>
-                                    <input type="text" class="form-control" placeholder="Project Name (Project Code)" 
-                                           value="${project.name}" readonly>
-                                </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <label class="form-label"><strong>Project Role</strong> <span style="color: red;">*</span></label>
-                                    <select name="roleId" id="roleId" class="form-select" required>
-                                        <option value="" hidden disable>Choose Project Role</option>
-                                        <!--<option value="1">Project Manager</option>-->
-                                        <c:forEach items="${listRole}" var="r">
-                                            <option 
-                                                <c:if test="${al.role.id eq r.id}">
-                                                    selected="selected"
-                                                </c:if>
-                                                value="${r.id}">${r.name}
-                                            </option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <label class="form-label"><strong>Form Date</strong> <span style="color: red;">*</span></label>
-                                    <input type="date" class="form-control" name="fromDate" placeholder="dd/MM/yyyy" 
-                                           value="${al.startDate}" id="fromDate" required>
-                                </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <label class="form-label"><strong>To Date</strong></label>
-                                    <input type="date" class="form-control" name="toDate" placeholder="dd/MM/yyyy" 
-                                           value="${al.endDate}" id="toDate">
-                                </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <label class="form-label"><strong>Effort Rate (%)</strong> <span style="color: red;">*</span></label>
-                                    <input type="number" class="form-control" name="effort" placeholder="Enter the Effort Rate"
-                                           value="${al.effortRate}" id="effort" required>
-                                </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <label class="form-label"><strong>Status</strong></label>
-                                    <div class="check  mt-1">
-                                        <input class="form-check-input" type="radio" name="statusAllocation"
-                                               <c:if test="${al.status eq 'true'}">
-                                                   checked
-                                               </c:if>
-                                               value="true"> Active
-                                        <input class="form-check-input ms-3" type="radio" name="statusAllocation"
-                                               <c:if test="${al.status eq 'false'}">
-                                                   checked
-                                               </c:if>
-                                               value="false"> Inactive
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Created By</strong></label>
+                                        <input type="text" class="form-control" placeholder="Full Name (Username)" 
+                                               value="${al.created_by.full_name} (${al.created_by.username})" readonly>
                                     </div>
-                                </div>
 
-                                <div class="mb-3 col-md-12">
-                                    <label class="form-label"><strong>Description</strong></label>
-                                    <textarea class="form-control" name="descriptionAllocation" id="descriptionAllocation"
-                                              placeholder="Enter the Description" rows="3">${al.description}</textarea>
-                                </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Created At</strong></label>
+                                        <input type="datetime-local" class="form-control" placeholder="dd/MM/yyyy hh:mm:ss" 
+                                               value="${al.createdAt}" readonly>
+                                    </div>
 
-                                <div id="errorContainer" class="alert alert-danger pt-3 pe-3 ps-3 d-none">
-                                    <ul id="errorList"></ul>
-                                </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Updated By</strong></label>
+                                        <input type="text" class="form-control" placeholder="Full Name (Username)" 
+                                               readonly
+                                               <c:choose>
+                                                   <c:when test="${al.updated_by != null}">
+                                                       value="${al.updated_by.full_name} (${al.updated_by.username})"
+                                                   </c:when>
+                                                   <c:otherwise>
+                                                       value=""
+                                                   </c:otherwise>
+                                               </c:choose>>
+                                    </div>
 
-                                <div class="d-flex justify-content-end">
-                                    <button type="submit" class="btn btn-lg btn-success">Submit</button>
-                                </div>
-                            </form>
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Last Updated</strong></label>
+                                        <input type="datetime-local" class="form-control" placeholder="dd/MM/yyyy hh:mm:ss" 
+                                               value="${al.lastUpdated}" readonly>
+                                    </div>
+
+                                    <div class="d-flex align-items-center my-4">
+                                        <div class="flex-grow-1 border-top"></div>
+                                        <!--<span class="mx-3">Department Manager</span>-->
+                                        <div class="flex-grow-1 border-top"></div>
+                                    </div>
+
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Department</strong></label>
+                                        <input type="hidden" class="form-control" name="deptId"
+                                               value="${al.dept.id}">
+                                        <input type="text" class="form-control" placeholder="Department (Department Code)" 
+                                               value="${al.dept.name} (${al.dept.code})" readonly>
+                                    </div>
+
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Member</strong></label>
+                                        <input type="hidden" class="form-control" name="memId"
+                                               value="${al.user.id}">
+                                        <input type="text" class="form-control" placeholder="Full Name (Username)" 
+                                               value="${al.user.full_name} (${al.user.username})" readonly>
+                                    </div>
+
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Project</strong></label>
+                                        <input type="text" class="form-control" placeholder="Project Name (Project Code)" 
+                                               value="${project.name}" readonly>
+                                    </div>
+
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Project Role</strong> <span style="color: red;">*</span></label>
+                                        <select name="roleId" id="roleId" class="form-select" required>
+                                            <option value="" hidden disable>Choose Project Role</option>
+                                            <!--<option value="1">Project Manager</option>-->
+                                            <c:forEach items="${listRole}" var="r">
+                                                <option 
+                                                    <c:if test="${al.role.id eq r.id}">
+                                                        selected="selected"
+                                                    </c:if>
+                                                    value="${r.id}">${r.name}
+                                                </option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Form Date</strong> <span style="color: red;">*</span></label>
+                                        <input type="date" class="form-control" name="fromDate" placeholder="dd/MM/yyyy" 
+                                               value="${al.startDate}" id="fromDate" required>
+                                    </div>
+
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>To Date</strong></label>
+                                        <input type="date" class="form-control" name="toDate" placeholder="dd/MM/yyyy" 
+                                               value="${al.endDate}" id="toDate">
+                                    </div>
+
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Effort Rate (%)</strong> <span style="color: red;">*</span></label>
+                                        <input type="number" class="form-control" name="effort" placeholder="Enter the Effort Rate"
+                                               value="${al.effortRate}" id="effort" required>
+                                    </div>
+
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Status</strong></label>
+                                        <div class="check  mt-1">
+                                            <input class="form-check-input" type="radio" name="statusAllocation"
+                                                   <c:if test="${al.status eq 'true'}">
+                                                       checked
+                                                   </c:if>
+                                                   value="true"> Active
+                                            <input class="form-check-input ms-3" type="radio" name="statusAllocation"
+                                                   <c:if test="${al.status eq 'false'}">
+                                                       checked
+                                                   </c:if>
+                                                   value="false"> Inactive
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3 col-md-12">
+                                        <label class="form-label"><strong>Description</strong></label>
+                                        <textarea class="form-control" name="descriptionAllocation" id="descriptionAllocation"
+                                                  placeholder="Enter the Description" rows="3">${al.description}</textarea>
+                                    </div>
+
+                                    <div id="errorContainer" class="alert alert-danger pt-3 pe-3 ps-3 d-none">
+                                        <ul id="errorList"></ul>
+                                    </div>
+
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-lg btn-success">Submit</button>
+                                    </div>
+                                </form>
+                            </c:if>
+
+                            <c:if test="${action == 'view'}">
+                                <form action="update-allocation" id="allocationForm" method="post" 
+                                      class="row" onsubmit="return validateFormEdit(event)">
+                                    <input type="hidden" name="projectId" value="${projectId}">
+                                    <input type="hidden" name="userId" value="${user.id}">
+                                    <input type="hidden" name="id" value="${al.id}">
+
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Created By</strong></label>
+                                        <input type="text" class="form-control" placeholder="Full Name (Username)" 
+                                               value="${al.created_by.full_name} (${al.created_by.username})" readonly>
+                                    </div>
+
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Created At</strong></label>
+                                        <input type="datetime-local" class="form-control" placeholder="dd/MM/yyyy hh:mm:ss" 
+                                               value="${al.createdAt}" readonly>
+                                    </div>
+
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Updated By</strong></label>
+                                        <input type="text" class="form-control" placeholder="Full Name (Username)" 
+                                               readonly
+                                               <c:choose>
+                                                   <c:when test="${al.updated_by != null}">
+                                                       value="${al.updated_by.full_name} (${al.updated_by.username})"
+                                                   </c:when>
+                                                   <c:otherwise>
+                                                       value=""
+                                                   </c:otherwise>
+                                               </c:choose>>
+                                    </div>
+
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Last Updated</strong></label>
+                                        <input type="datetime-local" class="form-control" placeholder="dd/MM/yyyy hh:mm:ss" 
+                                               value="${al.lastUpdated}" readonly>
+                                    </div>
+
+                                    <div class="d-flex align-items-center my-4">
+                                        <div class="flex-grow-1 border-top"></div>
+                                        <!--<span class="mx-3">Department Manager</span>-->
+                                        <div class="flex-grow-1 border-top"></div>
+                                    </div>
+
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Department</strong></label>
+                                        <input type="hidden" class="form-control" name="deptId"
+                                               value="${al.dept.id}">
+                                        <input type="text" class="form-control" placeholder="Department (Department Code)" 
+                                               value="${al.dept.name} (${al.dept.code})" readonly>
+                                    </div>
+
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Member</strong></label>
+                                        <input type="hidden" class="form-control" name="memId"
+                                               value="${al.user.id}">
+                                        <input type="text" class="form-control" placeholder="Full Name (Username)" 
+                                               value="${al.user.full_name} (${al.user.username})" readonly>
+                                    </div>
+
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Project</strong></label>
+                                        <input type="text" class="form-control" placeholder="Project Name (Project Code)" 
+                                               value="${project.name}" readonly>
+                                    </div>
+                                    
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Project Role</strong> <span style="color: red;">*</span></label>
+                                        <input type="text" class="form-control" placeholder="Choose Project Role" 
+                                               value="${al.role.name}" readonly>
+                                    </div>
+
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Form Date</strong> <span style="color: red;">*</span></label>
+                                        <input type="date" class="form-control" name="fromDate" placeholder="dd/MM/yyyy" 
+                                               value="${al.startDate}" id="fromDate" readonly>
+                                    </div>
+
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>To Date</strong></label>
+                                        <input type="date" class="form-control" name="toDate" placeholder="dd/MM/yyyy" 
+                                               value="${al.endDate}" id="toDate" readonly>
+                                    </div>
+
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Effort Rate (%)</strong> <span style="color: red;">*</span></label>
+                                        <input type="number" class="form-control" name="effort" placeholder="Enter the Effort Rate"
+                                               value="${al.effortRate}" id="effort" readonly>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label"><strong>Status</strong></label>
+                                        <c:if test="${al.status eq 'true'}">
+                                            <input type="text" class="form-control" placeholder="Allocation Status" 
+                                                   value="Active" readonly>
+                                        </c:if>
+                                        <c:if test="${al.status eq 'false'}">
+                                            <input type="text" class="form-control" placeholder="Allocation Status" 
+                                                   value="Inactive" readonly>
+                                        </c:if>
+                                    </div>
+
+                                    <div class="mb-3 col-md-12">
+                                        <label class="form-label"><strong>Description</strong></label>
+                                        <textarea class="form-control" name="descriptionAllocation" id="descriptionAllocation"
+                                                  placeholder="Enter the Description" rows="3" readonly>${al.description}</textarea>
+                                    </div>
+
+                                    <div id="errorContainer" class="alert alert-danger pt-3 pe-3 ps-3 d-none">
+                                        <ul id="errorList"></ul>
+                                    </div>
+
+                                </form>
+                            </c:if>
                         </c:if>
 
                     </div>

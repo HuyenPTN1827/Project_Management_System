@@ -131,7 +131,7 @@ public class ProjectConfigDAO {
                 milestone.setCreatedBy(rs.getInt("created_by"));
                 milestone.setLastUpdated(rs.getString("last_updated"));
                 milestone.setName(rs.getString("name"));
-                milestone.setParentMilestone(rs.getInt("parent_milestone_name")); // Lấy tên milestone cha (nếu có)
+                milestone.setParentMilestone(rs.getInt("parent_milestone")); // Lấy tên milestone cha (nếu có)
                 milestone.setPriority(rs.getInt("priority"));
                 milestone.setTargetDate(rs.getDate("target_date"));
                 milestone.setStatus(rs.getInt("status"));
@@ -139,6 +139,7 @@ public class ProjectConfigDAO {
                 milestone.setDetails(rs.getString("details"));
                 milestone.setProjectId(rs.getInt("project_id"));
                 milestone.setProjectName(rs.getString("project_name")); // Lấy tên project
+                milestone.setParentMilestoneName(rs.getString("parent_milestone_name"));
 
                 milestones.add(milestone);
             }
@@ -288,13 +289,14 @@ public class ProjectConfigDAO {
         Project project = null; // Khởi tạo project
 
         // Câu lệnh SQL để lấy thông tin dự án, bao gồm cả tên loại dự án
-        String sql = "SELECT DISTINCT p.id, p.code, p.name, p.details, p.start_date, p.end_date, p.last_updated, "
-                + "p.estimated_effort, p.status, p.type_id, p.department_id, p.user_id, "
-                + "pt.code AS type_code, pt.name AS type_name, d.code AS department_code "
-                + "FROM project p "
-                + "LEFT JOIN project_type pt ON p.type_id = pt.id " // JOIN với bảng project_type
-                + "LEFT JOIN department d ON p.department_id = d.id " // JOIN với bảng department
-                + "WHERE p.id = ?"; // Điều kiện WHERE để tìm dự án theo ID
+        String sql = """
+                     SELECT DISTINCT p.id, p.code, p.name, p.details, p.start_date, p.end_date, p.last_updated, 
+                     p.estimated_effort, p.status, p.type_id, p.department_id, p.user_id, 
+                     pt.code AS type_code, pt.name AS type_name, d.code AS department_code, d.name AS department_name
+                     FROM project p 
+                     LEFT JOIN project_type pt ON p.type_id = pt.id
+                     LEFT JOIN department d ON p.department_id = d.id 
+                     WHERE p.id = ?;"""; // Điều kiện WHERE để tìm dự án theo ID
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
             stm.setInt(1, id); // Thiết lập ID dự án
@@ -317,6 +319,7 @@ public class ProjectConfigDAO {
                 project.setTypeCode(rs.getString("type_code")); // Mã loại dự án
                 project.setTypeName(rs.getString("type_name")); // Tên loại dự án (mới thêm)
                 project.setDepartmentCode(rs.getString("department_code")); // Mã bộ phận
+                project.setDepartmentName(rs.getString("department_name"));
             }
         } catch (SQLException e) {
             BaseDAO.printSQLException(e); // Xử lý lỗi SQL
