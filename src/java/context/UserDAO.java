@@ -51,7 +51,7 @@ public class UserDAO {
     public User loginValidate(User user) throws ClassNotFoundException {
         User foundUser = null;
         String query = """
-                   SELECT u.id, u.full_name, u.username, u.email, u.mobile, u.password, u.role_id, s.name
+                   SELECT u.id, u.full_name, u.username, u.email, u.mobile, u.password, u.role_id, s.name, u.avatar
                    FROM pms.user u JOIN pms.setting s ON u.role_id = s.id
                    WHERE u.email = ? AND u.password = ?;
                    """;
@@ -71,6 +71,7 @@ public class UserDAO {
                 foundUser.setPassword(rs.getString("password"));
                 foundUser.setRole_id(rs.getInt("role_id")); // Set role_id vào user
                 foundUser.setRole_name(rs.getString("name")); // Set role_id vào user
+                foundUser.setAvatar(rs.getString("avatar"));
             }
         } catch (SQLException e) {
             BaseDAO.printSQLException(e);
@@ -536,113 +537,74 @@ public class UserDAO {
         }
         return false;
     }
-    
-   public User getUserBySessionId(int userId) {
-    String query = "SELECT u.id, u.username, u.password, u.full_name, u.email, u.role_id, u.mobile, " +
-                   "s.name AS role_name, d.name AS department_name " +
-                   "FROM user u " +
-                   "JOIN setting s ON u.role_id = s.id " +
-                   "LEFT JOIN dept_user du ON u.id = du.user_id " +
-                   "LEFT JOIN department d ON du.dept_id = d.id " +
-                   "WHERE u.id = ?";
-    try (Connection con = BaseDAO.getConnection(); 
-         PreparedStatement ps = con.prepareStatement(query)) {
-        ps.setInt(1, userId);
-        try (ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                // Khởi tạo đối tượng User từ kết quả truy vấn
-                User user = new User();
-                user.setId(rs.getInt("id"));
-                user.setUsername(rs.getString("username"));
-                user.setPassword(rs.getString("password"));
-                user.setFull_name(rs.getString("full_name"));
-                user.setEmail(rs.getString("email"));
-                user.setMobile(rs.getString("mobile"));
-                user.setRole_id(rs.getInt("role_id"));
-                user.setRole_name(rs.getString("role_name")); // Lấy tên vai trò
-                user.setDepartment(rs.getString("department_name")); // Lấy tên phòng ban
-                return user;
+
+    public User getUserBySessionId(int userId) {
+        String query = "SELECT u.id, u.username, u.password, u.full_name, u.email, u.role_id, u.mobile, u.avatar, "
+                + "s.name AS role_name, d.name AS department_name "
+                + "FROM user u "
+                + "JOIN setting s ON u.role_id = s.id "
+                + "LEFT JOIN dept_user du ON u.id = du.user_id "
+                + "LEFT JOIN department d ON du.dept_id = d.id "
+                + "WHERE u.id = ?";
+        try (Connection con = BaseDAO.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    // Khởi tạo đối tượng User từ kết quả truy vấn
+                    User user = new User();
+                    user.setId(rs.getInt("id"));
+                    user.setUsername(rs.getString("username"));
+                    user.setPassword(rs.getString("password"));
+                    user.setFull_name(rs.getString("full_name"));
+                    user.setEmail(rs.getString("email"));
+                    user.setMobile(rs.getString("mobile"));
+                    user.setAvatar(rs.getString("avatar"));
+                    user.setRole_id(rs.getInt("role_id"));
+                    user.setRole_name(rs.getString("role_name")); // Lấy tên vai trò
+                    user.setDepartment(rs.getString("department_name")); // Lấy tên phòng ban
+                    return user;
+                }
             }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
         }
-    } catch (SQLException e) {
-        BaseDAO.printSQLException(e);
+        return null; // Trả về null nếu không tìm thấy hoặc xảy ra lỗi
     }
-    return null; // Trả về null nếu không tìm thấy hoặc xảy ra lỗi
-}
 
+    //HuyenPTNHE160769
+    // Change avatar
+    public boolean changeAvatar(User user) throws SQLException {
+        boolean rowUpdated = false;
+        String sql = "UPDATE pms.user SET avatar = ? WHERE id = ?";
 
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
+            stm.setString(1, user.getAvatar());
+            stm.setInt(2, user.getId());
+            rowUpdated = stm.executeUpdate() > 0;
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return rowUpdated;
+    }
 
-
-//    Select all users by deptId 
-    public List<User> selectAllUsersByDept(String keyword, Integer deptId, Integer roleId, Integer status) {
+    //    Admin select all users 
+    public List<User> selectAllDeptManagers() {
         List<User> user = new ArrayList<>();
 
         String sql = """
-                     SELECT u.id, u.full_name, u.username, u.email, u.mobile, 
-                     d.id, d.code, s.id, s.name, u.status
-                     FROM pms.user u
-                     LEFT JOIN pms.dept_user du ON u.id = du.user_id AND du.end_date IS NULL
-                     LEFT JOIN pms.department d ON du.dept_id = d.id
-                     LEFT JOIN pms.setting s ON u.role_id = s.id                  
-                     WHERE 1=1""";
-        // Add search conditions if any
-        if (keyword != null && !keyword.isEmpty()) {
-            sql += " AND (LOWER(u.full_name) LIKE ? "
-                    + "OR LOWER(u.username) LIKE ? "
-                    + "OR LOWER(u.email) LIKE ? "
-                    + "OR u.mobile LIKE ?)";
-        }
-        if (deptId != null) {
-            sql += " AND d.id = ?";
-        }
-        if (roleId != null) {
-            sql += " AND s.id = ?";
-        }
-        if (status != null) {
-            sql += " AND u.status = ?";
-        }
-        sql += "ORDER BY u.id DESC;";
+                     SELECT id, full_name, username, email
+                     FROM pms.user               
+                     WHERE role_id = 3 AND status = 1
+                     ORDER BY id DESC;""";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
-            int index = 1;
-
-            if (keyword != null && !keyword.isEmpty()) {
-                String keywordPattern = "%" + keyword.toLowerCase().trim() + "%";
-
-                stm.setString(index++, keywordPattern);
-                stm.setString(index++, keywordPattern);
-                stm.setString(index++, keywordPattern);
-                stm.setString(index++, keywordPattern);
-            }
-            if (deptId != null) {
-                stm.setInt(index++, deptId);
-            }
-            if (roleId != null) {
-                stm.setInt(index++, roleId);
-            }
-            if (status != null) {
-                stm.setInt(index++, status);
-            }
-
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 User u = new User();
-                u.setId(rs.getInt("u.id"));
-                u.setFull_name(rs.getString("u.full_name"));
-                u.setUsername(rs.getString("u.username"));
-                u.setEmail(rs.getString("u.email"));
-                u.setMobile(rs.getString("u.mobile"));
-                u.setStatus(rs.getInt("u.status"));
-
-                Department d = new Department();
-                d.setId(rs.getInt("d.id"));
-                d.setCode(rs.getString("d.code"));
-                u.getDepts().add(d);
-
-                Setting r = new Setting();
-                r.setId(rs.getInt("s.id"));
-                r.setName(rs.getString("s.name"));
-                u.getSettings().add(r);
+                u.setId(rs.getInt("id"));
+                u.setFull_name(rs.getString("full_name"));
+                u.setUsername(rs.getString("username"));
+                u.setEmail(rs.getString("email"));
 
                 user.add(u);
             }

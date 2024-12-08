@@ -33,6 +33,16 @@ public class IssueService extends BaseServive {
         return issueDAO.selectAllIssues(keyword, project, type, milestone, assigner, assignee, status);
     }
     
+    // Get 10 lastest issues
+    public List<Issue> get10LastestIssues() {
+        return issueDAO.select10LastestIssues();
+    }
+    
+    // Count issues
+    public List<Issue> countIssues(Integer deptId, Integer bizTerm) {
+        return issueDAO.countIssues(deptId, bizTerm);
+    }
+    
     // Get a issue information by id
     public Issue getIssueById(int id) {
         return issueDAO.selectIssueByID(id);

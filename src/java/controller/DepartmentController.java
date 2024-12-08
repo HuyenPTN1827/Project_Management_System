@@ -162,6 +162,7 @@ public class DepartmentController extends HttpServlet {
         String name = request.getParameter("name");
         String code = request.getParameter("code");
         String parent = request.getParameter("parent");
+        boolean status = Boolean.parseBoolean(request.getParameter("status"));
         String details = request.getParameter("details");
 
         // Process the filter value, convert to number or null if not selected
@@ -173,6 +174,7 @@ public class DepartmentController extends HttpServlet {
         if (parentId != null) {
             d.setParentId(parentId);
         }
+        d.setStatus(status);
         d.setDetails(details);
 
         deptService.insertDepartment(d, parentId);
@@ -220,7 +222,7 @@ public class DepartmentController extends HttpServlet {
         deptService.updateDepartment(d, parentId);
 //        request.setAttribute("message", "Department details updated successfully.");
         // Redirect to user-management url
-        response.sendRedirect("department-config?id=" + id + "&update=success");
+        response.sendRedirect("department-config?id=" + id + "&action=edit&update=success");
     }
 
 //    HuyenPTNHE160769 
@@ -250,19 +252,22 @@ public class DepartmentController extends HttpServlet {
         String keyword = request.getParameter("keyword");
         String statusStr = request.getParameter("status");
         String activeTab = request.getParameter("activeTab");
+        String action = request.getParameter("action");
 
         // Process the filter value, convert to number or null if not selected
         Boolean status = statusStr != null && !statusStr.isEmpty() ? Boolean.valueOf(statusStr) : null;
 
         Department dept = deptService.getDepartmentById(id);
         List<Department> listDept = deptService.getAllDepartments(null, null);
+        List<Department> listActiveDept = deptService.getAllActiveDepartments();
         List<Department_User> deptUser = deptService.getAllDepartmentUsers(keyword, null, status, id);
         List<Department> parent = deptService.getAllDepartments(null, true);
-        List<User> listManager = userService.getAllUsers(null, null, 3, 1);
+        List<User> listManager = userService.getAllDeptManagers();
 
         request.setAttribute("dept", dept);
         request.setAttribute("parent", parent);
         request.setAttribute("listDept", listDept);
+        request.setAttribute("listActiveDept", listActiveDept);
         request.setAttribute("listManager", listManager);
         request.setAttribute("deptUser", deptUser);
         request.setAttribute("keyword", keyword);
@@ -273,6 +278,7 @@ public class DepartmentController extends HttpServlet {
             activeTab = (keyword != null || status != null) ? "manager" : "detail";
         }
         request.setAttribute("activeTab", activeTab);
+        request.setAttribute("action", action);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/dept-config.jsp");
         dispatcher.forward(request, response);
@@ -296,7 +302,7 @@ public class DepartmentController extends HttpServlet {
         du.setDept(d);
 
         deptService.changeStatusDepartmentUser(du);
-        response.sendRedirect("department-config?id=" + deptId + "&activeTab=manager");
+        response.sendRedirect("department-config?id=" + deptId + "&action=edit&activeTab=manager");
     }
 
 //    HuyenPTNHE160769 
@@ -347,7 +353,7 @@ public class DepartmentController extends HttpServlet {
         du.setSetting(setting);
 
         deptService.insertDepartmentUser(du);
-        response.sendRedirect("department-config?id=" + deptId + "&activeTab=manager");
+        response.sendRedirect("department-config?id=" + deptId + "&action=edit&activeTab=manager");
     }
 
 //    HuyenPTNHE160769 
@@ -392,7 +398,7 @@ public class DepartmentController extends HttpServlet {
         du.setSetting(setting);
 
         deptService.updateDepartmentUser(du);
-        response.sendRedirect("department-config?id=" + deptId + "&activeTab=manager");
+        response.sendRedirect("department-config?id=" + deptId + "&action=edit&activeTab=manager");
     }
 
 }

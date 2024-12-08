@@ -60,12 +60,12 @@
                             <form action="insert-allocation" id="allocationForm" method="post" 
                                   class="row" onsubmit="return validateForm(event)">
                                 <input type="hidden" name="projectId" value="${projectId}">
-                                <input type="hidden" name="userId" value="${userId}">
+                                <input type="hidden" name="userId" value="${user.id}">
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Department <span style="color: red;">*</span></label>
+                                    <label class="form-label"><strong>Department</strong> <span style="color: red;">*</span></label>
                                     <select name="deptId" id="deptDropdown" class="form-select" 
-                                            onchange="redirectToDetailPage(${projectId}, ${userId})" required>
+                                            onchange="redirectToDetailPage(${projectId})" required>
                                         <option value="" hidden disable>Choose Department</option>
                                         <c:forEach items="${listDept}" var="d">
                                             <option 
@@ -79,7 +79,7 @@
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Member <span style="color: red;">*</span></label>
+                                    <label class="form-label"><strong>Member</strong> <span style="color: red;">*</span></label>
                                     <select name="memId" id="memId" class="form-select" required>
                                         <option value="" hidden disable>Choose Member</option>
                                         <c:forEach items="${listMem}" var="m">
@@ -94,13 +94,13 @@
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Project</label>
+                                    <label class="form-label"><strong>Project</strong></label>
                                     <input type="text" class="form-control" placeholder="Project Name (Project Code)" 
                                            value="${project.name}" readonly>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Project Role <span style="color: red;">*</span></label>
+                                    <label class="form-label"><strong>Project Role</strong> <span style="color: red;">*</span></label>
                                     <select name="roleId" id="roleId" class="form-select" required>
                                         <option value="" hidden disable>Choose Project Role</option>
                                         <!--<option value="1">Project Manager</option>-->
@@ -128,7 +128,7 @@
                                                                 </div>-->
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">From Date <span style="color: red;">*</span> - To Date </label>
+                                    <label class="form-label"><strong>From Date</strong> <span style="color: red;">*</span> <strong>- To Date</strong> </label>
                                     <div class="input-group">
                                         <input type="date" class="form-control" name="fromDate" placeholder="dd/MM/yyyy" 
                                                value="${fromDate}" id="fromDate" required>
@@ -139,13 +139,13 @@
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Effort Rate (%) <span style="color: red;">*</span></label>
+                                    <label class="form-label"><strong>Effort Rate (%)</strong> <span style="color: red;">*</span></label>
                                     <input type="number" class="form-control" name="effort" placeholder="Enter the Effort Rate"
                                            value="${effort}" id="effort" required>
                                 </div>
 
                                 <div class="mb-3 col-md-12">
-                                    <label class="form-label">Description</label>
+                                    <label class="form-label"><strong>Description</strong></label>
                                     <textarea class="form-control" name="descriptionAllocation" id="descriptionAllocation"
                                               placeholder="Enter the Description" rows="3">${descriptionAllocation}</textarea>
                                 </div>
@@ -164,23 +164,23 @@
                             <form action="update-allocation" id="allocationForm" method="post" 
                                   class="row" onsubmit="return validateFormEdit(event)">
                                 <input type="hidden" name="projectId" value="${projectId}">
-                                <input type="hidden" name="userId" value="${userId}">
+                                <input type="hidden" name="userId" value="${user.id}">
                                 <input type="hidden" name="id" value="${al.id}">
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Created By</label>
+                                    <label class="form-label"><strong>Created By</strong></label>
                                     <input type="text" class="form-control" placeholder="Full Name (Username)" 
                                            value="${al.created_by.full_name} (${al.created_by.username})" readonly>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Created At</label>
+                                    <label class="form-label"><strong>Created At</strong></label>
                                     <input type="datetime-local" class="form-control" placeholder="dd/MM/yyyy hh:mm:ss" 
                                            value="${al.createdAt}" readonly>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Updated By</label>
+                                    <label class="form-label"><strong>Updated By</strong></label>
                                     <input type="text" class="form-control" placeholder="Full Name (Username)" 
                                            readonly
                                            <c:choose>
@@ -194,7 +194,7 @@
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Last Updated</label>
+                                    <label class="form-label"><strong>Last Updated</strong></label>
                                     <input type="datetime-local" class="form-control" placeholder="dd/MM/yyyy hh:mm:ss" 
                                            value="${al.lastUpdated}" readonly>
                                 </div>
@@ -206,7 +206,7 @@
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Department</label>
+                                    <label class="form-label"><strong>Department</strong></label>
                                     <input type="hidden" class="form-control" name="deptId"
                                            value="${al.dept.id}">
                                     <input type="text" class="form-control" placeholder="Department (Department Code)" 
@@ -214,7 +214,7 @@
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Member</label>
+                                    <label class="form-label"><strong>Member</strong></label>
                                     <input type="hidden" class="form-control" name="memId"
                                            value="${al.user.id}">
                                     <input type="text" class="form-control" placeholder="Full Name (Username)" 
@@ -222,13 +222,13 @@
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Project</label>
+                                    <label class="form-label"><strong>Project</strong></label>
                                     <input type="text" class="form-control" placeholder="Project Name (Project Code)" 
                                            value="${project.name}" readonly>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Project Role <span style="color: red;">*</span></label>
+                                    <label class="form-label"><strong>Project Role</strong> <span style="color: red;">*</span></label>
                                     <select name="roleId" id="roleId" class="form-select" required>
                                         <option value="" hidden disable>Choose Project Role</option>
                                         <!--<option value="1">Project Manager</option>-->
@@ -244,25 +244,25 @@
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Form Date <span style="color: red;">*</span></label>
+                                    <label class="form-label"><strong>Form Date</strong> <span style="color: red;">*</span></label>
                                     <input type="date" class="form-control" name="fromDate" placeholder="dd/MM/yyyy" 
                                            value="${al.startDate}" id="fromDate" required>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">To Date</label>
+                                    <label class="form-label"><strong>To Date</strong></label>
                                     <input type="date" class="form-control" name="toDate" placeholder="dd/MM/yyyy" 
                                            value="${al.endDate}" id="toDate">
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Effort Rate (%) <span style="color: red;">*</span></label>
+                                    <label class="form-label"><strong>Effort Rate (%)</strong> <span style="color: red;">*</span></label>
                                     <input type="number" class="form-control" name="effort" placeholder="Enter the Effort Rate"
                                            value="${al.effortRate}" id="effort" required>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Status</label>
+                                    <label class="form-label"><strong>Status</strong></label>
                                     <div class="check  mt-1">
                                         <input class="form-check-input" type="radio" name="statusAllocation"
                                                <c:if test="${al.status eq 'true'}">
@@ -278,7 +278,7 @@
                                 </div>
 
                                 <div class="mb-3 col-md-12">
-                                    <label class="form-label">Description</label>
+                                    <label class="form-label"><strong>Description</strong></label>
                                     <textarea class="form-control" name="descriptionAllocation" id="descriptionAllocation"
                                               placeholder="Enter the Description" rows="3">${al.description}</textarea>
                                 </div>

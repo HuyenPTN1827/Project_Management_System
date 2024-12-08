@@ -188,7 +188,8 @@ public class ProjectTypeController extends HttpServlet {
 //    15/10/2024 
 //    Show form insert project type
     private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("projectType", null);
+        String action = request.getParameter("action");
+        request.setAttribute("action", action);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/project-type-detail.jsp");
 //        dispatcher.forward(request, response);
         dispatcher.include(request, response);
@@ -201,11 +202,13 @@ public class ProjectTypeController extends HttpServlet {
         String name = request.getParameter("name");
         String code = request.getParameter("code");
         String details = request.getParameter("details");
+        boolean status = Boolean.parseBoolean(request.getParameter("status"));
 
         ProjectType pt = new ProjectType();
         pt.setName(name);
         pt.setCode(code);
         pt.setDetails(details);
+        pt.setStatus(status);
 
         ptService.insertProjectType(pt);
         response.sendRedirect("project-type-management");
@@ -216,8 +219,10 @@ public class ProjectTypeController extends HttpServlet {
 //    Show form edit project type
     private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
+        String action = request.getParameter("action");
         ProjectType projectType = ptService.getProjectTypeById(id);
 
+        request.setAttribute("action", action);
         request.setAttribute("projectType", projectType);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/project-type-detail.jsp");
         dispatcher.forward(request, response); // Use forward to load the edit form with data
@@ -270,6 +275,7 @@ public class ProjectTypeController extends HttpServlet {
     private void listProjectTypeConfig(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         int id = Integer.parseInt(request.getParameter("id"));
         String activeTab = request.getParameter("activeTab");
+        String action = request.getParameter("action");
         ProjectType projectType = ptService.getProjectTypeById(id);
         List<ProjectType> listPjType = ptService.getAllProjectTypes(null, null);
         request.setAttribute("projectType", projectType);
@@ -280,6 +286,7 @@ public class ProjectTypeController extends HttpServlet {
             activeTab = "setting"; // Tab mặc định là "setting"
         }
         request.setAttribute("activeTab", activeTab);
+        request.setAttribute("action", action);
 
         //Project Type Setting
         String keywordSetting = request.getParameter("keywordSetting");
@@ -355,6 +362,7 @@ public class ProjectTypeController extends HttpServlet {
         String value = request.getParameter("value");
         int priority = Integer.parseInt(request.getParameter("priority"));
         String description = request.getParameter("description");
+        boolean status = Boolean.parseBoolean(request.getParameter("status"));
 
         ProjectTypeSetting setting = new ProjectTypeSetting();
         setting.setName(name);
@@ -362,21 +370,25 @@ public class ProjectTypeController extends HttpServlet {
         setting.setValue(value);
         setting.setPriority(priority);
         setting.setDescription(description);
+        setting.setStatus(status);
 
         ProjectType pt = new ProjectType();
         pt.setId(typeId);
         setting.setPjType(pt);
 
         ptService.createProjectTypeSetting(setting);
-        response.sendRedirect("project-type-config?id=" + typeId + "&activeTab=setting");
+        response.sendRedirect("project-type-config?id=" + typeId + "&action=edit&activeTab=setting");
     }
 
     private void showEditFormPTSetting(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
         int typeId = Integer.parseInt(request.getParameter("typeId"));
         int id = Integer.parseInt(request.getParameter("id"));
+        String action = request.getParameter("action");
+        
         ProjectTypeSetting setting = ptService.getProjectTypeSettingById(id);
         List<ProjectTypeSetting> type = ptService.getTypeList(typeId);
 
+        request.setAttribute("action", action);
         request.setAttribute("setting", setting);
         request.setAttribute("type", type);
         request.setAttribute("typeId", typeId);
@@ -404,7 +416,7 @@ public class ProjectTypeController extends HttpServlet {
         setting.setStatus(status);
 
         ptService.updateProjectTypeSetting(setting);
-        response.sendRedirect("project-type-config?id=" + typeId + "&activeTab=setting");
+        response.sendRedirect("project-type-config?id=" + typeId + "&action=edit&activeTab=setting");
     }
 
     private void changeStatusPTSetting(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
@@ -413,7 +425,7 @@ public class ProjectTypeController extends HttpServlet {
         boolean status = Boolean.parseBoolean(request.getParameter("status"));
 
         ptService.changeStatusProjectTypeSettingById(id, !status);
-        response.sendRedirect("project-type-config?id=" + typeId + "&activeTab=setting");
+        response.sendRedirect("project-type-config?id=" + typeId + "&action=edit&activeTab=setting");
     }
 
 //    HuyenPTNHE160769 
@@ -629,27 +641,32 @@ public class ProjectTypeController extends HttpServlet {
         String name = request.getParameter("name");
         int priority = Integer.parseInt(request.getParameter("priority"));
         String details = request.getParameter("details");
+                boolean status = Boolean.parseBoolean(request.getParameter("status"));
+
 
         ProjectPhase phase = new ProjectPhase();
         phase.setName(name);
         phase.setPriority(priority);
         phase.setDetails(details);
+        phase.setStatus(status);
 
         ProjectType pt = new ProjectType();
         pt.setId(typeId);
         phase.setPjType(pt);
 
         ptService.insertProjectPhase(phase);
-        response.sendRedirect("project-type-config?id=" + typeId + "&activeTab=phase");
+        response.sendRedirect("project-type-config?id=" + typeId + "&action=edit&activeTab=phase");
     }
 
     // Show form to edit Project Phase
     private void showEditFormProjectPhase(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int typeId = Integer.parseInt(request.getParameter("typeId"));
         int id = Integer.parseInt(request.getParameter("id"));
+        String action = request.getParameter("action");
         ProjectPhase phase = ptService.getProjectPhaseById(id);
         request.setAttribute("phase", phase);
         request.setAttribute("typeId", typeId);
+        request.setAttribute("action", action);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/project-phase-detail.jsp");
         dispatcher.forward(request, response);
     }
@@ -671,7 +688,7 @@ public class ProjectTypeController extends HttpServlet {
         phase.setStatus(status);
 
         ptService.updateProjectPhase(phase);
-        response.sendRedirect("project-type-config?id=" + typeId + "&activeTab=phase");
+        response.sendRedirect("project-type-config?id=" + typeId + "&action=edit&activeTab=phase");
     }
 
     // Change status of Project Phase
@@ -685,7 +702,7 @@ public class ProjectTypeController extends HttpServlet {
         phase.setStatus(!status);
 
         ptService.changeStatusProjectPhase(phase);
-        response.sendRedirect("project-type-config?id=" + typeId + "&activeTab=phase");
+        response.sendRedirect("project-type-config?id=" + typeId + "&action=edit&activeTab=phase");
     }
 
 }

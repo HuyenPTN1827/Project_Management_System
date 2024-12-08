@@ -90,6 +90,10 @@ public class UserService extends BaseServive {
     public List<User> getAllUsers(String keyword, Integer deptId, Integer roleId, Integer status) {
         return userDAO.selectAllUsers(keyword, deptId, roleId, status);
     }
+    
+    public List<User> getAllDeptManagers() {
+        return userDAO.selectAllDeptManagers();
+    }
 
     // HuyenPTNHE160769
     // 26/09/2024
@@ -160,6 +164,12 @@ public class UserService extends BaseServive {
    
      public User getUserBySessionId(int userId) {
         return userDAO.getUserBySessionId(userId);
+    }
+     
+    // HuyenPTNHE160769
+    // Change avatar
+    public boolean changeAvatar(User user) throws SQLException {
+        return userDAO.changeAvatar(user);
     }
 
 }

@@ -184,6 +184,73 @@ public class IssueDAO {
         return issue;
     }
 
+    // Get 10 lastest issues
+    public List<Issue> select10LastestIssues() {
+        List<Issue> issue = new ArrayList<>();
+
+        String sql = """
+                     SELECT DISTINCT i.id, i.created_by, u1.username, u1.full_name, i.milestone_id, m.name, 
+                                          i.assignee, u2.username, u2.full_name, i.deadline, i.status, i.name, 
+                                          i.type, s.name, i.project_id, p.code, p.name, i.details
+                                          FROM pms.issue i 
+                                          JOIN pms.project p ON i.project_id = p.id
+                                          JOIN pms.milestone m ON i.milestone_id = m.id
+                                          JOIN pms.user u1 ON i.created_by = u1.id 
+                                          JOIN pms.user u2 ON i.assignee = u2.id
+                                          JOIN pms.setting s ON i.type = s.id
+                                          JOIN pms.allocation a ON i.project_id = a.project_id
+                                          ORDER BY i.id DESC LIMIT 10 OFFSET 0;""";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Issue i = new Issue();
+                i.setId(rs.getInt("i.id"));
+                i.setName(rs.getString("i.name"));
+                i.setDetails(rs.getString("i.details"));
+                i.setStatus(rs.getInt("i.status"));
+                // Handle potential null values for dates
+                Date deadline = rs.getDate("i.deadline");
+                if (deadline != null) {
+                    i.setDeadline(BaseDAO.MyDateUtil.getUtilDate((java.sql.Date) deadline));
+                }
+
+                Setting s = new Setting();
+                s.setId(rs.getInt("i.type"));
+                s.setName(rs.getString("s.name"));
+                i.setType(s);
+
+                Project p = new Project();
+                p.setId(rs.getInt("i.project_id"));
+                p.setCode(rs.getString("p.code"));
+                p.setName(rs.getString("p.name"));
+                i.setProject(p);
+
+                Milestone m = new Milestone();
+                m.setId(rs.getInt("i.milestone_id"));
+                m.setName(rs.getString("m.name"));
+                i.setMilestone(m);
+
+                User u1 = new User();
+                u1.setId(rs.getInt("i.created_by"));
+                u1.setUsername(rs.getString("u1.username"));
+                u1.setFull_name(rs.getString("u1.full_name"));
+                i.setCreated_by(u1);
+
+                User u2 = new User();
+                u2.setId(rs.getInt("i.assignee"));
+                u2.setUsername(rs.getString("u2.username"));
+                u2.setFull_name(rs.getString("u2.full_name"));
+                i.setAssignee(u2);
+
+                issue.add(i);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return issue;
+    }
+
 //    Select issue by id
     public Issue selectIssueByID(int id) {
         Issue i = null;
@@ -303,5 +370,47 @@ public class IssueDAO {
             BaseDAO.printSQLException(e);
         }
         return rowUpdated;
+    }
+
+    // Count issues
+    public List<Issue> countIssues(Integer deptId, Integer bizTerm) {
+        List<Issue> issue = new ArrayList<>();
+
+        String sql = """
+                     SELECT i.status, COUNT(*) AS count 
+                     FROM pms.issue i 
+                     JOIN pms.project p ON i.project_id = p.id
+                     LEFT JOIN pms.department d ON p.department_id = d.id
+                     WHERE 1=1 """;
+
+        if (deptId != null) {
+            sql += " AND p.department_id = ?";
+        }
+        if (bizTerm != null) {
+            sql += " AND p.biz_term = ?";
+        }
+        
+        sql += " GROUP BY i.status ORDER BY i.status ASC;";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            int index = 1;
+            if (deptId != null) {
+                stm.setInt(index++, deptId);
+            }
+            if (bizTerm != null) {
+                stm.setInt(index++, bizTerm);
+            }
+           
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Issue i = new Issue();
+                i.setStatus(rs.getInt("i.status"));
+                i.setCount(rs.getInt("count"));
+                issue.add(i);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return issue;
     }
 }

@@ -43,31 +43,29 @@
                     <main class="content">
                         <div class="container-fluid p-0">
 
+                            <a href="<%=request.getContextPath()%>/member-profile">Profile ></a>
 
-
-                            <div class="row">
-
-
-                                <div class="col-md-8 col-xl-9">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5 class="card-title">Change Password</h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <form action="changepasswordcontroller" method="post"> <!-- Change action URL as necessary -->
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="oldPassword">Current password:</label>
-                                                    <input type="password" class="form-control" id="oldPassword" name="oldPassword" required>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="newPassword">New password:</label>
-                                                    <input type="password" class="form-control" id="newPassword" name="newPassword" required>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="confirmPassword">Confirm new password:</label>
-                                                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
-                                                </div>
-                                                <p style="color: blue;">
+                        <div class="row mt-3">
+                            <div class="col-md-8 col-xl-9">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="card-title">Change Password</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <form action="changepassword" method="post"> <!-- Change action URL as necessary -->
+                                            <div class="mb-3">
+                                                <label class="form-label" for="oldPassword">Current password:</label>
+                                                <input type="password" class="form-control" id="oldPassword" name="oldPassword" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label" for="newPassword">New password:</label>
+                                                <input type="password" class="form-control" id="newPassword" name="newPassword" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label" for="confirmPassword">Confirm new password:</label>
+                                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                                            </div>
+                                            <p style="color: blue;">
                                                 ${NOTIFICATION}
                                             </p>
                                             <p style="color: red;">

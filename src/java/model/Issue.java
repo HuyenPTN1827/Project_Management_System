@@ -19,6 +19,7 @@ public class Issue {
     private String details;
     private LocalDate deadline;
     private int status;
+    private int count;
 
     private User created_by;
     private User assignee;
@@ -91,6 +92,14 @@ public class Issue {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     public User getCreated_by() {

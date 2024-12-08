@@ -701,7 +701,7 @@ public class ProjectConfigController extends HttpServlet {
 
     private void showNewFormAllocation(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int projectId = Integer.parseInt(request.getParameter("projectId"));
-        int userId = Integer.parseInt(request.getParameter("userId"));
+//        int userId = Integer.parseInt(request.getParameter("userId"));
         String dept = request.getParameter("deptId");
         String role = request.getParameter("roleId");
         String startDateStr = request.getParameter("fromDate");
@@ -725,7 +725,7 @@ public class ProjectConfigController extends HttpServlet {
         request.setAttribute("listRole", listRole);
         request.setAttribute("listMem", listMem);
         request.setAttribute("projectId", projectId);
-        request.setAttribute("userId", userId);
+//        request.setAttribute("userId", userId);
         request.setAttribute("deptId", deptId);
         request.setAttribute("roleId", roleId);
         request.setAttribute("fromDate", startDate);
@@ -766,7 +766,7 @@ public class ProjectConfigController extends HttpServlet {
 
     private void showEditFormAllocation(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int projectId = Integer.parseInt(request.getParameter("projectId"));
-        int userId = Integer.parseInt(request.getParameter("userId"));
+//        int userId = Integer.parseInt(request.getParameter("userId"));
         int id = Integer.parseInt(request.getParameter("id"));
 //        int deptId = Integer.parseInt(request.getParameter("deptId"));
 
@@ -782,7 +782,7 @@ public class ProjectConfigController extends HttpServlet {
         request.setAttribute("listRole", listRole);
         request.setAttribute("listMem", listMem);
         request.setAttribute("projectId", projectId);
-        request.setAttribute("userId", userId);
+//        request.setAttribute("userId", userId);
 //        request.setAttribute("deptId", deptId);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/allocation-detail.jsp");
         dispatcher.forward(request, response);

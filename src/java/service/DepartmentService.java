@@ -23,6 +23,12 @@ public class DepartmentService {
     }
 
     // HuyenPTNHE160769
+    // Admin get all active depts
+    public List<Department> getAllActiveDepartments() {
+        return deptDAO.selectAllActiveDepartments();
+    }
+
+    // HuyenPTNHE160769
     // 04/10/2024
     // Admin get all depts
     public List<Department> getAllDepartments(String keyword, Boolean status) {
