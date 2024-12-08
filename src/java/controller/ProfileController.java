@@ -176,28 +176,30 @@ public class ProfileController extends HttpServlet {
         UserService userService = new UserService();
 
         if (session != null) {
-            User user = (User) session.getAttribute("user");
+        User user = (User) session.getAttribute("user");
 
-            if (user != null) {
-                String fullname = request.getParameter("fullname");
-                String email = request.getParameter("email");
-                String mobile = request.getParameter("mobile");
+        if (user != null) {
+            String fullname = request.getParameter("fullname");
+            String email = request.getParameter("email");
+            String mobile = request.getParameter("mobile");
+            String username = request.getParameter("username");
 
-                // Check if the profile was updated
-                boolean isUpdated = false;
+            // Check if the profile was updated
+            boolean isUpdated = false;
 
-                // Check if the new values are different from the current ones
-                if (!fullname.equals(user.getFull_name())
-                        || !email.equals(user.getEmail())
-                        || !mobile.equals(user.getMobile())) {
+            // Check if the new values are different from the current ones
+            if (!fullname.equals(user.getFull_name())
+                    || !email.equals(user.getEmail())
+                    || !mobile.equals(user.getMobile())
+                    || !username.equals(user.getUsername())) {
 
-                    // Chỉ cập nhật các trường được phép
-                    user.setFull_name(fullname);
-                    user.setEmail(email);
-                    user.setMobile(mobile);
-
-                    // Gọi phương thức cập nhật từ UserService
-                    isUpdated = userService.updateMember(user);
+                // Chỉ cập nhật các trường được phép
+                user.setFull_name(fullname);
+                user.setEmail(email);
+                user.setMobile(mobile);
+                user.setUsername(username);
+                // Gọi phương thức cập nhật từ UserService
+                isUpdated = userService.updateMember(user);
                 }
 
                 if (isUpdated) {

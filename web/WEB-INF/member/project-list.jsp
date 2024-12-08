@@ -123,11 +123,9 @@
                                                     <select name="status" class="form-select" onchange="this.form.submit();">
                                                         <option value="">All Status</option>
                                                         <option value="0" <c:if test="${status == 0}">selected="selected"</c:if>>Pending</option>
-                                                        <option value="1" <c:if test="${status == 1}">selected="selected"</c:if>>To Do</option>
-                                                        <option value="2" <c:if test="${status == 2}">selected="selected"</c:if>>Doing</option>
-                                                        <option value="3" <c:if test="${status == 3}">selected="selected"</c:if>>Done</option>
-                                                        <option value="4" <c:if test="${status == 4}">selected="selected"</c:if>>Closed</option>
-                                                        <option value="5" <c:if test="${status == 5}">selected="selected"</c:if>>Cancelled</option>
+                                                        <option value="1" <c:if test="${status == 1}">selected="selected"</c:if>>Doing</option>
+                                                        <option value="2" <c:if test="${status == 2}">selected="selected"</c:if>>Closed</option>
+                                                        <option value="3" <c:if test="${status == 3}">selected="selected"</c:if>>Cancelled</option>
                                                         </select>
                                                     </div>
 
@@ -177,18 +175,12 @@
                                                                     <span class="badge bg-secondary">Pending</span>
                                                                 </c:when>
                                                                 <c:when test="${project.status == 1}">
-                                                                    <span class="badge bg-warning">To Do</span>
-                                                                </c:when>
-                                                                <c:when test="${project.status == 2}">
                                                                     <span class="badge bg-primary">Doing</span>
                                                                 </c:when>
-                                                                <c:when test="${project.status == 3}">
-                                                                    <span class="badge bg-success">Done</span>
-                                                                </c:when>
-                                                                <c:when test="${project.status == 4}">
+                                                                <c:when test="${project.status == 2}">
                                                                     <span class="badge bg-secondary-light">Closed</span>
                                                                 </c:when>
-                                                                <c:when test="${project.status == 5}">
+                                                                <c:when test="${project.status == 3}">
                                                                     <span class="badge bg-danger">Cancelled</span>
                                                                 </c:when>
                                                             </c:choose>

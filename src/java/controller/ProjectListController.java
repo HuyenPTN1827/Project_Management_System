@@ -74,7 +74,6 @@ public class ProjectListController extends HttpServlet {
 
         // Lấy danh sách Manager từ Service
         List<User> managers = projectService.getAllManagers();
-    
 
         // Kiểm tra điều kiện tìm kiếm
         if (status >= 0 && status <= 5) {
@@ -148,6 +147,13 @@ public class ProjectListController extends HttpServlet {
                 request.setAttribute("errorMessage", "All required fields must be filled in completely.");
                 request.getRequestDispatcher("/WEB-INF/member/projectlist.jsp").forward(request, response);
 
+                return;
+            }
+
+            // Kiểm tra mã code đã tồn tại
+            if (projectService.isCodeExists(code)) {
+                request.setAttribute("errorMessage", "Project code already exists. Please use a different code.");
+                request.getRequestDispatcher("/WEB-INF/member/project-add.jsp").forward(request, response);
                 return;
             }
 

@@ -143,6 +143,7 @@ public class UserService extends BaseServive {
             errors.add("Password must be at least 6 characters, including uppercase letters, "
                     + "lowercase letters, numbers and some special characters.");
         }
+
         return errors;
     }
 
@@ -161,8 +162,7 @@ public class UserService extends BaseServive {
     }
 
 // Lấy thông tin người dùng theo sessionId
-   
-     public User getUserBySessionId(int userId) {
+    public User getUserBySessionId(int userId) {
         return userDAO.getUserBySessionId(userId);
     }
      
@@ -171,5 +171,62 @@ public class UserService extends BaseServive {
     public boolean changeAvatar(User user) throws SQLException {
         return userDAO.changeAvatar(user);
     }
+
+    public List<String> validateUserRegister(User user, String confirmPassword) {
+        List<String> errors = new ArrayList<>();
+
+        if (user.getFull_name() == null || user.getFull_name().trim().isEmpty()) {
+            errors.add("Full name is required.");
+        }
+        if (user.getUsername() == null || user.getUsername().trim().isEmpty()) {
+            errors.add("Username is required.");
+        }
+        if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
+            errors.add("Email is required.");
+        }
+        if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
+            errors.add("Password is required.");
+        }
+        if (confirmPassword == null || confirmPassword.trim().isEmpty()) {
+            errors.add("Confirm Password is required.");
+        }
+        // Validate email format
+        if (!validateEmail(user.getEmail())) {
+            errors.add("Invalid email format.");
+        }
+        // Validate Vietnamese phone number
+        if (!validateMobile(user.getMobile())) {
+            errors.add("Invalid mobile number format. Must start with 03, 05, "
+                    + "07, 08, or 09 and be 10 digits long.");
+        }
+        // Validate password 
+        if (!validatePassword(user.getPassword())) {
+            errors.add("Password must be at least 6 characters, including uppercase letters, "
+                    + "lowercase letters, numbers and some special characters.");
+        }
+
+        // Check if password and confirmPassword match
+        if (!user.getPassword().equals(confirmPassword)) {
+            errors.add("Password and confirm password do not match.");
+        }
+
+        return errors;
+    }
+    
+public void updateUserStatus(String email, int status) {
+    try {
+        // Kiểm tra kết nối và thực hiện cập nhật
+        System.out.println("Updating user status for User ID: " + email + " to status: " + status);
+        userDAO.updateUserStatus(email, status);
+        System.out.println("User status updated successfully.");
+    } catch (Exception e) {
+        // In ra lỗi nếu có
+        System.err.println("Error updating user status: " + e.getMessage());
+        e.printStackTrace();
+    }
+}
+
+
+
 
 }

@@ -247,11 +247,9 @@
                                                                     <select class="form-select" id="status" name="status">
                                                                         <option value="">Status Name</option>
                                                                         <option value="0" ${project.status == 0 ? 'selected' : ''}>Pending</option>
-                                                                        <option value="1" ${project.status == 1 ? 'selected' : ''}>To Do</option>
-                                                                        <option value="2" ${project.status == 2 ? 'selected' : ''}>Doing</option>
-                                                                        <option value="3" ${project.status == 3 ? 'selected' : ''}>Done</option>
-                                                                        <option value="4" ${project.status == 4 ? 'selected' : ''}>Closed</option>
-                                                                        <option value="5" ${project.status == 5 ? 'selected' : ''}>Cancelled</option>
+                                                                        <option value="1" ${project.status == 1 ? 'selected' : ''}>Doing</option>
+                                                                        <option value="2" ${project.status == 2 ? 'selected' : ''}>Closed</option>
+                                                                        <option value="3" ${project.status == 3 ? 'selected' : ''}>Cancelled</option>
                                                                     </select>
                                                                 </div>
 
@@ -298,7 +296,16 @@
                                             <div class="tab-pane fade ${activeTab == 'milestone' ? 'show active' : ''}" id="milestone" role="tabpanel" aria-labelledby="milestone-tab">
                                                 <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 15px;">
 
-                                                    <h3 class="d-flex align-items-center">Milestones List</h3>
+                                                        <!-- Dropdown lọc trạng thái -->
+                                                        <div class="col-md-4">
+                                                            <select class="form-select me-2" name="statusFilter" id="statusFilter" onchange="this.form.submit()">
+                                                                <option value="">All Status</option>
+                                                                <option value="0" ${param.statusFilter == '0' ? 'selected' : ''}>Pending</option>
+                                                                <option value="1" ${param.statusFilter == '1' ? 'selected' : ''}>Doing</option>
+                                                                <option value="2" ${param.statusFilter == '2' ? 'selected' : ''}>Closed</option>
+                                                                <option value="3" ${param.statusFilter == '3' ? 'selected' : ''}>Cancelled</option>
+                                                            </select>
+                                                        </div>
 
                                                     <a class="btn btn-primary" href="javascript:void(0);" onclick="openMilestoneModal(${param.id});">Create new</a>
                                                 </div>
@@ -330,11 +337,9 @@
                                                                     <td>
                                                                         <c:choose>
                                                                             <c:when test="${milestone.status == 0}"><span class="badge bg-secondary">Pending</span></c:when>
-                                                                            <c:when test="${milestone.status == 1}"><span class="badge bg-warning">To Do</span></c:when>
-                                                                            <c:when test="${milestone.status == 2}"><span class="badge bg-primary">Doing</span></c:when>
-                                                                            <c:when test="${milestone.status == 3}"><span class="badge bg-success">Done</span></c:when>
-                                                                            <c:when test="${milestone.status == 4}"><span class="badge bg-secondary-light">Closed</span></c:when>
-                                                                            <c:when test="${milestone.status == 5}"><span class="badge bg-danger">Cancelled</span></c:when>
+                                                                            <c:when test="${milestone.status == 1}"><span class="badge bg-primary">Doing</span></c:when>
+                                                                            <c:when test="${milestone.status == 2}"><span class="badge bg-secondary-light">Closed</span></c:when>
+                                                                            <c:when test="${milestone.status == 3}"><span class="badge bg-danger">Cancelled</span></c:when>
                                                                             <c:otherwise>Unknown</c:otherwise>
                                                                         </c:choose>
                                                                     </td>
@@ -364,11 +369,9 @@
                                                                     <td>
                                                                         <c:choose>
                                                                             <c:when test="${milestone.status == 0}"><span class="badge bg-secondary">Pending</span></c:when>
-                                                                            <c:when test="${milestone.status == 1}"><span class="badge bg-warning">To Do</span></c:when>
-                                                                            <c:when test="${milestone.status == 2}"><span class="badge bg-primary">Doing</span></c:when>
-                                                                            <c:when test="${milestone.status == 3}"><span class="badge bg-success">Done</span></c:when>
-                                                                            <c:when test="${milestone.status == 4}"><span class="badge bg-secondary-light">Closed</span></c:when>
-                                                                            <c:when test="${milestone.status == 5}"><span class="badge bg-danger">Cancelled</span></c:when>
+                                                                            <c:when test="${milestone.status == 1}"><span class="badge bg-primary">Doing</span></c:when>
+                                                                            <c:when test="${milestone.status == 2}"><span class="badge bg-secondary-light">Closed</span></c:when>
+                                                                            <c:when test="${milestone.status == 3}"><span class="badge bg-danger">Cancelled</span></c:when>
                                                                             <c:otherwise>Unknown</c:otherwise>
                                                                         </c:choose>
                                                                     </td>

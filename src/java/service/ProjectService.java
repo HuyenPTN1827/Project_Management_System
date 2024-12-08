@@ -80,4 +80,9 @@ public class ProjectService {
       public List<Department> getAllDepartment() {
         return projectDAO.getAllDepartments(); 
     }
+      
+      public boolean isCodeExists(String code) {
+    return projectDAO.isCodeExists(code);
+}
+
 }

@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
-        <file>
-            <url>src/java/context/ProjectConfigDAO.java</url>
-            <bookmark id="1">
-                <name/>
-                <line>598</line>
-                <key/>
-            </bookmark>
-        </file>
-    </editor-bookmarks>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/AuthenticationController.java</file>
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/service/UserService.java</file>
+            <file>file:/D:/Do%20An/Project_Management_System/src/java/service/BaseServive.java</file>
+            <file>file:/D:/Do%20An/Project_Management_System/web/WEB-INF/guest/register.jsp</file>
+=======
             <file>file:/D:/Git/Project/Project_Management_System/src/java/service/IssueService.java</file>
             <file>file:/D:/Git/Project/Project_Management_System/src/java/context/IssueDAO.java</file>
             <file>file:/D:/Git/Project/Project_Management_System/web/WEB-INF/guest/register.jsp</file>
@@ -20,6 +17,7 @@
             <file>file:/D:/Git/Project/Project_Management_System/src/java/controller/IssueController.java</file>
             <file>file:/D:/Git/Project/Project_Management_System/src/java/controller/UserController.java</file>
             <file>file:/D:/Git/Project/Project_Management_System/src/java/context/ProjectDAO.java</file>
+>>>>>>> 57594519c4386206ea9fedbba2594a8168e1e472
         </group>
     </open-files>
 </project-private>

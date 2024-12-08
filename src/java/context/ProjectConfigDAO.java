@@ -743,4 +743,21 @@ public class ProjectConfigDAO {
         }
         return rowUpdated;
     }
+    
+    public boolean isCodeExists(String code) {
+    String query = "SELECT 1 FROM project WHERE code = ? LIMIT 1"; // Dùng LIMIT 1 để tối ưu
+    try (Connection conn = BaseDAO.getConnection(); // Sử dụng phương thức getConnection từ BaseDAO
+         PreparedStatement stmt = conn.prepareStatement(query)) {
+        // Gán giá trị mã code vào câu truy vấn
+        stmt.setString(1, code);
+
+        // Thực thi truy vấn
+        try (ResultSet rs = stmt.executeQuery()) {
+            return rs.next(); // Nếu có kết quả trả về, mã đã tồn tại
+        }
+    } catch (SQLException e) {
+        BaseDAO.printSQLException(e); // Ghi log lỗi để kiểm tra
+    }
+    return false; // Mặc định trả về false nếu có lỗi
+}
 }

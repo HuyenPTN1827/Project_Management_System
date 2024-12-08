@@ -124,4 +124,8 @@ public class ProjectConfigService extends BaseServive {
 
         return errors;
     }
+    
+      public boolean isCodeExists(String code) {
+    return projectConfigDAO.isCodeExists(code);
+}
 }

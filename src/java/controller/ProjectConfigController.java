@@ -300,6 +300,23 @@ public class ProjectConfigController extends HttpServlet {
         String projectCode = request.getParameter("projectCode");
         int estimatedEffort = Integer.parseInt(request.getParameter("estimatedEffort"));
 
+        // Kiểm tra mã code đã tồn tại
+        if (projectConfigService.isCodeExists(projectCode)) {
+            request.setAttribute("error", "Project code already exists. Please use a different code.");
+            Project project = projectConfigService.getProjectById(projectId);
+            List<User> managers = projectConfigService.getAllManagers(); // Lấy tất cả các quản lý
+            List<Project> projectListName = projectConfigService.getAllProjects(); // Lấy tất cả các dự án (có thể là danh sách các tên dự án)
+            List<Department> departments = projectConfigService.getAllDepartment(); // Lấy tất cả các phòng ban
+            // Truyền đối tượng project vào request
+            request.setAttribute("project", project);
+            request.setAttribute("listManagers", managers);
+            request.setAttribute("projectListName", projectListName);
+            request.setAttribute("departments", departments); // Thêm danh sách phòng ban
+
+            request.getRequestDispatcher("/projectconfig").forward(request, response);
+            return;  // Dừng lại nếu mã code đã tồn tại
+        }
+
         // Chuyển từ String sang Date sử dụng SimpleDateFormat
         String startDateStr = request.getParameter("startDate");
         String endDateStr = request.getParameter("endDate");
@@ -318,7 +335,7 @@ public class ProjectConfigController extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Invalid date format. Please use yyyy-MM-dd.");
-            request.getRequestDispatcher("updateProjectForm.jsp").forward(request, response);
+            request.getRequestDispatcher("/projectconfig").forward(request, response);
             return;  // Dừng lại nếu có lỗi
         }
 
@@ -364,11 +381,33 @@ public class ProjectConfigController extends HttpServlet {
 
         // Kiểm tra nếu update thành công
         if (isUpdated) {
+            // Sau khi cập nhật thành công, lấy lại thông tin dự án và các dữ liệu liên quan
+            Project updatedProject = projectConfigService.getProjectById(projectId);  // Lấy dự án mới nhất từ database
+            List<User> managers = projectConfigService.getAllManagers(); // Lấy tất cả các quản lý
+            List<Project> projectListName = projectConfigService.getAllProjects(); // Lấy tất cả các dự án (có thể là danh sách các tên dự án)
+            List<Department> departments = projectConfigService.getAllDepartment(); // Lấy tất cả các phòng ban
+
+// Truyền lại thông tin dự án, quản lý, và phòng ban vào request
+            request.setAttribute("project", updatedProject);
+            request.setAttribute("listManagers", managers);
+            request.setAttribute("projectListName", projectListName);
+            request.setAttribute("departments", departments);
             request.setAttribute("message", "Project updated successfully.");
             request.getRequestDispatcher("/projectconfig").forward(request, response);
         } else {
+            // Sau khi cập nhật thành công, lấy lại thông tin dự án và các dữ liệu liên quan
+            Project updatedProject = projectConfigService.getProjectById(projectId);  // Lấy dự án mới nhất từ database
+            List<User> managers = projectConfigService.getAllManagers(); // Lấy tất cả các quản lý
+            List<Project> projectListName = projectConfigService.getAllProjects(); // Lấy tất cả các dự án (có thể là danh sách các tên dự án)
+            List<Department> departments = projectConfigService.getAllDepartment(); // Lấy tất cả các phòng ban
+
+// Truyền lại thông tin dự án, quản lý, và phòng ban vào request
+            request.setAttribute("project", updatedProject);
+            request.setAttribute("listManagers", managers);
+            request.setAttribute("projectListName", projectListName);
+            request.setAttribute("departments", departments);
             request.setAttribute("error", "Failed to update the project.");
-            request.getRequestDispatcher("/WEB-INF/member/project-config.jsp").forward(request, response);
+            request.getRequestDispatcher("/projectconfig").forward(request, response);
         }
     }
 
