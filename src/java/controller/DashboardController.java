@@ -149,7 +149,6 @@ public class DashboardController extends HttpServlet {
     private void projectList(HttpServletRequest request, HttpServletResponse response, Integer deptId, Integer bizTerm, User user) {
         ProjectService pjService = new ProjectService();
         List<Project> project = pjService.getProjectListByUserID(user.getId(), bizTerm);
-        
         request.setAttribute("project", project);
     }
 

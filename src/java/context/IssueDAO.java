@@ -29,15 +29,15 @@ public class IssueDAO {
         List<User> user = new ArrayList<>();
 //        String sql = """
 //                     SELECT DISTINCT u.id, u.username, u.full_name
-//                     FROM pms.issue i
-//                     JOIN pms.allocation a ON i.project_id = a.project_id
-//                     JOIN pms.user u ON i.assignee = u.id
+//                     FROM issue i
+//                     JOIN allocation a ON i.project_id = a.project_id
+//                     JOIN user u ON i.assignee = u.id
 //                     WHERE a.user_id = ?
 //                     AND (u.status = 1 OR u.status = 0)""";
         String sql = """
                      SELECT DISTINCT u.id, u.username, u.full_name
-                     FROM pms.allocation a
-                     JOIN pms.user u ON a.user_id = u.id
+                     FROM allocation a
+                     JOIN user u ON a.user_id = u.id
                      WHERE (u.status = 1 OR u.status = 0)""";
         if (projectId != null) {
             sql += " AND a.project_id = ?";
@@ -69,13 +69,13 @@ public class IssueDAO {
                      SELECT DISTINCT i.id, i.created_by, u1.username, i.milestone_id, m.name, 
                      i.assignee, u2.username, i.deadline, i.status, i.name, 
                      i.type, s.name, i.project_id, p.code, i.details
-                     FROM pms.issue i 
-                     JOIN pms.project p ON i.project_id = p.id
-                     JOIN pms.milestone m ON i.milestone_id = m.id
-                     JOIN pms.user u1 ON i.created_by = u1.id 
-                     JOIN pms.user u2 ON i.assignee = u2.id
-                     JOIN pms.setting s ON i.type = s.id
-                     JOIN pms.allocation a ON i.project_id = a.project_id
+                     FROM issue i 
+                     JOIN project p ON i.project_id = p.id
+                     JOIN milestone m ON i.milestone_id = m.id
+                     JOIN user u1 ON i.created_by = u1.id 
+                     JOIN user u2 ON i.assignee = u2.id
+                     JOIN setting s ON i.type = s.id
+                     JOIN allocation a ON i.project_id = a.project_id
                      WHERE 1=1""";
 
         // Add search conditions if any
@@ -192,13 +192,13 @@ public class IssueDAO {
                      SELECT DISTINCT i.id, i.created_by, u1.username, u1.full_name, i.milestone_id, m.name, 
                                           i.assignee, u2.username, u2.full_name, i.deadline, i.status, i.name, 
                                           i.type, s.name, i.project_id, p.code, p.name, i.details
-                                          FROM pms.issue i 
-                                          JOIN pms.project p ON i.project_id = p.id
-                                          JOIN pms.milestone m ON i.milestone_id = m.id
-                                          JOIN pms.user u1 ON i.created_by = u1.id 
-                                          JOIN pms.user u2 ON i.assignee = u2.id
-                                          JOIN pms.setting s ON i.type = s.id
-                                          JOIN pms.allocation a ON i.project_id = a.project_id
+                                          FROM issue i 
+                                          JOIN project p ON i.project_id = p.id
+                                          JOIN milestone m ON i.milestone_id = m.id
+                                          JOIN user u1 ON i.created_by = u1.id 
+                                          JOIN user u2 ON i.assignee = u2.id
+                                          JOIN setting s ON i.type = s.id
+                                          JOIN allocation a ON i.project_id = a.project_id
                                           ORDER BY i.id DESC LIMIT 10 OFFSET 0;""";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
@@ -259,13 +259,13 @@ public class IssueDAO {
                      SELECT i.id, i.created_by, u1.username, i.last_updated, i.milestone_id, m.name, 
                      i.assignee, u2.username, i.deadline, i.status, i.name, i.type, s.name, 
                      i.project_id, p.name, p.code, i.details, u1.full_name, u2.full_name
-                     FROM pms.issue i 
-                     JOIN pms.project p ON i.project_id = p.id
-                     JOIN pms.milestone m ON i.milestone_id = m.id
-                     JOIN pms.user u1 ON i.created_by = u1.id 
-                     JOIN pms.user u2 ON i.assignee = u2.id
-                     JOIN pms.setting s ON i.type = s.id
-                     JOIN pms.allocation a ON i.project_id = a.project_id
+                     FROM issue i 
+                     JOIN project p ON i.project_id = p.id
+                     JOIN milestone m ON i.milestone_id = m.id
+                     JOIN user u1 ON i.created_by = u1.id 
+                     JOIN user u2 ON i.assignee = u2.id
+                     JOIN setting s ON i.type = s.id
+                     JOIN allocation a ON i.project_id = a.project_id
                      WHERE i.id = ?;""";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
@@ -323,7 +323,7 @@ public class IssueDAO {
     public int insertIssue(Issue issue) throws SQLException {
         int result = 0;
         String sql = """
-                     INSERT INTO pms.issue (created_by, last_updated, milestone_id, 
+                     INSERT INTO issue (created_by, last_updated, milestone_id, 
                      assignee, deadline, status, name, type, project_id, details)
                      VALUES (?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?);""";
 
@@ -350,7 +350,7 @@ public class IssueDAO {
         boolean rowUpdated = false;
 
         String sql = """
-                     UPDATE pms.issue SET last_updated = NOW(), milestone_id = ?, assignee = ?, 
+                     UPDATE issue SET last_updated = NOW(), milestone_id = ?, assignee = ?, 
                      deadline = ?, status = ?, name =?, type = ?, project_id = ?, details = ?
                      WHERE id = ?;""";
 
@@ -378,9 +378,9 @@ public class IssueDAO {
 
         String sql = """
                      SELECT i.status, COUNT(*) AS count 
-                     FROM pms.issue i 
-                     JOIN pms.project p ON i.project_id = p.id
-                     LEFT JOIN pms.department d ON p.department_id = d.id
+                     FROM issue i 
+                     JOIN project p ON i.project_id = p.id
+                     LEFT JOIN department d ON p.department_id = d.id
                      WHERE 1=1 """;
 
         if (deptId != null) {

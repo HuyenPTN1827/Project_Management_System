@@ -51,8 +51,8 @@ public class UserDAO {
     User foundUser = null;
     String query = """
                SELECT u.id, u.full_name, u.username, u.email, u.mobile, u.password, u.role_id, u.status, s.name, u.avatar
-               FROM pms.user u 
-               JOIN pms.setting s ON u.role_id = s.id
+               FROM user u 
+               JOIN setting s ON u.role_id = s.id
                WHERE u.email = ? AND u.password = ?;
                """;
 
@@ -86,7 +86,7 @@ public class UserDAO {
         String query = """
                    SELECT u.id, u.full_name, u.email, u.mobile, u.password, u.notes, 
                    u.status, u.role_id
-                   FROM pms.user u
+                   FROM user u
                    WHERE u.email = ?;""";
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(query)) {
             stm.setString(1, email);
@@ -140,7 +140,7 @@ public class UserDAO {
 //28/9
 //updatepassword
     public boolean updatePassword(int userId, String newPassword) {
-        String sql = "UPDATE pms.user SET password = ? WHERE id = ?"; // Đã sửa tên bảng
+        String sql = "UPDATE user SET password = ? WHERE id = ?"; // Đã sửa tên bảng
         try (Connection conn = BaseDAO.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, newPassword);
             stmt.setInt(2, userId);
@@ -160,10 +160,10 @@ public class UserDAO {
         String sql = """
                      SELECT u.id, u.full_name, u.username, u.email, u.mobile, 
                      d.id, d.code, s.id, s.name, u.status
-                     FROM pms.user u
-                     LEFT JOIN pms.dept_user du ON u.id = du.user_id AND du.end_date IS NULL
-                     LEFT JOIN pms.department d ON du.dept_id = d.id
-                     LEFT JOIN pms.setting s ON u.role_id = s.id                  
+                     FROM user u
+                     LEFT JOIN dept_user du ON u.id = du.user_id AND du.end_date IS NULL
+                     LEFT JOIN department d ON du.dept_id = d.id
+                     LEFT JOIN setting s ON u.role_id = s.id                  
                      WHERE 1=1""";
         // Add search conditions if any
         if (keyword != null && !keyword.isEmpty()) {
@@ -241,10 +241,10 @@ public class UserDAO {
         String sql = """
                      SELECT u.id, u.full_name, u.username, u.email, u.mobile, 
                      u.password, d.id, d.name, s.id, s.name, u.notes, u.status
-                     FROM pms.user u
-                     LEFT JOIN pms.dept_user du ON u.id = du.user_id AND du.end_date IS NULL
-                     LEFT JOIN pms.department d ON du.dept_id = d.id
-                     LEFT JOIN pms.setting s ON u.role_id = s.id   
+                     FROM user u
+                     LEFT JOIN dept_user du ON u.id = du.user_id AND du.end_date IS NULL
+                     LEFT JOIN department d ON du.dept_id = d.id
+                     LEFT JOIN setting s ON u.role_id = s.id   
                      WHERE u.id = ?;""";
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             stm.setInt(1, id);
@@ -284,10 +284,10 @@ public class UserDAO {
         int userId = 0;
         int result = 0;
         String userSql = """
-                         INSERT INTO pms.user (full_name, username, email, mobile, password, notes, role_id)
+                         INSERT INTO user (full_name, username, email, mobile, password, notes, role_id)
                          VALUES (?, ?, ?, ?, ?, ?, ?);""";
         String deptUserSql = """
-                            INSERT INTO pms.dept_user (user_id, dept_id, status)
+                            INSERT INTO dept_user (user_id, dept_id, status)
                             VALUES (?, ?, 0);""";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement userStm = cnt.prepareStatement(userSql); PreparedStatement deptUserStm = cnt.prepareStatement(deptUserSql);) {
@@ -306,7 +306,7 @@ public class UserDAO {
 
             result = userStm.executeUpdate();
 
-            ResultSet rs = userStm.executeQuery("SELECT DISTINCT LAST_INSERT_ID() FROM pms.user;");
+            ResultSet rs = userStm.executeQuery("SELECT DISTINCT LAST_INSERT_ID() FROM user;");
             if (rs.next()) {
                 userId = rs.getInt(1);
             }
@@ -335,7 +335,7 @@ public class UserDAO {
             switch (user.getStatus()) {
                 // If status = 3, dept_user status is not changed
                 case 3 -> {
-                    String updateUserSql = "UPDATE pms.user SET full_name = ?, username = ?, "
+                    String updateUserSql = "UPDATE user SET full_name = ?, username = ?, "
                             + "email = ?, mobile = ?, notes = ?, role_id = ? "
                             + "WHERE id = ? AND status = 3;";
                     try (PreparedStatement updateUserStm = cnt.prepareStatement(updateUserSql)) {
@@ -357,7 +357,7 @@ public class UserDAO {
 
                     if (deptId != null) {
                         // Update current record in dept_user
-                        String updateDeptUserSql = "UPDATE pms.dept_user SET dept_id = ? WHERE user_id = ? AND end_date IS NULL";
+                        String updateDeptUserSql = "UPDATE dept_user SET dept_id = ? WHERE user_id = ? AND end_date IS NULL";
                         try (PreparedStatement updateDeptUserStm = cnt.prepareStatement(updateDeptUserSql)) {
                             updateDeptUserStm.setInt(1, user.getDept().getId());
                             updateDeptUserStm.setInt(2, user.getId());
@@ -368,10 +368,10 @@ public class UserDAO {
 
                         // Insert new record in dept_user if record of this user not exist
                         String insertDeptUserSql = """
-                                               INSERT INTO pms.dept_user (user_id, dept_id) 
+                                               INSERT INTO dept_user (user_id, dept_id) 
                                                SELECT ?, ?
                                                WHERE NOT EXISTS (
-                                                   SELECT 1 FROM pms.dept_user 
+                                                   SELECT 1 FROM dept_user 
                                                    WHERE user_id = ? AND end_date IS NULL
                                                );""";
                         try (PreparedStatement insertDeptUserStm = cnt.prepareStatement(insertDeptUserSql)) {
@@ -387,7 +387,7 @@ public class UserDAO {
                 // If status = 1 or changes to 1, and dept_id is changed
                 case 1 -> {
                     // Update user
-                    String updateUserSql = "UPDATE pms.user SET full_name = ?, username = ?, email = ?, "
+                    String updateUserSql = "UPDATE user SET full_name = ?, username = ?, email = ?, "
                             + "mobile = ?, notes = ?, status = ?, role_id = ? WHERE id = ?;";
                     try (PreparedStatement updateUserStm = cnt.prepareStatement(updateUserSql)) {
                         updateUserStm.setString(1, user.getFull_name());
@@ -409,7 +409,7 @@ public class UserDAO {
 
                     if (deptId != null) {
                         // Query to get the current dept_id from dept_user
-                        String selectDeptIdSql = "SELECT dept_id FROM pms.dept_user WHERE user_id = ? AND end_date IS NULL";
+                        String selectDeptIdSql = "SELECT dept_id FROM dept_user WHERE user_id = ? AND end_date IS NULL";
                         Integer currentDeptId = null;
 
                         try (PreparedStatement selectDeptIdStm = cnt.prepareStatement(selectDeptIdSql)) {
@@ -424,7 +424,7 @@ public class UserDAO {
                         // Only update if deptId is different from currentDeptId
                         if (!deptId.equals(currentDeptId)) {
                             // Close current record in dept_user
-                            String closeDeptUserSql = "UPDATE pms.dept_user SET end_date = CURDATE(), "
+                            String closeDeptUserSql = "UPDATE dept_user SET end_date = CURDATE(), "
                                     + "status = 0 WHERE user_id = ? AND end_date IS NULL";
                             try (PreparedStatement closeDeptUserStm = cnt.prepareStatement(closeDeptUserSql)) {
                                 closeDeptUserStm.setInt(1, user.getId());
@@ -433,7 +433,7 @@ public class UserDAO {
                             }
 
                             // Insert new record in dept_user
-                            String insertDeptUserSql = "INSERT INTO pms.dept_user (user_id, dept_id, start_date, status) VALUES (?, ?, CURDATE(), 1)";
+                            String insertDeptUserSql = "INSERT INTO dept_user (user_id, dept_id, start_date, status) VALUES (?, ?, CURDATE(), 1)";
                             try (PreparedStatement insertDeptUserStm = cnt.prepareStatement(insertDeptUserSql)) {
                                 insertDeptUserStm.setInt(1, user.getId());
                                 insertDeptUserStm.setInt(2, user.getDept().getId());
@@ -447,7 +447,7 @@ public class UserDAO {
                 // If status = 0 or changes to 0
                 case 0 -> {
                     // Update user
-                    String updateUserSql = "UPDATE pms.user SET full_name = ?, username = ?, email = ?, "
+                    String updateUserSql = "UPDATE user SET full_name = ?, username = ?, email = ?, "
                             + "mobile = ?, notes = ?, status = ? WHERE id = ?;";
                     try (PreparedStatement updateUserStm = cnt.prepareStatement(updateUserSql)) {
                         updateUserStm.setString(1, user.getFull_name());
@@ -462,7 +462,7 @@ public class UserDAO {
                     }
 
                     // Close current record in dept_user
-                    String closeDeptUserSql = "UPDATE pms.dept_user SET status = 0, "
+                    String closeDeptUserSql = "UPDATE dept_user SET status = 0, "
                             + "end_date = CURRENT_DATE WHERE user_id = ? AND end_date IS NULL";
                     try (PreparedStatement closeDeptUserStm = cnt.prepareStatement(closeDeptUserSql)) {
                         closeDeptUserStm.setInt(1, user.getId());
@@ -487,7 +487,7 @@ public class UserDAO {
         boolean rowUpdated = false;
         try (Connection cnt = BaseDAO.getConnection()) {
             // Update user
-            String updateUserSql = "UPDATE pms.user SET status = ? WHERE id = ?";
+            String updateUserSql = "UPDATE user SET status = ? WHERE id = ?";
             try (PreparedStatement updateUserStm = cnt.prepareStatement(updateUserSql)) {
                 updateUserStm.setInt(1, user.getStatus());
                 updateUserStm.setInt(2, user.getId());
@@ -497,7 +497,7 @@ public class UserDAO {
 
             // If status changes to 0, Close current record in dept_user
             if (user.getStatus() == 0) {
-                String closeDeptUserSql = "UPDATE pms.dept_user SET status = 0, end_date = CURDATE() "
+                String closeDeptUserSql = "UPDATE dept_user SET status = 0, end_date = CURDATE() "
                         + "WHERE user_id = ? AND end_date IS NULL";
                 try (PreparedStatement closeDeptUserStm = cnt.prepareStatement(closeDeptUserSql)) {
                     closeDeptUserStm.setInt(1, user.getId());
@@ -579,7 +579,7 @@ public class UserDAO {
     // Change avatar
     public boolean changeAvatar(User user) throws SQLException {
         boolean rowUpdated = false;
-        String sql = "UPDATE pms.user SET avatar = ? WHERE id = ?";
+        String sql = "UPDATE user SET avatar = ? WHERE id = ?";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
             stm.setString(1, user.getAvatar());
@@ -597,7 +597,7 @@ public class UserDAO {
 
         String sql = """
                      SELECT id, full_name, username, email
-                     FROM pms.user               
+                     FROM user               
                      WHERE role_id = 3 AND status = 1
                      ORDER BY id DESC;""";
 

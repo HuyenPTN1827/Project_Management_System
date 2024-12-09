@@ -13,7 +13,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
-        <meta name="author" content="AdminKit">
+        <meta name="author" content="PMS">
         <meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
 
         <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -169,7 +169,7 @@
                     if (localStorage.getItem('popState') !== 'shown') {
                         window.notyf.open({
                             type: "success",
-                            message: "Get access to all 500+ components and 45+ pages with AdminKit PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
+                            message: "Get access to all 500+ components and 45+ pages with PMS PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
                             duration: 10000,
                             ripple: true,
                             dismissible: false,

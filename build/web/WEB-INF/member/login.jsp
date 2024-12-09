@@ -12,7 +12,7 @@
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link rel="shortcut icon" href="img/icons/icon-48x48.png" />
         <link rel="canonical" href="pages-sign-in.html" />
-        <title>Login | AdminKit Demo</title>
+        <title>Login | PMS</title>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet">
         <link class="js-stylesheet" href="${pageContext.request.contextPath}/css/light.css" rel="stylesheet">
         <script src="${pageContext.request.contextPath}/js/settings.js"></script>

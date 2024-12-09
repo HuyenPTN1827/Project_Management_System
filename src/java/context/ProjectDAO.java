@@ -417,7 +417,7 @@ public class ProjectDAO {
     public List<Project> getProjectsDropDown() {
         List<Project> projects = new ArrayList<>();
 
-        String sql = "SELECT * FROM pms.project";
+        String sql = "SELECT * FROM project";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
@@ -438,31 +438,44 @@ public class ProjectDAO {
         List<Project> project = new ArrayList<>();
 
         String sql = """
-                     SELECT DISTINCT p.id, p.name, p.code, p.start_date, p.end_date, 
-                     p.status, p.department_id, p.biz_term
-                     FROM pms.project p 
-                     JOIN pms.allocation a ON p.id = a.project_id 
-                     WHERE a.user_id = ?""";
-        
+                 SELECT DISTINCT p.id, p.name, p.code, p.start_date, p.end_date, 
+                        p.status, p.department_id, p.biz_term, p.user_id, 
+                        u.full_name, u.username
+                 FROM project p 
+                 JOIN allocation a ON p.id = a.project_id 
+                 JOIN user u ON p.user_id = u.id
+                 WHERE a.user_id = ?
+                 """;
+
         if (biz_term != null) {
             sql += " AND p.biz_term = ?";
         }
 
         sql += " ORDER BY p.id DESC;";
-        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
             stm.setInt(1, userId);
+            int index = 2;
+            if (biz_term != null) {
+                stm.setInt(index++, biz_term);
+            }
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Project p = new Project();
-                p.setId(rs.getInt("p.id"));
-                p.setName(rs.getString("p.name"));
-                p.setCode(rs.getString("p.code"));
-                p.setStartDate(rs.getDate("p.start_date"));
-                p.setEndDate(rs.getDate("p.end_date"));
-                p.setStatus(rs.getInt("p.status"));
-                p.setDepartmentId(rs.getInt("p.departmentId"));
-                p.setBizTerm(rs.getInt("p.biz_term"));
-                
+                p.setId(rs.getInt("id"));
+                p.setName(rs.getString("name"));
+                p.setCode(rs.getString("code"));
+                p.setStartDate(rs.getDate("start_date"));
+                p.setEndDate(rs.getDate("end_date"));
+                p.setStatus(rs.getInt("status"));
+                p.setDepartmentId(rs.getInt("department_id"));
+                p.setBizTerm(rs.getInt("biz_term"));
+
+                User u = new User();
+                u.setId(rs.getInt("user_id"));
+                u.setFull_name(rs.getString("full_name"));
+                u.setUsername(rs.getString("username"));
+                p.setUser(u);
+
                 project.add(p);
             }
         } catch (SQLException e) {
@@ -475,8 +488,8 @@ public class ProjectDAO {
     public List<Milestone> getMilestonesByProjectId(Integer projectId) {
         List<Milestone> milestones = new ArrayList<>();
         String sql = """
-                     SELECT DISTINCT m.id, m.name FROM pms.milestone m
-                     JOIN pms.allocation a ON m.project_id = a.project_id
+                     SELECT DISTINCT m.id, m.name FROM milestone m
+                     JOIN allocation a ON m.project_id = a.project_id
                      WHERE 1=1""";
         if (projectId != null) {
             sql += " AND m.project_id = ?";
@@ -499,7 +512,7 @@ public class ProjectDAO {
     }
 
     public Project getProjectsName(int id) {
-        String sql = "SELECT * FROM pms.project where id = " + id;
+        String sql = "SELECT * FROM project where id = " + id;
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
