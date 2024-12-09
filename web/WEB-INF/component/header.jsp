@@ -16,7 +16,7 @@
 
     <div class="d-flex justify-content-between align-items-center">
         <!-- Menu dropdown mini -->
-        <div class="nav-item dropdown d-lg-none">
+        <div class="nav-item dropdown d-lg-none" hidden>
             <a class="nav-link dropdown-toggle text-dark" href="#" role="button" id="menuDropdown" data-bs-toggle="dropdown" 
                aria-haspopup="true" aria-expanded="false">
                 Menu
@@ -32,13 +32,14 @@
                    href="#" hidden>Defects</a>
 
                     <a class="dropdown-item <c:if test="${currentPage == 'timesheet-management'}">active</c:if>"
-                       href="#">Timesheets</a>
+                       href="#" hidden>Timesheets</a>
 
                 </ul>
             </div>
 
             <!-- Large menu -->
-            <ul class="navbar-nav d-none d-lg-flex">
+            <!--<ul class="navbar-nav d-none d-lg-flex">-->
+            <ul class="navbar-nav">
                 <li class="nav-item px-2">
                     <a class="nav-link <c:if test="${currentPage == 'requirement-management'}">active</c:if>"
                        href="WorkPackageController" hidden>Requirements</a>
@@ -61,7 +62,7 @@
 
                 <li class="nav-item px-1">
                     <a class="nav-link <c:if test="${currentPage == 'timesheet-management'}">active</c:if>" 
-                       href="#">Timesheets</a>
+                       href="#" hidden>Timesheets</a>
                 </li>
             </ul>
         </div>

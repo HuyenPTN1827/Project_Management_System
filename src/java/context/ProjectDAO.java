@@ -434,15 +434,21 @@ public class ProjectDAO {
     }
 
 //    HuyenPTNHE160769
-    public List<Project> getProjectListByUserID(int userId) {
+    public List<Project> getProjectListByUserID(int userId, Integer biz_term) {
         List<Project> project = new ArrayList<>();
 
         String sql = """
-                     SELECT DISTINCT p.id, p.name, p.code FROM pms.project p 
+                     SELECT DISTINCT p.id, p.name, p.code, p.start_date, p.end_date, 
+                     p.status, p.department_id, p.biz_term
+                     FROM pms.project p 
                      JOIN pms.allocation a ON p.id = a.project_id 
-                     WHERE a.user_id = ? 
-                     ORDER BY p.id DESC;""";
+                     WHERE a.user_id = ?""";
+        
+        if (biz_term != null) {
+            sql += " AND p.biz_term = ?";
+        }
 
+        sql += " ORDER BY p.id DESC;";
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             stm.setInt(1, userId);
             ResultSet rs = stm.executeQuery();
@@ -451,6 +457,12 @@ public class ProjectDAO {
                 p.setId(rs.getInt("p.id"));
                 p.setName(rs.getString("p.name"));
                 p.setCode(rs.getString("p.code"));
+                p.setStartDate(rs.getDate("p.start_date"));
+                p.setEndDate(rs.getDate("p.end_date"));
+                p.setStatus(rs.getInt("p.status"));
+                p.setDepartmentId(rs.getInt("p.departmentId"));
+                p.setBizTerm(rs.getInt("p.biz_term"));
+                
                 project.add(p);
             }
         } catch (SQLException e) {

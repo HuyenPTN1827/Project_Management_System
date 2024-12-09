@@ -90,10 +90,11 @@
                                     </select>
                                 </form>
                             </div>
-
                         </div>
+                            
                         <div class="row">
-                            <div class="col-12 col-md-4 col-xxl-3 d-flex order-1 order-xxl-3">
+                            
+                            <div class="col-12 col-md-3 col-xxl-3 d-flex order-1 order-xxl-3">
                                 <div class="card flex-fill w-100">
                                     <div class="card-header">
                                         <div class="card-actions float-end">
@@ -118,34 +119,12 @@
                                                     <canvas id="chartjs-dashboard-pie"></canvas>
                                                 </div>
                                             </div>
-
-                                            <table class="table mb-0">
-                                                <tbody>
-                                                    <tr>
-                                                        <td><i class="fas fa-circle text-primary fa-fw"></i> Chrome <span
-                                                                class="badge badge-success-light">+12%</span></td>
-                                                        <td class="text-end">4306</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><i class="fas fa-circle text-warning fa-fw"></i> Firefox <span
-                                                                class="badge badge-danger-light">-3%</span></td>
-                                                        <td class="text-end">3801</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><i class="fas fa-circle text-danger fa-fw"></i> Edge</td>
-                                                        <td class="text-end">1689</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><i class="fas fa-circle text-dark fa-fw"></i> Other</td>
-                                                        <td class="text-end">3251</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
+                            
+<!--
                             <div class="col-12 col-md-4 col-xxl-3 d-flex order-1 order-xxl-3">
                                 <div class="card flex-fill w-100">
                                     <div class="card-header">
@@ -174,103 +153,31 @@
 
                                             <table class="table mb-0">
                                                 <tbody>
-                                                    <c:forEach items="${requestScope.issues}" var="issue">
+                                                    <%--<c:forEach items="${requestScope.issues}" var="issue">--%>
                                                         <tr>
                                                             <td>
-                                                                <c:if test="${issue.status eq 0}">
+                                                                <%--<c:if test="${issue.status eq 0}">--%>
                                                                     <i class="fas fa-circle text-secondary fa-fw"></i> Pending
-                                                                </c:if>
-                                                                <c:if test="${issue.status eq 1}">
+                                                                <%--</c:if>--%>
+                                                                <%--<c:if test="${issue.status eq 1}">--%>
                                                                     <i class="fas fa-circle text-primary fa-fw"></i> In Progress
-                                                                </c:if>
-                                                                <c:if test="${issue.status eq 2}">
+                                                                <%--</c:if>--%>
+                                                                <%--<c:if test="${issue.status eq 2}">--%>
                                                                     <i class="fas fa-circle text-success fa-fw"></i> Closed
-                                                                </c:if>
-                                                                <c:if test="${issue.status eq 3}">
+                                                                <%--</c:if>--%>
+                                                                <%--<c:if test="${issue.status eq 3}">--%>
                                                                     <i class="fas fa-circle text-danger fa-fw"></i> Cancelled
-                                                                </c:if>
+                                                                <%--</c:if>--%>
                                                             </td>
                                                             <td class="text-end">${issue.count}</td>
                                                         </tr>
-                                                    </c:forEach>
-
-                                                    <!--                                                <tr>
-                                                                                                        <td><i class="fas fa-circle text-primary fa-fw"></i> Chrome <span
-                                                                                                                class="badge badge-success-light">+12%</span></td>
-                                                                                                        <td class="text-end">4306</td>
-                                                                                                    </tr>
-                                                                                                    <tr>
-                                                                                                        <td><i class="fas fa-circle text-warning fa-fw"></i> Firefox <span
-                                                                                                                class="badge badge-danger-light">-3%</span></td>
-                                                                                                        <td class="text-end">3801</td>
-                                                                                                    </tr>
-                                                                                                    <tr>
-                                                                                                        <td><i class="fas fa-circle text-danger fa-fw"></i> Edge</td>
-                                                                                                        <td class="text-end">1689</td>
-                                                                                                    </tr>
-                                                                                                    <tr>
-                                                                                                        <td><i class="fas fa-circle text-dark fa-fw"></i> Other</td>
-                                                                                                        <td class="text-end">3251</td>
-                                                                                                    </tr>-->
+                                                    <%--</c:forEach>--%>
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="col-12 col-md-4 col-xxl-3 d-flex order-1 order-xxl-3">
-                                <div class="card flex-fill w-100">
-                                    <div class="card-header">
-                                        <div class="card-actions float-end">
-                                            <div class="dropdown position-relative">
-                                                <a href="#" data-bs-toggle="dropdown" data-bs-display="static">
-                                                    <i class="align-middle" data-feather="more-horizontal"></i>
-                                                </a>
-
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <a class="dropdown-item" href="#">Action</a>
-                                                    <a class="dropdown-item" href="#">Another action</a>
-                                                    <a class="dropdown-item" href="#">Something else here</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <h5 class="card-title mb-0">Timesheets</h5>
-                                    </div>
-                                    <div class="card-body d-flex">
-                                        <div class="align-self-center w-100">
-                                            <div class="py-3">
-                                                <div class="chart chart-xs">
-                                                    <canvas id="chartjs-dashboard-pie2"></canvas>
-                                                </div>
-                                            </div>
-
-                                            <table class="table mb-0">
-                                                <tbody>
-                                                    <tr>
-                                                        <td><i class="fas fa-circle text-primary fa-fw"></i> Chrome <span
-                                                                class="badge badge-success-light">+12%</span></td>
-                                                        <td class="text-end">4306</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><i class="fas fa-circle text-warning fa-fw"></i> Firefox <span
-                                                                class="badge badge-danger-light">-3%</span></td>
-                                                        <td class="text-end">3801</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><i class="fas fa-circle text-danger fa-fw"></i> Edge</td>
-                                                        <td class="text-end">1689</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><i class="fas fa-circle text-dark fa-fw"></i> Other</td>
-                                                        <td class="text-end">3251</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            </div>-->
 
                             <div class="col-xl-5" hidden>
                                 <div class="card flex-fill w-100">
@@ -307,17 +214,16 @@
                                 <div class="card flex-fill">
                                     <div class="card-header">
                                         <div class="card-actions float-end">
-                                            <!--                                                <div class="dropdown position-relative">
-                                                                                                <a href="#" data-bs-toggle="dropdown" data-bs-display="static">
-                                                                                                    <i class="align-middle" data-feather="more-horizontal"></i>
-                                                                                                </a>
-                                            
-                                                                                                <div class="dropdown-menu dropdown-menu-end">
-                                                                                                    <a class="dropdown-item" href="#">Action</a>
-                                                                                                    <a class="dropdown-item" href="#">Another action</a>
-                                                                                                    <a class="dropdown-item" href="#">Something else here</a>
-                                                                                                </div>
-                                                                                            </div>-->
+                                            <div class="dropdown position-relative">
+                                                <a href="#" data-bs-toggle="dropdown" data-bs-display="static">
+                                                    <i class="align-middle" data-feather="more-horizontal"></i>
+                                                </a>
+
+                                                <div class="dropdown-menu dropdown-menu-end">
+                                                    <a class="dropdown-item" href="<%=request.getContextPath()%>/issue-management?projectId=1">View all Issues</a>
+                                                    <a class="dropdown-item" href="<%=request.getContextPath()%>/add-issue?userId=${user.id}">Add new Issue</a>
+                                                </div>
+                                            </div>
                                         </div>
                                         <h5 class="card-title mb-0">Latest Project Issues</h5>
                                     </div>

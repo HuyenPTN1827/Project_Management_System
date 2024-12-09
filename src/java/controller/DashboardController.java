@@ -17,10 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Department;
 import model.Issue;
+import model.Project;
 import model.Setting;
 import model.User;
 import service.DepartmentService;
 import service.IssueService;
+import service.ProjectService;
 import service.SettingService;
 
 /**
@@ -62,19 +64,8 @@ public class DashboardController extends HttpServlet {
                 SettingService settingService = new SettingService();
                 List<Setting> setting = settingService.getBizTermsList();
 
-//                IssueService issueService = new IssueService();
-//                List<Issue> issues = issueService.countIssues(deptId, bizTerm);
-//                List<String> labels = new ArrayList<>();
-//                List<Integer> data = new ArrayList<>();
-//
-//                for (Issue issue : issues) {
-//                    labels.add("" + issue.getStatus());
-//                    data.add(issue.getCount());
-//                }
-//
-//                request.setAttribute("labels", labels);
-//                request.setAttribute("data", data);
                 issueChart(request, response, deptId, bizTerm);
+                projectList(request, response, deptId, bizTerm, user);
                 issueList(request, response);
 
 //                request.setAttribute("issues", issues);
@@ -153,6 +144,13 @@ public class DashboardController extends HttpServlet {
         request.setAttribute("issues", issues);
         request.setAttribute("labels", labels);
         request.setAttribute("data", data);
+    }
+
+    private void projectList(HttpServletRequest request, HttpServletResponse response, Integer deptId, Integer bizTerm, User user) {
+        ProjectService pjService = new ProjectService();
+        List<Project> project = pjService.getProjectListByUserID(user.getId(), bizTerm);
+        
+        request.setAttribute("project", project);
     }
 
 }

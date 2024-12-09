@@ -173,24 +173,21 @@
                                                         </c:if>
                                                         ${errors}
 
-                                                        <form action="updateproject" method="post">
+                                                        <form action="updateproject" method="post" class="row">
                                                             <c:if test="${action == 'edit'}">
                                                                 <!-- Hidden input to include project ID -->
                                                                 <input type="hidden" name="projectId" value="${project.id}" />
 
-                                                                <div class="row">
-                                                                    <div class="col-md-6 mb-3">
-                                                                        <label for="projectName" class="form-label"><strong>Name</strong> <span style="color: red;">*</span></label>
-                                                                        <input type="text" class="form-control" id="projectName" name="projectName" placeholder="Project Name" value="${project.name}">
-                                                                    </div>
-                                                                    <div class="col-md-6 mb-3">
-                                                                        <label for="projectCode" class="form-label"><strong>Code</strong> <span style="color: red;">*</span></label>
-                                                                        <input type="text" class="form-control" id="projectCode" name="projectCode" placeholder="PrjCode" value="${project.code}">
-                                                                    </div>
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="projectName" class="form-label"><strong>Name</strong> <span style="color: red;">*</span></label>
+                                                                    <input type="text" class="form-control" id="projectName" name="projectName" placeholder="Project Name" value="${project.name}">
                                                                 </div>
 
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="projectCode" class="form-label"><strong>Code</strong> <span style="color: red;">*</span></label>
+                                                                    <input type="text" class="form-control" id="projectCode" name="projectCode" placeholder="PrjCode" value="${project.code}">
+                                                                </div>
 
-                                                            <div class="row">
                                                                 <div class="col-md-6 mb-3">
                                                                     <label for="projectType" class="form-label"><strong>Project Type</strong></label>
                                                                     <input type="text" class="form-control" id="projectType" name="projectType" placeholder="Project Type" value="${project.typeName}" readonly>
@@ -207,18 +204,11 @@
                                                                     </select>
                                                                 </div>
 
-                                                            </div>
-
-
-
-
-
-
-                                                            <div class="row">
                                                                 <div class="col-md-6 mb-3">
                                                                     <label for="estimatedEffort" class="form-label"><strong>Estimated Effort (man-days)</strong> <span style="color: red;">*</span></label>
                                                                     <input type="number" class="form-control" id="estimatedEffort" name="estimatedEffort" value="${project.estimatedEffort}">
                                                                 </div>
+
                                                                 <div class="col-md-6 mb-3">
                                                                     <label for="department" class="form-label"><strong>Department</strong> <span style="color: red;">*</span></label>
                                                                     <select class="form-select" id="department" name="department">
@@ -227,26 +217,27 @@
                                                                             ${project.departmentName} 
                                                                         </option>
 
-                                                                            <!-- Hiển thị danh sách tất cả các phòng ban -->
-                                                                            <c:forEach var="department" items="${departments}">
-                                                                                <option value="${department.id}" 
-                                                                                        ${department.id == project.departmentId ? 'selected' : ''}>
-                                                                                    ${department.name} 
-                                                                                </option>
-                                                                            </c:forEach>
-                                                                        </select>
+                                                                        <!-- Hiển thị danh sách tất cả các phòng ban -->
+                                                                        <c:forEach var="department" items="${departments}">
+                                                                            <option value="${department.id}" 
+                                                                                    ${department.id == project.departmentId ? 'selected' : ''}>
+                                                                                ${department.name} 
+                                                                            </option>
+                                                                        </c:forEach>
+                                                                    </select>
+                                                                </div>
+
+                                                                <div class="mb-3 col-md-6">
+                                                                    <label class="form-label"><strong>Start Date</strong> <span style="color: red;">*</span> <strong>- End Date</strong> </label>
+                                                                    <div class="input-group">
+                                                                        <input type="date" class="form-control" placeholder="dd/MM/yyyy"
+                                                                               id="startDate" name="startDate" value="${project.startDate}" required>
+                                                                        <span class="input-group-text">&nbsp;&nbsp;&nbsp;&nbsp; to &nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                                                        <input type="date" class="form-control" placeholder="dd/MM/yyyy"
+                                                                               id="endDate" name="endDate" value="${project.endDate}">
                                                                     </div>
-
                                                                 </div>
 
-
-                                                            </div>
-
-                                                            <div class="row">
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label for="startDate" class="form-label"><strong>Start Date</strong> <span style="color: red;">*</span></label>
-                                                                    <input type="date" class="form-control" id="startDate" name="startDate" value="${project.startDate}">
-                                                                </div>
                                                                 <div class="col-md-6 mb-3">
                                                                     <label for="projectManager" class="form-label"><strong>Project Manager</strong> <span style="color: red;">*</span></label>
                                                                     <select class="form-select" id="projectManager" name="projectManager">
@@ -260,14 +251,6 @@
                                                                     </select>
                                                                 </div> 
 
-                                                            </div>
-
-                                                            <div class="row">
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label for="endDate" class="form-label"><strong>End Date</strong></label>
-                                                                    <input type="date" class="form-control" id="endDate" name="endDate" value="${project.endDate}">
-                                                                </div>
-
                                                                 <div class="col-md-6 mb-3">
                                                                     <label for="status" class="form-label"><strong>Status</strong></label>
                                                                     <select class="form-select" id="status" name="status">
@@ -277,113 +260,99 @@
                                                                         <option value="2" ${project.status == 2 ? 'selected' : ''}>Closed</option>
                                                                         <option value="3" ${project.status == 3 ? 'selected' : ''}>Cancelled</option>
                                                                     </select>
-                                                                </div>       
+                                                                </div>      
 
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="lastUpdated" class="form-label"><strong>Last Updated At</strong></label>
+                                                                    <input type="date" class="form-control" id="lastUpdated" value="${project.lastUpdated}" readonly>
+                                                                </div>
 
-                                                            </div>
-                                                            <div class="col-md-6 mb-3">
-                                                                <label for="lastUpdated" class="form-label"><strong>Last Updated At</strong></label>
-                                                                <input type="date" class="form-control" id="lastUpdated" value="${project.lastUpdated}" readonly>
-                                                            </div>
-
-                                                                <div class="mb-3">
+                                                                <div class="col-md-12 mb-3">
                                                                     <label for="description" class="form-label"><strong>Description</strong></label>
                                                                     <textarea class="form-control" id="description" name="description" rows="3">${project.details}</textarea>
                                                                 </div>
 
-                                                                <button type="submit" class="btn btn-lg btn-success" onclick="return validateAndSubmitForm(event, ${param.id});">Submit</button>
+                                                                <div>
+                                                                    <button type="submit" class="btn btn-lg btn-success" onclick="return validateAndSubmitForm(event, ${param.id});">Submit</button>
+                                                                </div>
                                                             </c:if>
 
                                                             <c:if test="${action == 'view'}">
                                                                 <!-- Hidden input to include project ID -->
                                                                 <input type="hidden" name="projectId" value="${project.id}" />
 
-                                                                <div class="row">
-                                                                    <div class="col-md-6 mb-3">
-                                                                        <label for="projectName" class="form-label"><strong>Name</strong> <span style="color: red;">*</span></label>
-                                                                        <input type="text" class="form-control" id="projectName" name="projectName" placeholder="Project Name" value="${project.name}" readonly>
-                                                                    </div>
-                                                                    <div class="col-md-6 mb-3">
-                                                                        <label for="projectCode" class="form-label"><strong>Code</strong> <span style="color: red;">*</span></label>
-                                                                        <input type="text" class="form-control" id="projectCode" name="projectCode" placeholder="PrjCode" value="${project.code}" readonly>
-                                                                    </div>
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="projectName" class="form-label"><strong>Name</strong> <span style="color: red;">*</span></label>
+                                                                    <input type="text" class="form-control" id="projectName" name="projectName" placeholder="Project Name" value="${project.name}" readonly>
+                                                                </div>
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="projectCode" class="form-label"><strong>Code</strong> <span style="color: red;">*</span></label>
+                                                                    <input type="text" class="form-control" id="projectCode" name="projectCode" placeholder="PrjCode" value="${project.code}" readonly>
                                                                 </div>
 
-                                                                <div class="row">
-                                                                    <div class="col-md-6 mb-3">
-                                                                        <label for="projectType" class="form-label"><strong>Project Type</strong></label>
-                                                                        <input type="text" class="form-control" id="projectType" name="projectType" placeholder="Project Type" value="${project.typeName}" readonly>
-                                                                    </div>
-
-                                                                    <div class="col-md-6 mb-3">
-                                                                        <label for="department" class="form-label"><strong>Department</strong> <span style="color: red;">*</span></label>
-                                                                        <input type="text" class="form-control" id="department" name="department" placeholder="Department" value="${project.departmentName}" readonly>
-                                                                    </div>
-
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="projectType" class="form-label"><strong>Project Type</strong></label>
+                                                                    <input type="text" class="form-control" id="projectType" name="projectType" placeholder="Project Type" value="${project.typeName}" readonly>
                                                                 </div>
 
-                                                                <div class="row">
-                                                                    <div class="col-md-6 mb-3">
-                                                                        <label for="estimatedEffort" class="form-label"><strong>Estimated Effort (man-days)</strong> <span style="color: red;">*</span></label>
-                                                                        <input type="number" class="form-control" id="estimatedEffort" name="estimatedEffort" value="${project.estimatedEffort}" readonly>
-                                                                    </div>
-
-                                                                    <div class="col-md-6 mb-3">
-                                                                        <label for="projectManager" class="form-label"><strong>Project Manager</strong> <span style="color: red;">*</span></label>
-                                                                        <input type="tex6" class="form-control" id="projectManager" name="projectManager" value="${user.full_name}" readonly>
-                                                                    </div>
-
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="department" class="form-label"><strong>Department</strong> <span style="color: red;">*</span></label>
+                                                                    <input type="text" class="form-control" id="department" name="department" placeholder="Department" value="${project.departmentName}" readonly>
                                                                 </div>
 
-                                                                <div class="row">
-                                                                    <div class="col-md-6 mb-3">
-                                                                        <label for="startDate" class="form-label"><strong>Start Date</strong> <span style="color: red;">*</span></label>
-                                                                        <input type="date" class="form-control" id="startDate" name="startDate" value="${project.startDate}" readonly>
-                                                                    </div>
-                                                                    <div class="col-md-6 mb-3">
-                                                                        <label for="endDate" class="form-label"><strong>End Date</strong></label>
-                                                                        <input type="date" class="form-control" id="endDate" name="endDate" value="${project.endDate}" readonly>
-                                                                    </div>
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="estimatedEffort" class="form-label"><strong>Estimated Effort (man-days)</strong> <span style="color: red;">*</span></label>
+                                                                    <input type="number" class="form-control" id="estimatedEffort" name="estimatedEffort" value="${project.estimatedEffort}" readonly>
                                                                 </div>
 
-                                                                <div class="row">
-                                                                    <div class="col-md-6 mb-3">
-                                                                        <label for="status" class="form-label"><strong>Status</strong></label>
-                                                                        <c:if test="${project.status eq '0'}">
-                                                                            <input type="text" class="form-control" placeholder="Project Status" 
-                                                                                   value="Pending" readonly>
-                                                                        </c:if>
-                                                                        <c:if test="${dept.status eq '1'}">
-                                                                            <input type="text" class="form-control" placeholder="Project Status" 
-                                                                                   value="Doing" readonly>
-                                                                        </c:if>
-                                                                        <c:if test="${dept.status eq '2'}">
-                                                                            <input type="text" class="form-control" placeholder="Project Status" 
-                                                                                   value="Closed" readonly>
-                                                                        </c:if>
-                                                                        <c:if test="${dept.status eq '3'}">
-                                                                            <input type="text" class="form-control" placeholder="Project Status" 
-                                                                                   value="Cancelled" readonly>
-                                                                        </c:if>
-                                                                    </div>
-
-                                                                    <div class="col-md-6 mb-3">
-                                                                        <label for="lastUpdated" class="form-label"><strong>Last Updated At</strong></label>
-                                                                        <input type="date" class="form-control" id="lastUpdated" value="${project.lastUpdated}" readonly>
-                                                                    </div>
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="projectManager" class="form-label"><strong>Project Manager</strong> <span style="color: red;">*</span></label>
+                                                                    <input type="tex6" class="form-control" id="projectManager" name="projectManager" value="${user.full_name}" readonly>
                                                                 </div>
 
-                                                                <div class="mb-3">
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="startDate" class="form-label"><strong>Start Date</strong> <span style="color: red;">*</span></label>
+                                                                    <input type="date" class="form-control" id="startDate" name="startDate" value="${project.startDate}" readonly>
+                                                                </div>
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="endDate" class="form-label"><strong>End Date</strong></label>
+                                                                    <input type="date" class="form-control" id="endDate" name="endDate" value="${project.endDate}" readonly>
+                                                                </div>
+
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="status" class="form-label"><strong>Status</strong></label>
+                                                                    <c:if test="${project.status eq '0'}">
+                                                                        <input type="text" class="form-control" placeholder="Project Status" 
+                                                                               value="Pending" readonly>
+                                                                    </c:if>
+                                                                    <c:if test="${project.status eq '1'}">
+                                                                        <input type="text" class="form-control" placeholder="Project Status" 
+                                                                               value="Doing" readonly>
+                                                                    </c:if>
+                                                                    <c:if test="${project.status eq '2'}">
+                                                                        <input type="text" class="form-control" placeholder="Project Status" 
+                                                                               value="Closed" readonly>
+                                                                    </c:if>
+                                                                    <c:if test="${project.status eq '3'}">
+                                                                        <input type="text" class="form-control" placeholder="Project Status" 
+                                                                               value="Cancelled" readonly>
+                                                                    </c:if>
+                                                                </div>
+
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="lastUpdated" class="form-label"><strong>Last Updated At</strong></label>
+                                                                    <input type="date" class="form-control" id="lastUpdated" value="${project.lastUpdated}" readonly>
+                                                                </div>
+
+                                                                <div class="col-md-12 mb-3">
                                                                     <label for="description" class="form-label"><strong>Description</strong></label>
                                                                     <textarea class="form-control" id="description" name="description" rows="3" readonly>${project.details}</textarea>
                                                                 </div>
-
                                                             </c:if>
                                                         </form>
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <script>
                                                 function validateAndSubmitForm(event, projectId) {
                                                     // Kiểm tra nếu projectId là null hoặc undefined
@@ -727,7 +696,7 @@
                                                                             </a>
                                                                         </c:if>
                                                                     </c:if>
-                                                                    
+
                                                                     <c:if test="${action == 'view'}">
                                                                         <a href="javascript:void(0);" class="btn btn-info" 
                                                                            onclick="openAllocationModal(${param.id}, ${al.id});">

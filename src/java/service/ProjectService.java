@@ -67,8 +67,8 @@ public class ProjectService {
     }
 
     //HuyenPTNHE160769
-    public List<Project> getProjectListByUserID(int userId) {
-        return projectDAO.getProjectListByUserID(userId);
+    public List<Project> getProjectListByUserID(int userId, Integer biz_term) {
+        return projectDAO.getProjectListByUserID(userId, biz_term);
     }
 
     public List<Milestone> getMilestonesByProjectId(Integer projectId) {

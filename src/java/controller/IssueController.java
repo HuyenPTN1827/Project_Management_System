@@ -170,7 +170,7 @@ public class IssueController extends HttpServlet {
             Integer status = statusStr != null && !statusStr.isEmpty() ? Integer.valueOf(statusStr) : null;
 
             List<Setting> listType = settingService.getIssueTypeList();
-            List<Project> listPj = pjService.getProjectListByUserID(userId);
+            List<Project> listPj = pjService.getProjectListByUserID(userId, null);
             List<Project> listAllPj = pjService.getAllProjects();
             List<Milestone> listMilestone = pjService.getMilestonesByProjectId(project);
             List<User> listAssignee = issueService.getMemberListByProjectId(project);
@@ -265,7 +265,7 @@ public class IssueController extends HttpServlet {
             int projectId = Integer.parseInt(request.getParameter("projectId"));
             Issue issue = issueService.getIssueById(id);
             List<Setting> listType = settingService.getIssueTypeList();
-            List<Project> listPj = pjService.getProjectListByUserID(userId);
+            List<Project> listPj = pjService.getProjectListByUserID(userId, null);
             List<Milestone> listMilestone = pjService.getMilestonesByProjectId(projectId);
             List<User> listAssignee = issueService.getMemberListByProjectId(projectId);
 
