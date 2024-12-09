@@ -19,6 +19,7 @@ import model.Department;
 import model.Milestone;
 import model.Project;
 import model.ProjectType;
+import model.Setting;
 import model.User;
 import service.ProjectService;
 //BachHD
@@ -115,10 +116,12 @@ public class ProjectListController extends HttpServlet {
         List<User> managers = projectService.getAllManagers();
         List<ProjectType> projecttypes = projectService.getAllProjectType();
         List<Department> departments = projectService.getAllDepartment();
+        List<Setting> bizTerms = projectService.getAllBizTerm();
         // Path to user information input form page
         request.setAttribute("listDepartments", departments);
         request.setAttribute("listProjectTypes", projecttypes);
         request.setAttribute("listManagers", managers);
+        request.setAttribute("listBizTerms", bizTerms);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/project-add.jsp");
         dispatcher.forward(request, response);
     }
@@ -134,7 +137,7 @@ public class ProjectListController extends HttpServlet {
         String typeIdString = request.getParameter("type");
         String estimatedEffortString = request.getParameter("estimatedEffort");
         String projectManagerIdString = request.getParameter("projectManagerId");
-
+        String bizTermIdString = request.getParameter("bizterm");
         Project project = new Project();
         Allocation allocation = new Allocation();
         Milestone milestone = new Milestone();  // Khởi tạo đối tượng milestone
@@ -142,7 +145,7 @@ public class ProjectListController extends HttpServlet {
         try {
             // Kiểm tra các trường bắt buộc
             if (name == null || code == null || departmentIdString == null || typeIdString == null
-                    || startDateString == null || endDateString == null || projectManagerIdString == null) {
+                    || startDateString == null || endDateString == null || projectManagerIdString == null || bizTermIdString == null) {
 
                 request.setAttribute("errorMessage", "All required fields must be filled in completely.");
                 request.getRequestDispatcher("/WEB-INF/member/projectlist.jsp").forward(request, response);
@@ -192,10 +195,12 @@ public class ProjectListController extends HttpServlet {
                 int departmentId = Integer.parseInt(departmentIdString);
                 int typeId = Integer.parseInt(typeIdString);
                 int projectManagerId = Integer.parseInt(projectManagerIdString);
+                int bizTermId = Integer.parseInt(bizTermIdString);
 
                 project.setDepartmentId(departmentId);
                 project.setTypeId(typeId);
                 project.setUserId(projectManagerId);
+                project.setBizTerm(bizTermId);
             } catch (NumberFormatException e) {
 
                 request.setAttribute("errorMessage", "Invalid number format for Department, Type or Project Manager.");

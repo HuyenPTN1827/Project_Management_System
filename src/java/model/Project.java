@@ -26,6 +26,7 @@ public class Project {
     private int typeId;
     private int departmentId;
     private int userId;
+    private int bizTerm;
     
     // Các trường bổ sung có thể liên kết với bảng khác (nếu có)
     private String departmentName;
@@ -34,6 +35,7 @@ public class Project {
     private String departmentCode;
     private String settingName;
     private int createdBy;
+    private String bizTermName;
     
     public Project() {
     }
@@ -200,6 +202,22 @@ public class Project {
 
     public void setTypeName(String typeName) {
         this.typeName = typeName;
+    }
+
+    public int getBizTerm() {
+        return bizTerm;
+    }
+
+    public void setBizTerm(int bizTerm) {
+        this.bizTerm = bizTerm;
+    }
+
+    public String getBizTermName() {
+        return bizTermName;
+    }
+
+    public void setBizTermName(String bizTermName) {
+        this.bizTermName = bizTermName;
     }
 
     

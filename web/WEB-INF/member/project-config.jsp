@@ -161,6 +161,30 @@
                                                                     <label for="projectType" class="form-label"><strong>Project Type</strong></label>
                                                                     <input type="text" class="form-control" id="projectType" name="projectType" placeholder="Project Type" value="${project.typeName}" readonly>
                                                                 </div>
+
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="bizTerm" class="form-label"><strong>Biz Term</strong></label>
+                                                                    <select class="form-select" id="bizTerm" name="bizTerm">
+                                                                        <c:forEach var="term" items="${bizTerms}">
+                                                                            <option value="${term.id}" ${term.name == project.bizTermName ? 'selected' : ''}>
+                                                                                ${term.name}
+                                                                            </option>
+                                                                        </c:forEach>
+                                                                    </select>
+                                                                </div>
+
+                                                            </div>
+
+
+
+
+
+
+                                                            <div class="row">
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="estimatedEffort" class="form-label"><strong>Estimated Effort (man-days)</strong> <span style="color: red;">*</span></label>
+                                                                    <input type="number" class="form-control" id="estimatedEffort" name="estimatedEffort" value="${project.estimatedEffort}">
+                                                                </div>
                                                                 <div class="col-md-6 mb-3">
                                                                     <label for="department" class="form-label"><strong>Department</strong> <span style="color: red;">*</span></label>
                                                                     <select class="form-select" id="department" name="department">
@@ -183,8 +207,8 @@
 
                                                             <div class="row">
                                                                 <div class="col-md-6 mb-3">
-                                                                    <label for="estimatedEffort" class="form-label"><strong>Estimated Effort (man-days)</strong> <span style="color: red;">*</span></label>
-                                                                    <input type="number" class="form-control" id="estimatedEffort" name="estimatedEffort" value="${project.estimatedEffort}">
+                                                                    <label for="startDate" class="form-label"><strong>Start Date</strong> <span style="color: red;">*</span></label>
+                                                                    <input type="date" class="form-control" id="startDate" name="startDate" value="${project.startDate}">
                                                                 </div>
                                                                 <div class="col-md-6 mb-3">
                                                                     <label for="projectManager" class="form-label"><strong>Project Manager</strong> <span style="color: red;">*</span></label>
@@ -197,21 +221,16 @@
                                                                             </option>
                                                                         </c:forEach>
                                                                     </select>
-                                                                </div>
+                                                                </div> 
+
                                                             </div>
 
                                                             <div class="row">
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label for="startDate" class="form-label"><strong>Start Date</strong> <span style="color: red;">*</span></label>
-                                                                    <input type="date" class="form-control" id="startDate" name="startDate" value="${project.startDate}">
-                                                                </div>
                                                                 <div class="col-md-6 mb-3">
                                                                     <label for="endDate" class="form-label"><strong>End Date</strong></label>
                                                                     <input type="date" class="form-control" id="endDate" name="endDate" value="${project.endDate}">
                                                                 </div>
-                                                            </div>
 
-                                                            <div class="row">
                                                                 <div class="col-md-6 mb-3">
                                                                     <label for="status" class="form-label"><strong>Status</strong></label>
                                                                     <select class="form-select" id="status" name="status">
@@ -221,12 +240,13 @@
                                                                         <option value="2" ${project.status == 2 ? 'selected' : ''}>Closed</option>
                                                                         <option value="3" ${project.status == 3 ? 'selected' : ''}>Cancelled</option>
                                                                     </select>
-                                                                </div>
+                                                                </div>       
 
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label for="lastUpdated" class="form-label"><strong>Last Updated At</strong></label>
-                                                                    <input type="date" class="form-control" id="lastUpdated" value="${project.lastUpdated}" readonly>
-                                                                </div>
+
+                                                            </div>
+                                                            <div class="col-md-6 mb-3">
+                                                                <label for="lastUpdated" class="form-label"><strong>Last Updated At</strong></label>
+                                                                <input type="date" class="form-control" id="lastUpdated" value="${project.lastUpdated}" readonly>
                                                             </div>
 
                                                             <div class="mb-3">
@@ -279,7 +299,6 @@
                                                     <thead>
                                                         <tr style="text-align: center">
                                                             <th>ID</th>
-                                                            <th>Project</th>
                                                             <th>Milestone</th>
                                                             <th>Parent Milestone</th>
                                                             <th>Priority</th>
@@ -294,7 +313,6 @@
                                                             <c:if test="${milestone.parentMilestone == 0}">
                                                                 <tr style="text-align: center; font-weight: bold;">
                                                                     <td>${milestone.id}</td>
-                                                                    <td>${milestone.projectName}</td>
                                                                     <td>${milestone.name}</td>
                                                                     <td>${milestone.parentMilestoneName}</td>
                                                                     <td>${milestone.priority}</td>

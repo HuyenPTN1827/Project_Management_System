@@ -11,6 +11,7 @@ import model.Department;
 import model.Milestone;
 import model.Project;
 import model.ProjectType;
+import model.Setting;
 import model.User;
 
 /**
@@ -61,7 +62,7 @@ public class ProjectService {
     }
 
     public List<Project> getProjectsDropDown() {
-        
+
         return projectDAO.getProjectsDropDown();
     }
 
@@ -73,16 +74,21 @@ public class ProjectService {
     public List<Milestone> getMilestonesByProjectId(Integer projectId) {
         return projectDAO.getMilestonesByProjectId(projectId);
     }
+
+    public List<ProjectType> getAllProjectType() {
+        return projectDAO.getAllProjectTypes();
+    }
+
+    public List<Department> getAllDepartment() {
+        return projectDAO.getAllDepartments();
+    }
+
+    public boolean isCodeExists(String code) {
+        return projectDAO.isCodeExists(code);
+    }
     
-     public List<ProjectType> getAllProjectType() {
-        return projectDAO.getAllProjectTypes(); 
+    public List<Setting> getAllBizTerm() {
+        return projectDAO.getAllBizTerms();
     }
-      public List<Department> getAllDepartment() {
-        return projectDAO.getAllDepartments(); 
-    }
-      
-      public boolean isCodeExists(String code) {
-    return projectDAO.isCodeExists(code);
-}
 
 }

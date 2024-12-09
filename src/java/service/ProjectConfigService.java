@@ -9,6 +9,7 @@ import java.util.List;
 import model.Allocation;
 import model.Department;
 import model.Project;
+import model.Setting;
 import model.Team;
 import model.TeamMember;
 import model.User;
@@ -124,8 +125,14 @@ public class ProjectConfigService extends BaseServive {
 
         return errors;
     }
+
+    public boolean isCodeExists(String code, int id) {
+        return projectConfigDAO.isCodeExists(code, id);
+    }
+
     
-      public boolean isCodeExists(String code) {
-    return projectConfigDAO.isCodeExists(code);
-}
+    public List<Setting> getAllBizTerms() {
+        return projectConfigDAO.getAllBizTerms();
+    }
+
 }

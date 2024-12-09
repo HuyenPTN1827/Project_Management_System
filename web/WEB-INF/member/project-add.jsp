@@ -75,19 +75,36 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Project Type <span style="color: red;">*</span></label>
                                 <select class="form-select" name="type" required>
-                                   <option value="" hidden disable>Select Type</option>
-                                   <c:forEach var="projecttype" items="${listProjectTypes}">
+                                    <option value="" hidden disable>Select Type</option>
+                                    <c:forEach var="projecttype" items="${listProjectTypes}">
                                         <option value="${projecttype.id}" <c:if test="${projecttype.id == type}">selected</c:if>>
                                             ${projecttype.name}
                                         </option>
                                     </c:forEach>
-                                    </select>
-                                </div>
+                                </select>
+                            </div>
 
-                                <!-- Estimated Effort Field -->
-                                <div class="mb-3 col-md-6">
-                                    <label class="form-label">Estimated Effort (man-days) <span style="color: red;">*</span></label>
-                                    <input type="number" class="form-control" name="estimatedEffort" placeholder="Enter estimated effort" value="${estimatedEffort}" required>
+                            <!-- Biz term Field -->
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label">Project Biz Term <span style="color: red;">*</span></label>
+                                <select class="form-select" name="bizterm" required>
+                                    <option value="" hidden disabled>Select Biz Term</option>
+                                    <!-- Lặp qua danh sách bizTerms -->
+                                    <c:forEach var="bizterm" items="${listBizTerms}">
+                                        <option value="${bizterm.id}" 
+                                                <c:if test="${bizterm.id == selectedBizTermId}">selected</c:if>>
+                                            ${bizterm.name}
+                                        </option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+
+
+
+                            <!-- Estimated Effort Field -->
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label">Estimated Effort (man-days) <span style="color: red;">*</span></label>
+                                <input type="number" class="form-control" name="estimatedEffort" placeholder="Enter estimated effort" value="${estimatedEffort}" required>
                             </div>
 
 
@@ -96,12 +113,19 @@
                                 <label class="form-label">Department<span style="color: red;">*</span></label>
                                 <select class="form-select" name="department" required>
                                     <option value="">Select Department</option>
-                                   <c:forEach var="projectdepartment" items="${listDepartments}">
+                                    <c:forEach var="projectdepartment" items="${listDepartments}">
                                         <option value="${projectdepartment.id}" <c:if test="${projectdepartment.id == department}">selected</c:if>>
                                             ${projectdepartment.name}
                                         </option>
                                     </c:forEach>
                                 </select>
+                            </div>
+                            
+                            
+                            <!-- Start Date Field -->
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label">Start Date</label>
+                                <input type="date" class="form-control" name="startDate" value="${startDate}" required>
                             </div>
 
                             <!-- Project Manager Field -->
@@ -116,12 +140,6 @@
                                         </option>
                                     </c:forEach>
                                 </select>
-                            </div>
-
-                            <!-- Start Date Field -->
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label">Start Date</label>
-                                <input type="date" class="form-control" name="startDate" value="${startDate}" required>
                             </div>
 
                             <!-- End Date Field -->

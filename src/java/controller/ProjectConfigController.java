@@ -35,6 +35,7 @@ import java.util.logging.Logger;
 import model.Allocation;
 import model.Department;
 import model.ProjectTypeSetting;
+import model.Setting;
 import service.DepartmentService;
 import service.ProjectTypeService;
 import service.TeamService;
@@ -233,54 +234,58 @@ public class ProjectConfigController extends HttpServlet {
 
 // Xử lý chỉnh sửa dự án
     private void editProject(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("Start editProject");
+    System.out.println("Start editProject");
 
-        String projectIdString = request.getParameter("id");
+    String projectIdString = request.getParameter("id");
 
-        // Kiểm tra xem projectId có hợp lệ không
-        if (projectIdString == null || projectIdString.isEmpty()) {
-            System.out.println("Project ID is missing");
-            request.setAttribute("errorMessage", "Project ID is required.");
-            return; // Dừng phương thức nếu không có Project ID
-        }
-
-        try {
-            // Chuyển ID dự án từ String sang Integer
-            int projectId = Integer.parseInt(projectIdString);
-            System.out.println("Getting project details for ID: " + projectId);
-
-            // Lấy thông tin dự án từ service
-            Project project = projectConfigService.getProjectById(projectId);
-            List<User> managers = projectConfigService.getAllManagers(); // Lấy tất cả các quản lý
-            List<Project> projectListName = projectConfigService.getAllProjects(); // Lấy tất cả các dự án (có thể là danh sách các tên dự án)
-            List<Department> departments = projectConfigService.getAllDepartment(); // Lấy tất cả các phòng ban
-
-            // Nếu tìm thấy dự án
-            if (project != null) {
-                System.out.println("Project found: " + project.toString());
-                System.out.println("Managers found: " + managers.toString());
-                System.out.println("Departments found: " + departments.toString());
-
-                // Gửi thông tin dự án, quản lý và danh sách phòng ban tới JSP
-                request.setAttribute("project", project);
-                request.setAttribute("listManagers", managers);
-                request.setAttribute("projectListName", projectListName);
-                request.setAttribute("departments", departments); // Thêm danh sách phòng ban
-            } else {
-                // Nếu không tìm thấy dự án, gửi thông báo lỗi
-                System.out.println("Project not found for ID: " + projectId);
-                request.setAttribute("errorMessage", "Project not found.");
-            }
-        } catch (NumberFormatException e) {
-            // Xử lý lỗi khi ID không hợp lệ (không phải là số nguyên)
-            System.out.println("Invalid project ID: " + projectIdString);
-            request.setAttribute("errorMessage", "Invalid project ID.");
-        } catch (Exception e) {
-            // Xử lý các lỗi khác
-            System.out.println("Error retrieving project information: " + e.getMessage());
-            request.setAttribute("errorMessage", "Error retrieving project information.");
-        }
+    // Kiểm tra xem projectId có hợp lệ không
+    if (projectIdString == null || projectIdString.isEmpty()) {
+        System.out.println("Project ID is missing");
+        request.setAttribute("errorMessage", "Project ID is required.");
+        return; // Dừng phương thức nếu không có Project ID
     }
+
+    try {
+        // Chuyển ID dự án từ String sang Integer
+        int projectId = Integer.parseInt(projectIdString);
+        System.out.println("Getting project details for ID: " + projectId);
+
+        // Lấy thông tin dự án từ service
+        Project project = projectConfigService.getProjectById(projectId);
+        List<User> managers = projectConfigService.getAllManagers(); // Lấy tất cả các quản lý
+        List<Project> projectListName = projectConfigService.getAllProjects(); // Lấy tất cả các dự án
+        List<Department> departments = projectConfigService.getAllDepartment(); // Lấy tất cả các phòng ban
+        List<Setting> bizTerms = projectConfigService.getAllBizTerms(); // Lấy tất cả BizTerm
+
+        // Nếu tìm thấy dự án
+        if (project != null) {
+            System.out.println("Project found: " + project.toString());
+            System.out.println("Managers found: " + managers.toString());
+            System.out.println("Departments found: " + departments.toString());
+            System.out.println("BizTerms found: " + bizTerms.toString());
+
+            // Gửi thông tin dự án, quản lý, danh sách phòng ban và bizTerms tới JSP
+            request.setAttribute("project", project);
+            request.setAttribute("listManagers", managers);
+            request.setAttribute("projectListName", projectListName);
+            request.setAttribute("departments", departments); 
+            request.setAttribute("bizTerms", bizTerms); // Thêm danh sách BizTerm
+        } else {
+            // Nếu không tìm thấy dự án, gửi thông báo lỗi
+            System.out.println("Project not found for ID: " + projectId);
+            request.setAttribute("errorMessage", "Project not found.");
+        }
+    } catch (NumberFormatException e) {
+        // Xử lý lỗi khi ID không hợp lệ (không phải là số nguyên)
+        System.out.println("Invalid project ID: " + projectIdString);
+        request.setAttribute("errorMessage", "Invalid project ID.");
+    } catch (Exception e) {
+        // Xử lý các lỗi khác
+        System.out.println("Error retrieving project information: " + e.getMessage());
+        request.setAttribute("errorMessage", "Error retrieving project information.");
+    }
+}
+
 
 // Hàm xử lý lỗi
     private void handleError(HttpServletRequest request, HttpServletResponse response, String errorMessage)
@@ -299,19 +304,22 @@ public class ProjectConfigController extends HttpServlet {
         String projectName = request.getParameter("projectName");
         String projectCode = request.getParameter("projectCode");
         int estimatedEffort = Integer.parseInt(request.getParameter("estimatedEffort"));
+        int bizTermId = Integer.parseInt(request.getParameter("bizTerm"));
 
         // Kiểm tra mã code đã tồn tại
-        if (projectConfigService.isCodeExists(projectCode)) {
+        if (projectConfigService.isCodeExists(projectCode, projectId)) {
             request.setAttribute("error", "Project code already exists. Please use a different code.");
             Project project = projectConfigService.getProjectById(projectId);
             List<User> managers = projectConfigService.getAllManagers(); // Lấy tất cả các quản lý
             List<Project> projectListName = projectConfigService.getAllProjects(); // Lấy tất cả các dự án (có thể là danh sách các tên dự án)
             List<Department> departments = projectConfigService.getAllDepartment(); // Lấy tất cả các phòng ban
+            List<Setting> bizTerms = projectConfigService.getAllBizTerms(); // Lấy tất cả BizTerm
             // Truyền đối tượng project vào request
             request.setAttribute("project", project);
             request.setAttribute("listManagers", managers);
             request.setAttribute("projectListName", projectListName);
             request.setAttribute("departments", departments); // Thêm danh sách phòng ban
+            request.setAttribute("bizTerms", bizTerms); // Thêm danh sách BizTerm
 
             request.getRequestDispatcher("/projectconfig").forward(request, response);
             return;  // Dừng lại nếu mã code đã tồn tại
@@ -375,7 +383,7 @@ public class ProjectConfigController extends HttpServlet {
         project.setDepartmentId(departmentId);
         project.setUserId(projectManagerId);
         project.setLastUpdated(lastUpdated);  // Cập nhật giá trị lastUpdated
-
+        project.setBizTerm(bizTermId);
         // Gọi service để cập nhật thông tin vào cơ sở dữ liệu
         boolean isUpdated = projectConfigService.updateProject(project);
 
@@ -386,12 +394,14 @@ public class ProjectConfigController extends HttpServlet {
             List<User> managers = projectConfigService.getAllManagers(); // Lấy tất cả các quản lý
             List<Project> projectListName = projectConfigService.getAllProjects(); // Lấy tất cả các dự án (có thể là danh sách các tên dự án)
             List<Department> departments = projectConfigService.getAllDepartment(); // Lấy tất cả các phòng ban
+            List<Setting> bizTerms = projectConfigService.getAllBizTerms(); // Lấy tất cả BizTerm
 
 // Truyền lại thông tin dự án, quản lý, và phòng ban vào request
             request.setAttribute("project", updatedProject);
             request.setAttribute("listManagers", managers);
             request.setAttribute("projectListName", projectListName);
             request.setAttribute("departments", departments);
+            request.setAttribute("bizTerms", bizTerms); // Thêm danh sách BizTerm
             request.setAttribute("message", "Project updated successfully.");
             request.getRequestDispatcher("/projectconfig").forward(request, response);
         } else {
@@ -400,12 +410,14 @@ public class ProjectConfigController extends HttpServlet {
             List<User> managers = projectConfigService.getAllManagers(); // Lấy tất cả các quản lý
             List<Project> projectListName = projectConfigService.getAllProjects(); // Lấy tất cả các dự án (có thể là danh sách các tên dự án)
             List<Department> departments = projectConfigService.getAllDepartment(); // Lấy tất cả các phòng ban
+            List<Setting> bizTerms = projectConfigService.getAllBizTerms(); // Lấy tất cả BizTerm
 
 // Truyền lại thông tin dự án, quản lý, và phòng ban vào request
             request.setAttribute("project", updatedProject);
             request.setAttribute("listManagers", managers);
             request.setAttribute("projectListName", projectListName);
             request.setAttribute("departments", departments);
+            request.setAttribute("bizTerms", bizTerms); // Thêm danh sách BizTerm
             request.setAttribute("error", "Failed to update the project.");
             request.getRequestDispatcher("/projectconfig").forward(request, response);
         }
