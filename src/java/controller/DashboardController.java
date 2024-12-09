@@ -13,7 +13,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import model.Department;
+import model.Issue;
+import model.Setting;
 import model.User;
+import service.DepartmentService;
+import service.IssueService;
+import service.SettingService;
 
 /**
  *
@@ -43,6 +51,37 @@ public class DashboardController extends HttpServlet {
 
             if (user != null) {
                 // Chuyển đến trang dashboard.jsp
+                String deptIdStr = request.getParameter("deptId");
+                String bizTermStr = request.getParameter("bizTerm");
+
+                Integer deptId = deptIdStr != null && !deptIdStr.isEmpty() ? Integer.valueOf(deptIdStr) : null;
+                Integer bizTerm = bizTermStr != null && !bizTermStr.isEmpty() ? Integer.valueOf(bizTermStr) : null;
+
+                DepartmentService deptService = new DepartmentService();
+                List<Department> dept = deptService.getAllActiveDepartments();
+                SettingService settingService = new SettingService();
+                List<Setting> setting = settingService.getBizTermsList();
+
+//                IssueService issueService = new IssueService();
+//                List<Issue> issues = issueService.countIssues(deptId, bizTerm);
+//                List<String> labels = new ArrayList<>();
+//                List<Integer> data = new ArrayList<>();
+//
+//                for (Issue issue : issues) {
+//                    labels.add("" + issue.getStatus());
+//                    data.add(issue.getCount());
+//                }
+//
+//                request.setAttribute("labels", labels);
+//                request.setAttribute("data", data);
+                issueChart(request, response, deptId, bizTerm);
+                issueList(request, response);
+
+//                request.setAttribute("issues", issues);
+                request.setAttribute("deptId", deptId);
+                request.setAttribute("bizTerm", bizTerm);
+                request.setAttribute("dept", dept);
+                request.setAttribute("setting", setting);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/dashboard.jsp");
                 dispatcher.forward(request, response);
             } else {
@@ -93,5 +132,27 @@ public class DashboardController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private void issueList(HttpServletRequest request, HttpServletResponse response) {
+        IssueService issueService = new IssueService();
+        List<Issue> listIssue = issueService.get10LastestIssues();
+        request.setAttribute("listIssue", listIssue);
+    }
+
+    private void issueChart(HttpServletRequest request, HttpServletResponse response, Integer deptId, Integer bizTerm) {
+        IssueService issueService = new IssueService();
+        List<Issue> issues = issueService.countIssues(deptId, bizTerm);
+        List<String> labels = new ArrayList<>();
+        List<Integer> data = new ArrayList<>();
+
+        for (Issue issue : issues) {
+            labels.add("" + issue.getStatus());
+            data.add(issue.getCount());
+        }
+
+        request.setAttribute("issues", issues);
+        request.setAttribute("labels", labels);
+        request.setAttribute("data", data);
+    }
 
 }

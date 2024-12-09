@@ -61,19 +61,19 @@
 
                             <!-- Project Name Field -->
                             <div class="mb-3 col-md-6">
-                                <label class="form-label">Project Name <span style="color: red;">*</span></label>
+                                <label class="form-label"><strong>Project Name</strong> <span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" name="name" placeholder="Enter project Name" value="${name}" required>
                             </div>
 
                             <!-- Project Code Field -->
                             <div class="mb-3 col-md-6">
-                                <label class="form-label">Project Code <span style="color: red;">*</span></label>
+                                <label class="form-label"><strong>Project Code</strong> <span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" name="code" placeholder="Enter project Code" value="${code}" required>
                             </div>
 
                             <!--Type Field -->
                             <div class="mb-3 col-md-6">
-                                <label class="form-label">Project Type <span style="color: red;">*</span></label>
+                                <label class="form-label"><strong>Project Type</strong> <span style="color: red;">*</span></label>
                                 <select class="form-select" name="type" required>
                                     <option value="" hidden disable>Select Type</option>
                                     <c:forEach var="projecttype" items="${listProjectTypes}">
@@ -83,6 +83,7 @@
                                     </c:forEach>
                                 </select>
                             </div>
+
 
                             <!-- Biz term Field -->
                             <div class="mb-3 col-md-6">
@@ -101,16 +102,17 @@
 
 
 
+
                             <!-- Estimated Effort Field -->
                             <div class="mb-3 col-md-6">
-                                <label class="form-label">Estimated Effort (man-days) <span style="color: red;">*</span></label>
+                                <label class="form-label"><strong>Estimated Effort (man-days)</strong> <span style="color: red;">*</span></label>
                                 <input type="number" class="form-control" name="estimatedEffort" placeholder="Enter estimated effort" value="${estimatedEffort}" required>
                             </div>
 
 
                             <!-- Department Field -->
                             <div class="mb-3 col-md-6">
-                                <label class="form-label">Department<span style="color: red;">*</span></label>
+                                <label class="form-label"><strong>Department</strong><span style="color: red;">*</span></label>
                                 <select class="form-select" name="department" required>
                                     <option value="">Select Department</option>
                                     <c:forEach var="projectdepartment" items="${listDepartments}">
@@ -120,8 +122,8 @@
                                     </c:forEach>
                                 </select>
                             </div>
-                            
-                            
+
+
                             <!-- Start Date Field -->
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Start Date</label>
@@ -130,7 +132,7 @@
 
                             <!-- Project Manager Field -->
                             <div class="mb-3 col-md-6">
-                                <label class="form-label">Project Manager <span style="color: red;">*</span></label>
+                                <label class="form-label"><strong>Project Manager</strong> <span style="color: red;">*</span></label>
                                 <select class="form-select" name="projectManagerId" required>
                                     <option value="" hidden disable>Select Project Manager</option>
                                     <!-- Populate options dynamically -->
@@ -142,15 +144,17 @@
                                 </select>
                             </div>
 
+
+
                             <!-- End Date Field -->
                             <div class="mb-3 col-md-6">
-                                <label class="form-label">End Date</label>
+                                <label class="form-label"><strong>End Date</strong></label>
                                 <input type="date" class="form-control" name="endDate" value="${endDate}" required>
                             </div>
 
                             <!-- Descriptions Field -->
                             <div class="mb-3 col-md-12">
-                                <label class="form-label">Description</label>
+                                <label class="form-label"><strong>Description</strong></label>
                                 <textarea class="form-control" name="details" placeholder="Enter project type details" rows="3">${details}</textarea>
                             </div>
 

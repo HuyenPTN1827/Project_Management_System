@@ -20,7 +20,7 @@ import service.UserService;
  *
  * @author Admin
  */
-@WebServlet(name = "ChangePasswordController", urlPatterns = {"/changepasswordcontroller"})
+@WebServlet(name = "ChangePasswordController", urlPatterns = {"/changepassword"})
 public class ChangePasswordController extends HttpServlet {
 
     private UserService userService;

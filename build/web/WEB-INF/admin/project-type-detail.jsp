@@ -58,19 +58,29 @@
                         <c:if test="${projectType == null}">
                             <form action="insert-project-type" method="post" class="row">
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Name <span style="color: red;">*</span></label>
+                                    <label class="form-label"><strong>Name</strong> <span style="color: red;">*</span></label>
                                     <input type="text" class="form-control" name="name" placeholder="Enter the Project Type name" 
                                            value="${name}" required>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Code <span style="color: red;">*</span></label>
+                                    <label class="form-label"><strong>Code</strong> <span style="color: red;">*</span></label>
                                     <input type="text" class="form-control" name="code" placeholder="Enter the Project Type code" 
                                            value="${code}" required>
                                 </div>
 
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label"><strong>Status</strong></label>
+                                    <div class="check mt-1">
+                                        <input class="form-check-input" type="radio" name="status" checked
+                                               value="true">&nbsp;Active
+                                        <input class="form-check-input ms-4" type="radio" name="status"
+                                               value="false">&nbsp;Inactive
+                                    </div>
+                                </div>
+
                                 <div class="mb-3 col-md-12">
-                                    <label class="form-label">Details</label>
+                                    <label class="form-label"><strong>Details</strong></label>
                                     <textarea class="form-control" name="details" 
                                               placeholder="Enter the Project Type details" rows="3">${details}</textarea>
                                 </div>
@@ -82,43 +92,76 @@
                         </c:if>
 
                         <c:if test="${projectType != null}">
-                            <form action="update-project-type" method="post" class="row">
-                                <input type="hidden" name="id" value="${projectType.id}">
-                                <div class="mb-3 col-md-6">
-                                    <label class="form-label">Name <span style="color: red;">*</span></label>
-                                    <input type="text" class="form-control" name="name" value="${projectType.name}" required>
-                                </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <label class="form-label">Code <span style="color: red;">*</span></label>
-                                    <input type="text" class="form-control" name="code" value="${projectType.code}" required>
-                                </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <label class="form-label">Status</label>
-                                    <div class="check">
-                                        <input class="form-check-input" type="radio" name="status"
-                                               <c:if test="${projectType.status eq 'true'}">
-                                                   checked
-                                               </c:if>
-                                               value="true"> Active
-                                        <input class="form-check-input ms-3" type="radio" name="status"
-                                               <c:if test="${projectType.status eq 'false'}">
-                                                   checked
-                                               </c:if>
-                                               value="false"> Inactive
+                            <c:if test="${action == 'edit'}">
+                                <form action="update-project-type" method="post" class="row">
+                                    <input type="hidden" name="id" value="${projectType.id}">
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Name</strong> <span style="color: red;">*</span></label>
+                                        <input type="text" class="form-control" name="name" value="${projectType.name}" required>
                                     </div>
-                                </div>
 
-                                <div class="mb-3 col-md-12">
-                                    <label class="form-label">Details</label>
-                                    <textarea class="form-control" name="details" rows="3">${projectType.details}</textarea>
-                                </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Code</strong> <span style="color: red;">*</span></label>
+                                        <input type="text" class="form-control" name="code" value="${projectType.code}" required>
+                                    </div>
 
-                                <div class="d-flex justify-content-end">
-                                    <button type="submit" class="btn btn-lg btn-success">Submit</button>
-                                </div>
-                            </form>
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Status</strong></label>
+                                        <div class="check mt-1">
+                                            <input class="form-check-input" type="radio" name="status"
+                                                   <c:if test="${projectType.status eq 'true'}">
+                                                       checked
+                                                   </c:if>
+                                                   value="true">&nbsp;Active
+                                            <input class="form-check-input ms-4" type="radio" name="status"
+                                                   <c:if test="${projectType.status eq 'false'}">
+                                                       checked
+                                                   </c:if>
+                                                   value="false">&nbsp;Inactive
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3 col-md-12">
+                                        <label class="form-label"><strong>Details</strong></label>
+                                        <textarea class="form-control" name="details" rows="3">${projectType.details}</textarea>
+                                    </div>
+
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-lg btn-success">Submit</button>
+                                    </div>
+                                </form>
+                            </c:if>
+
+                            <c:if test="${action == 'view'}">
+                                <form action="update-project-type" method="post" class="row">
+                                    <input type="hidden" name="id" value="${projectType.id}">
+                                    <div class="mb-3 col-md-12">
+                                        <label class="form-label"><strong>Name</strong> <span style="color: red;">*</span></label>
+                                        <input type="text" class="form-control" name="name" value="${projectType.name}" readonly>
+                                    </div>
+
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Code</strong> <span style="color: red;">*</span></label>
+                                        <input type="text" class="form-control" name="code" value="${projectType.code}" readonly>
+                                    </div>
+
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Status</strong></label>
+                                        <c:if test="${projectType.status eq 'true'}">
+                                            <input type="text" class="form-control" name="status" value="Active" readonly>
+                                        </c:if>
+                                            
+                                        <c:if test="${projectType.status eq 'false'}">
+                                            <input type="text" class="form-control" name="status" value="Inactive" readonly>
+                                        </c:if>
+                                    </div>
+
+                                    <div class="mb-3 col-md-12">
+                                        <label class="form-label"><strong>Details</strong></label>
+                                        <textarea class="form-control" name="details" rows="3" readonly>${projectType.details}</textarea>
+                                    </div>
+                                </form>
+                            </c:if>
                         </c:if>
                     </div>
                 </div>
@@ -126,26 +169,5 @@
         </div>
         <script src="${pageContext.request.contextPath}/js/app.js"></script>
 
-        <script>
-            document.addEventListener("DOMContentLoaded", function (event) {
-                setTimeout(function () {
-                    if (localStorage.getItem('popState') !== 'shown') {
-                        window.notyf.open({
-                            type: "success",
-                            message: "Get access to all 500+ components and 45+ pages with AdminKit PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
-                            duration: 10000,
-                            ripple: true,
-                            dismissible: false,
-                            position: {
-                                x: "left",
-                                y: "bottom"
-                            }
-                        });
-
-                        localStorage.setItem('popState', 'shown');
-                    }
-                }, 15000);
-            });
-        </script>
     </body>
 </html>

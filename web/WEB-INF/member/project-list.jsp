@@ -135,14 +135,26 @@
                                                 </div>
 
                                                 <div class="col-md-2">
-                                                    <button type="submit" class="btn btn-primary">Search</button>
+                                                    <c:if test="${user == null}">
+                                                        <a class="btn btn-primary" href="<%=request.getContextPath()%>/logout">Search</a>
+                                                    </c:if>
+
+                                                    <c:if test="${user != null}">
+                                                        <button type="submit" class="btn btn-primary">Search</button>
+                                                    </c:if>
                                                 </div>
                                             </form>
 
                                             <div class="col-md-2 d-flex justify-content-end align-items-end">
-                                                <!--<a class="btn btn-primary" href="<%=request.getContextPath()%>/add-user">Create new</a>-->
 
-                                                <a class="btn btn-primary" href="javascript:void(0);" onclick="openProjectModal();">Create new</a>
+                                                <c:if test="${user == null}">
+                                                    <a class="btn btn-primary" href="<%=request.getContextPath()%>/logout">Create new</a>
+                                                </c:if>
+
+                                                <c:if test="${user != null && user.role_id == 2}">
+                                                    <a class="btn btn-primary" href="javascript:void(0);" onclick="openProjectModal();">Create new</a>
+                                                </c:if>
+
                                             </div>
                                         </div>
                                     </div>
@@ -187,11 +199,24 @@
                                                         </td>
 
                                                         <td>
-                                                            <!--<a href="<%=request.getContextPath()%>/edit-project?id=${project.id}" class="btn btn-link text-primary">Edit</a>-->
-                                                            <a href="<%=request.getContextPath()%>/projectconfig?id=${project.id}" class="btn btn-secondary">
-                                                                <i class="align-middle" data-feather="settings"></i>
-                                                            </a>
+                                                            <c:if test="${user == null}">
+                                                                <a href="<%=request.getContextPath()%>/login" class="btn btn-secondary">
+                                                                    <i class="align-middle" data-feather="settings"></i>
+                                                                </a>
+                                                            </c:if>
 
+                                                            <c:if test="${user != null}">
+                                                                <c:if test="${user.role_id == 5}">
+                                                                    <a href="<%=request.getContextPath()%>/projectconfig?id=${project.id}&action=view" class="btn btn-secondary">
+                                                                        <i class="align-middle" data-feather="settings"></i>
+                                                                    </a>
+                                                                </c:if>
+                                                                <c:if test="${user.role_id != 5}">
+                                                                    <a href="<%=request.getContextPath()%>/projectconfig?id=${project.id}&action=edit" class="btn btn-secondary">
+                                                                        <i class="align-middle" data-feather="settings"></i>
+                                                                    </a>
+                                                                </c:if>
+                                                            </c:if>
                                                         </td>
                                                     </tr>
                                                 </c:forEach>

@@ -132,7 +132,7 @@ public class ProjectConfigDAO {
                 milestone.setCreatedBy(rs.getInt("created_by"));
                 milestone.setLastUpdated(rs.getString("last_updated"));
                 milestone.setName(rs.getString("name"));
-                milestone.setParentMilestone(rs.getInt("parent_milestone_name")); // Lấy tên milestone cha (nếu có)
+                milestone.setParentMilestone(rs.getInt("parent_milestone")); // Lấy tên milestone cha (nếu có)
                 milestone.setPriority(rs.getInt("priority"));
                 milestone.setTargetDate(rs.getDate("target_date"));
                 milestone.setStatus(rs.getInt("status"));
@@ -140,6 +140,7 @@ public class ProjectConfigDAO {
                 milestone.setDetails(rs.getString("details"));
                 milestone.setProjectId(rs.getInt("project_id"));
                 milestone.setProjectName(rs.getString("project_name")); // Lấy tên project
+                milestone.setParentMilestoneName(rs.getString("parent_milestone_name"));
 
                 milestones.add(milestone);
             }
@@ -288,6 +289,7 @@ public class ProjectConfigDAO {
    public Project getProjectById(int id) {
     Project project = null; // Khởi tạo project
 
+
     // Câu lệnh SQL để lấy thông tin dự án, bao gồm cả tên loại dự án và biz_term từ bảng setting
     String sql = "SELECT DISTINCT p.id, p.code, p.name, p.details, p.start_date, p.end_date, p.last_updated, "
             + "p.estimated_effort, p.status, p.type_id, p.department_id, p.user_id, "
@@ -299,9 +301,11 @@ public class ProjectConfigDAO {
             + "LEFT JOIN setting s ON p.biz_term = s.id " // JOIN với bảng setting dựa trên bizterm
             + "WHERE p.id = ?"; // Điều kiện WHERE để tìm dự án theo ID
 
+
     try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
         stm.setInt(1, id); // Thiết lập ID dự án
         ResultSet rs = stm.executeQuery();
+
 
         if (rs.next()) { // Nếu có kết quả
             project = new Project(); // Tạo đối tượng Project
@@ -321,6 +325,7 @@ public class ProjectConfigDAO {
             project.setTypeName(rs.getString("type_name")); // Tên loại dự án
             project.setDepartmentCode(rs.getString("department_code")); // Mã bộ phận
             project.setBizTermName(rs.getString("biz_term_name")); // Lấy tên biz_term từ bảng setting
+
         }
     } catch (SQLException e) {
         BaseDAO.printSQLException(e); // Xử lý lỗi SQL

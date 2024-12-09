@@ -144,6 +144,7 @@ public class SettingController extends HttpServlet {
         String type = request.getParameter("type");
         String value = request.getParameter("value");
         int priority = Integer.parseInt(request.getParameter("priority"));
+        boolean status = Boolean.parseBoolean(request.getParameter("status"));
         String description = request.getParameter("description");
 
         Setting s = new Setting();
@@ -151,6 +152,7 @@ public class SettingController extends HttpServlet {
         s.setType(type);
         s.setValue(value);
         s.setPriority(priority);
+        s.setStatus(status);
         s.setDescription(description);
 
         settingService.insertSetting(s);

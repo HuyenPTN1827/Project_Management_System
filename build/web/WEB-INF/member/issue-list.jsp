@@ -204,7 +204,7 @@
                                                     <th>ID</th>
                                                     <th>Issue</th>
                                                     <th>Type</th>
-                                                    <th>Project</th>
+                                                    <!--<th>Project</th>-->
                                                     <th>Milestone</th>
                                                     <!--<th>Work Package</th>-->
                                                     <th>Assigner</th>
@@ -219,7 +219,7 @@
                                                     <tr style="text-align: center">
                                                         <td>${issue.id}</td>
                                                         <td>${issue.name}</td>
-                                                        <td>${issue.type.name}</td>
+                                                        <!--<td>${issue.type.name}</td>-->
                                                         <td>${issue.project.code}</td>
                                                         <td>${issue.milestone.name}</td>
                                                         <!--<td>${issue.scope.title}</td>-->
@@ -312,7 +312,7 @@
                                                                 info: true,
                                                                 order: [[0, 'desc']], // Default sort by ID column in descending order
                                                                 columnDefs: [
-                                                                    {orderable: false, targets: 9} // Disable sorting on the 'Action' column
+                                                                    {orderable: false, targets: 8} // Disable sorting on the 'Action' column
                                                                 ],
                                                                 language: {
                                                                     paginate: {

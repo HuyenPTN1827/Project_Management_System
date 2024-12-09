@@ -40,6 +40,27 @@ public class SettingDAO {
         }
         return setting;
     }
+    
+    // Get biz term list
+    public List<Setting> getBizTermsList() {
+        List<Setting> setting = new ArrayList<>();
+
+        String sql = "SELECT * FROM pms.setting WHERE type = 'Business Term' ORDER BY id ASC;";
+        
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Setting s = new Setting();
+                s.setId(rs.getInt("id"));
+                s.setName(rs.getString("name"));
+                s.setValue(rs.getString("value"));
+                setting.add(s);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return setting;
+    }
 
     // HuyenPTNHE160769
     // 22/10/2024
@@ -157,15 +178,16 @@ public class SettingDAO {
 //    Admin add new setting
     public int insertSetting(Setting setting) throws SQLException {
         int result = 0;
-        String sql = "INSERT INTO pms.setting (name, type, value, priority, description) "
-                + "VALUES (?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO pms.setting (name, type, value, priority, status, description) "
+                + "VALUES (?, ?, ?, ?, ?, ?);";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             stm.setString(1, setting.getName());
             stm.setString(2, setting.getType());
             stm.setString(3, setting.getValue());
             stm.setInt(4, setting.getPriority());
-            stm.setString(5, setting.getDescription());
+            stm.setBoolean(5, setting.isStatus());
+            stm.setString(6, setting.getDescription());
 
             result = stm.executeUpdate();
         } catch (SQLException e) {

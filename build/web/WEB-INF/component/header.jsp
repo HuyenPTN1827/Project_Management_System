@@ -58,7 +58,7 @@
                 <a class="nav-link <c:if test="${currentPage == 'defect-management'}">active</c:if>" 
                    href="#" hidden>Defects</a>
                 </li>   
-                
+
                 <li class="nav-item px-1">
                     <a class="nav-link <c:if test="${currentPage == 'timesheet-management'}">active</c:if>" 
                        href="#">Timesheets</a>
@@ -145,14 +145,20 @@
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-icon pe-md-0 dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                        <img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded" alt="Charles Hall" />
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-end">
-                        <a class="dropdown-item" href="member-profilecontroller"><i class="align-middle me-1" data-feather="user"></i> Settings & Profile</a>
-                        <a class="dropdown-item" href="changepasswordcontroller"><i class="align-middle me-1" data-feather="pie-chart"></i> Change password</a>
+                    <c:if test="${user.avatar == null}">
+                        <img src="img/avatars/avatar-default.png" alt="${user.full_name}" class="avatar img-fluid rounded"/>
+                    </c:if>
 
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="<%=request.getContextPath()%>/logout">Log out</a>
+                    <c:if test="${user.avatar != null}">
+                        <img src="img/avatars/${user.avatar}" alt="${user.full_name}" class="avatar img-fluid rounded"/>
+                    </c:if>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end">
+                    <a class="dropdown-item" href="member-profile"><i class="align-middle me-1" data-feather="user"></i> Settings & Profile</a>
+                    <a class="dropdown-item" href="changepassword"><i class="align-middle me-1" data-feather="pie-chart"></i> Change password</a>
+
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="<%=request.getContextPath()%>/logout">Log out</a>
                 </div>
             </li>
         </ul>

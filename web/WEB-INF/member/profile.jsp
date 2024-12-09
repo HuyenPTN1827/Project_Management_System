@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="model.User" %>
 <!DOCTYPE html>
@@ -34,6 +35,22 @@
             }
             gtag('js', new Date());
             gtag('config', 'UA-120946860-10', {'anonymize_ip': true});
+
+            feather.replace();
+        </script>
+
+        <script>
+            // Hiện biểu tượng camera khi di chuột vào avatar
+            const avatarLabel = document.querySelector('label[for="avatar-input"]');
+            const cameraIcon = document.getElementById('camera-icon');
+
+            avatarLabel.addEventListener('mouseenter', function () {
+                cameraIcon.style.display = 'block';
+            });
+
+            avatarLabel.addEventListener('mouseleave', function () {
+                cameraIcon.style.display = 'none';
+            });
         </script>
     </head>
 
@@ -57,10 +74,32 @@
                                             <h5 class="card-title mb-0">Profile Details</h5>
                                         </div>
                                         <div class="card-body text-center">
-                                            <img src="img/avatars/avatar-4.jpg" 
-                                                 alt="${userProfile.full_name}" 
-                                            class="img-fluid rounded-circle mb-2" width="128" height="128" />
-                                        <h5 class="card-title mb-0">${userProfile.full_name}</h5>
+
+                                        <c:if test="${userProfile.avatar == null}">
+                                            <label for="avatar-input" class="cursor-pointer position-relative">
+                                                <img src="img/avatars/avatar-default.png" alt="${userProfile.full_name}" 
+                                                     class="img-fluid rounded-circle mb-2" width="128" height="128" />
+                                                <div class="position-absolute top-50 start-50 translate-middle text-white" 
+                                                     style="display: none;" id="camera-icon" data-feather="camera" width="32" height="32"></div>
+                                            </label>
+                                        </c:if>
+
+                                        <c:if test="${userProfile.avatar != null}">
+                                            <label for="avatar-input" class="cursor-pointer position-relative">
+                                                <img src="img/avatars/${userProfile.avatar}" alt="${userProfile.full_name}" 
+                                                     class="img-fluid rounded-circle mb-2" width="128" height="128" />
+                                                <div class="position-absolute top-50 start-50 translate-middle text-white" 
+                                                     style="display: none;" id="camera-icon" data-feather="camera" width="32" height="32"></div>
+                                            </label>
+                                        </c:if>
+
+                                        <form action="change-avatar" method="post" enctype="multipart/form-data" id="avatar-form">
+                                            <input type="hidden" name="userId" value="${userProfile.id}">
+                                            <input type="file" id="avatar-input" name="avatar" class="d-none" accept="image/png, image/jpeg, image/webp"
+                                                   onchange="this.form.submit();">
+                                        </form>
+
+                                        <h5 class="card-title mt-3 mb-0">${userProfile.full_name}</h5>
                                         <div class="text-muted mb-2">${userProfile.role_name}</div>
                                         <div class="text-muted mb-2">Viet Nam</div>
                                     </div>
@@ -86,28 +125,28 @@
                                     <div class="card-header position-relative">
                                         <h5 class="card-title">Edit Profile</h5>
                                         <h6 class="card-subtitle text-muted">Update your profile here.</h6>
-                                        <a href="changepasswordcontroller" class="btn btn-link" style="position: absolute; top: 10px; right: 10px;">
+                                        <a href="changepassword" class="btn btn-link" style="position: absolute; top: 10px; right: 10px;">
                                             <i class="align-middle me-1" data-feather="lock"></i> Change Password
                                         </a>
                                     </div>
 
                                     <div class="card-body">
-                                        <form action="${pageContext.request.contextPath}/member-profilecontroller" method="post" class="row">
+                                        <form action="${pageContext.request.contextPath}/member-profile" method="post" class="row">
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="inputName">Full Name</label>
                                                 <input type="text" class="form-control" id="inputName" name="fullname" value="${userProfile.full_name}" >
                                             </div>
-                                            
+
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="inputCity">User Name</label>
                                                 <input type="text" class="form-control" id="roles" name="username" value="${userProfile.username}" >
                                             </div>
-                                            
+
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="inputEmail4">Email</label>
                                                 <input type="email" class="form-control" id="inputEmail4" name="email" value="${userProfile.email}" >
                                             </div>
-                                            
+
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="phone">Phone</label>
                                                 <input type="text" class="form-control" id="phone" name="mobile" value="${userProfile.mobile}" >
@@ -117,23 +156,21 @@
                                                 <label class="form-label" for="inputCity">Department</label>
                                                 <input type="text" class="form-control" id="roles" name="department" value="${userProfile.department}" readonly>
                                             </div>
-                                            
+
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="inputCity">Role</label>
                                                 <input type="text" class="form-control" id="roles" name="roles" value="${userProfile.role_name}" readonly>
                                             </div>
-                                            
-                                            <div style="color: green;">
-                                                ${message}
-                                            </div>
-                                            <div style="color: red;">
-                                                ${err}
-                                            </div>
-                                            
+
+                                            <%
+                                                String message = (String) request.getAttribute("message");
+                                                String error = (String) request.getAttribute("err");
+                                            %>
+
                                             <div>
                                                 <button type="submit" class="btn btn-lg btn-success">Save Changes</button>
                                             </div>
-                                            
+
                                         </form>
                                     </div>
                                 </div>
@@ -166,27 +203,55 @@
 
         <script src="js/app.js"></script>
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                // Pie chart
-                new Chart(document.getElementById("chartjs-dashboard-pie"), {
-                    type: "pie",
-                    data: {
-                        labels: ["Working time", "Not work"],
-                        datasets: [{
-                                data: [4306, 1251],
-                                backgroundColor: [window.theme.primary, "#E8EAED"],
-                                borderWidth: 5,
-                                borderColor: window.theme.white
-                            }]
-                    },
-                    options: {
-                        responsive: !window.MSInputMethodContext,
-                        maintainAspectRatio: false,
-                        legend: {display: false},
-                        cutoutPercentage: 70
-                    }
-                });
-            });
+                                                       document.addEventListener("DOMContentLoaded", function () {
+                                                           // Pie chart
+                                                           new Chart(document.getElementById("chartjs-dashboard-pie"), {
+                                                               type: "pie",
+                                                               data: {
+                                                                   labels: ["Working time", "Not work"],
+                                                                   datasets: [{
+                                                                           data: [4306, 1251],
+                                                                           backgroundColor: [window.theme.primary, "#E8EAED"],
+                                                                           borderWidth: 5,
+                                                                           borderColor: window.theme.white
+                                                                       }]
+                                                               },
+                                                               options: {
+                                                                   responsive: !window.MSInputMethodContext,
+                                                                   maintainAspectRatio: false,
+                                                                   legend: {display: false},
+                                                                   cutoutPercentage: 70
+                                                               }
+                                                           });
+                                                       });
+
+                                                       document.addEventListener("DOMContentLoaded", function () {
+                                                            <% if (message != null) { %>
+                                                           window.notyf.open({
+                                                               type: "success",
+                                                               message: "<%= message %>",
+                                                               duration: 5000,
+                                                               ripple: true,
+                                                               dismissible: true,
+                                                               position: {
+                                                                   x: "right",
+                                                                   y: "top"
+                                                               }
+                                                           });
+                                                            <% } else if (error != null) { %>
+                                                           window.notyf.open({
+                                                               type: "error",
+                                                               message: "<%= error %>",
+                                                               duration: 5000,
+                                                               ripple: true,
+                                                               dismissible: true,
+                                                               position: {
+                                                                   x: "right",
+                                                                   y: "top"
+                                                               }
+                                                           });
+            <% } %>
+                                                       });
         </script>
     </body>
 

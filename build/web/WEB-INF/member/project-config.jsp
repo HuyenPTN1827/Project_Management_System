@@ -56,6 +56,35 @@
                     history.replaceState(null, '', url);
                 });
             });
+
+            // Lắng nghe sự kiện thay đổi trong localStorage
+            window.addEventListener('storage', (event) => {
+                if (event.key === 'errorNotification' && event.newValue) {
+                    const message = event.newValue;
+                    showErrorNotification(message);
+                    // Xóa thông báo sau khi hiển thị để tránh hiển thị lại
+                    localStorage.removeItem('errorNotification');
+                }
+            });
+
+            // Hàm dùng chung để hiển thị thông báo lỗi
+            function showErrorNotification(message) {
+                if (window.notyf) {
+                    window.notyf.open({
+                        type: "error",
+                        message: message,
+                        duration: 5000, // Thời gian hiển thị
+                        ripple: true,
+                        dismissible: true,
+                        position: {
+                            x: "right",
+                            y: "top",
+                        },
+                    });
+                } else {
+                    console.error("Notyf library is not loaded.");
+                }
+            }
         </script>
     </head>
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
@@ -70,7 +99,8 @@
                             <a href="<%=request.getContextPath()%>/projectlist">Project Management > </a>
 
                         <div class="mt-2 mb-3">
-                            <h1 class="h1 d-inline align-middle">Project Details</h1>
+                            <h1 class="h1 d-inline align-middle">Project Configs</h1>
+                            <input type="hidden" id="action" value="${action}"/>
                         </div>
                         <div class="row">
                             <div class="col-md-12 col-xl-12">
@@ -98,7 +128,7 @@
                                                 </a>
                                             </li>
 
-                                            <li class="nav-item">
+                                            <li class="nav-item" hidden>
                                                 <a class="nav-link ${activeTab == 'team' ? 'active' : ''}" id="team-tab" data-bs-toggle="tab" 
                                                    href="#team" role="tab" aria-controls="team" aria-selected="false">
                                                     Teams
@@ -108,8 +138,9 @@
                                             <li class="nav-item col-md-3 ms-auto">
                                                 <form action="${pageContext.request.contextPath}/projectconfig" method="get">
                                                     <input type="hidden" name="activeTab" value="${activeTab}">
+                                                    <input type="hidden" name="action" value="${action}"/>
                                                     <select name="id" class="form-select" onchange="this.form.submit()">
-                                                        <option value="">Select Project</option>
+                                                        <option value="" hidden disable>Select Project</option>
                                                         <c:forEach var="project" items="${projectList}">
                                                             <option value="${project.id}" ${project.id == param.id ? 'selected' : ''}>
                                                                 ${project.name}
@@ -125,6 +156,7 @@
                                         <div class="tab-content" id="myTabContent">
                                             <!-- Project Details -->
                                             <div class="tab-pane fade ${activeTab == 'detail' ? 'show active' : ''}" id="project-detail" role="tabpanel" aria-labelledby="project-detail-tab">
+                                                <h3 class="mb-3"> General Information</h3>
                                                 <div class="row">
                                                     <div class="col-md-12 col-xl-12">
                                                         <c:if test="${not empty message}">
@@ -142,19 +174,21 @@
                                                         ${errors}
 
                                                         <form action="updateproject" method="post">
-                                                            <!-- Hidden input to include project ID -->
-                                                            <input type="hidden" name="projectId" value="${project.id}" />
+                                                            <c:if test="${action == 'edit'}">
+                                                                <!-- Hidden input to include project ID -->
+                                                                <input type="hidden" name="projectId" value="${project.id}" />
 
-                                                            <div class="row">
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label for="projectName" class="form-label"><strong>Name</strong> <span style="color: red;">*</span></label>
-                                                                    <input type="text" class="form-control" id="projectName" name="projectName" placeholder="Project Name" value="${project.name}">
+                                                                <div class="row">
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="projectName" class="form-label"><strong>Name</strong> <span style="color: red;">*</span></label>
+                                                                        <input type="text" class="form-control" id="projectName" name="projectName" placeholder="Project Name" value="${project.name}">
+                                                                    </div>
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="projectCode" class="form-label"><strong>Code</strong> <span style="color: red;">*</span></label>
+                                                                        <input type="text" class="form-control" id="projectCode" name="projectCode" placeholder="PrjCode" value="${project.code}">
+                                                                    </div>
                                                                 </div>
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label for="projectCode" class="form-label"><strong>Code</strong> <span style="color: red;">*</span></label>
-                                                                    <input type="text" class="form-control" id="projectCode" name="projectCode" placeholder="PrjCode" value="${project.code}">
-                                                                </div>
-                                                            </div>
+
 
                                                             <div class="row">
                                                                 <div class="col-md-6 mb-3">
@@ -193,15 +227,18 @@
                                                                             ${project.departmentName} 
                                                                         </option>
 
-                                                                        <!-- Hiển thị danh sách tất cả các phòng ban -->
-                                                                        <c:forEach var="department" items="${departments}">
-                                                                            <option value="${department.id}" 
-                                                                                    ${department.id == project.departmentId ? 'selected' : ''}>
-                                                                                ${department.name} 
-                                                                            </option>
-                                                                        </c:forEach>
-                                                                    </select>
+                                                                            <!-- Hiển thị danh sách tất cả các phòng ban -->
+                                                                            <c:forEach var="department" items="${departments}">
+                                                                                <option value="${department.id}" 
+                                                                                        ${department.id == project.departmentId ? 'selected' : ''}>
+                                                                                    ${department.name} 
+                                                                                </option>
+                                                                            </c:forEach>
+                                                                        </select>
+                                                                    </div>
+
                                                                 </div>
+
 
                                                             </div>
 
@@ -249,50 +286,145 @@
                                                                 <input type="date" class="form-control" id="lastUpdated" value="${project.lastUpdated}" readonly>
                                                             </div>
 
-                                                            <div class="mb-3">
-                                                                <label for="description" class="form-label"><strong>Description</strong></label>
-                                                                <textarea class="form-control" id="description" name="description" rows="3">${project.details}</textarea>
-                                                            </div>
+                                                                <div class="mb-3">
+                                                                    <label for="description" class="form-label"><strong>Description</strong></label>
+                                                                    <textarea class="form-control" id="description" name="description" rows="3">${project.details}</textarea>
+                                                                </div>
 
-                                                            <button type="submit" class="btn btn-lg btn-success">Submit</button>
+                                                                <button type="submit" class="btn btn-lg btn-success" onclick="return validateAndSubmitForm(event, ${param.id});">Submit</button>
+                                                            </c:if>
+
+                                                            <c:if test="${action == 'view'}">
+                                                                <!-- Hidden input to include project ID -->
+                                                                <input type="hidden" name="projectId" value="${project.id}" />
+
+                                                                <div class="row">
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="projectName" class="form-label"><strong>Name</strong> <span style="color: red;">*</span></label>
+                                                                        <input type="text" class="form-control" id="projectName" name="projectName" placeholder="Project Name" value="${project.name}" readonly>
+                                                                    </div>
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="projectCode" class="form-label"><strong>Code</strong> <span style="color: red;">*</span></label>
+                                                                        <input type="text" class="form-control" id="projectCode" name="projectCode" placeholder="PrjCode" value="${project.code}" readonly>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="row">
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="projectType" class="form-label"><strong>Project Type</strong></label>
+                                                                        <input type="text" class="form-control" id="projectType" name="projectType" placeholder="Project Type" value="${project.typeName}" readonly>
+                                                                    </div>
+
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="department" class="form-label"><strong>Department</strong> <span style="color: red;">*</span></label>
+                                                                        <input type="text" class="form-control" id="department" name="department" placeholder="Department" value="${project.departmentName}" readonly>
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="row">
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="estimatedEffort" class="form-label"><strong>Estimated Effort (man-days)</strong> <span style="color: red;">*</span></label>
+                                                                        <input type="number" class="form-control" id="estimatedEffort" name="estimatedEffort" value="${project.estimatedEffort}" readonly>
+                                                                    </div>
+
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="projectManager" class="form-label"><strong>Project Manager</strong> <span style="color: red;">*</span></label>
+                                                                        <input type="tex6" class="form-control" id="projectManager" name="projectManager" value="${user.full_name}" readonly>
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="row">
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="startDate" class="form-label"><strong>Start Date</strong> <span style="color: red;">*</span></label>
+                                                                        <input type="date" class="form-control" id="startDate" name="startDate" value="${project.startDate}" readonly>
+                                                                    </div>
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="endDate" class="form-label"><strong>End Date</strong></label>
+                                                                        <input type="date" class="form-control" id="endDate" name="endDate" value="${project.endDate}" readonly>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="row">
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="status" class="form-label"><strong>Status</strong></label>
+                                                                        <c:if test="${project.status eq '0'}">
+                                                                            <input type="text" class="form-control" placeholder="Project Status" 
+                                                                                   value="Pending" readonly>
+                                                                        </c:if>
+                                                                        <c:if test="${dept.status eq '1'}">
+                                                                            <input type="text" class="form-control" placeholder="Project Status" 
+                                                                                   value="Doing" readonly>
+                                                                        </c:if>
+                                                                        <c:if test="${dept.status eq '2'}">
+                                                                            <input type="text" class="form-control" placeholder="Project Status" 
+                                                                                   value="Closed" readonly>
+                                                                        </c:if>
+                                                                        <c:if test="${dept.status eq '3'}">
+                                                                            <input type="text" class="form-control" placeholder="Project Status" 
+                                                                                   value="Cancelled" readonly>
+                                                                        </c:if>
+                                                                    </div>
+
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label for="lastUpdated" class="form-label"><strong>Last Updated At</strong></label>
+                                                                        <input type="date" class="form-control" id="lastUpdated" value="${project.lastUpdated}" readonly>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="mb-3">
+                                                                    <label for="description" class="form-label"><strong>Description</strong></label>
+                                                                    <textarea class="form-control" id="description" name="description" rows="3" readonly>${project.details}</textarea>
+                                                                </div>
+
+                                                            </c:if>
                                                         </form>
                                                     </div>
                                                 </div>
                                             </div>
 
+                                            <script>
+                                                function validateAndSubmitForm(event, projectId) {
+                                                    // Kiểm tra nếu projectId là null hoặc undefined
+                                                    if (!projectId) {
+                                                        const errorMessage = "Please select a project first!";
+
+                                                        // Lưu thông báo lỗi vào localStorage để đồng bộ giữa các tab
+                                                        localStorage.setItem('errorNotification', errorMessage);
+
+                                                        // Hiển thị thông báo lỗi trên tab hiện tại
+                                                        showErrorNotification(errorMessage);
+
+                                                        // Ngăn form được submit
+                                                        event.preventDefault();
+                                                        return false;
+                                                    }
+
+                                                    // Nếu projectId hợp lệ, cho phép form tiếp tục được submit
+                                                    return true;
+                                                }
+                                            </script>
+
                                             <!-- Milestone Tab -->
                                             <div class="tab-pane fade ${activeTab == 'milestone' ? 'show active' : ''}" id="milestone" role="tabpanel" aria-labelledby="milestone-tab">
                                                 <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 15px;">
-                                                    <!-- Form lọc và tìm kiếm Milestone -->
-                                                    <form action="filterandsearchmilestone" method="get" id="filterForm" class="d-flex align-items-center" style="gap: 15px;">
-                                                        <!-- Input ẩn để gửi projectId -->
-                                                        <input type="hidden" name="projectId" value="${param.id}" />
 
-                                                        <!-- Dropdown lọc trạng thái -->
-                                                        <div class="col-md-4">
-                                                            <select class="form-select me-2" name="statusFilter" id="statusFilter" onchange="this.form.submit()">
-                                                                <option value="">All Status</option>
-                                                                <option value="0" ${param.statusFilter == '0' ? 'selected' : ''}>Pending</option>
-                                                                <option value="1" ${param.statusFilter == '1' ? 'selected' : ''}>Doing</option>
-                                                                <option value="2" ${param.statusFilter == '2' ? 'selected' : ''}>Closed</option>
-                                                                <option value="3" ${param.statusFilter == '3' ? 'selected' : ''}>Cancelled</option>
-                                                            </select>
-                                                        </div>
+                                                    <!--                                                     Dropdown lọc trạng thái 
+                                                                                                        <div class="col-md-4">
+                                                                                                            <select class="form-select me-2" name="statusFilter" id="statusFilter" onchange="this.form.submit()">
+                                                                                                                <option value="">All Status</option>
+                                                                                                                <option value="0" ${param.statusFilter == '0' ? 'selected' : ''}>Pending</option>
+                                                                                                                <option value="1" ${param.statusFilter == '1' ? 'selected' : ''}>Doing</option>
+                                                                                                                <option value="2" ${param.statusFilter == '2' ? 'selected' : ''}>Closed</option>
+                                                                                                                <option value="3" ${param.statusFilter == '3' ? 'selected' : ''}>Cancelled</option>
+                                                                                                            </select>
+                                                                                                        </div>-->
 
-                                                        <div class="col-md-7">
-                                                            <!-- Input tìm kiếm -->
-                                                            <input type="text" class="form-control" name="searchKeyword" placeholder="Search keyword" value="${param.searchKeyword}">
-                                                        </div>
-
-                                                        <!-- Nút tìm kiếm -->
-                                                        <div>
-                                                            <button class="btn btn-primary" type="submit">Search</button>
-                                                        </div>
-                                                    </form>
-
-                                                    <!-- Nút thêm mới Milestone -->
-                                                    <!--<a href="#" class="btn btn-primary" id="addNewMilestoneButton">Add New</a>-->
-                                                    <a class="btn btn-primary" href="javascript:void(0);" onclick="openMilestoneModal(${param.id});">Create new</a>
+                                                    <h3 class="h3 d-inline align-middle">Milestones List</h3>
+                                                    <c:if test="${action == 'edit'}">
+                                                        <a class="btn btn-primary" href="javascript:void(0);" onclick="openMilestoneModal(${param.id});">Create new</a>
+                                                    </c:if>
                                                 </div>
 
                                                 <table id="datatables-multi" class="table table-striped" style="width:100%">
@@ -327,13 +459,18 @@
                                                                         </c:choose>
                                                                     </td>
                                                                     <td>
-                                                                        <!--<button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#editMilestoneModal" 
-                                                                            onclick="loadMilestone(${milestone.id})"><i class="align-middle" data-feather="edit"></i></button>-->
-
-                                                                        <a href="javascript:void(0);" class="btn btn-info" 
-                                                                           onclick="openMilestoneModal(${param.id}, ${milestone.id});">
-                                                                            <i class="align-middle" data-feather="edit"></i>
-                                                                        </a>
+                                                                        <c:if test="${action == 'edit'}">
+                                                                            <a href="javascript:void(0);" class="btn btn-info" 
+                                                                               onclick="openMilestoneModal(${param.id}, ${milestone.id});">
+                                                                                <i class="align-middle" data-feather="edit"></i>
+                                                                            </a>
+                                                                        </c:if>
+                                                                        <c:if test="${action == 'view'}">
+                                                                            <a href="javascript:void(0);" class="btn btn-info" 
+                                                                               onclick="openMilestoneModal(${param.id}, ${milestone.id});">
+                                                                                <i class="align-middle" data-feather="eye"></i>
+                                                                            </a>
+                                                                        </c:if>
                                                                     </td>
                                                                 </tr>
                                                             </c:if>
@@ -344,7 +481,7 @@
                                                             <c:if test="${milestone.parentMilestone != 0}">
                                                                 <tr style="text-align: center">
                                                                     <td>${milestone.id}</td>
-                                                                    <td>${milestone.projectName}</td>
+                                                                    <td hidden>${milestone.projectName}</td>
                                                                     <td>${milestone.name}</td>
                                                                     <td>${milestone.parentMilestoneName}</td>
                                                                     <td>${milestone.priority}</td>
@@ -359,15 +496,18 @@
                                                                         </c:choose>
                                                                     </td>
                                                                     <td>
-                                                                        <!-- Nút Edit -->
-                                                                        <!--                                                                        <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#editMilestoneModal" 
-                                                                                                                                                        onclick="loadMilestone(${milestone.id})"><i class="align-middle" data-feather="edit"></i></button>-->
-
-                                                                        <a href="javascript:void(0);" class="btn btn-info" 
-                                                                           onclick="openMilestoneModal(${param.id}, ${milestone.id});">
-                                                                            <i class="align-middle" data-feather="edit"></i>
-                                                                        </a>
-
+                                                                        <c:if test="${action == 'edit'}">
+                                                                            <a href="javascript:void(0);" class="btn btn-info" 
+                                                                               onclick="openMilestoneModal(${param.id}, ${milestone.id});">
+                                                                                <i class="align-middle" data-feather="edit"></i>
+                                                                            </a>
+                                                                        </c:if>
+                                                                        <c:if test="${action == 'view'}">
+                                                                            <a href="javascript:void(0);" class="btn btn-info" 
+                                                                               onclick="openMilestoneModal(${param.id}, ${milestone.id});">
+                                                                                <i class="align-middle" data-feather="eye"></i>
+                                                                            </a>
+                                                                        </c:if>
                                                                     </td>
                                                                 </tr>
                                                             </c:if>
@@ -375,7 +515,438 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <div class="tab-pane fade ${activeTab == 'team' ? 'show active' : ''}" id="team" role="tabpanel" aria-labelledby="team-tab">
+
+                                            <!-- Milestone Modal --> 
+                                            <div id="milestoneModal" class="modal" tabindex="-1" role="dialog">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title">Milestone Details</h1>
+                                                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" onclick="closeMilestoneModal();"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <!--This is where the milestone-detail.jsp will be loaded via AJAX--> 
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <script>
+                                                document.addEventListener("DOMContentLoaded", function () {
+                                                    var datatablesMulti = $("#datatables-multi").DataTable({
+                                                        responsive: true,
+                                                        paging: true,
+                                                        searching: false,
+                                                        info: true,
+                                                        order: [[0, 'desc']], // Default sort by ID column in descending order
+                                                        columnDefs: [
+                                                            {orderable: false, targets: 7} // Disable sorting on the 'Action' column
+                                                        ],
+                                                        language: {
+                                                            paginate: {
+                                                                previous: '<i class="align-middle" data-feather="chevron-left"></i>',
+                                                                next: '<i class="align-middle" data-feather="chevron-right"></i>'
+                                                            },
+                                                            info: "_TOTAL_ milestone(s) found",
+                                                            infoEmpty: "No milestone found"
+                                                        },
+                                                        dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
+                                                        initComplete: function () {
+                                                            // Add necessary classes for alignment
+                                                            $('.dataTables_info').addClass('text-left fw-bolder');
+                                                            $('.dataTables_length').addClass('mt-2'); // Add necessary margin classes
+
+                                                            // Replace Feather icons after DataTable initializes
+                                                            feather.replace();
+                                                        }
+                                                    });
+
+                                                    // Replace Feather icons in case of dynamic changes
+                                                    datatablesMulti.on('draw', function () {
+                                                        feather.replace();
+                                                    });
+                                                });
+
+                                                function openMilestoneModal(projectId, id = null) {
+                                                    const action = document.getElementById("action").value;
+                                                    if (!projectId) {
+                                                        const errorMessage = "Please select a Project first!";
+                                                        localStorage.setItem('errorNotification', errorMessage); // Lưu thông báo lỗi
+                                                        showErrorNotification(errorMessage); // Hiển thị lỗi tại tab hiện tại
+                                                        return; // Thoát hàm nếu projectId không hợp lệ
+                                                    }
+
+                                                    let url = '<%=request.getContextPath()%>/add-milestone?projectId=' + projectId + '&action=' + action; // Default cho Create New
+                                                    if (id) {
+                                                        url = '<%=request.getContextPath()%>/edit-milestone?projectId=' + projectId + '&id=' + id + '&action=' + action; // Cho Edit
+                                                    }
+
+                                                    fetch(url)
+                                                            .then(response => response.text())
+                                                            .then(data => {
+                                                                document.querySelector('#milestoneModal .modal-body').innerHTML = data;
+                                                                document.getElementById('milestoneModal').style.display = 'block';
+                                                            })
+                                                            .catch(error => console.log('Error loading the form:', error));
+                                                }
+
+                                                function closeMilestoneModal() {
+                                                    document.getElementById('milestoneModal').style.display = 'none';
+                                                }
+                                            </script>
+
+                                            <!--Allocations Tab-->
+                                            <div class="tab-pane fade ${activeTab == 'allocation' ? 'show active' : ''}" id="allocation" role="tabpanel" aria-labelledby="allocation-tab">
+                                                <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 15px;">
+                                                    <form action="projectconfig" method="post" class="d-flex align-items-center" style="gap: 10px;">
+                                                        <input type="hidden" name="id" value="${param.id}" />
+                                                        <input type="hidden" name="activeTab" value="allocation">
+                                                        <input type="hidden" name="action" value="${action}">
+
+                                                        <div class="col-md-2">
+                                                            <select name="deptId" class="form-select">
+                                                                <option value="">All Departments</option>
+                                                                <c:forEach items="${listDept}" var="d">
+                                                                    <option 
+                                                                        <c:if test="${deptId eq d.id}">
+                                                                            selected="selected"
+                                                                        </c:if>
+                                                                        value="${d.id}">${d.name}
+                                                                    </option>
+                                                                </c:forEach>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-md-2">
+                                                            <select name="roleId" class="form-select">
+                                                                <option value="">All Roles</option>
+                                                                <option  
+                                                                    <c:if test="${roleId eq 1}">
+                                                                        selected="selected"
+                                                                    </c:if>
+                                                                    value="1">Project Manager
+                                                                </option>
+                                                                <c:forEach items="${listRole}" var="s">
+                                                                    <option 
+                                                                        <c:if test="${roleId eq s.id}">
+                                                                            selected="selected"
+                                                                        </c:if>
+                                                                        value="${s.id}">${s.name}
+                                                                    </option>
+                                                                </c:forEach>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-md-2">
+                                                            <select name="statusUser" class="form-select">
+                                                                <option value="">All Statuses</option>
+                                                                <option 
+                                                                    <c:if test="${statusUser eq 'true'}">
+                                                                        selected="selected"
+                                                                    </c:if>
+                                                                    value="true">Active
+                                                                </option>
+                                                                <option 
+                                                                    <c:if test="${statusUser eq 'false'}">
+                                                                        selected="selected"
+                                                                    </c:if>
+                                                                    value="false">Inactive
+                                                                </option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <input type="search" name="keywordUser" class="form-control"
+                                                                   placeholder="Full Name/Username/Email" id="keywordUser" value="${keywordUser}">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <button type="submit" class="btn btn-primary">Search</button>
+                                                        </div>
+
+                                                    </form>
+
+                                                    <c:if test="${action == 'edit'}">
+                                                        <div class="col-md-2 d-flex justify-content-end align-items-end">
+                                                            <a class="btn btn-primary" href="javascript:void(0);" onclick="openAllocationModal(${param.id});">Create new</a>
+                                                        </div>
+                                                    </c:if>
+                                                </div>
+
+                                                <table id="datatables-multi2" class="table table-striped" style="width:100%">
+                                                    <thead>
+                                                        <tr style="text-align: center">
+                                                            <th>ID</th>
+                                                            <th>Member</th>
+                                                            <th>Department</th>
+                                                            <th>From Date</th>
+                                                            <th>To Date</th>
+                                                            <th>Role</th>
+                                                            <th>Effort Rate</th>
+                                                            <th>Status</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <c:forEach items="${requestScope.allocation}" var="al">
+                                                            <tr style="text-align: center">
+                                                                <td>${al.id}</td>
+                                                                <td>${al.user.full_name} (${al.user.username})</td>
+                                                                <td>${al.dept.code}</td>
+                                                                <td>${al.startDate}</td>
+                                                                <td>${al.endDate}</td>
+                                                                <td>${al.role.name}</td>
+                                                                <td>${al.effortRate}</td>
+                                                                <td>
+                                                                    <c:if test="${al.status eq 'true'}">
+                                                                        <span class="badge bg-success">Active</span>
+                                                                    </c:if>
+                                                                    <c:if test="${al.status eq 'false'}">
+                                                                        <span class="badge bg-danger">Inactive</span>
+                                                                    </c:if>
+                                                                </td>
+                                                                <td>
+                                                                    <c:if test="${action == 'edit'}">
+                                                                        <a href="javascript:void(0);" class="btn btn-info" 
+                                                                           onclick="openAllocationModal(${param.id}, ${al.id});">
+                                                                            <i class="align-middle" data-feather="edit"></i>
+                                                                        </a>
+
+                                                                        <c:if test="${al.status eq 'false'}">
+                                                                            <a href="<%=request.getContextPath()%>/change-status-allocation?id=${al.id}&status=${al.status}&projectId=${param.id}&userId=${user.id}"
+                                                                               class="btn btn-success"
+                                                                               onclick="return confirm('Are you sure you want to activate this allocation?');">
+                                                                                <i class="fas fa-check"></i>
+                                                                            </a>
+                                                                        </c:if>
+
+                                                                        <c:if test="${al.status eq 'true'}">
+                                                                            <a href="<%=request.getContextPath()%>/change-status-allocation?id=${al.id}&status=${al.status}&projectId=${param.id}&userId=${user.id}"
+                                                                               class="btn btn-danger"
+                                                                               onclick="return confirm('Are you sure you want to deactivate this allocation?');">
+                                                                                <i class="fas fa-times" style="padding-left: 2px; padding-right: 2px"></i>
+                                                                            </a>
+                                                                        </c:if>
+                                                                    </c:if>
+                                                                    
+                                                                    <c:if test="${action == 'view'}">
+                                                                        <a href="javascript:void(0);" class="btn btn-info" 
+                                                                           onclick="openAllocationModal(${param.id}, ${al.id});">
+                                                                            <i class="align-middle" data-feather="eye"></i>
+                                                                        </a>
+                                                                    </c:if>
+                                                                </td>
+                                                            </tr>
+                                                        </c:forEach>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            <!--Allocation Modal--> 
+                                            <div id="allocationModal" class="modal" tabindex="-1" role="dialog">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title">
+                                                                Allocation Details
+                                                            </h1>
+                                                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" onclick="closeAllocationModal();"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <!--This is where the allocation-detail.jsp will be loaded via AJAX--> 
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <script>
+                                                document.addEventListener("DOMContentLoaded", function () {
+                                                    var datatablesMulti = $("#datatables-multi2").DataTable({
+                                                        responsive: true,
+                                                        paging: true,
+                                                        searching: false,
+                                                        info: true,
+                                                        order: [[0, 'desc']], // Default sort by ID column in descending order
+                                                        columnDefs: [
+                                                            {orderable: false, targets: 8} // Disable sorting on the 'Action' column
+                                                        ],
+                                                        language: {
+                                                            paginate: {
+                                                                previous: '<i class="align-middle" data-feather="chevron-left"></i>',
+                                                                next: '<i class="align-middle" data-feather="chevron-right"></i>'
+                                                            },
+                                                            info: "_TOTAL_ member(s) found",
+                                                            infoEmpty: "No member found"
+                                                        },
+                                                        dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
+                                                        initComplete: function () {
+                                                            // Add necessary classes for alignment
+                                                            $('.dataTables_info').addClass('text-left fw-bolder');
+                                                            $('.dataTables_length').addClass('mt-2'); // Add necessary margin classes
+
+                                                            // Replace Feather icons after DataTable initializes
+                                                            feather.replace();
+                                                        }
+                                                    });
+
+                                                    // Replace Feather icons in case of dynamic changes
+                                                    datatablesMulti.on('draw', function () {
+                                                        feather.replace();
+                                                    });
+                                                });
+
+                                                function openAllocationModal(projectId, id = null) {
+                                                    const action = document.getElementById("action").value;
+                                                    if (!projectId) {
+                                                        const errorMessage = "Please select a Project first!";
+                                                        localStorage.setItem('errorNotification', errorMessage); // Lưu thông báo lỗi
+                                                        showErrorNotification(errorMessage); // Hiển thị lỗi tại tab hiện tại
+                                                        return; // Thoát hàm nếu projectId không hợp lệ
+                                                    }
+
+                                                    let url = '<%=request.getContextPath()%>/add-allocation?projectId=' + projectId; // Default cho Create New
+                                                    if (id) {
+                                                        url = '<%=request.getContextPath()%>/edit-allocation?projectId=' + projectId + '&id=' + id + '&action=' + action; // Cho Edit
+                                                    }
+
+                                                    fetch(url)
+                                                            .then(response => response.text())
+                                                            .then(data => {
+                                                                document.querySelector('#allocationModal .modal-body').innerHTML = data;
+                                                                document.getElementById('allocationModal').style.display = 'block';
+                                                            })
+                                                            .catch(error => console.log('Error loading the form:', error));
+                                                }
+
+
+                                                function closeAllocationModal() {
+                                                    document.getElementById('allocationModal').style.display = 'none';
+                                                }
+
+                                                function redirectToDetailPage(projectId) {
+                                                    const deptId = document.getElementById("deptDropdown").value;
+                                                    const roleId = document.getElementById("roleId").value;
+                                                    const startDate = document.getElementById("fromDate").value;
+                                                    const endDate = document.getElementById("toDate").value;
+                                                    const effort = document.getElementById("effort").value;
+                                                    const description = document.getElementById("descriptionAllocation").value;
+
+                                                    let url = 'add-allocation?projectId=' + projectId;
+                                                    if (deptId) {
+                                                        url += '&deptId=' + deptId;
+                                                    }
+                                                    if (roleId) {
+                                                        url += '&roleId=' + roleId;
+                                                    }
+                                                    if (startDate) {
+                                                        url += '&fromDate=' + startDate;
+                                                    }
+                                                    if (endDate) {
+                                                        url += '&toDate=' + endDate;
+                                                    }
+                                                    if (effort) {
+                                                        url += '&effort=' + effort;
+                                                    }
+                                                    if (description) {
+                                                        url += '&descriptionAllocation=' + description;
+                                                    }
+
+                                                    fetch(url)
+                                                            .then(response => response.text())
+                                                            .then(data => {
+                                                                document.querySelector('#allocationModal .modal-body').innerHTML = data;
+                                                                document.getElementById('allocationModal').style.display = 'block';
+                                                            })
+                                                            .catch(error => console.log('Error loading the form:', error));
+                                                }
+
+                                                function validateForm(event) {
+                                                    event.preventDefault(); // Ngăn không gửi form ngay lập tức
+                                                    const errorContainer = document.getElementById("errorContainer");
+                                                    const errorList = document.getElementById("errorList");
+                                                    errorList.innerHTML = ""; // Xóa thông báo lỗi cũ
+                                                    errorContainer.classList.add("d-none");
+
+                                                    const effort = document.getElementById("effort").value;
+                                                    const fromDate = document.getElementById("fromDate").value;
+                                                    const toDate = document.getElementById("toDate").value;
+                                                    const today = new Date().toISOString().split("T")[0];
+                                                    let hasError = false;
+
+                                                    //Kiểm tra Effort Rate
+                                                    if (effort < 0 || effort > 100) {
+                                                        hasError = true;
+                                                        errorList.innerHTML += "<li>Effort rate must be between 0% and 100%.</li>";
+                                                    }
+
+                                                    // Kiểm tra fromDate
+                                                    if (!fromDate) {
+                                                        hasError = true;
+                                                        errorList.innerHTML += "<li>From Date is required.</li>";
+                                                    } else if (fromDate < today) {
+                                                        hasError = true;
+                                                        errorList.innerHTML += "<li>From Date cannot be earlier than today.</li>";
+                                                    }
+
+                                                    // Kiểm tra toDate
+                                                    if (toDate && toDate < fromDate) {
+                                                        hasError = true;
+                                                        errorList.innerHTML += "<li>To Date cannot be earlier than From Date.</li>";
+                                                    }
+
+                                                    // Hiển thị lỗi nếu có
+                                                    if (hasError) {
+                                                        errorContainer.classList.remove("d-none");
+                                                        return false; // Ngăn gửi form
+                                                    }
+
+                                                    // Không có lỗi, gửi form
+                                                    document.getElementById("allocationForm").submit();
+                                                }
+
+                                                function validateFormEdit(event) {
+                                                    event.preventDefault(); // Ngăn không gửi form ngay lập tức
+                                                    const errorContainer = document.getElementById("errorContainer");
+                                                    const errorList = document.getElementById("errorList");
+                                                    errorList.innerHTML = ""; // Xóa thông báo lỗi cũ
+                                                    errorContainer.classList.add("d-none");
+
+                                                    const effort = document.getElementById("effort").value;
+                                                    const fromDate = document.getElementById("fromDate").value;
+                                                    const toDate = document.getElementById("toDate").value;
+                                                    const today = new Date().toISOString().split("T")[0];
+                                                    let hasError = false;
+
+                                                    //Kiểm tra Effort Rate
+                                                    if (effort < 0 || effort > 100) {
+                                                        hasError = true;
+                                                        errorList.innerHTML += "<li>Effort Rate must be between 0% and 100%.</li>";
+                                                    }
+
+                                                    // Kiểm tra fromDate
+                                                    if (!fromDate) {
+                                                        hasError = true;
+                                                        errorList.innerHTML += "<li>From Date is required.</li>";
+                                                    }
+
+                                                    // Kiểm tra toDate
+                                                    if (toDate && toDate < fromDate) {
+                                                        hasError = true;
+                                                        errorList.innerHTML += "<li>To Date cannot be earlier than From Date.</li>";
+                                                    }
+
+                                                    // Hiển thị lỗi nếu có
+                                                    if (hasError) {
+                                                        errorContainer.classList.remove("d-none");
+                                                        return false; // Ngăn gửi form
+                                                    }
+
+                                                    // Không có lỗi, gửi form
+                                                    document.getElementById("allocationForm").submit();
+                                                }
+                                            </script>
+
+                                            <!--Team Tab-->
+                                            <div hidden class="tab-pane fade ${activeTab == 'team' ? 'show active' : ''}" id="team" role="tabpanel" aria-labelledby="team-tab">
                                                 <div class="row">
                                                     <div class="col-md-12 col-xl-12">
                                                         <div class="card">
@@ -467,392 +1038,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- Milestone Modal --> 
-                                            <div id="milestoneModal" class="modal" tabindex="-1" role="dialog">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h1 class="modal-title">Milestone Details</h1>
-                                                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" onclick="closeMilestoneModal();"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <!--This is where the milestone-detail.jsp will be loaded via AJAX--> 
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <script>
-                                                document.addEventListener("DOMContentLoaded", function () {
-                                                    var datatablesMulti = $("#datatables-multi").DataTable({
-                                                        responsive: true,
-                                                        paging: true,
-                                                        searching: false,
-                                                        info: true,
-                                                        order: [[0, 'desc']], // Default sort by ID column in descending order
-                                                        columnDefs: [
-                                                            {orderable: false, targets: 7} // Disable sorting on the 'Action' column
-                                                        ],
-                                                        language: {
-                                                            paginate: {
-                                                                previous: '<i class="align-middle" data-feather="chevron-left"></i>',
-                                                                next: '<i class="align-middle" data-feather="chevron-right"></i>'
-                                                            },
-                                                            info: "_TOTAL_ milestone(s) found",
-                                                            infoEmpty: "No milestone found"
-                                                        },
-                                                        dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
-                                                        initComplete: function () {
-                                                            // Add necessary classes for alignment
-                                                            $('.dataTables_info').addClass('text-left fw-bolder');
-                                                            $('.dataTables_length').addClass('mt-2'); // Add necessary margin classes
-
-                                                            // Replace Feather icons after DataTable initializes
-                                                            feather.replace();
-                                                        }
-                                                    });
-
-                                                    // Replace Feather icons in case of dynamic changes
-                                                    datatablesMulti.on('draw', function () {
-                                                        feather.replace();
-                                                    });
-                                                });
-
-                                                function openMilestoneModal(projectId, id = null) {
-                                                    let url = '<%=request.getContextPath()%>/add-milestone?projectId=' + projectId; // Default for Create New
-                                                    if (id) {
-                                                        url = '<%=request.getContextPath()%>/edit-milestone?projectId=' + projectId + '&id=' + id; // For Edit
-                                                    }
-
-                                                    fetch(url)
-                                                            .then(response => response.text())
-                                                            .then(data => {
-                                                                document.querySelector('#milestoneModal .modal-body').innerHTML = data;
-                                                                document.getElementById('milestoneModal').style.display = 'block';
-                                                            })
-                                                            .catch(error => console.log('Error loading the form:', error));
-                                                }
-
-                                                function closeMilestoneModal() {
-                                                    document.getElementById('milestoneModal').style.display = 'none';
-                                                }
-                                            </script>
-
-                                            <!--Allocations Tab-->
-                                            <div class="tab-pane fade ${activeTab == 'allocation' ? 'show active' : ''}" id="allocation" role="tabpanel" aria-labelledby="allocation-tab">
-                                                <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 15px;">
-                                                    <form action="projectconfig" method="get" class="d-flex align-items-center" style="gap: 10px;">
-                                                        <input type="hidden" name="id" value="${param.id}" />
-                                                        <input type="hidden" name="activeTab" value="allocation">
-
-                                                        <div class="col-md-2">
-                                                            <select name="deptId" class="form-select">
-                                                                <option value="">All Departments</option>
-                                                                <c:forEach items="${listDept}" var="d">
-                                                                    <option 
-                                                                        <c:if test="${deptId eq d.id}">
-                                                                            selected="selected"
-                                                                        </c:if>
-                                                                        value="${d.id}">${d.name}
-                                                                    </option>
-                                                                </c:forEach>
-                                                            </select>
-                                                        </div>
-
-                                                        <div class="col-md-2">
-                                                            <select name="roleId" class="form-select">
-                                                                <option value="">All Roles</option>
-                                                                <option  
-                                                                    <c:if test="${roleId eq 1}">
-                                                                        selected="selected"
-                                                                    </c:if>
-                                                                    value="1">Project Manager
-                                                                </option>
-                                                                <c:forEach items="${listRole}" var="s">
-                                                                    <option 
-                                                                        <c:if test="${roleId eq s.id}">
-                                                                            selected="selected"
-                                                                        </c:if>
-                                                                        value="${s.id}">${s.name}
-                                                                    </option>
-                                                                </c:forEach>
-                                                            </select>
-                                                        </div>
-
-                                                        <div class="col-md-2">
-                                                            <select name="statusUser" class="form-select">
-                                                                <option value="">All Statuses</option>
-                                                                <option 
-                                                                    <c:if test="${statusUser eq 'true'}">
-                                                                        selected="selected"
-                                                                    </c:if>
-                                                                    value="true">Active
-                                                                </option>
-                                                                <option 
-                                                                    <c:if test="${statusUser eq 'false'}">
-                                                                        selected="selected"
-                                                                    </c:if>
-                                                                    value="false">Inactive
-                                                                </option>
-                                                            </select>
-                                                        </div>
-
-                                                        <div class="col-md-4">
-                                                            <input type="search" name="keywordUser" class="form-control"
-                                                                   placeholder="Full Name/Username/Email" id="keywordUser" value="${keywordUser}">
-                                                        </div>
-
-                                                        <div class="col-md-2">
-                                                            <button type="submit" class="btn btn-primary">Search</button>
-                                                        </div>
-                                                    </form>
-
-                                                    <div class="col-md-2 d-flex justify-content-end align-items-end">
-                                                        <a class="btn btn-primary" href="javascript:void(0);" onclick="openAllocationModal(${param.id}, ${user.id});">Create new</a>
-                                                    </div>
-                                                </div>
-
-                                                <table id="datatables-multi2" class="table table-striped" style="width:100%">
-                                                    <thead>
-                                                        <tr style="text-align: center">
-                                                            <th>ID</th>
-                                                            <th>Member</th>
-                                                            <th>Department</th>
-                                                            <th>From Date</th>
-                                                            <th>To Date</th>
-                                                            <th>Role</th>
-                                                            <th>Effort Rate</th>
-                                                            <th>Status</th>
-                                                            <th>Action</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <c:forEach items="${requestScope.allocation}" var="al">
-                                                            <tr style="text-align: center">
-                                                                <td>${al.id}</td>
-                                                                <td>${al.user.full_name} (${al.user.username})</td>
-                                                                <td>${al.dept.code}</td>
-                                                                <td>${al.startDate}</td>
-                                                                <td>${al.endDate}</td>
-                                                                <td>${al.role.name}</td>
-                                                                <td>${al.effortRate}</td>
-                                                                <td>
-                                                                    <c:if test="${al.status eq 'true'}">
-                                                                        <span class="badge bg-success">Active</span>
-                                                                    </c:if>
-                                                                    <c:if test="${al.status eq 'false'}">
-                                                                        <span class="badge bg-danger">Inactive</span>
-                                                                    </c:if>
-                                                                </td>
-                                                                <td>
-                                                                    <a href="javascript:void(0);" class="btn btn-info" 
-                                                                       onclick="openAllocationModal(${param.id}, ${user.id}, ${al.id});">
-                                                                        <i class="align-middle" data-feather="edit"></i>
-                                                                    </a>
-
-                                                                    <c:if test="${al.status eq 'false'}">
-                                                                        <a href="<%=request.getContextPath()%>/change-status-allocation?id=${al.id}&status=${al.status}&projectId=${param.id}&userId=${user.id}"
-                                                                           class="btn btn-success"
-                                                                           onclick="return confirm('Are you sure you want to activate this allocation?');">
-                                                                            <i class="fas fa-check"></i>
-                                                                        </a>
-                                                                    </c:if>
-
-                                                                    <c:if test="${al.status eq 'true'}">
-                                                                        <a href="<%=request.getContextPath()%>/change-status-allocation?id=${al.id}&status=${al.status}&projectId=${param.id}&userId=${user.id}"
-                                                                           class="btn btn-danger"
-                                                                           onclick="return confirm('Are you sure you want to deactivate this allocation?');">
-                                                                            <i class="fas fa-times" style="padding-left: 2px; padding-right: 2px"></i>
-                                                                        </a>
-                                                                    </c:if>
-                                                                </td>
-                                                            </tr>
-                                                        </c:forEach>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-
-                                            <!--Allocation Modal--> 
-                                            <div id="allocationModal" class="modal" tabindex="-1" role="dialog">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h1 class="modal-title">
-                                                                Allocation Details
-                                                            </h1>
-                                                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" onclick="closeAllocationModal();"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <!--This is where the allocation-detail.jsp will be loaded via AJAX--> 
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <script>
-                                                document.addEventListener("DOMContentLoaded", function () {
-                                                    var datatablesMulti = $("#datatables-multi2").DataTable({
-                                                        responsive: true,
-                                                        paging: true,
-                                                        searching: false,
-                                                        info: true,
-                                                        order: [[0, 'desc']], // Default sort by ID column in descending order
-                                                        columnDefs: [
-                                                            {orderable: false, targets: 8} // Disable sorting on the 'Action' column
-                                                        ],
-                                                        language: {
-                                                            paginate: {
-                                                                previous: '<i class="align-middle" data-feather="chevron-left"></i>',
-                                                                next: '<i class="align-middle" data-feather="chevron-right"></i>'
-                                                            },
-                                                            info: "_TOTAL_ member(s) found",
-                                                            infoEmpty: "No member found"
-                                                        },
-                                                        dom: '<"row"<"col-sm-6"i><"col-sm-6 d-flex justify-content-end"l>>t<"row"<"col-sm-12"p>>', // Updated layout for page-length to be at the end
-                                                        initComplete: function () {
-                                                            // Add necessary classes for alignment
-                                                            $('.dataTables_info').addClass('text-left fw-bolder');
-                                                            $('.dataTables_length').addClass('mt-2'); // Add necessary margin classes
-
-                                                            // Replace Feather icons after DataTable initializes
-                                                            feather.replace();
-                                                        }
-                                                    });
-
-                                                    // Replace Feather icons in case of dynamic changes
-                                                    datatablesMulti.on('draw', function () {
-                                                        feather.replace();
-                                                    });
-                                                });
-
-                                                function openAllocationModal(projectId, userId, id = null) {
-
-                                                    let url = '<%=request.getContextPath()%>/add-allocation?projectId=' + projectId + '&userId=' + userId; // Default for Create New
-                                                    if (id) {
-                                                        url = '<%=request.getContextPath()%>/edit-allocation?projectId=' + projectId + '&userId=' + userId + '&id=' + id; // For Edit
-                                                    }
-
-                                                    fetch(url)
-                                                            .then(response => response.text())
-                                                            .then(data => {
-                                                                document.querySelector('#allocationModal .modal-body').innerHTML = data;
-                                                                document.getElementById('allocationModal').style.display = 'block';
-                                                            })
-                                                            .catch(error => console.log('Error loading the form:', error));
-                                                }
-
-                                                function closeAllocationModal() {
-                                                    document.getElementById('allocationModal').style.display = 'none';
-                                                }
-
-                                                function redirectToDetailPage(projectId, userId) {
-                                                    const deptId = document.getElementById("deptDropdown").value;
-                                                    const roleId = document.getElementById("roleId").value;
-                                                    const startDate = document.getElementById("fromDate").value;
-                                                    const endDate = document.getElementById("toDate").value;
-                                                    const effort = document.getElementById("effort").value;
-                                                    const description = document.getElementById("descriptionAllocation").value;
-
-                                                    let url = 'add-allocation?projectId=' + projectId + '&userId=' + userId;
-                                                    if (deptId) {
-                                                        url += '&deptId=' + deptId;
-                                                    }
-                                                    if (roleId) {
-                                                        url += '&roleId=' + roleId;
-                                                    }
-                                                    if (startDate) {
-                                                        url += '&fromDate=' + startDate;
-                                                    }
-                                                    if (endDate) {
-                                                        url += '&toDate=' + endDate;
-                                                    }
-                                                    if (effort) {
-                                                        url += '&effort=' + effort;
-                                                    }
-                                                    if (description) {
-                                                        url += '&descriptionAllocation=' + description;
-                                                    }
-
-                                                    fetch(url)
-                                                            .then(response => response.text())
-                                                            .then(data => {
-                                                                document.querySelector('#allocationModal .modal-body').innerHTML = data;
-                                                                document.getElementById('allocationModal').style.display = 'block';
-                                                            })
-                                                            .catch(error => console.log('Error loading the form:', error));
-                                                }
-
-                                                function validateForm(event) {
-                                                    event.preventDefault(); // Ngăn không gửi form ngay lập tức
-                                                    const errorContainer = document.getElementById("errorContainer");
-                                                    const errorList = document.getElementById("errorList");
-                                                    errorList.innerHTML = ""; // Xóa thông báo lỗi cũ
-                                                    errorContainer.classList.add("d-none");
-
-                                                    const fromDate = document.getElementById("fromDate").value;
-                                                    const toDate = document.getElementById("toDate").value;
-                                                    const today = new Date().toISOString().split("T")[0];
-                                                    let hasError = false;
-
-                                                    // Kiểm tra fromDate
-                                                    if (!fromDate) {
-                                                        hasError = true;
-                                                        errorList.innerHTML += "<li>From Date is required.</li>";
-                                                    } else if (fromDate < today) {
-                                                        hasError = true;
-                                                        errorList.innerHTML += "<li>From Date cannot be earlier than today.</li>";
-                                                    }
-
-                                                    // Kiểm tra toDate
-                                                    if (toDate && toDate < fromDate) {
-                                                        hasError = true;
-                                                        errorList.innerHTML += "<li>To Date cannot be earlier than From Date.</li>";
-                                                    }
-
-                                                    // Hiển thị lỗi nếu có
-                                                    if (hasError) {
-                                                        errorContainer.classList.remove("d-none");
-                                                        return false; // Ngăn gửi form
-                                                    }
-
-                                                    // Không có lỗi, gửi form
-                                                    document.getElementById("allocationForm").submit();
-                                                }
-
-                                                function validateFormEdit(event) {
-                                                    event.preventDefault(); // Ngăn không gửi form ngay lập tức
-                                                    const errorContainer = document.getElementById("errorContainer");
-                                                    const errorList = document.getElementById("errorList");
-                                                    errorList.innerHTML = ""; // Xóa thông báo lỗi cũ
-                                                    errorContainer.classList.add("d-none");
-
-                                                    const fromDate = document.getElementById("fromDate").value;
-                                                    const toDate = document.getElementById("toDate").value;
-                                                    const today = new Date().toISOString().split("T")[0];
-                                                    let hasError = false;
-
-                                                    // Kiểm tra fromDate
-                                                    if (!fromDate) {
-                                                        hasError = true;
-                                                        errorList.innerHTML += "<li>From Date is required.</li>";
-                                                    }
-
-                                                    // Kiểm tra toDate
-                                                    if (toDate && toDate < fromDate) {
-                                                        hasError = true;
-                                                        errorList.innerHTML += "<li>To Date cannot be earlier than From Date.</li>";
-                                                    }
-
-                                                    // Hiển thị lỗi nếu có
-                                                    if (hasError) {
-                                                        errorContainer.classList.remove("d-none");
-                                                        return false; // Ngăn gửi form
-                                                    }
-
-                                                    // Không có lỗi, gửi form
-                                                    document.getElementById("allocationForm").submit();
-                                                }
-                                            </script>
 
                                         </div>
                                     </div>
@@ -897,25 +1082,7 @@
         <script src="${pageContext.request.contextPath}/js/datatables.js"></script>
 
         <script>
-                                                document.addEventListener("DOMContentLoaded", function (event) {
-                                                    setTimeout(function () {
-                                                        if (localStorage.getItem('popState') !== 'shown') {
-                                                            window.notyf.open({
-                                                                type: "success",
-                                                                message: "Get access to all 500+ components and 45+ pages with AdminKit PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
-                                                                duration: 10000,
-                                                                ripple: true,
-                                                                dismissible: false,
-                                                                position: {
-                                                                    x: "left",
-                                                                    y: "bottom"
-                                                                }
-                                                            });
-
-                                                            localStorage.setItem('popState', 'shown');
-                                                        }
-                                                    }, 15000);
-                                                });
+                                                                                           window.notyf = new Notyf();
         </script>
     </body>
 </html>

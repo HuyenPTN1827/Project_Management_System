@@ -59,19 +59,29 @@
                                 <input type="hidden" name="typeId" value="${typeId}">
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Project Phase <span style="color: red;">*</span></label>
+                                    <label class="form-label"><strong>Project Phase</strong> <span style="color: red;">*</span></label>
                                     <input type="text" class="form-control" name="name" placeholder="Enter the Phase name" 
                                            value="${name}" required>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Priority <span style="color: red;">*</span></label>
+                                    <label class="form-label"><strong>Priority</strong> <span style="color: red;">*</span></label>
                                     <input type="number" class="form-control" name="priority" placeholder="Enter the Priority" 
                                            value="${priority}" required>
                                 </div>
 
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label"><strong>Status</strong></label>
+                                    <div class="check mt-1">
+                                        <input class="form-check-input" type="radio" name="status" checked
+                                               value="true">&nbsp;Active
+                                        <input class="form-check-input ms-4" type="radio" name="status"
+                                               value="false">&nbsp;Inactive
+                                    </div>
+                                </div>
+
                                 <div class="mb-3 col-md-12">
-                                    <label class="form-label">Details</label>
+                                    <label class="form-label"><strong>Details</strong></label>
                                     <textarea class="form-control" name="details" 
                                               placeholder="Enter the Phase details" rows="3">${details}</textarea>
                                 </div>
@@ -83,48 +93,87 @@
                         </c:if> 
 
                         <c:if test="${phase != null}">
-                            <form action="update-project-phase" method="post" class="row">
-                                <input type="hidden" name="typeId" value="${typeId}">
-                                <input type="hidden" name="id" value="${phase.id}">
+                            <c:if test="${action == 'edit'}">
+                                <form action="update-project-phase" method="post" class="row">
+                                    <input type="hidden" name="typeId" value="${typeId}">
+                                    <input type="hidden" name="id" value="${phase.id}">
 
-                                <div class="mb-3 col-md-6">
-                                    <label class="form-label">Name <span style="color: red;">*</span></label>
-                                    <input type="text" class="form-control" name="name" placeholder="Enter the Phase name" 
-                                           value="${phase.name}" required>
-                                </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <label class="form-label">Priority <span style="color: red;">*</span></label>
-                                    <input type="number" class="form-control" name="priority" placeholder="Enter the Priority" 
-                                           value="${phase.priority}" required>
-                                </div>
-
-                                <div class="mb-3 col-md-6 mt-1">
-                                    <label class="form-label">Status</label>
-                                    <div class="check">
-                                        <input class="form-check-input" type="radio" name="status"
-                                               <c:if test="${phase.status eq 'true'}">
-                                                   checked
-                                               </c:if>
-                                               value="true"> Active
-                                        <input class="form-check-input ms-3" type="radio" name="status"
-                                               <c:if test="${phase.status eq 'false'}">
-                                                   checked
-                                               </c:if>
-                                               value="false"> Inactive
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Name</strong> <span style="color: red;">*</span></label>
+                                        <input type="text" class="form-control" name="name" placeholder="Enter the Phase name" 
+                                               value="${phase.name}" required>
                                     </div>
-                                </div>
 
-                                <div class="mb-3 col-md-12">
-                                    <label class="form-label">Details</label>
-                                    <textarea class="form-control" name="details" 
-                                              placeholder="Enter the Phase details" rows="3">${phase.details}</textarea>
-                                </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Priority</strong> <span style="color: red;">*</span></label>
+                                        <input type="number" class="form-control" name="priority" placeholder="Enter the Priority" 
+                                               value="${phase.priority}" required>
+                                    </div>
 
-                                <div class="d-flex justify-content-end">
-                                    <button type="submit" class="btn btn-lg btn-success">Submit</button>
-                                </div>
-                            </form>
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Status</strong></label>
+                                        <div class="check mt-1">
+                                            <input class="form-check-input" type="radio" name="status"
+                                                   <c:if test="${phase.status eq 'true'}">
+                                                       checked
+                                                   </c:if>
+                                                   value="true">&nbsp;Active
+                                            <input class="form-check-input ms-4" type="radio" name="status"
+                                                   <c:if test="${phase.status eq 'false'}">
+                                                       checked
+                                                   </c:if>
+                                                   value="false">&nbsp;Inactive
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3 col-md-12">
+                                        <label class="form-label"><strong>Details</strong></label>
+                                        <textarea class="form-control" name="details" 
+                                                  placeholder="Enter the Phase details" rows="3">${phase.details}</textarea>
+                                    </div>
+
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-lg btn-success">Submit</button>
+                                    </div>
+                                </form>
+                            </c:if>
+                            
+                            <c:if test="${action == 'view'}">
+                                <form action="update-project-phase" method="post" class="row">
+                                    <input type="hidden" name="typeId" value="${typeId}">
+                                    <input type="hidden" name="id" value="${phase.id}">
+
+                                    <div class="mb-3 col-md-12">
+                                        <label class="form-label"><strong>Name</strong> <span style="color: red;">*</span></label>
+                                        <input type="text" class="form-control" name="name" placeholder="Enter the Phase name" 
+                                               value="${phase.name}" readonly>
+                                    </div>
+
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Priority</strong> <span style="color: red;">*</span></label>
+                                        <input type="number" class="form-control" name="priority" placeholder="Enter the Priority" 
+                                               value="${phase.priority}" readonly>
+                                    </div>
+                                    
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label"><strong>Status</strong></label>
+                                        <c:if test="${phase.status eq 'true'}">
+                                            <input type="text" class="form-control" placeholder="Project Phase Status" 
+                                                   value="Active" readonly>
+                                        </c:if>
+                                        <c:if test="${phase.status eq 'false'}">
+                                            <input type="text" class="form-control" placeholder="Project Phase Status" 
+                                                   value="Inactive" readonly>
+                                        </c:if>
+                                    </div>
+
+                                    <div class="mb-3 col-md-12">
+                                        <label class="form-label"><strong>Details</strong></label>
+                                        <textarea class="form-control" name="details" readonly
+                                                  placeholder="Enter the Phase details" rows="3">${phase.details}</textarea>
+                                    </div>
+                                </form>
+                            </c:if>
                         </c:if>
                     </div>
                 </div>

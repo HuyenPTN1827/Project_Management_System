@@ -13,17 +13,23 @@
         <div class="sidebar-user">
             <div class="d-flex justify-content-center">
                 <div class="flex-shrink-0">
-                    <img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded me-1" alt="${user.username}" />
+                    <c:if test="${user.avatar == null}">
+                        <img src="img/avatars/avatar-default.png" alt="${user.full_name}" class="avatar img-fluid rounded me-1"/>
+                    </c:if>
+
+                    <c:if test="${user.avatar != null}">
+                        <img src="img/avatars/${user.avatar}" alt="${user.full_name}" class="avatar img-fluid rounded me-1"/>
+                    </c:if>
                 </div>
                 <div class="flex-grow-1 ps-2">
                     <a class="sidebar-user-title dropdown-toggle" href="#" data-bs-toggle="dropdown">
                         <strong>${user.full_name}</strong>
                     </a>
                     <div class="dropdown-menu dropdown-menu-start">
-                        <a class="dropdown-item" href="<%=request.getContextPath()%>/member-profilecontroller">
+                        <a class="dropdown-item" href="<%=request.getContextPath()%>/member-profile">
                             <i class="align-middle me-1" data-feather="user"></i> Setting & Profile
                         </a>
-                        <a class="dropdown-item" href="<%=request.getContextPath()%>/changepasswordcontroller">
+                        <a class="dropdown-item" href="<%=request.getContextPath()%>/changepassword">
                             <i class="align-middle me-1" data-feather="lock"></i> Change password
                         </a>
                         <div class="dropdown-divider"></div>
@@ -37,7 +43,7 @@
             </div>
         </div>
 
-        <ul class="sidebar-nav">
+        <ul class="sidebar-nav mt-4">
             <li class="sidebar-item <c:if test="${currentPage == 'dashboard'}">active</c:if>">
                 <a class="sidebar-link" href="<%=request.getContextPath()%>/member-dashboard">
                     <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboards</span>
@@ -51,15 +57,29 @@
             </li>
 
             <li class="sidebar-item <c:if test="${activeTab == 'milestone'}">active</c:if>">
-                <a class="sidebar-link" href="<%= request.getContextPath() %>/projectconfig?activeTab=milestone">
-                    <i class="align-middle" data-feather="server"></i> <span class="align-middle">Milestones</span>
-                </a>
+                <c:if test="${user.role_id == 5}">
+                    <a class="sidebar-link" href="<%= request.getContextPath() %>/projectconfig?activeTab=milestone&action=view">
+                        <i class="align-middle" data-feather="server"></i> <span class="align-middle">Milestones</span>
+                    </a>
+                </c:if>
+                <c:if test="${user.role_id != 5}">
+                    <a class="sidebar-link" href="<%= request.getContextPath() %>/projectconfig?activeTab=milestone&action=edit">
+                        <i class="align-middle" data-feather="server"></i> <span class="align-middle">Milestones</span>
+                    </a>
+                </c:if>
             </li>
 
             <li class="sidebar-item <c:if test="${activeTab == 'allocation'}">active</c:if>">
-                <a class="sidebar-link" href="<%= request.getContextPath() %>/projectconfig?activeTab=allocation">
-                    <i class="align-middle" data-feather="users"></i> <span class="align-middle">HR Allocations</span>
-                </a>
+                <c:if test="${user.role_id == 5}">
+                    <a class="sidebar-link" href="<%= request.getContextPath() %>/projectconfig?activeTab=allocation&action=view">
+                        <i class="align-middle" data-feather="users"></i> <span class="align-middle">HR Allocations</span>
+                    </a>
+                </c:if>
+                <c:if test="${user.role_id != 5}">
+                    <a class="sidebar-link" href="<%= request.getContextPath() %>/projectconfig?activeTab=allocation&action=edit">
+                        <i class="align-middle" data-feather="users"></i> <span class="align-middle">HR Allocations</span>
+                    </a>
+                </c:if>
             </li>
 
             <!--            <li class="sidebar-item">

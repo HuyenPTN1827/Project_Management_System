@@ -27,6 +27,11 @@ public class SettingService {
     public List<Setting> getUserRoleList() {
         return settingDAO.getUserRolesList();
     }
+    
+    // Get biz terms list
+    public List<Setting> getBizTermsList() {
+        return settingDAO.getBizTermsList();
+    }
 
     // HuyenPTNHE160769
     // 22/11/2024

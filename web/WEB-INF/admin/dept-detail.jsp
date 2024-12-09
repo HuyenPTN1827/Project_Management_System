@@ -60,19 +60,19 @@
                         <c:if test="${department == null}">
                             <form action="insert-department" method="post" class="row">
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Name <span style="color: red;">*</span></label>
+                                    <label class="form-label"><strong>Name</strong> <span style="color: red;">*</span></label>
                                     <input type="text" class="form-control" name="name" placeholder="Enter the Department name" 
                                            value="${name}" required>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Code <span style="color: red;">*</span></label>
+                                    <label class="form-label"><strong>Code</strong> <span style="color: red;">*</span></label>
                                     <input type="text" class="form-control" name="code" placeholder="Enter the Department code" 
                                            value="${code}" required>
                                 </div>
 
-                                <div class="mb-3 col-md-12">
-                                    <label class="form-label">Parent</label>
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label"><strong>Parent</strong></label>
                                     <select name="parent" class="form-select">
                                         <option value="">Choose Department Parent</option>
                                         <c:forEach items="${dept}" var="d">
@@ -85,9 +85,19 @@
                                         </c:forEach>
                                     </select>
                                 </div>
-
+                                
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label"><strong>Status</strong></label>
+                                    <div class="check mt-1">
+                                        <input class="form-check-input" type="radio" name="status" checked
+                                               value="true">&nbsp;Active
+                                        <input class="form-check-input ms-4" type="radio" name="status"
+                                               value="false">&nbsp;Inactive
+                                    </div>
+                                </div>
+                                
                                 <div class="mb-3 col-md-12">
-                                    <label class="form-label">Details</label>
+                                    <label class="form-label"><strong>Details</strong></label>
                                     <textarea class="form-control" name="details" 
                                               placeholder="Enter the Department details" rows="3">${details}</textarea>
                                 </div>
@@ -103,19 +113,19 @@
                                 <input type="hidden" name="id" value="${department.id}"/>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Name <span style="color: red;">*</span></label>
+                                    <label class="form-label"><strong>Name</strong> <span style="color: red;">*</span></label>
                                     <input type="text" class="form-control" name="name" placeholder="Enter the Department name" 
                                            value="${department.name}" required>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Code <span style="color: red;">*</span></label>
+                                    <label class="form-label"><strong>Code</strong> <span style="color: red;">*</span></label>
                                     <input type="text" class="form-control" name="code" placeholder="Enter the Department code" 
                                            value="${department.code}" required>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">Parent</label>
+                                    <label class="form-label"><strong>Parent</strong></label>
                                     <select name="parent" class="form-select">
                                         <option value="">Choose Department Parent</option>
                                         <c:forEach items="${dept}" var="d">
@@ -129,24 +139,24 @@
                                     </select>
                                 </div>
 
-                                <div class="mb-3 col-md-6 mt-1">
-                                    <label class="form-label">Status</label>
-                                    <div class="check">
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label"><strong>Status</strong></label>
+                                    <div class="check mt-1">
                                         <input class="form-check-input" type="radio" name="status"
                                                <c:if test="${department.status eq 'true'}">
                                                    checked
                                                </c:if>
-                                               value="true"> Active
-                                        <input class="form-check-input ms-3" type="radio" name="status"
+                                               value="true">&nbsp;Active
+                                        <input class="form-check-input ms-4" type="radio" name="status"
                                                <c:if test="${department.status eq 'false'}">
                                                    checked
                                                </c:if>
-                                               value="false"> Inactive
+                                               value="false">&nbsp;Inactive
                                     </div>
                                 </div>
 
                                 <div class="mb-3 col-md-12">
-                                    <label class="form-label">Details</label>
+                                    <label class="form-label"><strong>Details</strong></label>
                                     <textarea class="form-control" name="details" 
                                               placeholder="Enter the Department details" rows="3">${department.details}</textarea>
                                 </div>
@@ -160,29 +170,8 @@
                 </div>
             </div>
         </div>
-        
+
         <script src="${pageContext.request.contextPath}/js/app.js"></script>
 
-        <script>
-            document.addEventListener("DOMContentLoaded", function (event) {
-                setTimeout(function () {
-                    if (localStorage.getItem('popState') !== 'shown') {
-                        window.notyf.open({
-                            type: "success",
-                            message: "Get access to all 500+ components and 45+ pages with AdminKit PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
-                            duration: 10000,
-                            ripple: true,
-                            dismissible: false,
-                            position: {
-                                x: "left",
-                                y: "bottom"
-                            }
-                        });
-
-                        localStorage.setItem('popState', 'shown');
-                    }
-                }, 15000);
-            });
-        </script>
     </body>
 </html>

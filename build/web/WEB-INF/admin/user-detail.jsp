@@ -83,38 +83,38 @@
 
                                             <form action="insert-user" method="post" class="row">
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Full Name <span style="color: red;">*</span></label>
+                                                    <label class="form-label"><strong>Full Name</strong> <span style="color: red;">*</span></label>
                                                     <input type="text" class="form-control" name="fullname" placeholder="Enter the Full name" 
                                                            value="${fullname}" required>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Username <span style="color: red;">*</span></label>
+                                                    <label class="form-label"><strong>Username</strong> <span style="color: red;">*</span></label>
                                                     <input type="text" class="form-control" name="username" placeholder="Enter the Username" 
                                                            value="${username}" required>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Email <span style="color: red;">*</span></label>
+                                                    <label class="form-label"><strong>Email</strong> <span style="color: red;">*</span></label>
                                                     <input type="text" class="form-control" name="email" placeholder="Enter the Email address" 
                                                            value="${email}" required>
                                                 </div>
 
-                                                <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Password <span style="color: red;">*</span></label>
+<!--                                                <div class="mb-3 col-md-6">
+                                                    <label class="form-label"><strong>Password</strong> <span style="color: red;">*</span></label>
                                                     <input type="password" class="form-control" name="password" placeholder="Enter the Password" required>
                                                     <small style="color: gray">Password must be at least 6 characters, including uppercase letters, lowercase letters, numbers and some special characters.</small>
-                                                </div>
+                                                </div>-->
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Phone</label>
+                                                    <label class="form-label"><strong>Phone</strong></label>
                                                     <input type="text" class="form-control" name="mobile" placeholder="Enter the Phone number"
                                                            value="${mobile}">
                                                     <small style="color: gray">Phone number must start with 03, 05, 07, 08, or 09 and be 10 digits long.</small>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Role</label>
+                                                    <label class="form-label"><strong>Role</strong></label>
                                                     <select name="role" class="form-select">
                                                         <c:forEach items="${role}" var="r">
                                                             <option 
@@ -128,7 +128,7 @@
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Department</label>
+                                                    <label class="form-label"><strong>Department</strong></label>
                                                     <select name="dept" class="form-select">
                                                         <option value="">Choose Department</option>
                                                         <c:forEach items="${dept}" var="d">
@@ -143,7 +143,7 @@
                                                 </div>
 
                                                 <div class="mb-3 col-md-12">
-                                                    <label class="form-label">Notes</label>
+                                                    <label class="form-label"><strong>Notes</strong></label>
                                                     <textarea class="form-control" name="notes" placeholder="Enter the Notes"
                                                               value="${notes}" rows="3"></textarea>
                                                 </div>
@@ -180,26 +180,26 @@
                                                 <input type="hidden" name="id" value="${userDetail.id}"/>
                                                 <input type="hidden" name="password" value="${userDetail.password}"/>
 
-                                                <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Full Name <span style="color: red;">*</span></label>
+                                                <div class="mb-3 col-md-12">
+                                                    <label class="form-label"><strong>Full Name</strong> <span style="color: red;">*</span></label>
                                                     <input type="text" class="form-control" name="fullname" placeholder="Enter the Full name" 
                                                            value="${userDetail.full_name}" required>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Username <span style="color: red;">*</span></label>
+                                                    <label class="form-label"><strong>Username</strong> <span style="color: red;">*</span></label>
                                                     <input type="text" class="form-control" name="username" placeholder="Enter the Username" 
                                                            value="${userDetail.username}" required>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Email <span style="color: red;">*</span></label>
+                                                    <label class="form-label"><strong>Email</strong> <span style="color: red;">*</span></label>
                                                     <input type="text" class="form-control" name="email" placeholder="Enter the Email address" 
                                                            value="${userDetail.email}" required>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Phone</label>
+                                                    <label class="form-label"><strong>Phone</strong></label>
                                                     <input type="text" class="form-control" name="mobile" placeholder="Enter the Phone number"
                                                            value="${userDetail.mobile}">
                                                     <small style="color: gray">Phone number must start with 03, 05, 07, 08, or 09 and be 10 digits long.</small>
@@ -207,7 +207,7 @@
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Role</label>
+                                                    <label class="form-label"><strong>Role</strong></label>
                                                     <select name="role" class="form-select">
                                                         <c:forEach items="${role}" var="r">
                                                             <option 
@@ -221,7 +221,7 @@
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Department</label>
+                                                    <label class="form-label"><strong>Department</strong></label>
                                                     <select name="dept" class="form-select">
                                                         <option value="">Choose Department</option>
                                                         <c:forEach items="${dept}" var="d">
@@ -236,14 +236,14 @@
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Status</label>
+                                                    <label class="form-label"><strong>Status</strong></label>
 
-                                                    <c:if test="${userDetail.status eq '3'}">
+                                                    <c:if test="${userDetail.status eq '2'}">
                                                         <input type="hidden" name="status" value="3">
                                                         <input type="text" class="form-control" value="Unverified" readonly>
                                                     </c:if>
 
-                                                    <c:if test="${userDetail.status ne '3'}">
+                                                    <c:if test="${userDetail.status ne '2'}">
                                                         <div class="check">
                                                             <input class="form-check-input" type="radio" name="status"
                                                                    <c:if test="${userDetail.status eq '1'}">
@@ -260,7 +260,7 @@
                                                 </div>
 
                                                 <div class="mb-3 col-md-12">
-                                                    <label class="form-label">Notes</label>
+                                                    <label class="form-label"><strong>Notes</strong></label>
                                                     <textarea class="form-control" name="notes" 
                                                               placeholder="Enter the Notes" rows="3">${userDetail.notes}</textarea>
                                                 </div>
@@ -308,29 +308,6 @@
         </div>
 
         <script src="${pageContext.request.contextPath}/js/app.js"></script>
-
-        <script>
-            document.addEventListener("DOMContentLoaded", function (event) {
-                setTimeout(function () {
-                    if (localStorage.getItem('popState') !== 'shown') {
-                        window.notyf.open({
-                            type: "success",
-                            message: "Get access to all 500+ components and 45+ pages with AdminKit PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
-                            duration: 10000,
-                            ripple: true,
-                            dismissible: false,
-                            position: {
-                                x: "left",
-                                y: "bottom"
-                            }
-                        });
-
-                        localStorage.setItem('popState', 'shown');
-                    }
-                }, 15000);
-            });
-        </script>
-
 
     </body>
 

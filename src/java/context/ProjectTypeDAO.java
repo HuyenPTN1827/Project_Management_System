@@ -104,12 +104,13 @@ public class ProjectTypeDAO {
 //    Admin add new project type
     public int insertProjectType(ProjectType projectType) throws SQLException {
         int result = 0;
-        String sql = "INSERT INTO pms.project_type (code, name, details) VALUES (?, ?, ?);";
+        String sql = "INSERT INTO pms.project_type (code, name, details, status) VALUES (?, ?, ?, ?);";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             stm.setString(1, projectType.getCode());
             stm.setString(2, projectType.getName());
             stm.setString(3, projectType.getDetails());
+            stm.setBoolean(4, projectType.isStatus());
 
             result = stm.executeUpdate();
         } catch (SQLException e) {
@@ -655,14 +656,15 @@ public class ProjectTypeDAO {
     public int insertProjectPhase(ProjectPhase phase) throws SQLException {
         int result = 0;
         String sql = """
-                 INSERT INTO pms.project_phase (name, priority, details, type_id)
-                 VALUES (?, ?, ?, ?);""";
+                 INSERT INTO pms.project_phase (name, priority, details, type_id, status)
+                 VALUES (?, ?, ?, ?, ?);""";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             stm.setString(1, phase.getName());
             stm.setInt(2, phase.getPriority());
             stm.setString(3, phase.getDetails());
             stm.setInt(4, phase.getPjType().getId());
+            stm.setBoolean(5, phase.isStatus());
 
             result = stm.executeUpdate();
         } catch (SQLException e) {
@@ -811,17 +813,18 @@ public class ProjectTypeDAO {
     // Create new ProjectTypeSetting
     public void createProjectTypeSetting(ProjectTypeSetting setting) throws SQLException {
         String sql = "INSERT INTO pms.project_type_setting (name, type, value, "
-                + "priority, description, type_id) VALUES (?, ?, ?, ?, ?, ?)";
+                + "priority, description, type_id, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
         System.out.println(sql);
 
-        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stmt = cnt.prepareStatement(sql);) {
-            stmt.setString(1, setting.getName());
-            stmt.setString(2, setting.getType());
-            stmt.setString(3, setting.getValue());
-            stmt.setInt(4, setting.getPriority());
-            stmt.setString(5, setting.getDescription());
-            stmt.setInt(6, setting.getPjType().getId());
-            stmt.executeUpdate();
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            stm.setString(1, setting.getName());
+            stm.setString(2, setting.getType());
+            stm.setString(3, setting.getValue());
+            stm.setInt(4, setting.getPriority());
+            stm.setString(5, setting.getDescription());
+            stm.setInt(6, setting.getPjType().getId());
+            stm.setBoolean(7, setting.isStatus());
+            stm.executeUpdate();
         } catch (SQLException e) {
             BaseDAO.printSQLException(e);
         }

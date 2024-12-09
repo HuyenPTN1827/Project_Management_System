@@ -112,13 +112,13 @@
                                                 <input type="hidden" name="userId" value="${user.id}">
 
                                                 <div class="mb-3 col-md-12">
-                                                    <label class="form-label">Issue <span style="color: red;">*</span></label>
+                                                    <label class="form-label"><strong>Issue</strong> <span style="color: red;">*</span></label>
                                                     <input type="text" class="form-control" name="name" placeholder="Enter the Issue name"
                                                            value="${name}" id="name" required>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Issue Type <span style="color: red;">*</span></label>
+                                                    <label class="form-label"><strong>Issue Type</strong> <span style="color: red;">*</span></label>
                                                     <select name="type" id="type" class="form-select" required>
                                                         <option value="" hidden disable>Choose Issue Type</option>
                                                         <c:forEach items="${listType}" var="t">
@@ -133,7 +133,7 @@
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Project <span style="color: red;">*</span></label>
+                                                    <label class="form-label"><strong>Project</strong> <span style="color: red;">*</span></label>
                                                     <select name="projectId" id="projectDropdown" class="form-select" 
                                                             onchange="redirectToConfigPage(${userId})" required>
                                                         <option value="" hidden disable>Choose Project</option>
@@ -161,7 +161,7 @@
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Milestone <span style="color: red;">*</span></label>
+                                                    <label class="form-label"><strong>Milestone</strong> <span style="color: red;">*</span></label>
                                                     <select name="milestone" id="milestone" class="form-select" required>
                                                         <option value="" hidden disable>Choose Milestone</option>
                                                         <c:forEach items="${listMilestone}" var="m">
@@ -176,7 +176,7 @@
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Assignee <span style="color: red;">*</span></label>
+                                                    <label class="form-label"><strong>Assignee</strong> <span style="color: red;">*</span></label>
                                                     <select name="assignee" id="assignee" class="form-select" required>
                                                         <option value="" hidden disable>Choose Assignee</option>
                                                         <c:forEach items="${listAssignee}" var="u">
@@ -191,14 +191,14 @@
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Deadline <span style="color: red;">*</span></label>
+                                                    <label class="form-label"><strong>Deadline</strong> <span style="color: red;">*</span></label>
                                                     <input type="date" class="form-control" name="deadline" placeholder="dd/MM/yyyy" 
                                                            value="${deadline}" id="deadline" required>
                                                 </div>
 
 
                                                 <div class="mb-3 col-md-6">
-                                                    <label class="form-label">Status</label>
+                                                    <label class="form-label"><strong>Status</strong></label>
                                                     <select name="status" class="form-select">
                                                         <option 
                                                             <c:if test="${status eq '0'}">
@@ -228,7 +228,7 @@
                                                 </div>
 
                                                 <div class="mb-3 col-md-12">
-                                                    <label class="form-label">Description</label>
+                                                    <label class="form-label"><strong>Description</strong></label>
                                                     <textarea class="form-control" name="description" id="description" 
                                                               placeholder="Enter the Description" rows="3">${description}</textarea>
                                                 </div>
@@ -266,25 +266,25 @@
                                                     <input type="hidden" name="userId" value="${user.id}"/>
 
                                                     <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Created By</label>
+                                                        <label class="form-label"><strong>Created By</strong></label>
                                                         <input type="text" class="form-control" placeholder="Full Name (Username)" 
                                                                value="${issue.created_by.full_name} (${issue.created_by.username})" readonly>
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Last Updated</label>
+                                                        <label class="form-label"><strong>Last Updated</strong></label>
                                                         <input type="datetime-local" class="form-control" name="last_updated" placeholder="dd/MM/yyyy hh:mm:ss" 
                                                                value="${issue.last_updated}" readonly>
                                                     </div>
 
                                                     <div class="mb-3 col-md-12">
-                                                        <label class="form-label">Issue <span style="color: red;">*</span></label>
+                                                        <label class="form-label"><strong>Issue</strong> <span style="color: red;">*</span></label>
                                                         <input type="text" class="form-control" name="name" placeholder="Enter the Issue name"
                                                                value="${issue.name}" required>
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Issue Type</label>
+                                                        <label class="form-label"><strong>Issue Type</strong></label>
                                                         <select name="type" class="form-select" required>
                                                             <c:forEach items="${listType}" var="t">
                                                                 <option 
@@ -298,7 +298,7 @@
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Project</label>
+                                                        <label class="form-label"><strong>Project</strong></label>
                                                         <!--                                                    <select name="project" class="form-select" required>
                                                         <%--<c:forEach items="${listPj}" var="p">--%>
                                                             <option 
@@ -316,7 +316,7 @@
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Milestone</label>
+                                                        <label class="form-label"><strong>Milestone</strong></label>
                                                         <select name="milestone" class="form-select" required>
                                                             <c:forEach items="${listMilestone}" var="m">
                                                                 <option 
@@ -330,7 +330,7 @@
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Assignee</label>
+                                                        <label class="form-label"><strong>Assignee</strong></label>
                                                         <select name="assignee" class="form-select" required>
                                                             <c:forEach items="${listAssignee}" var="u">
                                                                 <option 
@@ -344,13 +344,13 @@
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Deadline</label>
+                                                        <label class="form-label"><strong>Deadline</strong></label>
                                                         <input type="date" class="form-control" name="deadline" placeholder="dd/MM/yyyy" 
                                                                value="${issue.deadline}">
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Status</label>
+                                                        <label class="form-label"><strong>Status</strong></label>
                                                         <select name="status" class="form-select">
                                                             <option 
                                                                 <c:if test="${issue.status eq '0'}">
@@ -380,7 +380,7 @@
                                                     </div>
 
                                                     <div class="mb-3 col-md-12">
-                                                        <label class="form-label">Description</label>
+                                                        <label class="form-label"><strong>Description</strong></label>
                                                         <textarea class="form-control" name="description" 
                                                                   placeholder="Enter the Description" rows="3">${issue.details}</textarea>
                                                     </div>
@@ -395,55 +395,55 @@
                                                     <input type="hidden" name="userId" value="${user.id}"/>
 
                                                     <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Created By</label>
+                                                        <label class="form-label"><strong>Created By</strong></label>
                                                         <input type="text" class="form-control" placeholder="Full Name (Username)" 
                                                                value="${issue.created_by.full_name} (${issue.created_by.username})" readonly>
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Last Updated</label>
+                                                        <label class="form-label"><strong>Last Updated</strong></label>
                                                         <input type="datetime-local" class="form-control" name="last_updated" placeholder="dd/MM/yyyy hh:mm:ss" 
                                                                value="${issue.last_updated}" readonly>
                                                     </div>
 
                                                     <div class="mb-3 col-md-12">
-                                                        <label class="form-label">Issue <span style="color: red;">*</span></label>
+                                                        <label class="form-label"><strong>Issue</strong> <span style="color: red;">*</span></label>
                                                         <input type="text" class="form-control" name="name" placeholder="Issue Name"
                                                                value="${issue.name}" readonly>
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Issue Type</label>
+                                                        <label class="form-label"><strong>Issue Type</strong></label>
                                                         <input type="text" class="form-control" name="type" placeholder="Issue type"
                                                                value="${issue.type.name}" readonly>
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Project</label>
+                                                        <label class="form-label"><strong>Project</strong></label>
                                                         <input type="text" class="form-control" placeholder="Project Name (Project Code)"
                                                                value="${issue.project.name} (${issue.project.code})" readonly>
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Milestone</label>
+                                                        <label class="form-label"><strong>Milestone</strong></label>
                                                         <input type="text" class="form-control" placeholder="Milestone Name"
                                                                value="${issue.milestone.name}" readonly>
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Assignee</label>
+                                                        <label class="form-label"><strong>Assignee</strong></label>
                                                         <input type="text" class="form-control" placeholder="Full Name (Username)"
                                                                value="${issue.assignee.full_name} (${issue.assignee.username})" readonly>
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Deadline</label>
+                                                        <label class="form-label"><strong>Deadline</strong></label>
                                                         <input type="date" class="form-control" name="deadline" placeholder="dd/MM/yyyy" 
                                                                value="${issue.deadline}" readonly>
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
-                                                        <label class="form-label">Status</label>
+                                                        <label class="form-label"><strong>Status</strong></label>
                                                         <c:if test="${issue.status eq '0'}">
                                                             <input type="text" class="form-control" name="status" placeholder="Status" 
                                                                    value="Pending" readonly>
@@ -463,7 +463,7 @@
                                                     </div>
 
                                                     <div class="mb-3 col-md-12">
-                                                        <label class="form-label">Description</label>
+                                                        <label class="form-label"><strong>Description</strong></label>
                                                         <textarea class="form-control" name="description" readonly
                                                                   placeholder="Enter the Description" rows="3">${issue.details}</textarea>
                                                     </div>

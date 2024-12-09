@@ -24,11 +24,40 @@ import model.User;
  */
 public class DepartmentDAO {
 
-//    HuyenPTNHE160769
-//    04/10/2024        
-//    Admin select all depts order by id descending
-//        LIMIT = pageSize
-//        OFFSET = (pageIndex - 1) * pageSize;
+//    HuyenPTNHE160769    
+//    Select all sctive depts 
+    public List<Department> selectAllActiveDepartments() {
+        List<Department> dept = new ArrayList<>();
+
+        String sql = """
+                     SELECT d1.id, d1.code, d1.name, d1.details, d1.parent, 
+                     d1.status, d2.code, d2.name 
+                     FROM pms.department d1
+                     LEFT JOIN pms.department d2 ON d1.parent = d2.id
+                     WHERE d1.status = 1""";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Department d = new Department();
+                d.setId(rs.getInt("d1.id"));
+                d.setCode(rs.getString("d1.code"));
+                d.setName(rs.getString("d1.name"));
+                d.setDetails(rs.getString("d1.details"));
+                d.setParentId(rs.getInt("d1.parent"));
+                d.setParentName(rs.getString("d2.name"));
+                d.setParentCode(rs.getString("d2.code"));
+                d.setStatus(rs.getBoolean("d1.status"));
+
+                dept.add(d);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+
+        return dept;
+    }
+    
     public List<Department> selectAllDepartments(String keyword, Boolean status) {
         List<Department> dept = new ArrayList<>();
 
@@ -87,7 +116,11 @@ public class DepartmentDAO {
     public Department selectDepartmentByID(int id) {
         Department d = null;
 
-        String sql = "SELECT * FROM pms.department WHERE id = ?;";
+        String sql = """
+                     SELECT d1.id, d1.code, d1.name, d1.details, d1.parent, d1.status, d2.code, d2.name 
+                     FROM pms.department d1
+                     LEFT JOIN pms.department d2 ON d1.parent = d2.id
+                     WHERE d1.id = ?;""";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             stm.setInt(1, id);
@@ -95,12 +128,14 @@ public class DepartmentDAO {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 d = new Department();
-                d.setId(rs.getInt("id"));
-                d.setCode(rs.getString("code"));
-                d.setName(rs.getString("name"));
-                d.setDetails(rs.getString("details"));
-                d.setParentId(rs.getInt("parent"));
-                d.setStatus(rs.getBoolean("status"));
+                d.setId(rs.getInt("d1.id"));
+                d.setCode(rs.getString("d1.code"));
+                d.setName(rs.getString("d1.name"));
+                d.setDetails(rs.getString("d1.details"));
+                d.setParentId(rs.getInt("d1.parent"));
+                d.setParentName(rs.getString("d2.name"));
+                d.setParentCode(rs.getString("d2.code"));
+                d.setStatus(rs.getBoolean("d1.status"));
             }
         } catch (SQLException e) {
             BaseDAO.printSQLException(e);
@@ -113,18 +148,19 @@ public class DepartmentDAO {
 //    Admin add new dept
     public int insertDepartment(Department dept, Integer parent) throws SQLException {
         int result = 0;
-        String sql = "INSERT INTO pms.department (code, name, details, parent) "
-                + "VALUES (?, ?, ?, ?);";
+        String sql = "INSERT INTO pms.department (code, name, details, status, parent) "
+                + "VALUES (?, ?, ?, ?, ?);";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             stm.setString(1, dept.getCode());
             stm.setString(2, dept.getName());
             stm.setString(3, dept.getDetails());
+            stm.setBoolean(4, dept.isStatus());
             // Set parent (allow null)
             if (parent != null) {
-                stm.setInt(4, parent);
+                stm.setInt(5, parent);
             } else {
-                stm.setNull(4, Types.INTEGER);
+                stm.setNull(5, Types.INTEGER);
             }
 
             result = stm.executeUpdate();
@@ -181,7 +217,7 @@ public class DepartmentDAO {
         }
         return rowUpdated;
     }
-    
+
 //    HuyenPTNHE160769
 //    31/10/2024      
 //    Admin select all dept users
@@ -251,8 +287,8 @@ public class DepartmentDAO {
                 du.setDept(d);
 
                 Setting s = new Setting();
-                s.setId(rs.getInt("du.role_id"));  
-                s.setName(rs.getString("s.name"));  
+                s.setId(rs.getInt("du.role_id"));
+                s.setName(rs.getString("s.name"));
                 du.setSetting(s);
 
                 deptUsers.add(du);
