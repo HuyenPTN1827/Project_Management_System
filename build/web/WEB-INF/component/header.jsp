@@ -41,12 +41,17 @@
             <!-- Large menu -->
             <!--<ul class="navbar-nav d-none d-lg-flex">-->
             <ul class="navbar-nav">
-                <li class="nav-item px-2">
+                <li class="nav-item ps-4">
+                    <a class="nav-link <c:if test="${currentPage == 'dashboard'}">active</c:if>"
+                       href="<%=request.getContextPath()%>/member-dashboard">Dashboard</a>
+                </li>  
+<!--                
+                <li class="nav-item px-1">
                     <a class="nav-link <c:if test="${currentPage == 'requirement-management'}">active</c:if>"
                        href="WorkPackageController" hidden>Requirements</a>
-                </li>  
+                </li>  -->
 
-                <li class="nav-item px-1">
+                <li class="nav-item ps-3">
                 <c:if test="${user.id == null}">
                     <a class="nav-link" href="<%=request.getContextPath()%>/logout">Issues</a>
                 </c:if>
