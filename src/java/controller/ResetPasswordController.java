@@ -93,6 +93,7 @@ public class ResetPasswordController extends HttpServlet {
             boolean isUpdated = userService.updatePassword(userId, newPassword);
             if (isUpdated) {
                 // Đã cập nhật thành công
+                request.setAttribute("SUCCESS", "Password update successful.");
                 request.getRequestDispatcher("/WEB-INF/member/login.jsp").forward(request, response);
             } else {
                 // Xử lý lỗi

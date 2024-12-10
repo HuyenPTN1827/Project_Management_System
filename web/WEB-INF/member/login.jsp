@@ -17,8 +17,8 @@
         <link class="js-stylesheet" href="${pageContext.request.contextPath}/css/light.css" rel="stylesheet">
         <script src="${pageContext.request.contextPath}/js/settings.js"></script>
         <style>body {
-            opacity: 0;
-        }</style>
+                opacity: 0;
+            }</style>
     </head>
 
     <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-layout="default">
@@ -35,9 +35,9 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="m-sm-4">
-<!--                                        <div class="text-center">
-                                            <img src="${pageContext.request.contextPath}/img/avatars/avatar.jpg" alt="Charles Hall" class="img-fluid rounded-circle" width="132" height="132" />
-                                        </div>-->
+                                        <!--                                        <div class="text-center">
+                                                                                    <img src="${pageContext.request.contextPath}/img/avatars/avatar.jpg" alt="Charles Hall" class="img-fluid rounded-circle" width="132" height="132" />
+                                                                                </div>-->
                                         <form action="<%=request.getContextPath()%>/login" method="post">
                                             <div class="mb-3">
                                                 <label class="form-label">Email</label>
@@ -51,17 +51,21 @@
                                                     <label class="form-check-label" for="showPassword">Show Password</label>
                                                 </div>
                                             </div>
+                                            <div style="color: green; font-weight: bold;">
+                                                ${SUCCESS}
+                                            </div>
+
                                             <script>
-    function togglePasswordVisibility() {
-        var passwordInput = document.getElementById("password");
-        var showPasswordCheckbox = document.getElementById("showPassword");
-        if (showPasswordCheckbox.checked) {
-            passwordInput.type = "text"; // Hiển thị mật khẩu
-        } else {
-            passwordInput.type = "password"; // Ẩn mật khẩu
-        }
-    }
-</script>
+                                                function togglePasswordVisibility() {
+                                                    var passwordInput = document.getElementById("password");
+                                                    var showPasswordCheckbox = document.getElementById("showPassword");
+                                                    if (showPasswordCheckbox.checked) {
+                                                        passwordInput.type = "text"; // Hiển thị mật khẩu
+                                                    } else {
+                                                        passwordInput.type = "password"; // Ẩn mật khẩu
+                                                    }
+                                                }
+                                            </script>
 
 
                                             <% 

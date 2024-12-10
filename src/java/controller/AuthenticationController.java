@@ -281,7 +281,7 @@ protected void verifyOtp(HttpServletRequest request, HttpServletResponse respons
 
         // Thông báo thành công
         request.setAttribute("enteredotp", enteredOtp);
-        request.setAttribute("SUCCESS", "Account has been successfully verified.");
+        request.setAttribute("SUCCESS", "Account has been verified successfully. You can return to the login screen to log in.");
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/guest/verify.jsp");
         dispatcher.forward(request, response);
     } else {
