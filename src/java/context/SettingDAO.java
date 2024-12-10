@@ -24,7 +24,7 @@ public class SettingDAO {
     public List<Setting> getUserRolesList() {
         List<Setting> setting = new ArrayList<>();
 
-        String sql = "SELECT * FROM pms.setting WHERE type = 'User Role' ORDER BY priority DESC;";
+        String sql = "SELECT * FROM setting WHERE type = 'User Role' ORDER BY priority DESC;";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             ResultSet rs = stm.executeQuery();
@@ -45,7 +45,7 @@ public class SettingDAO {
     public List<Setting> getBizTermsList() {
         List<Setting> setting = new ArrayList<>();
 
-        String sql = "SELECT * FROM pms.setting WHERE type = 'Business Term' ORDER BY id ASC;";
+        String sql = "SELECT * FROM setting WHERE type = 'Business Term' ORDER BY id ASC;";
         
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             ResultSet rs = stm.executeQuery();
@@ -68,7 +68,7 @@ public class SettingDAO {
     public List<Setting> getIssueTypeList() {
         List<Setting> setting = new ArrayList<>();
 
-        String sql = "SELECT * FROM pms.setting WHERE type = 'Issue Type' AND status = 1 ORDER BY priority ASC;";
+        String sql = "SELECT * FROM setting WHERE type = 'Issue Type' AND status = 1 ORDER BY priority ASC;";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             ResultSet rs = stm.executeQuery();
@@ -93,7 +93,7 @@ public class SettingDAO {
     public List<Setting> selectAllSettings(String keyword, String type, Boolean status) {
         List<Setting> setting = new ArrayList<>();
 
-        String sql = "SELECT * FROM pms.setting WHERE 1=1";
+        String sql = "SELECT * FROM setting WHERE 1=1";
 
         // Add search conditions if any
         if (keyword != null && !keyword.isEmpty()) {
@@ -151,7 +151,7 @@ public class SettingDAO {
     public Setting selectSettingByID(int id) {
         Setting s = null;
 
-        String sql = "SELECT * FROM pms.setting WHERE id = ?;";
+        String sql = "SELECT * FROM setting WHERE id = ?;";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             stm.setInt(1, id);
@@ -178,7 +178,7 @@ public class SettingDAO {
 //    Admin add new setting
     public int insertSetting(Setting setting) throws SQLException {
         int result = 0;
-        String sql = "INSERT INTO pms.setting (name, type, value, priority, status, description) "
+        String sql = "INSERT INTO setting (name, type, value, priority, status, description) "
                 + "VALUES (?, ?, ?, ?, ?, ?);";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
@@ -202,7 +202,7 @@ public class SettingDAO {
     public boolean updateSetting(Setting setting) throws SQLException {
         boolean rowUpdated = false;
 
-        String sql = "UPDATE pms.setting SET name = ?, type = ?, value = ?, "
+        String sql = "UPDATE setting SET name = ?, type = ?, value = ?, "
                 + "priority = ?, status = ?, description = ? WHERE id = ?;";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
@@ -227,7 +227,7 @@ public class SettingDAO {
     public boolean changeStatusSetting(Setting setting) throws SQLException {
         boolean rowUpdated = false;
 
-        String sql = "UPDATE pms.setting SET status = ? WHERE id = ?;";
+        String sql = "UPDATE setting SET status = ? WHERE id = ?;";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             stm.setBoolean(1, setting.isStatus());
@@ -243,7 +243,7 @@ public class SettingDAO {
     public List<Setting> getPriorityUserRolesList() {
         List<Setting> settings = new ArrayList<>();
 
-        String sql = "SELECT id, name, value, priority FROM pms.setting WHERE type = 'User Role' AND status = 1 ORDER BY priority DESC;";
+        String sql = "SELECT id, name, value, priority FROM setting WHERE type = 'User Role' AND status = 1 ORDER BY priority DESC;";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
@@ -267,7 +267,7 @@ public class SettingDAO {
     public List<Setting> getTypeList() {
         List<Setting> setting = new ArrayList<>();
 
-        String sql = "SELECT * FROM pms.setting WHERE (type IS NULL OR type = '');";
+        String sql = "SELECT * FROM setting WHERE (type IS NULL OR type = '');";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             ResultSet rs = stm.executeQuery();

@@ -14,7 +14,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
-        <meta name="author" content="AdminKit">
+        <meta name="author" content="PMS">
         <meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
 
         <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -22,7 +22,7 @@
 
         <link rel="canonical" href="pages-profile.html" />
 
-        <title>Project Details | PMS</title>
+        <title>Milestone Details | PMS</title>
 
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet">
 
@@ -58,7 +58,7 @@
                     <div class="card-body">
                         <c:if test="${milestone == null}">
                             <form action="insert-milestone" method="post" class="row">
-                                <input type="text" id="action" name="action" value="${action}"/>
+                                <input type="hidden" id="action" name="action" value="${action}"/>
 
                                 <!-- Created By -->
                                 <div class="col-md-6 mb-3" hidden>
@@ -297,7 +297,7 @@
                                                 if (localStorage.getItem('popState') !== 'shown') {
                                                     window.notyf.open({
                                                         type: "success",
-                                                        message: "Get access to all 500+ components and 45+ pages with AdminKit PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
+                                                        message: "Get access to all 500+ components and 45+ pages with PMS PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
                                                         duration: 10000,
                                                         ripple: true,
                                                         dismissible: false,

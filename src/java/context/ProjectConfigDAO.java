@@ -507,11 +507,11 @@ public class ProjectConfigDAO {
         String sql = """
                      SELECT a.project_id, a.id, a.user_id, u.full_name, u.username, a.dept_id, 
                      d.code, a.start_date, a.end_date, a.project_role, r.name, a.effort_rate, a.status
-                     FROM pms.allocation a
-                     JOIN pms.department d ON a.dept_id = d.id
-                     JOIN pms.user u ON a.user_id = u.id
-                     JOIN pms.project p ON a.project_id = p.id
-                     JOIN pms.project_type_setting r ON a.project_role = r.id
+                     FROM allocation a
+                     JOIN department d ON a.dept_id = d.id
+                     JOIN user u ON a.user_id = u.id
+                     JOIN project p ON a.project_id = p.id
+                     JOIN project_type_setting r ON a.project_role = r.id
                      WHERE a.project_id = ?""";
 
         // Add search conditions if any
@@ -602,13 +602,13 @@ public class ProjectConfigDAO {
                      a.dept_id, d.name, d.code, a.user_id, u3.full_name, u3.username, 
                      a.project_id, p.name, p.code, a.project_role, r.name,
                      a.start_date, a.end_date, a.effort_rate, a.description, a.status
-                     FROM pms.allocation a
-                     JOIN pms.department d ON a.dept_id = d.id
-                     JOIN pms.user u1 ON a.created_by = u1.id
-                     LEFT JOIN pms.user u2 ON a.updated_by = u2.id
-                     JOIN pms.user u3 ON a.user_id = u3.id
-                     JOIN pms.project p ON a.project_id = p.id
-                     JOIN pms.project_type_setting r ON a.project_role = r.id
+                     FROM allocation a
+                     JOIN department d ON a.dept_id = d.id
+                     JOIN user u1 ON a.created_by = u1.id
+                     LEFT JOIN user u2 ON a.updated_by = u2.id
+                     JOIN user u3 ON a.user_id = u3.id
+                     JOIN project p ON a.project_id = p.id
+                     JOIN project_type_setting r ON a.project_role = r.id
                      WHERE a.id = ?;""";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
@@ -681,7 +681,7 @@ public class ProjectConfigDAO {
     public int insertAllocation(Allocation allocation) throws SQLException {
         int result = 0;
         String sql = """
-                     INSERT INTO pms.allocation (created_by, created_at, last_updated, start_date, 
+                     INSERT INTO allocation (created_by, created_at, last_updated, start_date, 
                      end_date, effort_rate, description, dept_id, user_id, project_id, project_role)
                      VALUES (?, NOW(), NOW(), ?, ?, ?, ?, ?, ?, ?, ?)""";
 
@@ -707,7 +707,7 @@ public class ProjectConfigDAO {
         boolean rowUpdated = false;
 
         String sql = """
-                     UPDATE pms.allocation SET updated_by = ?, last_updated = NOW(), 
+                     UPDATE allocation SET updated_by = ?, last_updated = NOW(), 
                      start_date = ?, end_date = ?, effort_rate = ?, description = ?, 
                      status = ?, dept_id = ?, user_id = ?, project_id = ?, project_role = ?
                      WHERE id = ?;""";
@@ -736,8 +736,8 @@ public class ProjectConfigDAO {
     public boolean changeStatusAllocation(Allocation allocation) throws SQLException {
         boolean rowUpdated = false;
 
-        String activateSql = "UPDATE pms.allocation SET updated_by = ?, last_updated = NOW(), end_date = NULL, status = 1 WHERE id = ?;";
-        String deactivateSql = "UPDATE pms.allocation SET updated_by = ?, last_updated = NOW(), end_date = CURDATE(), status = 0 WHERE id = ?;";
+        String activateSql = "UPDATE allocation SET updated_by = ?, last_updated = NOW(), end_date = NULL, status = 1 WHERE id = ?;";
+        String deactivateSql = "UPDATE allocation SET updated_by = ?, last_updated = NOW(), end_date = CURDATE(), status = 0 WHERE id = ?;";
 
         try (Connection cnt = BaseDAO.getConnection()) {
             PreparedStatement stm;

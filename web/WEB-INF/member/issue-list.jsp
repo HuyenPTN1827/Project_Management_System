@@ -14,7 +14,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
-        <meta name="author" content="AdminKit">
+        <meta name="author" content="PMS">
         <meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
 
         <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -84,6 +84,7 @@
                                                         <!--<input type="hidden" name="userId" value="${user.id}">-->
 
                                                     <select name="projectId" id="projectDropdown" class="form-select" onchange="redirectToConfigPage(${user.id})">
+                                                        <option value="">All Projects</option>
                                                         <c:forEach items="${listPj}" var="p">
                                                             <option 
                                                                 <c:if test="${projectId eq p.id}">
@@ -186,7 +187,7 @@
                                                     </select>
 
                                                     <div class="form-group" style="width: 210%;">
-                                                        <input type="search" name="keyword" class="form-control" placeholder="Enter the Project Issue" id="keyword" value="${keyword}">
+                                                        <input type="search" name="keywordIssue" class="form-control" placeholder="Enter the Project Issue" id="keywordIssue" value="${keywordIssue}">
                                                     </div>
                                                     <button type="submit" class="btn btn-primary">Search</button>
                                                 </div>
@@ -219,8 +220,8 @@
                                                     <tr style="text-align: center">
                                                         <td>${issue.id}</td>
                                                         <td>${issue.name}</td>
-                                                        <!--<td>${issue.type.name}</td>-->
-                                                        <td>${issue.project.code}</td>
+                                                        <td>${issue.type.name}</td>
+                                                        <!--<td>${issue.project.code}</td>-->
                                                         <td>${issue.milestone.name}</td>
                                                         <!--<td>${issue.scope.title}</td>-->
                                                         <td>${issue.created_by.username}</td>
@@ -274,7 +275,7 @@
                         <div class="row text-muted">
                             <div class="col-6 text-start">
                                 <p class="mb-0">
-                                    <a href="https://adminkit.io/" target="_blank" class="text-muted"><strong>AdminKit</strong></a> &copy;
+                                    <a href="https://adminkit.io/" target="_blank" class="text-muted"><strong>PMS</strong></a> &copy;
                                 </p>
                             </div>
                             <div class="col-6 text-end">

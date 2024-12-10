@@ -32,7 +32,7 @@ public class ProjectTypeDAO {
     public List<ProjectType> selectAllProjectTypes(String keyword, Boolean status) {
         List<ProjectType> projectType = new ArrayList<>();
 
-        String sql = "SELECT * FROM pms.project_type WHERE 1=1";
+        String sql = "SELECT * FROM project_type WHERE 1=1";
 
         // Add search conditions if any
         if (keyword != null && !keyword.isEmpty()) {
@@ -79,7 +79,7 @@ public class ProjectTypeDAO {
     public ProjectType selectProjectTypeByID(int id) {
         ProjectType pt = null;
 
-        String sql = "SELECT * FROM pms.project_type WHERE id = ?;";
+        String sql = "SELECT * FROM project_type WHERE id = ?;";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             stm.setInt(1, id);
@@ -104,7 +104,7 @@ public class ProjectTypeDAO {
 //    Admin add new project type
     public int insertProjectType(ProjectType projectType) throws SQLException {
         int result = 0;
-        String sql = "INSERT INTO pms.project_type (code, name, details, status) VALUES (?, ?, ?, ?);";
+        String sql = "INSERT INTO project_type (code, name, details, status) VALUES (?, ?, ?, ?);";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             stm.setString(1, projectType.getCode());
@@ -125,7 +125,7 @@ public class ProjectTypeDAO {
     public boolean updateProjectType(ProjectType projectType) throws SQLException {
         boolean rowUpdated = false;
 
-        String sql = "UPDATE pms.project_type SET code = ?, name = ?, details = ?, status = ? WHERE id = ?;";
+        String sql = "UPDATE project_type SET code = ?, name = ?, details = ?, status = ? WHERE id = ?;";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             stm.setString(1, projectType.getCode());
@@ -147,7 +147,7 @@ public class ProjectTypeDAO {
     public boolean changeStatusProjectType(ProjectType projectType) throws SQLException {
         boolean rowUpdated = false;
 
-        String sql = "UPDATE pms.project_type SET status = ? WHERE id = ?;";
+        String sql = "UPDATE project_type SET status = ? WHERE id = ?;";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             stm.setBoolean(1, projectType.isStatus());
@@ -167,9 +167,9 @@ public class ProjectTypeDAO {
         List<ProjectTypeSetting> pjSetting = new ArrayList<>();
 
         String sql = """
-                     SELECT pts.id, pts.name, pts.value FROM pms.project_type_setting pts 
-                     JOIN pms.project_type pt ON pts.type_id = pt.id
-                     JOIN pms.project p ON pt.id = p.type_id
+                     SELECT pts.id, pts.name, pts.value FROM project_type_setting pts 
+                     JOIN project_type pt ON pts.type_id = pt.id
+                     JOIN project p ON pt.id = p.type_id
                      WHERE pts.type = 'Project Role' 
                      AND pts.status = 1 
                      AND p.id = ?
@@ -199,10 +199,10 @@ public class ProjectTypeDAO {
 
         String sql = """
                      SELECT ut.id, ut.user_id, u.full_name, ut.role_id, pts.name, ut.type_id, 
-                     ut.start_date, ut.end_date, ut.status FROM pms.user_type ut
-                     INNER JOIN pms.user u ON ut.user_id = u.id
-                     INNER JOIN pms.project_type pt ON ut.type_id = pt.id
-                     INNER JOIN pms.setting pts ON ut.role_id = pts.id
+                     ut.start_date, ut.end_date, ut.status FROM user_type ut
+                     INNER JOIN user u ON ut.user_id = u.id
+                     INNER JOIN project_type pt ON ut.type_id = pt.id
+                     INNER JOIN setting pts ON ut.role_id = pts.id
                      WHERE ut.type_id = ?""";
 
         // Add search conditions if any
@@ -278,8 +278,8 @@ public class ProjectTypeDAO {
     public boolean changeStatusProjectTypeUser(ProjectType_User ptUser) throws SQLException {
         boolean rowUpdated = false;
 
-        String activateSql = "UPDATE pms.user_type SET status = ?, end_date = NULL WHERE id = ? AND type_id = ?;";
-        String deactivateSql = "UPDATE pms.user_type SET status = ?, end_date = CURDATE() WHERE id = ? AND type_id = ?;";
+        String activateSql = "UPDATE user_type SET status = ?, end_date = NULL WHERE id = ? AND type_id = ?;";
+        String deactivateSql = "UPDATE user_type SET status = ?, end_date = CURDATE() WHERE id = ? AND type_id = ?;";
 
         try (Connection cnt = BaseDAO.getConnection()) {
             PreparedStatement stm;
@@ -305,7 +305,7 @@ public class ProjectTypeDAO {
     public int insertProjectTypeUser(ProjectType_User ptUser) throws SQLException {
         int result = 0;
         String sql = """
-                     INSERT INTO pms.user_type (user_id, type_id, start_date, status, role_id)
+                     INSERT INTO user_type (user_id, type_id, start_date, status, role_id)
                      VALUES (?, ?, CURDATE(), 1, ?);""";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
@@ -328,10 +328,10 @@ public class ProjectTypeDAO {
 
         String sql = """
                      SELECT ut.id, ut.user_id, u.full_name, u.email, u.mobile, ut.role_id, pts.name, ut.type_id, 
-                                          ut.start_date, ut.end_date, ut.status FROM pms.user_type ut
-                                          INNER JOIN pms.user u ON ut.user_id = u.id
-                                          INNER JOIN pms.project_type pt ON ut.type_id = pt.id
-                                          INNER JOIN pms.setting pts ON ut.role_id = pts.id
+                                          ut.start_date, ut.end_date, ut.status FROM user_type ut
+                                          INNER JOIN user u ON ut.user_id = u.id
+                                          INNER JOIN project_type pt ON ut.type_id = pt.id
+                                          INNER JOIN setting pts ON ut.role_id = pts.id
                                           WHERE ut.id = ?;""";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
@@ -383,8 +383,8 @@ public class ProjectTypeDAO {
     public boolean updateProjectTypeUser(ProjectType_User ptUser) throws SQLException {
         boolean rowUpdated = false;
 
-        String activateSql = "UPDATE pms.user_type SET status = ?, role_id = ?, end_date = NULL WHERE id = ? AND type_id = ?;";
-        String deactivateSql = "UPDATE pms.user_type SET status = ?, role_id = ?, end_date = CURDATE() WHERE id = ? AND type_id = ?;";
+        String activateSql = "UPDATE user_type SET status = ?, role_id = ?, end_date = NULL WHERE id = ? AND type_id = ?;";
+        String deactivateSql = "UPDATE user_type SET status = ?, role_id = ?, end_date = CURDATE() WHERE id = ? AND type_id = ?;";
 
         try (Connection cnt = BaseDAO.getConnection()) {
             PreparedStatement stm;
@@ -413,8 +413,8 @@ public class ProjectTypeDAO {
 
         String sql = """
                      SELECT ec.id, ec.name, ec.weight, ec.status, ec.phase_id, pp.name, pp.type_id
-                     FROM pms.eval_criteria ec 
-                     INNER JOIN pms.project_phase pp ON ec.phase_id = pp.id
+                     FROM eval_criteria ec 
+                     INNER JOIN project_phase pp ON ec.phase_id = pp.id
                      WHERE pp.type_id = ?""";
 
         // Add search conditions if any
@@ -475,7 +475,7 @@ public class ProjectTypeDAO {
     public boolean changeStatusProjectTypeCriteria(ProjectTypeCriteria ptc) throws SQLException {
         boolean rowUpdated = false;
 
-        String sql = "UPDATE pms.eval_criteria SET status = ? WHERE id = ?;";
+        String sql = "UPDATE eval_criteria SET status = ? WHERE id = ?;";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             stm.setBoolean(1, ptc.isStatus());
@@ -496,8 +496,8 @@ public class ProjectTypeDAO {
         String sql = """
                      SELECT ec.id, ec.name, ec.weight, ec.description, ec.status, 
                      ec.phase_id, pp.name, pp.type_id
-                     FROM pms.eval_criteria ec 
-                     INNER JOIN pms.project_phase pp ON ec.phase_id = pp.id
+                     FROM eval_criteria ec 
+                     INNER JOIN project_phase pp ON ec.phase_id = pp.id
                      WHERE ec.id = ?;""";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
@@ -533,7 +533,7 @@ public class ProjectTypeDAO {
     public int insertProjectTypeCriteria(ProjectTypeCriteria ptc) throws SQLException {
         int result = 0;
         String sql = """
-                     INSERT INTO pms.eval_criteria (name, weight, description, phase_id)
+                     INSERT INTO eval_criteria (name, weight, description, phase_id)
                      VALUES (?, ?, ?, ?);""";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
@@ -555,7 +555,7 @@ public class ProjectTypeDAO {
     public boolean updateProjectTypeCriteria(ProjectTypeCriteria ptc) throws SQLException {
         boolean rowUpdated = false;
 
-        String sql = "UPDATE pms.eval_criteria SET name = ?, weight =?, description = ?, status = ?, phase_id = ? WHERE id =?;";
+        String sql = "UPDATE eval_criteria SET name = ?, weight =?, description = ?, status = ?, phase_id = ? WHERE id =?;";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             stm.setString(1, ptc.getName());
@@ -578,7 +578,7 @@ public class ProjectTypeDAO {
     public List<ProjectPhase> selectAllProjectPhase(int typeId, String keyword, Boolean status) {
         List<ProjectPhase> phase = new ArrayList<>();
 
-        String sql = "SELECT * FROM pms.project_phase WHERE type_id = ?";
+        String sql = "SELECT * FROM project_phase WHERE type_id = ?";
 
         // Add search conditions if any
         if (keyword != null && !keyword.isEmpty()) {
@@ -626,7 +626,7 @@ public class ProjectTypeDAO {
     public ProjectPhase selectProjectPhaseByID(int id) {
         ProjectPhase phase = null;
 
-        String sql = "SELECT * FROM pms.project_phase WHERE id = ?;";
+        String sql = "SELECT * FROM project_phase WHERE id = ?;";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             stm.setInt(1, id);
@@ -656,7 +656,7 @@ public class ProjectTypeDAO {
     public int insertProjectPhase(ProjectPhase phase) throws SQLException {
         int result = 0;
         String sql = """
-                 INSERT INTO pms.project_phase (name, priority, details, type_id, status)
+                 INSERT INTO project_phase (name, priority, details, type_id, status)
                  VALUES (?, ?, ?, ?, ?);""";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
@@ -679,7 +679,7 @@ public class ProjectTypeDAO {
     public boolean updateProjectPhase(ProjectPhase phase) throws SQLException {
         boolean rowUpdated = false;
 
-        String sql = "UPDATE pms.project_phase SET name = ?, priority = ?, details = ?, status = ? WHERE id = ?;";
+        String sql = "UPDATE project_phase SET name = ?, priority = ?, details = ?, status = ? WHERE id = ?;";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             stm.setString(1, phase.getName());
@@ -701,7 +701,7 @@ public class ProjectTypeDAO {
     public boolean changeStatusProjectPhase(ProjectPhase phase) throws SQLException {
         boolean rowUpdated = false;
 
-        String sql = "UPDATE pms.project_phase SET status = ? WHERE id = ?;";
+        String sql = "UPDATE project_phase SET status = ? WHERE id = ?;";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             stm.setBoolean(1, phase.isStatus());
@@ -719,7 +719,7 @@ public class ProjectTypeDAO {
     public List<ProjectTypeSetting> getAllProjectTypeSettings(String keyword, Boolean status, String type, int typeId) throws SQLException {
         List<ProjectTypeSetting> list = new ArrayList<>();
 
-        String sql = "SELECT * FROM pms.project_type_setting WHERE type_id = ?";
+        String sql = "SELECT * FROM project_type_setting WHERE type_id = ?";
 
         if (keyword != null && !keyword.trim().isEmpty()) {
             sql += (" AND (name LIKE ? OR value LIKE ?)");
@@ -782,7 +782,7 @@ public class ProjectTypeDAO {
     public ProjectTypeSetting getProjectTypeSettingById(int id) throws SQLException {
         ProjectTypeSetting setting = null;
 
-        String sql = "SELECT * FROM pms.project_type_setting WHERE id = ?";
+        String sql = "SELECT * FROM project_type_setting WHERE id = ?";
         System.out.println(sql);
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stmt = cnt.prepareStatement(sql);) {
@@ -812,7 +812,7 @@ public class ProjectTypeDAO {
     // 17/10/2024
     // Create new ProjectTypeSetting
     public void createProjectTypeSetting(ProjectTypeSetting setting) throws SQLException {
-        String sql = "INSERT INTO pms.project_type_setting (name, type, value, "
+        String sql = "INSERT INTO project_type_setting (name, type, value, "
                 + "priority, description, type_id, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
         System.out.println(sql);
 
@@ -834,7 +834,7 @@ public class ProjectTypeDAO {
     // 17/10/2024
     // Update existing ProjectTypeSetting
     public void updateProjectTypeSetting(ProjectTypeSetting setting) throws SQLException {
-        String sql = "UPDATE pms.project_type_setting SET name = ?, type = ?, value = ?, "
+        String sql = "UPDATE project_type_setting SET name = ?, type = ?, value = ?, "
                 + "priority = ?, status = ?, description = ? WHERE id = ?;";
         System.out.println(sql);
 
@@ -856,7 +856,7 @@ public class ProjectTypeDAO {
     // 17/10/2024
     // Change the status of ProjectTypeSetting by ID
     public void changeStatusById(int id, boolean newStatus) throws SQLException {
-        String sql = "UPDATE pms.project_type_setting SET status = ? WHERE id = ?";
+        String sql = "UPDATE project_type_setting SET status = ? WHERE id = ?";
         System.out.println(sql);
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stmt = cnt.prepareStatement(sql);) {
             stmt.setBoolean(1, newStatus);
@@ -873,7 +873,7 @@ public class ProjectTypeDAO {
     public List<ProjectTypeSetting> getTypeList(int id) {
         List<ProjectTypeSetting> setting = new ArrayList<>();
 
-        String sql = "SELECT * FROM pms.project_type_setting WHERE (type IS NULL OR type = '') AND type_id = ?;";
+        String sql = "SELECT * FROM project_type_setting WHERE (type IS NULL OR type = '') AND type_id = ?;";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             stm.setInt(1, id);

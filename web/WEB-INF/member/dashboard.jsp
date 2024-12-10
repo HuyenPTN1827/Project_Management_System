@@ -12,7 +12,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
-        <meta name="author" content="AdminKit">
+        <meta name="author" content="PMS">
         <meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
 
         <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -20,7 +20,7 @@
 
         <link rel="canonical" href="index.html" />
 
-        <title>AdminKit Demo - Bootstrap 5 Admin Template</title>
+        <title>Dashboard | PMS</title>
 
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet">
 
@@ -65,7 +65,7 @@
 
                                 <div class="col-auto ms-auto text-end mt-n1">
                                     <form action="member-dashboard" method="get" class="d-flex">
-                                        <select name="deptId" class="form-select me-2" onchange="this.form.submit()">
+                                        <select name="deptId" class="form-select me-2" onchange="this.form.submit()" hidden>
                                             <option value="">All Departments</option>
                                         <c:forEach items="${dept}" var="d">
                                             <option 
@@ -91,93 +91,144 @@
                                 </form>
                             </div>
                         </div>
-                            
+
                         <div class="row">
-                            
-                            <div class="col-12 col-md-3 col-xxl-3 d-flex order-1 order-xxl-3">
-                                <div class="card flex-fill w-100">
-                                    <div class="card-header">
-                                        <div class="card-actions float-end">
-                                            <div class="dropdown position-relative">
-                                                <a href="#" data-bs-toggle="dropdown" data-bs-display="static">
-                                                    <i class="align-middle" data-feather="more-horizontal"></i>
-                                                </a>
+                            <c:forEach items="${project}" var="p">
+                                <div class="col-12 col-md-4 col-xxl-3 d-flex order-1 order-xxl-3">
+                                    <div class="card flex-fill w-100">
+                                        <div class="card-header">
+                                            <div class="card-actions float-end">
+                                                <div class="dropdown position-relative">
+                                                    <a href="#" data-bs-toggle="dropdown" data-bs-display="static">
+                                                        <i class="align-middle" data-feather="more-horizontal"></i>
+                                                    </a>
 
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <a class="dropdown-item" href="#">Action</a>
-                                                    <a class="dropdown-item" href="#">Another action</a>
-                                                    <a class="dropdown-item" href="#">Something else here</a>
+                                                    <div class="dropdown-menu dropdown-menu-end">
+                                                        <c:if test="${user.role_id == 5}">
+                                                            <a class="dropdown-item" href="<%= request.getContextPath() %>/projectconfig?id=${p.id}&activeTab=milestone&action=view">View Milestones</a>
+                                                            <a class="dropdown-item" href="<%= request.getContextPath() %>/projectconfig?id=${p.id}&activeTab=allocation&action=view">View Allocations</a>
+                                                        </c:if>
+                                                        <c:if test="${user.role_id != 5}">
+                                                            <a class="dropdown-item" href="<%= request.getContextPath() %>/projectconfig?id=${p.id}&activeTab=milestone&action=edit">View Milestones</a>
+                                                            <a class="dropdown-item" href="<%= request.getContextPath() %>/projectconfig?id=${p.id}&activeTab=allocation&action=edit">View Allocations</a>
+                                                        </c:if>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <h5 class="card-title mb-0">Projects</h5>
-                                    </div>
-                                    <div class="card-body d-flex">
-                                        <div class="align-self-center w-100">
-                                            <div class="py-3">
-                                                <div class="chart chart-xs">
-                                                    <canvas id="chartjs-dashboard-pie"></canvas>
-                                                </div>
+
+
+                                            <c:if test="${user.role_id == 5}">
+                                                <a href="<%=request.getContextPath()%>/projectconfig?id=${p.id}&action=view" class="text-dark">
+                                                    <div>
+                                                        <h3 class="mb-3" style="color: black"><strong>${p.name} - ${p.code}</strong></h3>
+                                                    </div>
+                                                </a>
+                                            </c:if>
+                                            <c:if test="${user.role_id != 5}">
+                                                <a href="<%=request.getContextPath()%>/projectconfig?id=${p.id}&action=edit" class="text-dark">
+                                                    <div>
+                                                        <h3 class="mb-3" style="color: black"><strong>${p.name} - ${p.code}</strong></h3>
+                                                    </div>
+                                                </a>
+                                            </c:if>
+
+                                            <div class="mb-3">
+                                                <i class="align-middle" data-feather="user"></i>
+                                                <strong> Project Manager: </strong>
+                                                <span>${p.user.full_name} (${p.user.username})</span>
+                                            </div>
+                                            <div class="mb-3">
+                                                <i class="align-middle" data-feather="calendar"></i>
+                                                <strong> Timeline: </strong>
+                                                <span>${p.startDate} &ndash; ${p.endDate}</span>
+                                            </div>
+                                            <div>
+                                                <i class="align-middle" data-feather="activity"></i>
+                                                <strong> Status: </strong>
+                                                <c:choose>
+                                                    <c:when test="${p.status == 0}">
+                                                        <span class="text-secondary">Pending</span>
+                                                    </c:when>
+                                                    <c:when test="${p.status == 1}">
+                                                        <span class="text-primary">Doing</span>
+                                                    </c:when>
+                                                    <c:when test="${p.status == 2}">
+                                                        <span class="text-success">Closed</span>
+                                                    </c:when>
+                                                    <c:when test="${p.status == 3}">
+                                                        <span class="text-danger">Cancelled</span>
+                                                    </c:when>
+                                                </c:choose>
                                             </div>
                                         </div>
+
+                                        <!--                                        <div class="card-body d-flex">
+                                                                                    <div class="align-self-left w-100">
+                                                                                        <div class="py-3">
+                                                                                            <div>
+                                        
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    </a>
+                                                                                </div>-->
                                     </div>
                                 </div>
-                            </div>
+                            </c:forEach>
+                            <!--
+                                                        <div class="col-12 col-md-4 col-xxl-3 d-flex order-1 order-xxl-3">
+                                                            <div class="card flex-fill w-100">
+                                                                <div class="card-header">
+                                                                    <div class="card-actions float-end">
+                                                                        <div class="dropdown position-relative">
+                                                                            <a href="#" data-bs-toggle="dropdown" data-bs-display="static">
+                                                                                <i class="align-middle" data-feather="more-horizontal"></i>
+                                                                            </a>
                             
-<!--
-                            <div class="col-12 col-md-4 col-xxl-3 d-flex order-1 order-xxl-3">
-                                <div class="card flex-fill w-100">
-                                    <div class="card-header">
-                                        <div class="card-actions float-end">
-                                            <div class="dropdown position-relative">
-                                                <a href="#" data-bs-toggle="dropdown" data-bs-display="static">
-                                                    <i class="align-middle" data-feather="more-horizontal"></i>
-                                                </a>
-
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <a class="dropdown-item" href="#">Action</a>
-                                                    <a class="dropdown-item" href="#">Another action</a>
-                                                    <a class="dropdown-item" href="#">Something else here</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <h5 class="card-title mb-0">Issues</h5>
-                                    </div>
-                                    <div class="card-body d-flex">
-                                        <div class="align-self-top w-100">
-                                            <div class="py-3">
-                                                <div class="chart chart-xs">
-                                                    <canvas id="chartjs-dashboard-pie1"></canvas>
-                                                </div>
-                                            </div>
-
-                                            <table class="table mb-0">
-                                                <tbody>
-                                                    <%--<c:forEach items="${requestScope.issues}" var="issue">--%>
-                                                        <tr>
-                                                            <td>
-                                                                <%--<c:if test="${issue.status eq 0}">--%>
-                                                                    <i class="fas fa-circle text-secondary fa-fw"></i> Pending
-                                                                <%--</c:if>--%>
-                                                                <%--<c:if test="${issue.status eq 1}">--%>
-                                                                    <i class="fas fa-circle text-primary fa-fw"></i> In Progress
-                                                                <%--</c:if>--%>
-                                                                <%--<c:if test="${issue.status eq 2}">--%>
-                                                                    <i class="fas fa-circle text-success fa-fw"></i> Closed
-                                                                <%--</c:if>--%>
-                                                                <%--<c:if test="${issue.status eq 3}">--%>
-                                                                    <i class="fas fa-circle text-danger fa-fw"></i> Cancelled
-                                                                <%--</c:if>--%>
-                                                            </td>
-                                                            <td class="text-end">${issue.count}</td>
-                                                        </tr>
-                                                    <%--</c:forEach>--%>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>-->
+                                                                            <div class="dropdown-menu dropdown-menu-end">
+                                                                                <a class="dropdown-item" href="#">Action</a>
+                                                                                <a class="dropdown-item" href="#">Another action</a>
+                                                                                <a class="dropdown-item" href="#">Something else here</a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <h5 class="card-title mb-0">Issues</h5>
+                                                                </div>
+                                                                <div class="card-body d-flex">
+                                                                    <div class="align-self-top w-100">
+                                                                        <div class="py-3">
+                                                                            <div class="chart chart-xs">
+                                                                                <canvas id="chartjs-dashboard-pie1"></canvas>
+                                                                            </div>
+                                                                        </div>
+                            
+                                                                        <table class="table mb-0">
+                                                                            <tbody>
+                            <%--<c:forEach items="${requestScope.issues}" var="issue">--%>
+                                <tr>
+                                    <td>
+                            <%--<c:if test="${issue.status eq 0}">--%>
+                                <i class="fas fa-circle text-secondary fa-fw"></i> Pending
+                            <%--</c:if>--%>
+                            <%--<c:if test="${issue.status eq 1}">--%>
+                                <i class="fas fa-circle text-primary fa-fw"></i> In Progress
+                            <%--</c:if>--%>
+                            <%--<c:if test="${issue.status eq 2}">--%>
+                                <i class="fas fa-circle text-success fa-fw"></i> Closed
+                            <%--</c:if>--%>
+                            <%--<c:if test="${issue.status eq 3}">--%>
+                                <i class="fas fa-circle text-danger fa-fw"></i> Cancelled
+                            <%--</c:if>--%>
+                        </td>
+                        <td class="text-end">${issue.count}</td>
+                    </tr>
+                            <%--</c:forEach>--%>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>-->
 
                             <div class="col-xl-5" hidden>
                                 <div class="card flex-fill w-100">
@@ -298,7 +349,7 @@
                         <div class="row text-muted">
                             <div class="col-6 text-start">
                                 <p class="mb-0">
-                                    <a href="https://adminkit.io/" target="_blank" class="text-muted"><strong>AdminKit</strong></a> &copy;
+                                    <a href="https://adminkit.io/" target="_blank" class="text-muted"><strong>PMS</strong></a> &copy;
                                 </p>
                             </div>
                             <div class="col-6 text-end">
@@ -660,7 +711,7 @@
                     if (localStorage.getItem('popState') !== 'shown') {
                         window.notyf.open({
                             type: "success",
-                            message: "Get access to all 500+ components and 45+ pages with AdminKit PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
+                            message: "Get access to all 500+ components and 45+ pages with PMS PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
                             duration: 10000,
                             ripple: true,
                             dismissible: false,

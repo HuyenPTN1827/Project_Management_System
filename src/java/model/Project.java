@@ -37,10 +37,12 @@ public class Project {
     private int createdBy;
     private String bizTermName;
     
+    private User user;
+    
     public Project() {
     }
 
-    public Project(int id, String name, String code, int estimatedEffort, Date startDate, String details, Date endDate, Date lastUpdated, int status, int typeId, int departmentId, int userId, String departmentName, String typeCode, String departmentCode, String settingName, int createdBy) {
+    public Project(int id, String name, String code, int estimatedEffort, Date startDate, String details, Date endDate, Date lastUpdated, int status, int typeId, int departmentId, int userId, int bizTerm, String departmentName, String typeName, String typeCode, String departmentCode, String settingName, int createdBy, String bizTermName, User user) {
         this.id = id;
         this.name = name;
         this.code = code;
@@ -53,11 +55,23 @@ public class Project {
         this.typeId = typeId;
         this.departmentId = departmentId;
         this.userId = userId;
+        this.bizTerm = bizTerm;
         this.departmentName = departmentName;
+        this.typeName = typeName;
         this.typeCode = typeCode;
         this.departmentCode = departmentCode;
         this.settingName = settingName;
         this.createdBy = createdBy;
+        this.bizTermName = bizTermName;
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public int getId() {
@@ -127,7 +141,7 @@ public class Project {
     public int getStatus() {
         return status;
     }
-
+                                                         
     public void setStatus(int status) {
         this.status = status;
     }
@@ -220,8 +234,4 @@ public class Project {
         this.bizTermName = bizTermName;
     }
 
-    
-    
-    
-    
 }

@@ -114,8 +114,8 @@ public class WorkPackageDAO {
     public List<WorkPackage> getWorkPackageByProjectId(int userId, Integer projectId) {
         List<WorkPackage> scope = new ArrayList<>();
         String sql = """
-                     SELECT wp.id, wp.title FROM pms.work_package wp
-                     JOIN pms.allocation a ON wp.project_id = a.project_id
+                     SELECT wp.id, wp.title FROM work_package wp
+                     JOIN allocation a ON wp.project_id = a.project_id
                      WHERE a.user_id = ?""";
         if (projectId != null) {
             sql += " AND wp.project_id = ?";

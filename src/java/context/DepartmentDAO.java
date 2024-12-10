@@ -32,8 +32,8 @@ public class DepartmentDAO {
         String sql = """
                      SELECT d1.id, d1.code, d1.name, d1.details, d1.parent, 
                      d1.status, d2.code, d2.name 
-                     FROM pms.department d1
-                     LEFT JOIN pms.department d2 ON d1.parent = d2.id
+                     FROM department d1
+                     LEFT JOIN department d2 ON d1.parent = d2.id
                      WHERE d1.status = 1""";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
@@ -64,8 +64,8 @@ public class DepartmentDAO {
         String sql = """
                      SELECT d1.id, d1.code, d1.name, d1.details, d1.parent, 
                      d1.status, d2.code, d2.name 
-                     FROM pms.department d1
-                     LEFT JOIN pms.department d2 ON d1.parent = d2.id
+                     FROM department d1
+                     LEFT JOIN department d2 ON d1.parent = d2.id
                      WHERE 1=1""";
 
         // Add search conditions if any
@@ -118,8 +118,8 @@ public class DepartmentDAO {
 
         String sql = """
                      SELECT d1.id, d1.code, d1.name, d1.details, d1.parent, d1.status, d2.code, d2.name 
-                     FROM pms.department d1
-                     LEFT JOIN pms.department d2 ON d1.parent = d2.id
+                     FROM department d1
+                     LEFT JOIN department d2 ON d1.parent = d2.id
                      WHERE d1.id = ?;""";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
@@ -148,7 +148,7 @@ public class DepartmentDAO {
 //    Admin add new dept
     public int insertDepartment(Department dept, Integer parent) throws SQLException {
         int result = 0;
-        String sql = "INSERT INTO pms.department (code, name, details, status, parent) "
+        String sql = "INSERT INTO department (code, name, details, status, parent) "
                 + "VALUES (?, ?, ?, ?, ?);";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
@@ -176,7 +176,7 @@ public class DepartmentDAO {
     public boolean updateDepartment(Department dept, Integer parent) throws SQLException {
         boolean rowUpdated = false;
 
-        String sql = "UPDATE pms.department SET code = ?, name = ?, details = ?, "
+        String sql = "UPDATE department SET code = ?, name = ?, details = ?, "
                 + "parent = ?, status = ? WHERE id = ?;";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
@@ -205,7 +205,7 @@ public class DepartmentDAO {
     public boolean changeStatusDepartment(Department dept) throws SQLException {
         boolean rowUpdated = false;
 
-        String sql = "UPDATE pms.department SET status = ? WHERE id = ?;";
+        String sql = "UPDATE department SET status = ? WHERE id = ?;";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             stm.setBoolean(1, dept.isStatus());
@@ -227,10 +227,10 @@ public class DepartmentDAO {
         String sql = """
                      SELECT du.id, du.user_id, u.full_name, du.dept_id, 
                      du.role_id, s.name, du.start_date, du.end_date, du.status
-                     FROM pms.dept_user du
-                     INNER JOIN pms.user u ON du.user_id = u.id
-                     INNER JOIN pms.department d ON du.dept_id = d.id 
-                     INNER JOIN pms.setting s ON du.role_id = s.id AND s.name = 'Department Manager'
+                     FROM dept_user du
+                     INNER JOIN user u ON du.user_id = u.id
+                     INNER JOIN department d ON du.dept_id = d.id 
+                     INNER JOIN setting s ON du.role_id = s.id AND s.name = 'Department Manager'
                      WHERE du.dept_id = ?""";
 
         // Add search conditions if any
@@ -306,8 +306,8 @@ public class DepartmentDAO {
     public boolean changeStatusDepartmentUser(Department_User deptUser) throws SQLException {
         boolean rowUpdated = false;
 
-        String activateSql = "UPDATE pms.dept_user SET status = ?, end_date = NULL WHERE id = ? AND dept_id = ?;";
-        String deactivateSql = "UPDATE pms.dept_user SET status = ?, end_date = CURDATE() WHERE id = ? AND dept_id = ?;";
+        String activateSql = "UPDATE dept_user SET status = ?, end_date = NULL WHERE id = ? AND dept_id = ?;";
+        String deactivateSql = "UPDATE dept_user SET status = ?, end_date = CURDATE() WHERE id = ? AND dept_id = ?;";
 
         try (Connection cnt = BaseDAO.getConnection()) {
             PreparedStatement stm;
@@ -333,7 +333,7 @@ public class DepartmentDAO {
     public int insertDepartmentUser(Department_User ptUser) throws SQLException {
         int result = 0;
         String sql = """
-                     INSERT INTO pms.dept_user (user_id, dept_id, start_date, status, role_id)
+                     INSERT INTO dept_user (user_id, dept_id, start_date, status, role_id)
                      VALUES (?, ?, CURDATE(), 1, ?);""";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
@@ -357,10 +357,10 @@ public class DepartmentDAO {
         String sql = """
                      SELECT du.id, du.user_id, u.full_name, u.email, u.mobile, du.dept_id, d.code, 
                      du.role_id, s.name, du.start_date, du.end_date, du.status
-                     FROM pms.dept_user du
-                     INNER JOIN pms.user u ON du.user_id = u.id
-                     INNER JOIN pms.department d ON du.dept_id = d.id
-                     INNER JOIN pms.setting s ON du.role_id = s.id
+                     FROM dept_user du
+                     INNER JOIN user u ON du.user_id = u.id
+                     INNER JOIN department d ON du.dept_id = d.id
+                     INNER JOIN setting s ON du.role_id = s.id
                      WHERE du.id = ?;""";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
@@ -413,8 +413,8 @@ public class DepartmentDAO {
     public boolean updateDepartmentUser(Department_User deptUser) throws SQLException {
         boolean rowUpdated = false;
 
-        String activateSql = "UPDATE pms.dept_user SET status = ?, role_id = ?, end_date = NULL WHERE id = ? AND dept_id = ?;";
-        String deactivateSql = "UPDATE pms.dept_user SET status = ?, role_id = ?, end_date = CURDATE() WHERE id = ? AND dept_id = ?;";
+        String activateSql = "UPDATE dept_user SET status = ?, role_id = ?, end_date = NULL WHERE id = ? AND dept_id = ?;";
+        String deactivateSql = "UPDATE dept_user SET status = ?, role_id = ?, end_date = CURDATE() WHERE id = ? AND dept_id = ?;";
 
         try (Connection cnt = BaseDAO.getConnection()) {
             PreparedStatement stm;

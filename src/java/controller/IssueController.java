@@ -116,7 +116,7 @@ public class IssueController extends HttpServlet {
         String assigneeStr = request.getParameter("assignee");
         String assignerStr = request.getParameter("assigner");
         String statusStr = request.getParameter("status");
-        String keyword = request.getParameter("keyword");
+        String keywordIssue = request.getParameter("keywordIssue");
 
         // Process the filter value, convert to number or null if not selected
         Integer type = typeStr != null && !typeStr.isEmpty() ? Integer.valueOf(typeStr) : null;
@@ -127,7 +127,7 @@ public class IssueController extends HttpServlet {
         Integer assigner = assignerStr != null && !assignerStr.isEmpty() ? Integer.valueOf(assignerStr) : null;
         Integer status = statusStr != null && !statusStr.isEmpty() ? Integer.valueOf(statusStr) : null;
 
-        List<Issue> listIssue = issueService.getAllIssues(keyword, project, type, milestone, assigner, assignee, status);
+        List<Issue> listIssue = issueService.getAllIssues(keywordIssue, project, type, milestone, assigner, assignee, status);
         List<Setting> listType = settingService.getIssueTypeList();
         List<Project> listPj = pjService.getAllProjects();
         List<Milestone> listMilestone = pjService.getMilestonesByProjectId(project);
@@ -149,7 +149,7 @@ public class IssueController extends HttpServlet {
         request.setAttribute("assignee", assignee);
         request.setAttribute("assigner", assigner);
         request.setAttribute("status", status);
-        request.setAttribute("keyword", keyword);
+        request.setAttribute("keywordIssue", keywordIssue);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/issue-list.jsp");
         dispatcher.forward(request, response);
     }
@@ -245,8 +245,8 @@ public class IssueController extends HttpServlet {
 //            request.setAttribute("name", name);
 //            request.setAttribute("type", type);
 //            request.setAttribute("projectId", projectId);
-            request.setAttribute("milestone", milestone);
-            request.setAttribute("assignee", assignee);
+                request.setAttribute("milestone", milestone);
+                request.setAttribute("assignee", assignee);
 //            request.setAttribute("deadline", deadline);
 //            request.setAttribute("description", description);
                 showNewForm(request, response);
@@ -326,4 +326,5 @@ public class IssueController extends HttpServlet {
             response.sendRedirect("logout");
         }
     }
+
 }
