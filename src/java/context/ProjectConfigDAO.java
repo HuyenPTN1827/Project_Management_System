@@ -31,10 +31,11 @@ public class ProjectConfigDAO {
     public List<Project> getAllProjects() {
         List<Project> projects = new ArrayList<>();
         // Cập nhật câu truy vấn để thực hiện JOIN với bảng department
-        String sql = "SELECT p.id, p.name, p.code, p.estimated_effort, p.start_date, p.details, p.end_date, \n"
-                + "       p.last_updated, p.status, p.type_id, p.department_id, d.name AS department_name\n"
-                + "FROM project p\n"
-                + "LEFT JOIN department d ON p.department_id = d.id;"; // Thực hiện JOIN với bảng department
+        String sql = """
+                     SELECT p.id, p.name, p.code, p.estimated_effort, p.start_date, p.details, p.end_date, 
+                                      p.last_updated, p.status, p.type_id, p.department_id, d.name AS department_name
+                                      FROM project p
+                                      LEFT JOIN department d ON p.department_id = d.id;"""; // Thực hiện JOIN với bảng department
 
         try (Connection conn = BaseDAO.getConnection(); PreparedStatement stm = conn.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
@@ -52,8 +53,6 @@ public class ProjectConfigDAO {
                 project.setStatus(rs.getInt("status"));
                 project.setTypeId(rs.getInt("type_id"));
                 project.setDepartmentId(rs.getInt("department_id"));
-                String departmentName = rs.getString("department_name");
-                System.out.println("Department Namee: " + departmentName);
                 project.setDepartmentName(rs.getString("department_name"));
 
                 // Thêm project vào danh sách
@@ -286,54 +285,51 @@ public class ProjectConfigDAO {
         return isUpdated;
     }
 
-   public Project getProjectById(int id) {
-    Project project = null; // Khởi tạo project
+    public Project getProjectById(int id) {
+        Project project = null; // Khởi tạo project
 
+        // Câu lệnh SQL để lấy thông tin dự án, bao gồm cả tên loại dự án và biz_term từ bảng setting
+        String sql = "SELECT DISTINCT p.id, p.code, p.name, p.details, p.start_date, p.end_date, p.last_updated, "
+                + "p.estimated_effort, p.status, p.type_id, p.department_id, p.user_id, "
+                + "pt.code AS type_code, pt.name AS type_name, d.code AS department_code, d.name AS department_name, "
+                + "s.name AS biz_term_name " // Thêm cột biz_term_name từ bảng setting
+                + "FROM project p "
+                + "LEFT JOIN project_type pt ON p.type_id = pt.id " // JOIN với bảng project_type
+                + "LEFT JOIN department d ON p.department_id = d.id " // JOIN với bảng department
+                + "LEFT JOIN setting s ON p.biz_term = s.id " // JOIN với bảng setting dựa trên bizterm
+                + "WHERE p.id = ?"; // Điều kiện WHERE để tìm dự án theo ID
 
-    // Câu lệnh SQL để lấy thông tin dự án, bao gồm cả tên loại dự án và biz_term từ bảng setting
-    String sql = "SELECT DISTINCT p.id, p.code, p.name, p.details, p.start_date, p.end_date, p.last_updated, "
-            + "p.estimated_effort, p.status, p.type_id, p.department_id, p.user_id, "
-            + "pt.code AS type_code, pt.name AS type_name, d.code AS department_code, "
-            + "s.name AS biz_term_name "  // Thêm cột biz_term_name từ bảng setting
-            + "FROM project p "
-            + "LEFT JOIN project_type pt ON p.type_id = pt.id " // JOIN với bảng project_type
-            + "LEFT JOIN department d ON p.department_id = d.id " // JOIN với bảng department
-            + "LEFT JOIN setting s ON p.biz_term = s.id " // JOIN với bảng setting dựa trên bizterm
-            + "WHERE p.id = ?"; // Điều kiện WHERE để tìm dự án theo ID
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
+            stm.setInt(1, id); // Thiết lập ID dự án
+            ResultSet rs = stm.executeQuery();
 
+            if (rs.next()) { // Nếu có kết quả
+                project = new Project(); // Tạo đối tượng Project
+                project.setId(rs.getInt("id"));
+                project.setCode(rs.getString("code"));
+                project.setName(rs.getString("name"));
+                project.setDetails(rs.getString("details"));
+                project.setStartDate(rs.getDate("start_date"));
+                project.setEndDate(rs.getDate("end_date"));
+                project.setLastUpdated(rs.getDate("last_updated"));
+                project.setEstimatedEffort(rs.getInt("estimated_effort"));
+                project.setStatus(rs.getInt("status"));
+                project.setTypeId(rs.getInt("type_id"));
+                project.setDepartmentId(rs.getInt("department_id"));
+                project.setUserId(rs.getInt("user_id"));
+                project.setTypeCode(rs.getString("type_code")); // Mã loại dự án
+                project.setTypeName(rs.getString("type_name")); // Tên loại dự án
+                project.setDepartmentCode(rs.getString("department_code")); // Mã bộ phận
+                project.setDepartmentName(rs.getString("department_name")); // Tên bộ phận
+                project.setBizTermName(rs.getString("biz_term_name")); // Lấy tên biz_term từ bảng setting
 
-    try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
-        stm.setInt(1, id); // Thiết lập ID dự án
-        ResultSet rs = stm.executeQuery();
-
-
-        if (rs.next()) { // Nếu có kết quả
-            project = new Project(); // Tạo đối tượng Project
-            project.setId(rs.getInt("id"));
-            project.setCode(rs.getString("code"));
-            project.setName(rs.getString("name"));
-            project.setDetails(rs.getString("details"));
-            project.setStartDate(rs.getDate("start_date"));
-            project.setEndDate(rs.getDate("end_date"));
-            project.setLastUpdated(rs.getDate("last_updated"));
-            project.setEstimatedEffort(rs.getInt("estimated_effort"));
-            project.setStatus(rs.getInt("status"));
-            project.setTypeId(rs.getInt("type_id"));
-            project.setDepartmentId(rs.getInt("department_id"));
-            project.setUserId(rs.getInt("user_id"));
-            project.setTypeCode(rs.getString("type_code")); // Mã loại dự án
-            project.setTypeName(rs.getString("type_name")); // Tên loại dự án
-            project.setDepartmentCode(rs.getString("department_code")); // Mã bộ phận
-            project.setBizTermName(rs.getString("biz_term_name")); // Lấy tên biz_term từ bảng setting
-
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e); // Xử lý lỗi SQL
         }
-    } catch (SQLException e) {
-        BaseDAO.printSQLException(e); // Xử lý lỗi SQL
+
+        return project; // Trả về Project hoặc null nếu không tìm thấy
     }
-
-    return project; // Trả về Project hoặc null nếu không tìm thấy
-}
-
 
     public List<User> getAllManagers() {
         List<User> managers = new ArrayList<>();
@@ -367,38 +363,37 @@ public class ProjectConfigDAO {
     }
 
     public boolean updateProject(Project project) {
-    String sql = "UPDATE project SET name = ?, code = ?, estimated_effort = ?, "
-            + "start_date = ?, end_date = ?, details = ?, status = ?, department_id = ?, "
-            + "user_id = ?, biz_term = ?, last_updated = ? WHERE id = ?";
+        String sql = "UPDATE project SET name = ?, code = ?, estimated_effort = ?, "
+                + "start_date = ?, end_date = ?, details = ?, status = ?, department_id = ?, "
+                + "user_id = ?, biz_term = ?, last_updated = ? WHERE id = ?";
 
-    try (Connection conn = BaseDAO.getConnection(); // Sử dụng BaseDAO.getConnection()
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = BaseDAO.getConnection(); // Sử dụng BaseDAO.getConnection()
+                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-        // Gán các giá trị từ đối tượng project vào PreparedStatement
-        stmt.setString(1, project.getName());
-        stmt.setString(2, project.getCode());
-        stmt.setInt(3, project.getEstimatedEffort());
-        stmt.setDate(4, new java.sql.Date(project.getStartDate().getTime())); // Chuyển java.util.Date sang java.sql.Date
-        stmt.setDate(5, new java.sql.Date(project.getEndDate().getTime()));   // Chuyển java.util.Date sang java.sql.Date
-        stmt.setString(6, project.getDetails());
-        stmt.setInt(7, project.getStatus());
-        stmt.setInt(8, project.getDepartmentId());
-        stmt.setInt(9, project.getUserId());
-        stmt.setInt(10, project.getBizTerm()); // Thêm biz_term vào PreparedStatement
-        stmt.setTimestamp(11, new java.sql.Timestamp(System.currentTimeMillis())); // Thêm thời gian hiện tại vào last_updated_at
-        stmt.setInt(12, project.getId()); // Đảm bảo rằng project.getId() trả về id của dự án cần cập nhật
+            // Gán các giá trị từ đối tượng project vào PreparedStatement
+            stmt.setString(1, project.getName());
+            stmt.setString(2, project.getCode());
+            stmt.setInt(3, project.getEstimatedEffort());
+            stmt.setDate(4, new java.sql.Date(project.getStartDate().getTime())); // Chuyển java.util.Date sang java.sql.Date
+            stmt.setDate(5, new java.sql.Date(project.getEndDate().getTime()));   // Chuyển java.util.Date sang java.sql.Date
+            stmt.setString(6, project.getDetails());
+            stmt.setInt(7, project.getStatus());
+            stmt.setInt(8, project.getDepartmentId());
+            stmt.setInt(9, project.getUserId());
+            stmt.setInt(10, project.getBizTerm()); // Thêm biz_term vào PreparedStatement
+            stmt.setTimestamp(11, new java.sql.Timestamp(System.currentTimeMillis())); // Thêm thời gian hiện tại vào last_updated_at
+            stmt.setInt(12, project.getId()); // Đảm bảo rằng project.getId() trả về id của dự án cần cập nhật
 
-        // Thực thi câu lệnh UPDATE và kiểm tra số dòng bị ảnh hưởng
-        int rowsUpdated = stmt.executeUpdate();
-        return rowsUpdated > 0; // Nếu có ít nhất 1 dòng được cập nhật, trả về true
+            // Thực thi câu lệnh UPDATE và kiểm tra số dòng bị ảnh hưởng
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0; // Nếu có ít nhất 1 dòng được cập nhật, trả về true
 
-    } catch (SQLException e) {
-        // In thông báo lỗi nếu có vấn đề khi thực thi SQL
-        System.err.println("SQL Error: " + e.getMessage());
-        return false; // Nếu có lỗi xảy ra, trả về false
+        } catch (SQLException e) {
+            // In thông báo lỗi nếu có vấn đề khi thực thi SQL
+            System.err.println("SQL Error: " + e.getMessage());
+            return false; // Nếu có lỗi xảy ra, trả về false
+        }
     }
-}
-
 
     public List<Department> getAllDepartments() {
         List<Department> departments = new ArrayList<>();
@@ -755,28 +750,27 @@ public class ProjectConfigDAO {
         }
         return rowUpdated;
     }
-    
-   public boolean isCodeExists(String code, int projectId) {
-    String query = "SELECT 1 FROM project WHERE code = ? AND id != ? LIMIT 1"; // Loại trừ ID của dự án hiện tại
-    try (Connection conn = BaseDAO.getConnection(); // Sử dụng phương thức getConnection từ BaseDAO
-         PreparedStatement stmt = conn.prepareStatement(query)) {
 
-        // Gán giá trị vào câu truy vấn
-        stmt.setString(1, code);
-        stmt.setInt(2, projectId);
+    public boolean isCodeExists(String code, int projectId) {
+        String query = "SELECT 1 FROM project WHERE code = ? AND id != ? LIMIT 1"; // Loại trừ ID của dự án hiện tại
+        try (Connection conn = BaseDAO.getConnection(); // Sử dụng phương thức getConnection từ BaseDAO
+                 PreparedStatement stmt = conn.prepareStatement(query)) {
 
-        // Thực thi truy vấn
-        try (ResultSet rs = stmt.executeQuery()) {
-            return rs.next(); // Nếu có kết quả trả về, mã đã tồn tại
+            // Gán giá trị vào câu truy vấn
+            stmt.setString(1, code);
+            stmt.setInt(2, projectId);
+
+            // Thực thi truy vấn
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next(); // Nếu có kết quả trả về, mã đã tồn tại
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e); // Ghi log lỗi để kiểm tra
         }
-    } catch (SQLException e) {
-        BaseDAO.printSQLException(e); // Ghi log lỗi để kiểm tra
+        return false; // Mặc định trả về false nếu có lỗi
     }
-    return false; // Mặc định trả về false nếu có lỗi
-}
 
-   
-   public List<Setting> getAllBizTerms() {
+    public List<Setting> getAllBizTerms() {
         String query = "SELECT DISTINCT id, name FROM setting ";
 
         List<Setting> bizTerms = new ArrayList<>();
@@ -800,6 +794,5 @@ public class ProjectConfigDAO {
 
         return bizTerms; // Trả về danh sách Setting
     }
-
 
 }

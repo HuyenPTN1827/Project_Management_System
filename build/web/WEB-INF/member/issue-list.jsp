@@ -340,7 +340,40 @@
                                                             });
                                                         });
         </script>
-
+        <script>
+            document.addEventListener("DOMContentLoaded", function (event) {
+                // Check URL for 'success' parameter
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('update') === 'success') {
+                    // Show success notification
+                    window.notyf.open({
+                        type: "success",
+                        message: "Issue details updated successfully.",
+                        duration: 5000, // Adjust duration as needed
+                        ripple: true,
+                        dismissible: true,
+                        position: {
+                            x: "right",
+                            y: "top"
+                        }
+                    });
+                }
+                if (urlParams.get('create') === 'success') {
+                    // Show success notification
+                    window.notyf.open({
+                        type: "success",
+                        message: "Add new Issue successfully.",
+                        duration: 5000, // Adjust duration as needed
+                        ripple: true,
+                        dismissible: true,
+                        position: {
+                            x: "right",
+                            y: "top"
+                        }
+                    });
+                }
+            });
+        </script>
     </body>
 
 </html>
