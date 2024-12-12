@@ -41,7 +41,7 @@
                                         <form action="<%=request.getContextPath()%>/login" method="post">
                                             <div class="mb-3">
                                                 <label class="form-label">Email</label>
-                                                <input type="text" class="form-control form-control-lg" id="email" value="${sessionScope.user}" placeholder="Enter your email" name="email" required />
+                                                <input type="text" class="form-control form-control-lg" id="email" value="${user}" placeholder="Enter your email" name="email" required />
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label">Password</label>

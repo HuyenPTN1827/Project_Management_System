@@ -57,6 +57,10 @@
         <url-pattern>/verify</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+    <servlet-name>AuthenticationController</servlet-name>
+    <url-pattern>/resend-otp</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>AuthenticationController</servlet-name>
         <url-pattern>/login-form</url-pattern>
     </servlet-mapping>

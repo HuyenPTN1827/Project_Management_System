@@ -59,6 +59,8 @@ public class AuthenticationController extends HttpServlet {
                 register(request, response);
             case "/verify" ->
                 verifyOtp (request, response);
+            case "/resend-otp" ->
+                resendOtp(request, response);
             case "/login-form" ->
                 showLoginForm(request, response);
             case "/login" ->
@@ -333,6 +335,43 @@ private void sendOtpToEmail(String email, String otp) {
         }
     }
 
+protected void resendOtp(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    // Lấy email từ tham số gửi qua form
+    String email = request.getParameter("email");
+
+    if (email != null && !email.isEmpty()) {
+        // Tạo OTP mới
+        String otp = generateOtp();
+
+        // Lưu OTP vào session
+        HttpSession session = request.getSession();
+        session.setAttribute("otp", otp);  // Lưu OTP vào session
+
+        try {
+            // Gửi OTP tới email
+            sendOtpToEmail(email, otp);  // Nếu gửi thành công, không cần trả về giá trị boolean
+
+            // Thông báo thành công
+            request.setAttribute("SUCCESS", "A new OTP has been sent to your email.");
+        } catch (Exception e) {
+            // Thông báo lỗi gửi email
+            request.setAttribute("NOTIFICATION", "Failed to send OTP. Please try again later.");
+            e.printStackTrace(); // Bạn có thể ghi lại lỗi vào log nếu cần
+        }
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/guest/verify.jsp");
+        dispatcher.forward(request, response);
+    } else {
+        // Nếu không có email hợp lệ
+        request.setAttribute("NOTIFICATION", "Unable to resend OTP. Please check your input and try again.");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/guest/register.jsp");
+        dispatcher.forward(request, response);
+    }
+}
+
+
+
+
 
     private void showLoginForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/member/login.jsp");
@@ -432,7 +471,7 @@ private void sendOtpToEmail(String email, String otp) {
             int roleId = foundUser.getRole_id();
             HttpSession session = request.getSession();
             session.setAttribute("user", foundUser);
-            session.setMaxInactiveInterval(30 * 60);
+            session.setMaxInactiveInterval(1 * 60);
 
             // Kiểm tra trạng thái người dùng
             int userStatus = foundUser.getStatus();
@@ -475,6 +514,7 @@ private void sendOtpToEmail(String email, String otp) {
         } else {
             // Nếu không tìm thấy người dùng
             HttpSession session = request.getSession();
+            request.setAttribute("user", email);
             session.setAttribute("NOTIFICATION", "Incorrect account or password, please log in again.");
             System.out.println("Login Failed!");
             request.getRequestDispatcher("/WEB-INF/member/login.jsp").forward(request, response);
