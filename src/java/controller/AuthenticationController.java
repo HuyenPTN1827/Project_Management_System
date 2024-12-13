@@ -345,6 +345,7 @@ protected void resendOtp(HttpServletRequest request, HttpServletResponse respons
 
         // Lưu OTP vào session
         HttpSession session = request.getSession();
+        session.setAttribute("userEmail", email);
         session.setAttribute("otp", otp);  // Lưu OTP vào session
 
         try {
