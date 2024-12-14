@@ -314,6 +314,10 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ProjectListController</servlet-name>
+        <url-pattern>/check-project-code</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectListController</servlet-name>
         <url-pattern>/insert-project</url-pattern>
     </servlet-mapping>
     <servlet-mapping>

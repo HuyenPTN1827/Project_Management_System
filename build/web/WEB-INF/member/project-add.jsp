@@ -57,7 +57,8 @@
             <div class="col-md-12 col-xl-12">
                 <div class="card">
                     <div class="card-body">
-                        <form action="insert-project" method="post" class="row">
+                        <form action="insert-project" method="get" class="row"
+                              id="projectForm" onsubmit="return validateForm(event)">
 
                             <!-- Project Name Field -->
                             <div class="mb-3 col-md-6">
@@ -68,7 +69,7 @@
                             <!-- Project Code Field -->
                             <div class="mb-3 col-md-6">
                                 <label class="form-label"><strong>Project Code</strong> <span style="color: red;">*</span></label>
-                                <input type="text" class="form-control" name="code" placeholder="Enter project Code" value="${code}" required>
+                                <input type="text" class="form-control" name="code" id="code" placeholder="Enter project Code" value="${code}" required>
                             </div>
 
                             <!--Type Field -->
@@ -84,10 +85,9 @@
                                 </select>
                             </div>
 
-
                             <!-- Biz term Field -->
                             <div class="mb-3 col-md-6">
-                                <label class="form-label">Project Biz Term <span style="color: red;">*</span></label>
+                                <label class="form-label"><strong>Project Business Term</strong> <span style="color: red;">*</span></label>
                                 <select class="form-select" name="bizterm" required>
                                     <option value="" hidden disabled>Select Biz Term</option>
                                     <!-- Lặp qua danh sách bizTerms -->
@@ -101,8 +101,6 @@
                             </div>
 
 
-
-
                             <!-- Estimated Effort Field -->
                             <div class="mb-3 col-md-6">
                                 <label class="form-label"><strong>Estimated Effort (man-days)</strong> <span style="color: red;">*</span></label>
@@ -112,7 +110,7 @@
 
                             <!-- Department Field -->
                             <div class="mb-3 col-md-6">
-                                <label class="form-label"><strong>Department</strong><span style="color: red;">*</span></label>
+                                <label class="form-label"><strong>Department</strong> <span style="color: red;">*</span></label>
                                 <select class="form-select" name="department" required>
                                     <option value="">Select Department</option>
                                     <c:forEach var="projectdepartment" items="${listDepartments}">
@@ -123,11 +121,15 @@
                                 </select>
                             </div>
 
-
-                            <!-- Start Date Field -->
                             <div class="mb-3 col-md-6">
-                                <label class="form-label">Start Date</label>
-                                <input type="date" class="form-control" name="startDate" value="${startDate}" required>
+                                <label class="form-label"><strong>Start Date</strong> <span style="color: red;">*</span> <strong>- End Date</strong> </label>
+                                <div class="input-group">
+                                    <input type="date" class="form-control" placeholder="dd/MM/yyyy"
+                                           id="startDate" name="startDate" value="${startDate}" required>
+                                    <span class="input-group-text">to</span>
+                                    <input type="date" class="form-control" placeholder="dd/MM/yyyy"
+                                           id="endDate" name="endDate" value="${endDate}">
+                                </div>
                             </div>
 
                             <!-- Project Manager Field -->
@@ -144,14 +146,6 @@
                                 </select>
                             </div>
 
-
-
-                            <!-- End Date Field -->
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label"><strong>End Date</strong></label>
-                                <input type="date" class="form-control" name="endDate" value="${endDate}" required>
-                            </div>
-
                             <!-- Descriptions Field -->
                             <div class="mb-3 col-md-12">
                                 <label class="form-label"><strong>Description</strong></label>
@@ -159,6 +153,9 @@
                             </div>
 
                             ${errorMessage}
+                            <div id="errorContainer" class="alert alert-danger pt-3 pe-3 ps-3 d-none">
+                                <ul id="errorList"></ul>
+                            </div>
 
                             <!-- Save and Cancel Buttons -->
                             <div class="d-flex justify-content-end">

@@ -44,6 +44,8 @@ public class ProjectListController extends HttpServlet {
                     listProjects(request, response); // Hiển thị danh sách dự án
                 case "/add-project" ->
                     showNewForm(request, response); // Hiển thị danh sách dự án
+                case "/check-project-code" ->
+                    checkProjectCode(request, response);
                 case "/insert-project" ->
                     insertProject(request, response); // Xử lý thêm dự án mới
 
@@ -148,18 +150,17 @@ public class ProjectListController extends HttpServlet {
                     || startDateString == null || endDateString == null || projectManagerIdString == null || bizTermIdString == null) {
 
                 request.setAttribute("errorMessage", "All required fields must be filled in completely.");
-                request.getRequestDispatcher("/WEB-INF/member/projectlist.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/member/project-add.jsp").include(request, response);
 
                 return;
             }
 
             // Kiểm tra mã code đã tồn tại
-            if (projectService.isCodeExists(code)) {
-                request.setAttribute("errorMessage", "Project code already exists. Please use a different code.");
-                request.getRequestDispatcher("/WEB-INF/member/project-add.jsp").forward(request, response);
-                return;
-            }
-
+//            if (projectService.isCodeExists(code)) {
+//                request.setAttribute("errorMessage", "Project code already exists. Please use a different code.");
+//                request.getRequestDispatcher("/WEB-INF/member/project-add.jsp").include(request, response);
+//                return;
+//            }
             project.setName(name);
             project.setCode(code);
 
@@ -170,7 +171,7 @@ public class ProjectListController extends HttpServlet {
             } catch (DateTimeParseException e) {
 
                 request.setAttribute("errorMessage", "Invalid start date format.");
-                request.getRequestDispatcher("/WEB-INF/member/projectlist.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/member/project-add.jsp").forward(request, response);
 
                 return;
             }
@@ -182,7 +183,7 @@ public class ProjectListController extends HttpServlet {
             } catch (DateTimeParseException e) {
 
                 request.setAttribute("errorMessage", "Invalid end date format.");
-                request.getRequestDispatcher("/WEB-INF/member/projectlist.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/member/project-add.jsp").forward(request, response);
 
                 return;
             }
@@ -204,7 +205,7 @@ public class ProjectListController extends HttpServlet {
             } catch (NumberFormatException e) {
 
                 request.setAttribute("errorMessage", "Invalid number format for Department, Type or Project Manager.");
-                request.getRequestDispatcher("/WEB-INF/member/projectlist.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/member/project-add.jsp").forward(request, response);
 
                 return;
             }
@@ -218,7 +219,7 @@ public class ProjectListController extends HttpServlet {
             } catch (NumberFormatException e) {
 
                 request.setAttribute("errorMessage", "Invalid number format for Estimated Effort.");
-                request.getRequestDispatcher("/WEB-INF/member/projectlist.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/member/project-add.jsp").forward(request, response);
 
                 return;
             }
@@ -228,8 +229,7 @@ public class ProjectListController extends HttpServlet {
             User loggedInUser = (User) session.getAttribute("user"); // Lấy đối tượng User từ session
             // Kiểm tra nếu người dùng đã đăng nhập
             if (loggedInUser == null) {
-                request.setAttribute("errorMessage", "User is not logged in.");
-                request.getRequestDispatcher("/WEB-INF/member/project-detail.jsp").forward(request, response);
+                response.sendRedirect(request.getContextPath() + "/login");
                 return;
             }
 
@@ -265,11 +265,11 @@ public class ProjectListController extends HttpServlet {
             } else {
 
                 request.setAttribute("errorMessage", "There was an error adding the project.");
-                request.getRequestDispatcher("/WEB-INF/member/projectlist.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/member/project-add.jsp").forward(request, response);
             }
         } catch (Exception e) {
             request.setAttribute("errorMessage", "There was an error adding the project: " + e.getMessage());
-            request.getRequestDispatcher("/WEB-INF/member/projectlist.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/member/project-add.jsp").forward(request, response);
         }
     }
 
@@ -288,6 +288,15 @@ public class ProjectListController extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Project List Controller";
+    }
+
+    private void checkProjectCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String code = request.getParameter("code");
+        boolean exists = projectService.isCodeExists(code);
+
+        // Return the result as JSON
+        response.setContentType("application/json");
+        response.getWriter().write("{\"exists\": " + exists + "}");
     }
 
 }

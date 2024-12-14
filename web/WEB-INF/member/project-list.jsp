@@ -234,7 +234,12 @@
                                                 <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" onclick="closeModal();"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <!-- This is where the project-detail.jsp will be loaded via AJAX -->
+                                                <!-- This is where the project-add.jsp will be loaded via AJAX -->
+                                                <c:if test="${not empty errorMessage}">
+                                                    <div class="alert alert-danger" id role="alert">
+                                                        ${errorMessage}
+                                                    </div>
+                                                </c:if>
                                             </div>
                                         </div>
                                     </div>
@@ -314,29 +319,88 @@
                                                             feather.replace();
                                                         });
                                                     });
+
         </script>
 
         <script>
-            document.addEventListener("DOMContentLoaded", function (event) {
-                setTimeout(function () {
-                    if (localStorage.getItem('popState') !== 'shown') {
-                        window.notyf.open({
-                            type: "success",
-                            message: "Get access to all 500+ components and 45+ pages with PMS PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
-                            duration: 10000,
-                            ripple: true,
-                            dismissible: false,
-                            position: {
-                                x: "left",
-                                y: "bottom"
-                            }
-                        });
+//            function validateForm(event) {
+//                event.preventDefault(); // Ngăn không gửi form ngay lập tức
+//                const errorContainer = document.getElementById("errorContainer");
+//                const errorList = document.getElementById("errorList");
+//                errorList.innerHTML = ""; // Xóa thông báo lỗi cũ
+//                errorContainer.classList.add("d-none");
+//
+//                const code = document.getElementById("code").value;
+//                let hasError = false;
+//
+//                //Kiểm tra Effort Rate
+//                if (projectService.isCodeExists(code)) {
+//                    hasError = true;
+//                    errorList.innerHTML += "<li>Project code already exists. Please use a different code.</li>";
+//                }
+//
+//                // Kiểm tra fromDate
+////                if (!fromDate) {
+////                    hasError = true;
+////                    errorList.innerHTML += "<li>From Date is required.</li>";
+////                } else if (fromDate < today) {
+////                    hasError = true;
+////                    errorList.innerHTML += "<li>From Date cannot be earlier than today.</li>";
+////                }
+////
+////                // Kiểm tra toDate
+////                if (toDate && toDate < fromDate) {
+////                    hasError = true;
+////                    errorList.innerHTML += "<li>To Date cannot be earlier than From Date.</li>";
+////                }
+//
+//                // Hiển thị lỗi nếu có
+//                if (hasError) {
+//                    errorContainer.classList.remove("d-none");
+//                    return false; // Ngăn gửi form
+//                }
+//
+//                // Không có lỗi, gửi form
+//                document.getElementById("projectForm").submit();
+//            }
 
-                        localStorage.setItem('popState', 'shown');
-                    }
-                }, 15000);
-            });
+            function validateForm(event) {
+                event.preventDefault(); // Prevent the form from submitting immediately
+                const errorContainer = document.getElementById("errorContainer");
+                const errorList = document.getElementById("errorList");
+                errorList.innerHTML = ""; // Clear previous error messages
+                errorContainer.classList.add("d-none");
+
+                const code = document.getElementById("code").value;
+                let hasError = false;
+
+                // Perform AJAX check for existing project code
+                fetch('<%=request.getContextPath()%>/check-project-code?code=' + encodeURIComponent(code))
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.exists) {
+                                hasError = true;
+                                errorList.innerHTML += "<li>Project code already exists. Please use a different code.</li>";
+                            }
+
+                            // Show error messages if there are any
+                            if (hasError) {
+                                errorContainer.classList.remove("d-none");
+                            } else {
+                                // If no errors, submit the form
+                                document.getElementById("projectForm").submit();
+                            }
+                        })
+                        .catch(error => {
+                            console.log('Error checking project code:', error);
+                            // Optionally display an error message for AJAX failure
+                            errorList.innerHTML += "<li>Error checking project code. Please try again.</li>";
+                            errorContainer.classList.remove("d-none");
+                        });
+            }
+
         </script>
+
     </body>
 
 </html>
