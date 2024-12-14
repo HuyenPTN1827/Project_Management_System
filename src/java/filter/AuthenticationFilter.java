@@ -73,49 +73,64 @@ public class AuthenticationFilter implements Filter {
 //        }
 //    }
 //BachHD
-  @Override
-public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-        throws IOException, ServletException {
-    HttpServletRequest httpRequest = (HttpServletRequest) request;
-    HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-    // Kiểm tra session
-    HttpSession session = httpRequest.getSession(false); // Không tạo session mới
-    if (session == null || session.getAttribute("user") == null) {
-        System.out.println("Session expired or user not logged in. Redirecting to login.");
-        httpResponse.sendRedirect(httpRequest.getContextPath() + "/member/login.jsp");
-        return;
-    }
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-    // Kiểm tra vai trò người dùng
-    Setting userRoleSetting = (Setting) session.getAttribute("userRoleSetting");
-    String currentURL = httpRequest.getRequestURI();
-
-    System.out.println("User role: " + (userRoleSetting != null ? userRoleSetting.getName() : "No role"));
-    System.out.println("Current URL: " + currentURL);
-
-    // Phân quyền
-    if (currentURL.contains("/user-management")) {
-        if (userRoleSetting != null && userRoleSetting.getPriority() == 1) {
-            chain.doFilter(request, response);
-        } else {
-            System.out.println("Unauthorized access attempt to /user-management");
-            httpRequest.getRequestDispatcher("/WEB-INF/member/unauthorized.jsp").forward(request, response);
+        // Kiểm tra session
+        HttpSession session = httpRequest.getSession(false); // Không tạo session mới
+        if (session == null || session.getAttribute("user") == null) {
+            System.out.println("Session expired or user not logged in. Redirecting to login.");
+            httpResponse.sendRedirect(httpRequest.getContextPath() + "/member/login.jsp");
+            return;
         }
-    } else if (currentURL.contains("/member-dashboard")) {
-        if (userRoleSetting != null && userRoleSetting.getPriority() >= 2) {
-            chain.doFilter(request, response);
+
+        // Kiểm tra vai trò người dùng
+        Setting userRoleSetting = (Setting) session.getAttribute("userRoleSetting");
+        String currentURL = httpRequest.getRequestURI();
+
+        // Kiểm tra xem userRoleSetting có null không
+        if (userRoleSetting == null) {
+            System.out.println("userRoleSetting is null.");
         } else {
-            System.out.println("Unauthorized access attempt to /member-dashboard");
-            httpRequest.getRequestDispatcher("/WEB-INF/member/unauthorized.jsp").forward(request, response);
+            System.out.println("userRoleSetting is not null.");
+            System.out.println("User role name: " + userRoleSetting.getName());
+            System.out.println("User role ID: " + userRoleSetting.getId());
         }
-    } else {
-        // Các URL khác cho phép truy cập
-        chain.doFilter(request, response);
+
+        System.out.println("Current URL: " + currentURL);
+
+        // Phân quyền
+        if (currentURL.contains("/user-management")) {
+            if (userRoleSetting != null && userRoleSetting.getId() == 2) {
+                chain.doFilter(request, response);
+
+            } else {
+                System.out.println("Unauthorized access attempt to /user-management");
+                httpRequest.getRequestDispatcher("/WEB-INF/member/unauthorized.jsp").forward(request, response);
+            }
+        } else if (currentURL.contains("/setting-management")) { // Thêm kiểm tra cho /setting-management
+            if (userRoleSetting != null && userRoleSetting.getId() == 2) {
+                chain.doFilter(request, response);
+            } else {
+                System.out.println("Unauthorized access attempt to /setting-management");
+                httpRequest.getRequestDispatcher("/WEB-INF/member/unauthorized.jsp").forward(request, response);
+            }
+        } else if (currentURL.contains("/member-dashboard")) {
+            if (userRoleSetting != null && userRoleSetting.getId() >= 2) {
+                chain.doFilter(request, response);
+            } else {
+                System.out.println("Unauthorized access attempt to /member-dashboard");
+                httpRequest.getRequestDispatcher("/WEB-INF/member/unauthorized.jsp").forward(request, response);
+            }
+        } else {
+            // Các URL khác cho phép truy cập
+            chain.doFilter(request, response);
+        }
     }
-}
-
-
 
     @Override
     public void destroy() {

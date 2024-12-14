@@ -266,7 +266,12 @@ public class ProjectConfigDAO {
             stm.setInt(1, milestone.getCreatedBy());
             stm.setString(2, milestone.getLastUpdated());
             stm.setString(3, milestone.getName());
-            stm.setInt(4, milestone.getParentMilestone());
+            // Kiểm tra parentMilestone
+            if (milestone.getParentMilestone() != null) {
+                stm.setInt(4, milestone.getParentMilestone());
+            } else {
+                stm.setNull(4, java.sql.Types.INTEGER);
+            }
             stm.setInt(5, milestone.getPriority());
             stm.setDate(6, milestone.getTargetDate() != null ? new java.sql.Date(milestone.getTargetDate().getTime()) : null);
             stm.setInt(7, milestone.getStatus());

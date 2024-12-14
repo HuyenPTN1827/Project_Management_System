@@ -472,7 +472,7 @@ protected void resendOtp(HttpServletRequest request, HttpServletResponse respons
             int roleId = foundUser.getRole_id();
             HttpSession session = request.getSession();
             session.setAttribute("user", foundUser);
-            session.setMaxInactiveInterval(1 * 60);
+            session.setMaxInactiveInterval(30 * 60);
 
             // Kiểm tra trạng thái người dùng
             int userStatus = foundUser.getStatus();

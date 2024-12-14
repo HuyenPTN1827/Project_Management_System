@@ -44,6 +44,10 @@
         <servlet-name>IssueController</servlet-name>
         <servlet-class>controller.IssueController</servlet-class>
     </servlet>
+     <filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>filter.AuthenticationFilter</filter-class>
+    </filter>
     <servlet-mapping>
         <servlet-name>AuthenticationController</servlet-name>
         <url-pattern>/register-form</url-pattern>
@@ -404,6 +408,19 @@
         <servlet-name>IssueController</servlet-name>
         <url-pattern>/update-issue</url-pattern>
     </servlet-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/user-management</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/setting-management</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/member-dashboard</url-pattern>
+    </filter-mapping>
+    
     <welcome-file-list>
         <welcome-file>login-form</welcome-file>
         <!--<welcome-file>project-type-management</welcome-file>-->

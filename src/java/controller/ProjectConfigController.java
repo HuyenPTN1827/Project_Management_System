@@ -236,58 +236,57 @@ public class ProjectConfigController extends HttpServlet {
 
 // Xử lý chỉnh sửa dự án
     private void editProject(HttpServletRequest request, HttpServletResponse response) {
-    System.out.println("Start editProject");
+        System.out.println("Start editProject");
 
-    String projectIdString = request.getParameter("id");
+        String projectIdString = request.getParameter("id");
 
-    // Kiểm tra xem projectId có hợp lệ không
-    if (projectIdString == null || projectIdString.isEmpty()) {
-        System.out.println("Project ID is missing");
-        request.setAttribute("errorMessage", "Project ID is required.");
-        return; // Dừng phương thức nếu không có Project ID
-    }
-
-    try {
-        // Chuyển ID dự án từ String sang Integer
-        int projectId = Integer.parseInt(projectIdString);
-        System.out.println("Getting project details for ID: " + projectId);
-
-        // Lấy thông tin dự án từ service
-        Project project = projectConfigService.getProjectById(projectId);
-        List<User> managers = projectConfigService.getAllManagers(); // Lấy tất cả các quản lý
-        List<Project> projectListName = projectConfigService.getAllProjects(); // Lấy tất cả các dự án
-        List<Department> departments = projectConfigService.getAllDepartment(); // Lấy tất cả các phòng ban
-        List<Setting> bizTerms = projectConfigService.getAllBizTerms(); // Lấy tất cả BizTerm
-
-        // Nếu tìm thấy dự án
-        if (project != null) {
-            System.out.println("Project found: " + project.toString());
-            System.out.println("Managers found: " + managers.toString());
-            System.out.println("Departments found: " + departments.toString());
-            System.out.println("BizTerms found: " + bizTerms.toString());
-
-            // Gửi thông tin dự án, quản lý, danh sách phòng ban và bizTerms tới JSP
-            request.setAttribute("project", project);
-            request.setAttribute("listManagers", managers);
-            request.setAttribute("projectListName", projectListName);
-            request.setAttribute("departments", departments); 
-            request.setAttribute("bizTerms", bizTerms); // Thêm danh sách BizTerm
-        } else {
-            // Nếu không tìm thấy dự án, gửi thông báo lỗi
-            System.out.println("Project not found for ID: " + projectId);
-            request.setAttribute("errorMessage", "Project not found.");
+        // Kiểm tra xem projectId có hợp lệ không
+        if (projectIdString == null || projectIdString.isEmpty()) {
+            System.out.println("Project ID is missing");
+            request.setAttribute("errorMessage", "Project ID is required.");
+            return; // Dừng phương thức nếu không có Project ID
         }
-    } catch (NumberFormatException e) {
-        // Xử lý lỗi khi ID không hợp lệ (không phải là số nguyên)
-        System.out.println("Invalid project ID: " + projectIdString);
-        request.setAttribute("errorMessage", "Invalid project ID.");
-    } catch (Exception e) {
-        // Xử lý các lỗi khác
-        System.out.println("Error retrieving project information: " + e.getMessage());
-        request.setAttribute("errorMessage", "Error retrieving project information.");
-    }
-}
 
+        try {
+            // Chuyển ID dự án từ String sang Integer
+            int projectId = Integer.parseInt(projectIdString);
+            System.out.println("Getting project details for ID: " + projectId);
+
+            // Lấy thông tin dự án từ service
+            Project project = projectConfigService.getProjectById(projectId);
+            List<User> managers = projectConfigService.getAllManagers(); // Lấy tất cả các quản lý
+            List<Project> projectListName = projectConfigService.getAllProjects(); // Lấy tất cả các dự án
+            List<Department> departments = projectConfigService.getAllDepartment(); // Lấy tất cả các phòng ban
+            List<Setting> bizTerms = projectConfigService.getAllBizTerms(); // Lấy tất cả BizTerm
+
+            // Nếu tìm thấy dự án
+            if (project != null) {
+                System.out.println("Project found: " + project.toString());
+                System.out.println("Managers found: " + managers.toString());
+                System.out.println("Departments found: " + departments.toString());
+                System.out.println("BizTerms found: " + bizTerms.toString());
+
+                // Gửi thông tin dự án, quản lý, danh sách phòng ban và bizTerms tới JSP
+                request.setAttribute("project", project);
+                request.setAttribute("listManagers", managers);
+                request.setAttribute("projectListName", projectListName);
+                request.setAttribute("departments", departments);
+                request.setAttribute("bizTerms", bizTerms); // Thêm danh sách BizTerm
+            } else {
+                // Nếu không tìm thấy dự án, gửi thông báo lỗi
+                System.out.println("Project not found for ID: " + projectId);
+                request.setAttribute("errorMessage", "Project not found.");
+            }
+        } catch (NumberFormatException e) {
+            // Xử lý lỗi khi ID không hợp lệ (không phải là số nguyên)
+            System.out.println("Invalid project ID: " + projectIdString);
+            request.setAttribute("errorMessage", "Invalid project ID.");
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            System.out.println("Error retrieving project information: " + e.getMessage());
+            request.setAttribute("errorMessage", "Error retrieving project information.");
+        }
+    }
 
 // Hàm xử lý lỗi
     private void handleError(HttpServletRequest request, HttpServletResponse response, String errorMessage)
@@ -572,12 +571,15 @@ public class ProjectConfigController extends HttpServlet {
         } catch (NumberFormatException e) {
             errors.append("Invalid Project ID.<br>");
         }
-        int parentMilestoneId = 0;
-        try {
-            parentMilestoneId = Integer.parseInt(parentMilestoneIdStr);
-        } catch (NumberFormatException e) {
-            errors.append("Invalid Parent Milestone ID.<br>");
+        Integer parentMilestoneId = null; // Sử dụng Integer thay vì int để cho phép null
+        if (parentMilestoneIdStr != null && !parentMilestoneIdStr.trim().isEmpty()) {
+            try {
+                parentMilestoneId = Integer.parseInt(parentMilestoneIdStr);
+            } catch (NumberFormatException e) {
+                errors.append("Invalid Parent Milestone ID.<br>");
+            }
         }
+
         int priority = 0;
         try {
             priority = Integer.parseInt(priorityStr);
