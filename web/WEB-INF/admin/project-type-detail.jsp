@@ -92,7 +92,7 @@
                         </c:if>
 
                         <c:if test="${projectType != null}">
-                            <c:if test="${action == 'edit'}">
+                            <c:if test="${user.role_id == 2}">
                                 <form action="update-project-type" method="post" class="row">
                                     <input type="hidden" name="id" value="${projectType.id}">
                                     <div class="mb-3 col-md-6">
@@ -132,7 +132,7 @@
                                 </form>
                             </c:if>
 
-                            <c:if test="${action == 'view'}">
+                            <c:if test="${user.role_id != 2}">
                                 <form action="update-project-type" method="post" class="row">
                                     <input type="hidden" name="id" value="${projectType.id}">
                                     <div class="mb-3 col-md-12">

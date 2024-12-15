@@ -245,7 +245,7 @@
                                     </div>
 
                                     <div class="mb-3 col-md-6">
-                                        <label class="form-label"><strong>Form Date</strong> <span style="color: red;">*</span></label>
+                                        <label class="form-label"><strong>From Date</strong> <span style="color: red;">*</span></label>
                                         <input type="date" class="form-control" name="fromDate" placeholder="dd/MM/yyyy" 
                                                value="${al.startDate}" id="fromDate" required>
                                     </div>

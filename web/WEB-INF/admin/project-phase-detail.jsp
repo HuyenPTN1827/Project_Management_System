@@ -93,7 +93,7 @@
                         </c:if> 
 
                         <c:if test="${phase != null}">
-                            <c:if test="${action == 'edit'}">
+                            <c:if test="${user.role_id == 2}">
                                 <form action="update-project-phase" method="post" class="row">
                                     <input type="hidden" name="typeId" value="${typeId}">
                                     <input type="hidden" name="id" value="${phase.id}">
@@ -138,7 +138,7 @@
                                 </form>
                             </c:if>
                             
-                            <c:if test="${action == 'view'}">
+                            <c:if test="${user.role_id != 2}">
                                 <form action="update-project-phase" method="post" class="row">
                                     <input type="hidden" name="typeId" value="${typeId}">
                                     <input type="hidden" name="id" value="${phase.id}">
@@ -182,27 +182,6 @@
 
         <script src="${pageContext.request.contextPath}/js/app.js"></script>
 
-        <script>
-            document.addEventListener("DOMContentLoaded", function (event) {
-                setTimeout(function () {
-                    if (localStorage.getItem('popState') !== 'shown') {
-                        window.notyf.open({
-                            type: "success",
-                            message: "Get access to all 500+ components and 45+ pages with PMS PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
-                            duration: 10000,
-                            ripple: true,
-                            dismissible: false,
-                            position: {
-                                x: "left",
-                                y: "bottom"
-                            }
-                        });
-
-                        localStorage.setItem('popState', 'shown');
-                    }
-                }, 15000);
-            });
-        </script>
     </body>
 </html>
 

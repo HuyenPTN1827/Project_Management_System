@@ -50,10 +50,10 @@
 
             gtag('config', 'UA-120946860-10', {'anonymize_ip': true});
 
-            function openProjectTypeModal(id = null, action) {
+            function openProjectTypeModal(id = null) {
                 let url = '<%=request.getContextPath()%>/add-project-type'; // Default for Create New
                 if (id) {
-                    url = '<%=request.getContextPath()%>/edit-project-type?id=' + id + '&action=' + action; // For Edit
+                    url = '<%=request.getContextPath()%>/edit-project-type?id=' + id; // For Edit
                 }
 
                 fetch(url)
@@ -127,7 +127,7 @@
                                                 <a class="btn btn-primary" href="<%=request.getContextPath()%>/logout">Create new</a>
                                             </c:if>
 
-                                            <c:if test="${user != null && user.role_id == 2}">
+                                            <c:if test="${user != null}">
                                                 <a class="btn btn-primary" href="javascript:void(0);" onclick="openProjectTypeModal();">Create new</a>
                                             </c:if>
                                         </div>
@@ -162,70 +162,50 @@
                                                         <td>
 
                                                             <c:if test="${user == null}">
-                                                                <c:if test="${user.role_id == 2}">
-                                                                    <a href="<%=request.getContextPath()%>/logout" class="btn btn-info">
-                                                                        <i class="align-middle" data-feather="edit"></i>
-                                                                    </a>
+                                                                <a href="<%=request.getContextPath()%>/logout" class="btn btn-info">
+                                                                    <i class="align-middle" data-feather="edit"></i>
+                                                                </a>
 
-                                                                    <c:if test="${type.status eq 'false'}">
-                                                                        <a href="<%=request.getContextPath()%>/logout" class="btn btn-success">
-                                                                            <i class="fas fa-check"></i>
-                                                                        </a>
-                                                                    </c:if>
-
-                                                                    <c:if test="${type.status eq 'true'}">
-                                                                        <a href="<%=request.getContextPath()%>/logout" class="btn btn-danger">
-                                                                            <i class="fas fa-times" style="padding-left: 2px; padding-right: 2px"></i>
-                                                                        </a>
-                                                                    </c:if>
-                                                                    <a href="<%=request.getContextPath()%>/logout" class="btn btn-secondary">
-                                                                        <i class="align-middle" data-feather="settings"></i>
+                                                                <c:if test="${type.status eq 'false'}">
+                                                                    <a href="<%=request.getContextPath()%>/logout" class="btn btn-success">
+                                                                        <i class="fas fa-check"></i>
                                                                     </a>
                                                                 </c:if>
 
-                                                                <c:if test="${user.role_id != 2}">
-                                                                    <a href="<%=request.getContextPath()%>/logout" class="btn btn-info">
-                                                                        <i class="align-middle" data-feather="edit"></i>
-                                                                    </a>
-                                                                    <a href="<%=request.getContextPath()%>/logout" class="btn btn-secondary">
-                                                                        <i class="align-middle" data-feather="settings"></i>
+                                                                <c:if test="${type.status eq 'true'}">
+                                                                    <a href="<%=request.getContextPath()%>/logout" class="btn btn-danger">
+                                                                        <i class="fas fa-times" style="padding-left: 2px; padding-right: 2px"></i>
                                                                     </a>
                                                                 </c:if>
+                                                                <a href="<%=request.getContextPath()%>/logout" class="btn btn-secondary">
+                                                                    <i class="align-middle" data-feather="settings"></i>
+                                                                </a>
                                                             </c:if>
 
                                                             <c:if test="${user != null}">
-                                                                <c:if test="${user.role_id == 2}">
-                                                                    <a href="javascript:void(0);" class="btn btn-info" 
-                                                                       onclick="openProjectTypeModal(${type.id}, 'edit');"><i class="align-middle" data-feather="edit"></i></a>
+                                                                <a href="javascript:void(0);" class="btn btn-info" 
+                                                                   onclick="openProjectTypeModal(${type.id});"><i class="align-middle" data-feather="edit"></i></a>
 
-                                                                    <c:if test="${type.status eq 'false'}">
-                                                                        <a href="<%=request.getContextPath()%>/change-status-project-type?id=${type.id}&status=${type.status}"
-                                                                           class="btn btn-success"
-                                                                           onclick="return confirm('Are you sure you want to activate this project type?');">
-                                                                            <i class="fas fa-check"></i>
-                                                                        </a>
-                                                                    </c:if>
-
-                                                                    <c:if test="${type.status eq 'true'}">
-                                                                        <a href="<%=request.getContextPath()%>/change-status-project-type?id=${type.id}&status=${type.status}"
-                                                                           class="btn btn-danger"
-                                                                           onclick="return confirm('Are you sure you want to deactivate this project type?');">
-                                                                            <i class="fas fa-times" style="padding-left: 2px; padding-right: 2px"></i>
-                                                                        </a>
-                                                                    </c:if>
-
-                                                                    <a href="<%=request.getContextPath()%>/project-type-config?id=${type.id}&action=edit" 
-                                                                       class="btn btn-secondary"><i class="align-middle" data-feather="settings"></i></a>
-                                                                    </c:if>
-
-                                                                <c:if test="${user.role_id != 2}">
-                                                                    <a href="javascript:void(0);" class="btn btn-info" 
-                                                                       onclick="openProjectTypeModal(${type.id}, 'view');"><i class="align-middle" data-feather="eye"></i></a>
-
-                                                                    <a href="<%=request.getContextPath()%>/project-type-config?id=${type.id}&action=view" 
-                                                                       class="btn btn-secondary"><i class="align-middle" data-feather="settings"></i></a>
-                                                                    </c:if>
+                                                                <c:if test="${type.status eq 'false'}">
+                                                                    <a href="<%=request.getContextPath()%>/change-status-project-type?id=${type.id}&status=${type.status}"
+                                                                       class="btn btn-success"
+                                                                       onclick="return confirm('Are you sure you want to activate this project type?');">
+                                                                        <i class="fas fa-check"></i>
+                                                                    </a>
                                                                 </c:if>
+
+                                                                <c:if test="${type.status eq 'true'}">
+                                                                    <a href="<%=request.getContextPath()%>/change-status-project-type?id=${type.id}&status=${type.status}"
+                                                                       class="btn btn-danger"
+                                                                       onclick="return confirm('Are you sure you want to deactivate this project type?');">
+                                                                        <i class="fas fa-times" style="padding-left: 2px; padding-right: 2px"></i>
+                                                                    </a>
+                                                                </c:if>
+
+                                                                <a href="<%=request.getContextPath()%>/project-type-config?id=${type.id}" 
+                                                                   class="btn btn-secondary"><i class="align-middle" data-feather="settings"></i></a>
+
+                                                            </c:if>
 
                                                         </td>
                                                     </tr>
@@ -327,25 +307,25 @@
         </script>
 
         <script>
-            document.addEventListener("DOMContentLoaded", function (event) {
-                setTimeout(function () {
-                    if (localStorage.getItem('popState') !== 'shown') {
-                        window.notyf.open({
-                            type: "success",
-                            message: "Get access to all 500+ components and 45+ pages with PMS PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
-                            duration: 10000,
-                            ripple: true,
-                            dismissible: false,
-                            position: {
-                                x: "left",
-                                y: "bottom"
-                            }
-                        });
-
-                        localStorage.setItem('popState', 'shown');
-                    }
-                }, 15000);
-            });
+//            document.addEventListener("DOMContentLoaded", function (event) {
+//                setTimeout(function () {
+//                    if (localStorage.getItem('popState') !== 'shown') {
+//                        window.notyf.open({
+//                            type: "success",
+//                            message: "Get access to all 500+ components and 45+ pages with PMS PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
+//                            duration: 10000,
+//                            ripple: true,
+//                            dismissible: false,
+//                            position: {
+//                                x: "left",
+//                                y: "bottom"
+//                            }
+//                        });
+//
+//                        localStorage.setItem('popState', 'shown');
+//                    }
+//                }, 15000);
+//            });
         </script>
     </body>
 

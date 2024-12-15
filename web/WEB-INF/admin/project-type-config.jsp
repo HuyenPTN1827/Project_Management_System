@@ -50,10 +50,9 @@
             gtag('config', 'UA-120946860-10', {'anonymize_ip': true});
 
             function openSettingModal(typeId, id = null) {
-                const action = document.getElementById("action").value;
                 let url = '<%=request.getContextPath()%>/add-project-type-setting?typeId=' + typeId; // Default for Create New
                 if (id) {
-                    url = '<%=request.getContextPath()%>/edit-project-type-setting?typeId=' + typeId + '&id=' + id + '&action=' + action; // For Edit
+                    url = '<%=request.getContextPath()%>/edit-project-type-setting?typeId=' + typeId + '&id=' + id; // For Edit
                 }
 
                 fetch(url)
@@ -81,10 +80,9 @@
             }
 
             function openPhaseModal(typeId, id = null) {
-                const action = document.getElementById("action").value;
                 let url = '<%=request.getContextPath()%>/add-project-phase?typeId=' + typeId; // Default for Create New
                 if (id) {
-                    url = '<%=request.getContextPath()%>/edit-project-phase?typeId=' + typeId + '&id=' + id + '&action=' + action; // For Edit
+                    url = '<%=request.getContextPath()%>/edit-project-phase?typeId=' + typeId + '&id=' + id; // For Edit
                 }
 
                 fetch(url)
@@ -286,7 +284,6 @@
                                                     <form action="project-type-config" method="post" class="d-flex align-items-center" style="gap: 15px;">
                                                         <input type="hidden" name="id" value="${projectType.id}">
                                                         <input type="hidden" name="activeTab" value="setting">
-                                                        <input type="hidden" name="action" value="${action}"/>
 
                                                         <div class="col-md-3">
                                                             <select name="type" class="form-select">
@@ -335,9 +332,9 @@
                                                             <button type="submit" class="btn btn-primary">Search</button>
                                                         </div>
                                                     </form>
-                                                    <c:if test="${action == 'edit'}">
-                                                        <a class="btn btn-primary" href="javascript:void(0);" onclick="openSettingModal(${projectType.id});">Create new</a>
-                                                    </c:if>
+
+                                                    <a class="btn btn-primary" href="javascript:void(0);" onclick="openSettingModal(${projectType.id});">Create new</a>
+
                                                 </div>
 
                                                 <table id="datatables-multi3" class="table table-striped" style="width:100%">
@@ -369,36 +366,25 @@
                                                                     </c:if>
                                                                 </td>
                                                                 <td>
-                                                                    <c:if test="${action == 'edit'}">
-                                                                        <a href="javascript:void(0);" class="btn btn-info" 
-                                                                           onclick="openSettingModal(${projectType.id}, ${type.id});">
-                                                                            <i class="align-middle" data-feather="edit"></i>
+                                                                    <a href="javascript:void(0);" class="btn btn-info" 
+                                                                       onclick="openSettingModal(${projectType.id}, ${type.id});">
+                                                                        <i class="align-middle" data-feather="edit"></i>
+                                                                    </a>
+
+                                                                    <c:if test="${type.status eq 'false'}">
+                                                                        <a href="<%=request.getContextPath()%>/change-status-project-type-setting?id=${type.id}&status=${type.status}&typeId=${projectType.id}"
+                                                                           class="btn btn-success"
+                                                                           onclick="return confirm('Are you sure you want to activate this project type setting?');">
+                                                                            <i class="fas fa-check"></i>
                                                                         </a>
                                                                     </c:if>
 
-                                                                    <c:if test="${action == 'view'}">
-                                                                        <a href="javascript:void(0);" class="btn btn-info" 
-                                                                           onclick="openSettingModal(${projectType.id}, ${type.id});">
-                                                                            <i class="align-middle" data-feather="eye"></i>
+                                                                    <c:if test="${type.status eq 'true'}">
+                                                                        <a href="<%=request.getContextPath()%>/change-status-project-type-setting?id=${type.id}&status=${type.status}&typeId=${projectType.id}"
+                                                                           class="btn btn-danger"
+                                                                           onclick="return confirm('Are you sure you want to deactivate this project type setting?');">
+                                                                            <i class="fas fa-times" style="padding-left: 2px; padding-right: 2px"></i>
                                                                         </a>
-                                                                    </c:if>
-
-                                                                    <c:if test="${action == 'edit'}">
-                                                                        <c:if test="${type.status eq 'false'}">
-                                                                            <a href="<%=request.getContextPath()%>/change-status-project-type-setting?id=${type.id}&status=${type.status}&typeId=${projectType.id}"
-                                                                               class="btn btn-success"
-                                                                               onclick="return confirm('Are you sure you want to activate this project type setting?');">
-                                                                                <i class="fas fa-check"></i>
-                                                                            </a>
-                                                                        </c:if>
-
-                                                                        <c:if test="${type.status eq 'true'}">
-                                                                            <a href="<%=request.getContextPath()%>/change-status-project-type-setting?id=${type.id}&status=${type.status}&typeId=${projectType.id}"
-                                                                               class="btn btn-danger"
-                                                                               onclick="return confirm('Are you sure you want to deactivate this project type setting?');">
-                                                                                <i class="fas fa-times" style="padding-left: 2px; padding-right: 2px"></i>
-                                                                            </a>
-                                                                        </c:if>
                                                                     </c:if>
                                                                 </td>
                                                             </tr>
@@ -578,7 +564,6 @@
                                                     <form action="project-type-config" method="post" class="d-flex align-items-center" style="gap: 15px;">
                                                         <input type="hidden" name="id" value="${projectType.id}">
                                                         <input type="hidden" name="activeTab" value="phase">
-                                                        <input type="hidden" name="action" value="${action}"/>
 
                                                         <div class="col-md-4">
                                                             <select name="statusPhase" class="form-select">
@@ -606,9 +591,8 @@
 
                                                     </form>
 
-                                                    <c:if test="${action == 'edit'}">
-                                                        <a class="btn btn-primary" href="javascript:void(0);" onclick="openPhaseModal(${projectType.id});">Create new</a>
-                                                    </c:if>
+                                                    <a class="btn btn-primary" href="javascript:void(0);" onclick="openPhaseModal(${projectType.id});">Create new</a>
+
                                                 </div>
 
                                                 <table id="datatables-multi1" class="table table-striped" style="width:100%">
@@ -636,35 +620,27 @@
                                                                     </c:if>
                                                                 </td>
                                                                 <td>
-                                                                    <c:if test="${action == 'edit'}">
-                                                                        <a href="javascript:void(0);" class="btn btn-info" 
-                                                                           onclick="openPhaseModal(${projectType.id}, ${p.id});">
-                                                                            <i class="align-middle" data-feather="edit"></i>
-                                                                        </a>
+                                                                    <a href="javascript:void(0);" class="btn btn-info" 
+                                                                       onclick="openPhaseModal(${projectType.id}, ${p.id});">
+                                                                        <i class="align-middle" data-feather="edit"></i>
+                                                                    </a>
 
-                                                                        <c:if test="${p.status eq 'false'}">
-                                                                            <a href="<%=request.getContextPath()%>/change-status-project-phase?id=${p.id}&status=${p.status}&typeId=${projectType.id}"
-                                                                               class="btn btn-success"
-                                                                               onclick="return confirm('Are you sure you want to activate this project phase?');">
-                                                                                <i class="fas fa-check"></i>
-                                                                            </a>
-                                                                        </c:if>
-
-                                                                        <c:if test="${p.status eq 'true'}">
-                                                                            <a href="<%=request.getContextPath()%>/change-status-project-phase?id=${p.id}&status=${p.status}&typeId=${projectType.id}"
-                                                                               class="btn btn-danger"
-                                                                               onclick="return confirm('Are you sure you want to deactivate this project phase?');">
-                                                                                <i class="fas fa-times" style="padding-left: 2px; padding-right: 2px"></i>
-                                                                            </a>
-                                                                        </c:if>
-                                                                    </c:if>
-
-                                                                    <c:if test="${action == 'view'}">
-                                                                        <a href="javascript:void(0);" class="btn btn-info" 
-                                                                           onclick="openPhaseModal(${projectType.id}, ${p.id});">
-                                                                            <i class="align-middle" data-feather="eye"></i>
+                                                                    <c:if test="${p.status eq 'false'}">
+                                                                        <a href="<%=request.getContextPath()%>/change-status-project-phase?id=${p.id}&status=${p.status}&typeId=${projectType.id}"
+                                                                           class="btn btn-success"
+                                                                           onclick="return confirm('Are you sure you want to activate this project phase?');">
+                                                                            <i class="fas fa-check"></i>
                                                                         </a>
                                                                     </c:if>
+
+                                                                    <c:if test="${p.status eq 'true'}">
+                                                                        <a href="<%=request.getContextPath()%>/change-status-project-phase?id=${p.id}&status=${p.status}&typeId=${projectType.id}"
+                                                                           class="btn btn-danger"
+                                                                           onclick="return confirm('Are you sure you want to deactivate this project phase?');">
+                                                                            <i class="fas fa-times" style="padding-left: 2px; padding-right: 2px"></i>
+                                                                        </a>
+                                                                    </c:if>
+
                                                                 </td>
                                                             </tr>
                                                         </c:forEach>
@@ -959,26 +935,5 @@
                                                                                });
         </script>
 
-        <script>
-            document.addEventListener("DOMContentLoaded", function (event) {
-                setTimeout(function () {
-                    if (localStorage.getItem('popState') !== 'shown') {
-                        window.notyf.open({
-                            type: "success",
-                            message: "Get access to all 500+ components and 45+ pages with PMS PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
-                            duration: 10000,
-                            ripple: true,
-                            dismissible: false,
-                            position: {
-                                x: "left",
-                                y: "bottom"
-                            }
-                        });
-
-                        localStorage.setItem('popState', 'shown');
-                    }
-                }, 15000);
-            });
-        </script>
     </body>
 </html>

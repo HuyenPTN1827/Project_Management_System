@@ -57,47 +57,16 @@
             </li>
 
             <li class="sidebar-item <c:if test="${activeTab == 'milestone'}">active</c:if>">
-                <c:if test="${user.role_id == 5}">
-                    <a class="sidebar-link" href="<%= request.getContextPath() %>/projectconfig?activeTab=milestone&action=view">
-                        <i class="align-middle" data-feather="server"></i> <span class="align-middle">Milestones</span>
-                    </a>
-                </c:if>
-                <c:if test="${user.role_id != 5}">
-                    <a class="sidebar-link" href="<%= request.getContextPath() %>/projectconfig?activeTab=milestone&action=edit">
-                        <i class="align-middle" data-feather="server"></i> <span class="align-middle">Milestones</span>
-                    </a>
-                </c:if>
+                <a class="sidebar-link" href="<%= request.getContextPath() %>/projectconfig?activeTab=milestone">
+                    <i class="align-middle" data-feather="server"></i> <span class="align-middle">Milestones</span>
+                </a>
             </li>
 
             <li class="sidebar-item <c:if test="${activeTab == 'allocation'}">active</c:if>">
-                <c:if test="${user.role_id == 5}">
-                    <a class="sidebar-link" href="<%= request.getContextPath() %>/projectconfig?activeTab=allocation&action=view">
-                        <i class="align-middle" data-feather="users"></i> <span class="align-middle">HR Allocations</span>
-                    </a>
-                </c:if>
-                <c:if test="${user.role_id != 5}">
-                    <a class="sidebar-link" href="<%= request.getContextPath() %>/projectconfig?activeTab=allocation&action=edit">
-                        <i class="align-middle" data-feather="users"></i> <span class="align-middle">HR Allocations</span>
-                    </a>
-                </c:if>
+                <a class="sidebar-link" href="<%= request.getContextPath() %>/projectconfig?activeTab=allocation">
+                    <i class="align-middle" data-feather="users"></i> <span class="align-middle">HR Allocations</span>
+                </a>
             </li>
-
-            <!--            <li class="sidebar-item">
-                            <a data-bs-target="#project" data-bs-toggle="collapse" class="sidebar-link collapsed">
-                                <i class="align-middle" data-feather="briefcase"></i> <span class="align-middle">Project Admin</span>
-                            </a>
-                            <ul id="project" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
-                                <li class="sidebar-item">
-                                    <a class="sidebar-link" href="<%= request.getContextPath() %>/projectlist">Projects</a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a class="sidebar-link" href="<%= request.getContextPath() %>/projectconfig?activeTab=milestone">Milestones</a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a class="sidebar-link" href="<%= request.getContextPath() %>/projectconfig?activeTab=allocation">HR Allocations</a>
-                                </li>
-                            </ul>
-                        </li>-->
 
             <li class="sidebar-item" hidden>
                 <a data-bs-target="#evaluation" data-bs-toggle="collapse" class="sidebar-link collapsed">
@@ -109,34 +78,37 @@
                 </ul>
             </li>
 
-            <li class="sidebar-item <c:if test="${currentPage == 'department-management' || currentPage == 'project-type-management'
-                                                  || currentPage == 'user-management' || currentPage == 'setting-management'}">active</c:if>">
-                      <a data-bs-target="#system" data-bs-toggle="collapse" class="sidebar-link collapsed
-                      <c:if test="${currentPage == 'department-management' || currentPage == 'project-type-management'
-                                    || currentPage == 'user-management' || currentPage == 'setting-management'}">active</c:if>">
-                          <i class="align-middle" data-feather="settings"></i> <span class="align-middle">System Admin</span>
-                      </a>
+            <c:if test="${user.role_id == 2 || user.role_id == 3}">
+                <li class="sidebar-item <c:if test="${currentPage == 'department-management' || currentPage == 'project-type-management'
+                                                      || currentPage == 'user-management' || currentPage == 'setting-management'}">active</c:if>">
+                          <a data-bs-target="#system" data-bs-toggle="collapse" class="sidebar-link collapsed
+                          <c:if test="${currentPage == 'department-management' || currentPage == 'project-type-management'
+                                        || currentPage == 'user-management' || currentPage == 'setting-management'}">active</c:if>">
+                              <i class="align-middle" data-feather="settings"></i> <span class="align-middle">System Admin</span>
+                          </a>
 
-                      <ul id="system" class="sidebar-dropdown list-unstyled collapse
-                      <c:if test="${currentPage == 'department-management' || currentPage == 'project-type-management'
-                                    || currentPage == 'user-management' || currentPage == 'setting-management'}">show</c:if>" data-bs-parent="#sidebar">
+                          <ul id="system" class="sidebar-dropdown list-unstyled collapse
+                          <c:if test="${currentPage == 'department-management' || currentPage == 'project-type-management'
+                                        || currentPage == 'user-management' || currentPage == 'setting-management'}">show</c:if>" data-bs-parent="#sidebar">
 
-                          <li class="sidebar-item <c:if test="${currentPage == 'department-management'}">active</c:if>">
-                          <a class="sidebar-link" href="<%=request.getContextPath()%>/department-management">Departments</a>
-                      </li>
-                      <li class="sidebar-item <c:if test="${currentPage == 'project-type-management'}">active</c:if>">
-                          <a class="sidebar-link" href="<%=request.getContextPath()%>/project-type-management">Project Types</a>
-                      </li>
-                      <c:if test="${user.role_id == 2}">
-                          <li class="sidebar-item <c:if test="${currentPage == 'user-management'}">active</c:if>">
-                              <a class="sidebar-link" href="<%=request.getContextPath()%>/user-management">Users</a>
+                              <li class="sidebar-item <c:if test="${currentPage == 'department-management'}">active</c:if>">
+                              <a class="sidebar-link" href="<%=request.getContextPath()%>/department-management">Departments</a>
                           </li>
-                          <li class="sidebar-item <c:if test="${currentPage == 'setting-management'}">active</c:if>">
-                              <a class="sidebar-link" href="<%=request.getContextPath()%>/setting-management">Settings</a>
-                          </li>
-                      </c:if>
-                  </ul>
-            </li>
+
+                          <c:if test="${user.role_id == 2}">
+                              <li class="sidebar-item <c:if test="${currentPage == 'project-type-management'}">active</c:if>">
+                                  <a class="sidebar-link" href="<%=request.getContextPath()%>/project-type-management">Project Types</a>
+                              </li>
+                              <li class="sidebar-item <c:if test="${currentPage == 'user-management'}">active</c:if>">
+                                  <a class="sidebar-link" href="<%=request.getContextPath()%>/user-management">Users</a>
+                              </li>
+                              <li class="sidebar-item <c:if test="${currentPage == 'setting-management'}">active</c:if>">
+                                  <a class="sidebar-link" href="<%=request.getContextPath()%>/setting-management">Settings</a>
+                              </li>
+                          </c:if>
+                      </ul>
+                </li>
+            </c:if>
         </ul>
 
     </div>

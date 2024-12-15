@@ -16,7 +16,6 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import model.Setting;
-import model.User;
 
 /**
  *
@@ -84,7 +83,7 @@ public class AuthenticationFilter implements Filter {
         HttpSession session = httpRequest.getSession(false); // Không tạo session mới
         if (session == null || session.getAttribute("user") == null) {
             System.out.println("Session expired or user not logged in. Redirecting to login.");
-            httpResponse.sendRedirect(httpRequest.getContextPath() + "/member/login.jsp");
+            httpResponse.sendRedirect(httpRequest.getContextPath() + "/logout");
             return;
         }
 
@@ -117,6 +116,36 @@ public class AuthenticationFilter implements Filter {
                 chain.doFilter(request, response);
             } else {
                 System.out.println("Unauthorized access attempt to /setting-management");
+                httpRequest.getRequestDispatcher("/WEB-INF/member/unauthorized.jsp").forward(request, response);
+            }
+        } else if (currentURL.contains("/project-type-management") 
+                || currentURL.contains("/add-project-type")
+                || currentURL.contains("/insert-project-type")
+                || currentURL.contains("/edit-project-type")
+                || currentURL.contains("/update-project-type")
+                || currentURL.contains("/change-status-project-type")
+                || currentURL.contains("/project-type-config")
+                || currentURL.contains("/add-project-type-setting")
+                || currentURL.contains("/insert-project-type-setting")
+                || currentURL.contains("/edit-project-type-setting")
+                || currentURL.contains("/update-project-type-setting")
+                || currentURL.contains("/change-status-project-type-setting")
+                || currentURL.contains("/add-project-phase")
+                || currentURL.contains("/insert-project-phase")
+                || currentURL.contains("/edit-project-phase")
+                || currentURL.contains("/update-project-phase")
+                || currentURL.contains("/change-status-project-phase")) { 
+            if (userRoleSetting != null && userRoleSetting.getId() == 2) {
+                chain.doFilter(request, response);
+            } else {
+                System.out.println("Unauthorized access attempt to /project-type-management");
+                httpRequest.getRequestDispatcher("/WEB-INF/member/unauthorized.jsp").forward(request, response);
+            }
+        } else if (currentURL.contains("/department-management")) { // Thêm kiểm tra cho /department-management
+            if (userRoleSetting != null && userRoleSetting.getId() <= 3) {
+                chain.doFilter(request, response);
+            } else {
+                System.out.println("Unauthorized access attempt to /department-management");
                 httpRequest.getRequestDispatcher("/WEB-INF/member/unauthorized.jsp").forward(request, response);
             }
         } else if (currentURL.contains("/member-dashboard")) {
