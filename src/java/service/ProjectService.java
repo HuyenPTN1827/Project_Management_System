@@ -32,14 +32,14 @@ public class ProjectService {
         return projectDAO.getAllProjects();
     }
 
-    // Tìm kiếm dự án theo trạng thái
-    public List<Project> searchProjectsByStatus(int status) {
-        return projectDAO.getProjectsByStatus(status);
-    }
-
-    public List<Project> searchProjectsByKeyword(String keyword) {
-        return projectDAO.searchProjectsByKeyword(keyword); // Gọi phương thức từ ProjectDAO
-    }
+//    // Tìm kiếm dự án theo trạng thái
+//    public List<Project> searchProjectsByStatus(int status) {
+//        return projectDAO.getProjectsByStatus(status);
+//    }
+//
+//    public List<Project> searchProjectsByKeyword(String keyword) {
+//        return projectDAO.searchProjectsByKeyword(keyword); // Gọi phương thức từ ProjectDAO
+//    }
 
     // Lấy dự án theo ID
     public Project getProjectById(int id) {
@@ -90,5 +90,17 @@ public class ProjectService {
     public List<Setting> getAllBizTerm() {
         return projectDAO.getAllBizTerms();
     }
+   
+// public List<Project> searchByProjectType(int projectType) {
+//    return projectDAO.getProjectsByType(projectType);
+//}
+//
+//
+//public List<Project> searchByDepartment(int departmentId) {
+//    return projectDAO.getProjectsByDepartment(departmentId);
+//}
+
+
+
 
 }
