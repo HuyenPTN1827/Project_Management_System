@@ -27,6 +27,7 @@ public class Project {
     private int departmentId;
     private int userId;
     private int bizTerm;
+    private int deptManager;
     
     // Các trường bổ sung có thể liên kết với bảng khác (nếu có)
     private String departmentName;
@@ -42,7 +43,7 @@ public class Project {
     public Project() {
     }
 
-    public Project(int id, String name, String code, int estimatedEffort, Date startDate, String details, Date endDate, Date lastUpdated, int status, int typeId, int departmentId, int userId, int bizTerm, String departmentName, String typeName, String typeCode, String departmentCode, String settingName, int createdBy, String bizTermName, User user) {
+    public Project(int id, String name, String code, int estimatedEffort, Date startDate, String details, Date endDate, Date lastUpdated, int status, int typeId, int departmentId, int userId, int bizTerm, int deptManager, String departmentName, String typeName, String typeCode, String departmentCode, String settingName, int createdBy, String bizTermName, User user) {
         this.id = id;
         this.name = name;
         this.code = code;
@@ -56,6 +57,7 @@ public class Project {
         this.departmentId = departmentId;
         this.userId = userId;
         this.bizTerm = bizTerm;
+        this.deptManager = deptManager;
         this.departmentName = departmentName;
         this.typeName = typeName;
         this.typeCode = typeCode;
@@ -168,6 +170,14 @@ public class Project {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public int getDeptManager() {
+        return deptManager;
+    }
+
+    public void setDeptManager(int deptManager) {
+        this.deptManager = deptManager;
     }
 
     public String getDepartmentName() {

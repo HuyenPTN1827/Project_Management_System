@@ -103,22 +103,31 @@ public class AuthenticationFilter implements Filter {
         System.out.println("Current URL: " + currentURL);
 
         // Phân quyền
-        if (currentURL.contains("/user-management")) {
+        if (currentURL.contains("/user-management")
+                || currentURL.contains("/add-user")
+                || currentURL.contains("/insert-user")
+                || currentURL.contains("/edit-user")
+                || currentURL.contains("/update-user")
+                || currentURL.contains("/change-status-user")) {
             if (userRoleSetting != null && userRoleSetting.getId() == 2) {
                 chain.doFilter(request, response);
-
             } else {
                 System.out.println("Unauthorized access attempt to /user-management");
                 httpRequest.getRequestDispatcher("/WEB-INF/member/unauthorized.jsp").forward(request, response);
             }
-        } else if (currentURL.contains("/setting-management")) { // Thêm kiểm tra cho /setting-management
+        } else if (currentURL.contains("/setting-management")
+                || currentURL.contains("/add-setting")
+                || currentURL.contains("/insert-setting")
+                || currentURL.contains("/edit-setting")
+                || currentURL.contains("/update-setting")
+                || currentURL.contains("/change-status-setting")) { // Thêm kiểm tra cho /setting-management
             if (userRoleSetting != null && userRoleSetting.getId() == 2) {
                 chain.doFilter(request, response);
             } else {
                 System.out.println("Unauthorized access attempt to /setting-management");
                 httpRequest.getRequestDispatcher("/WEB-INF/member/unauthorized.jsp").forward(request, response);
             }
-        } else if (currentURL.contains("/project-type-management") 
+        } else if (currentURL.contains("/project-type-management")
                 || currentURL.contains("/add-project-type")
                 || currentURL.contains("/insert-project-type")
                 || currentURL.contains("/edit-project-type")
@@ -134,25 +143,55 @@ public class AuthenticationFilter implements Filter {
                 || currentURL.contains("/insert-project-phase")
                 || currentURL.contains("/edit-project-phase")
                 || currentURL.contains("/update-project-phase")
-                || currentURL.contains("/change-status-project-phase")) { 
+                || currentURL.contains("/change-status-project-phase")
+                || currentURL.contains("/add-department")
+                || currentURL.contains("/insert-department")
+                || currentURL.contains("/update-department")
+                || currentURL.contains("/change-status-department")
+                || currentURL.contains("/insert-department-user")
+                || currentURL.contains("/change-status-department-user")) {
             if (userRoleSetting != null && userRoleSetting.getId() == 2) {
                 chain.doFilter(request, response);
             } else {
                 System.out.println("Unauthorized access attempt to /project-type-management");
                 httpRequest.getRequestDispatcher("/WEB-INF/member/unauthorized.jsp").forward(request, response);
             }
-        } else if (currentURL.contains("/department-management")) { // Thêm kiểm tra cho /department-management
-            if (userRoleSetting != null && userRoleSetting.getId() <= 3) {
+        } else if (currentURL.contains("/department-management")
+                || currentURL.contains("/department-config")
+                || currentURL.contains("/add-project")
+                || currentURL.contains("/insert-project")
+                || currentURL.contains("/update-project")
+                || currentURL.contains("/check-project-code")
+                || currentURL.contains("/add-allocation")
+                || currentURL.contains("/insert-allocation")
+                || currentURL.contains("/update-allocation")
+                || currentURL.contains("/change-status-allocation")
+                ) {
+            if (userRoleSetting != null && userRoleSetting.getId() >= 2 && userRoleSetting.getId() <= 3) {
                 chain.doFilter(request, response);
             } else {
                 System.out.println("Unauthorized access attempt to /department-management");
                 httpRequest.getRequestDispatcher("/WEB-INF/member/unauthorized.jsp").forward(request, response);
             }
-        } else if (currentURL.contains("/member-dashboard")) {
+        } else if (currentURL.contains("/member-dashboard")
+                || currentURL.contains("/projectlist")
+                || currentURL.contains("/projectconfig")
+                || currentURL.contains("/issue-management")
+                || currentURL.contains("/edit-milestone")
+                ) {
             if (userRoleSetting != null && userRoleSetting.getId() >= 2) {
                 chain.doFilter(request, response);
             } else {
                 System.out.println("Unauthorized access attempt to /member-dashboard");
+                httpRequest.getRequestDispatcher("/WEB-INF/member/unauthorized.jsp").forward(request, response);
+            }
+        } else if (currentURL.contains("/edit-allocation")
+                || currentURL.contains("/add-milestone")
+                || currentURL.contains("/insert-milestone")
+                || currentURL.contains("/update-milestone")) {
+            if (userRoleSetting != null && userRoleSetting.getId() >= 2 && userRoleSetting.getId() != 5) {
+                chain.doFilter(request, response);
+            } else {
                 httpRequest.getRequestDispatcher("/WEB-INF/member/unauthorized.jsp").forward(request, response);
             }
         } else {

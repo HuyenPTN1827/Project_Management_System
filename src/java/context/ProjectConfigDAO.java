@@ -295,12 +295,14 @@ public class ProjectConfigDAO {
 
         // Câu lệnh SQL để lấy thông tin dự án, bao gồm cả tên loại dự án và biz_term từ bảng setting
         String sql = "SELECT DISTINCT p.id, p.code, p.name, p.details, p.start_date, p.end_date, p.last_updated, "
-                + "p.estimated_effort, p.status, p.type_id, p.department_id, p.user_id, "
+                + "p.estimated_effort, p.status, p.type_id, p.department_id, p.user_id, u.full_name, u.username, "
                 + "pt.code AS type_code, pt.name AS type_name, d.code AS department_code, d.name AS department_name, "
-                + "s.name AS biz_term_name " // Thêm cột biz_term_name từ bảng setting
+                + "s.name AS biz_term_name, du.user_id " // Thêm cột biz_term_name từ bảng setting
                 + "FROM project p "
                 + "LEFT JOIN project_type pt ON p.type_id = pt.id " // JOIN với bảng project_type
-                + "LEFT JOIN department d ON p.department_id = d.id " // JOIN với bảng department
+                + "LEFT JOIN department d ON p.department_id = d.id "
+                + "LEFT JOIN dept_user du ON p.department_id = du.dept_id AND du.role_id = 3 " 
+                + "LEFT JOIN user u ON p.user_id = u.id " 
                 + "LEFT JOIN setting s ON p.biz_term = s.id " // JOIN với bảng setting dựa trên bizterm
                 + "WHERE p.id = ?"; // Điều kiện WHERE để tìm dự án theo ID
 
@@ -321,12 +323,18 @@ public class ProjectConfigDAO {
                 project.setStatus(rs.getInt("status"));
                 project.setTypeId(rs.getInt("type_id"));
                 project.setDepartmentId(rs.getInt("department_id"));
-                project.setUserId(rs.getInt("user_id"));
+                project.setUserId(rs.getInt("p.user_id"));
                 project.setTypeCode(rs.getString("type_code")); // Mã loại dự án
                 project.setTypeName(rs.getString("type_name")); // Tên loại dự án
                 project.setDepartmentCode(rs.getString("department_code")); // Mã bộ phận
                 project.setDepartmentName(rs.getString("department_name")); // Tên bộ phận
                 project.setBizTermName(rs.getString("biz_term_name")); // Lấy tên biz_term từ bảng setting
+                project.setDeptManager(rs.getInt("du.user_id"));
+                
+                User u = new User();
+                u.setFull_name(rs.getString("full_name"));
+                u.setUsername(rs.getString("username"));
+                project.setUser(u);
 
             }
         } catch (SQLException e) {
@@ -776,7 +784,8 @@ public class ProjectConfigDAO {
     }
 
     public List<Setting> getAllBizTerms() {
-        String query = "SELECT DISTINCT id, name FROM setting ";
+        // Sửa lại câu truy vấn SQL để chỉ lấy những bản ghi có type = 'Business Term'
+        String query = "SELECT DISTINCT id, name FROM setting WHERE type = 'Business Term'";
 
         List<Setting> bizTerms = new ArrayList<>();
 

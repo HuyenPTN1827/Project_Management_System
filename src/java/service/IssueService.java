@@ -34,8 +34,8 @@ public class IssueService extends BaseServive {
     }
     
     // Get 10 lastest issues
-    public List<Issue> get10LastestIssues() {
-        return issueDAO.select10LastestIssues();
+    public List<Issue> get10LastestIssues(int userId) {
+        return issueDAO.select10LastestIssues(userId);
     }
     
     // Count issues

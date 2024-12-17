@@ -92,35 +92,37 @@
                                             <div class="d-flex justify-content-between align-items-center" style="margin: 10px;">
                                                 <form action="projectlist" method="post" class="d-flex align-items-center" style="gap: 10px;">
                                                     <div class="col-md-2">
-                                                        <select name="typeId" class="form-select " >
+                                                        <select name="typeId" class="form-select">
                                                             <option value="">All Project Types</option>
-                                                        <c:forEach items="${type}" var="t">
+                                                        <c:forEach items="${listProjectTypes}" var="type">
                                                             <option 
-                                                                <c:if test="${typeId eq t.id}">
+                                                                <c:if test="${projectType eq type.id}">
                                                                     selected="selected"
                                                                 </c:if>
-                                                                value="${t.id}">${t.name}
+                                                                value="${type.id}">${type.name}
                                                             </option>
                                                         </c:forEach>
                                                     </select>
                                                 </div>
+
 
                                                 <div class="col-md-2">
                                                     <select name="deptId" class="form-select">
                                                         <option value="">All Departments</option>
-                                                        <c:forEach items="${dept}" var="d">
+                                                        <c:forEach items="${listDepartments}" var="dept">
                                                             <option 
-                                                                <c:if test="${deptId eq d.id}">
+                                                                <c:if test="${department eq dept.id}">
                                                                     selected="selected"
                                                                 </c:if>
-                                                                value="${d.id}">${d.name}
+                                                                value="${dept.id}">${dept.name}
                                                             </option>
                                                         </c:forEach>
                                                     </select>
                                                 </div>
 
+
                                                 <div class="col-md-2">
-                                                    <select name="status" class="form-select" onchange="this.form.submit();">
+                                                    <select name="status" class="form-select">
                                                         <option value="">All Status</option>
                                                         <option value="0" <c:if test="${status == 0}">selected="selected"</c:if>>Pending</option>
                                                         <option value="1" <c:if test="${status == 1}">selected="selected"</c:if>>Doing</option>
@@ -135,23 +137,13 @@
                                                 </div>
 
                                                 <div class="col-md-2">
-                                                    <c:if test="${user == null}">
-                                                        <a class="btn btn-primary" href="<%=request.getContextPath()%>/logout">Search</a>
-                                                    </c:if>
-
-                                                    <c:if test="${user != null}">
-                                                        <button type="submit" class="btn btn-primary">Search</button>
-                                                    </c:if>
+                                                    <button type="submit" class="btn btn-primary">Search</button>
                                                 </div>
                                             </form>
 
                                             <div class="col-md-2 d-flex justify-content-end align-items-end">
 
-                                                <c:if test="${user == null}">
-                                                    <a class="btn btn-primary" href="<%=request.getContextPath()%>/logout">Create new</a>
-                                                </c:if>
-
-                                                <c:if test="${user != null && user.role_id == 2}">
+                                                <c:if test="${user.role_id == 2 || user.role_id == 3}">
                                                     <a class="btn btn-primary" href="javascript:void(0);" onclick="openProjectModal();">Create new</a>
                                                 </c:if>
 
@@ -199,24 +191,9 @@
                                                         </td>
 
                                                         <td>
-                                                            <c:if test="${user == null}">
-                                                                <a href="<%=request.getContextPath()%>/login" class="btn btn-secondary">
-                                                                    <i class="align-middle" data-feather="settings"></i>
-                                                                </a>
-                                                            </c:if>
-
-                                                            <c:if test="${user != null}">
-                                                                <c:if test="${user.role_id == 5}">
-                                                                    <a href="<%=request.getContextPath()%>/projectconfig?id=${project.id}&action=view" class="btn btn-secondary">
-                                                                        <i class="align-middle" data-feather="settings"></i>
-                                                                    </a>
-                                                                </c:if>
-                                                                <c:if test="${user.role_id != 5}">
-                                                                    <a href="<%=request.getContextPath()%>/projectconfig?id=${project.id}&action=edit" class="btn btn-secondary">
-                                                                        <i class="align-middle" data-feather="settings"></i>
-                                                                    </a>
-                                                                </c:if>
-                                                            </c:if>
+                                                            <a href="<%=request.getContextPath()%>/projectconfig?id=${project.id}" class="btn btn-secondary">
+                                                                <i class="align-middle" data-feather="settings"></i>
+                                                            </a>
                                                         </td>
                                                     </tr>
                                                 </c:forEach>

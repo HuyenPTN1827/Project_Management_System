@@ -71,7 +71,7 @@
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Username</label>
                                     <input type="text" class="form-control" name="username" placeholder="Username" 
-                                           value="${deptUser.setting.name}" readonly>
+                                           value="${deptUser.user.username}" readonly>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
