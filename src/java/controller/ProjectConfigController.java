@@ -816,7 +816,7 @@ public class ProjectConfigController extends HttpServlet {
         al.setProjectRole(roleId);
 
         projectConfigService.insertAllocation(al);
-        response.sendRedirect("projectconfig?id=" + projectId + "&activeTab=allocation");
+        response.sendRedirect("projectconfig?id=" + projectId + "&activeTab=allocation&create-allocation=success");
     }
 
     private void showEditFormAllocation(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -874,7 +874,7 @@ public class ProjectConfigController extends HttpServlet {
         al.setProjectRole(roleId);
 
         projectConfigService.updateAllocation(al);
-        response.sendRedirect("projectconfig?id=" + projectId + "&activeTab=allocation");
+        response.sendRedirect("projectconfig?id=" + projectId + "&activeTab=allocation&update-allocation=success");
     }
 
     private void changeStatusAllocation(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
@@ -889,7 +889,7 @@ public class ProjectConfigController extends HttpServlet {
         allocation.setUpdateBy(userId);
 
         projectConfigService.changeStatusAllocation(allocation);
-        response.sendRedirect("projectconfig?id=" + projectId + "&activeTab=allocation");
+        response.sendRedirect("projectconfig?id=" + projectId + "&activeTab=allocation&change-status-allocation=success");
     }
 
     private void showNewFormMilestone(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -300,47 +300,6 @@
         </script>
 
         <script>
-//            function validateForm(event) {
-//                event.preventDefault(); // Ngăn không gửi form ngay lập tức
-//                const errorContainer = document.getElementById("errorContainer");
-//                const errorList = document.getElementById("errorList");
-//                errorList.innerHTML = ""; // Xóa thông báo lỗi cũ
-//                errorContainer.classList.add("d-none");
-//
-//                const code = document.getElementById("code").value;
-//                let hasError = false;
-//
-//                //Kiểm tra Effort Rate
-//                if (projectService.isCodeExists(code)) {
-//                    hasError = true;
-//                    errorList.innerHTML += "<li>Project code already exists. Please use a different code.</li>";
-//                }
-//
-//                // Kiểm tra fromDate
-////                if (!fromDate) {
-////                    hasError = true;
-////                    errorList.innerHTML += "<li>From Date is required.</li>";
-////                } else if (fromDate < today) {
-////                    hasError = true;
-////                    errorList.innerHTML += "<li>From Date cannot be earlier than today.</li>";
-////                }
-////
-////                // Kiểm tra toDate
-////                if (toDate && toDate < fromDate) {
-////                    hasError = true;
-////                    errorList.innerHTML += "<li>To Date cannot be earlier than From Date.</li>";
-////                }
-//
-//                // Hiển thị lỗi nếu có
-//                if (hasError) {
-//                    errorContainer.classList.remove("d-none");
-//                    return false; // Ngăn gửi form
-//                }
-//
-//                // Không có lỗi, gửi form
-//                document.getElementById("projectForm").submit();
-//            }
-
             function validateForm(event) {
                 event.preventDefault(); // Prevent the form from submitting immediately
                 const errorContainer = document.getElementById("errorContainer");
@@ -349,6 +308,10 @@
                 errorContainer.classList.add("d-none");
 
                 const code = document.getElementById("code").value;
+                const estimatedEffort = document.getElementById("estimatedEffort").value;
+                const startDate = document.getElementById("startDate").value;
+                const endDate = document.getElementById("endDate").value;
+                const today = new Date().toISOString().split("T")[0];
                 let hasError = false;
 
                 // Perform AJAX check for existing project code
@@ -357,7 +320,28 @@
                         .then(data => {
                             if (data.exists) {
                                 hasError = true;
-                                errorList.innerHTML += "<li>Project code already exists. Please use a different code.</li>";
+                                errorList.innerHTML += "<li>Project Code already exists. Please use a different code.</li>";
+                            }
+
+                            //Kiểm tra estimatedEffort
+                            if (estimatedEffort <= 0) {
+                                hasError = true;
+                                errorList.innerHTML += "<li>Estimated Effort must be greater than 0.</li>";
+                            }
+
+                            // Kiểm tra startDate
+                            if (!startDate) {
+                                hasError = true;
+                                errorList.innerHTML += "<li>Start Date is required.</li>";
+                            } else if (startDate < today) {
+                                hasError = true;
+                                errorList.innerHTML += "<li>Start Date cannot be earlier than today.</li>";
+                            }
+
+                            // Kiểm tra toDate
+                            if (endDate && endDate < startDate) {
+                                hasError = true;
+                                errorList.innerHTML += "<li>End Date cannot be earlier than Start Date.</li>";
                             }
 
                             // Show error messages if there are any
@@ -376,6 +360,27 @@
                         });
             }
 
+        </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function (event) {
+                // Check URL for 'success' parameter
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('create-project') === 'success') {
+                    // Show success notification
+                    window.notyf.open({
+                        type: "success",
+                        message: "New Project created successfully. Parent milestone has been automatically created, please check!",
+                        duration: 5000, // Adjust duration as needed
+                        ripple: true,
+                        dismissible: true,
+                        position: {
+                            x: "right",
+                            y: "top"
+                        }
+                    });
+                }
+            });
         </script>
 
     </body>

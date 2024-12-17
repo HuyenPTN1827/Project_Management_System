@@ -57,7 +57,7 @@
             <div class="col-md-12 col-xl-12">
                 <div class="card">
                     <div class="card-body">
-                        <form action="insert-project" method="get" class="row"
+                        <form action="insert-project" method="post" class="row"
                               id="projectForm" onsubmit="return validateForm(event)">
 
                             <!-- Project Name Field -->
@@ -104,7 +104,7 @@
                             <!-- Estimated Effort Field -->
                             <div class="mb-3 col-md-6">
                                 <label class="form-label"><strong>Estimated Effort (man-days)</strong> <span style="color: red;">*</span></label>
-                                <input type="number" class="form-control" name="estimatedEffort" placeholder="Enter estimated effort" value="${estimatedEffort}" required>
+                                <input type="number" class="form-control" name="estimatedEffort" id="estimatedEffort" placeholder="Enter estimated effort" value="${estimatedEffort}" required>
                             </div>
 
 
@@ -122,13 +122,13 @@
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label class="form-label"><strong>Start Date</strong> <span style="color: red;">*</span> <strong>- End Date</strong> </label>
+                                <label class="form-label"><strong>Start Date</strong> <span style="color: red;">*</span> <strong>- End Date</strong> <span style="color: red;">*</span></label>
                                 <div class="input-group">
                                     <input type="date" class="form-control" placeholder="dd/MM/yyyy"
                                            id="startDate" name="startDate" value="${startDate}" required>
                                     <span class="input-group-text">to</span>
                                     <input type="date" class="form-control" placeholder="dd/MM/yyyy"
-                                           id="endDate" name="endDate" value="${endDate}">
+                                           id="endDate" name="endDate" value="${endDate}" required>
                                 </div>
                             </div>
 
