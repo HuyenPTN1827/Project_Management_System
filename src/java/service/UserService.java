@@ -139,10 +139,10 @@ public class UserService extends BaseServive {
                     + "07, 08, or 09 and be 10 digits long.");
         }
         // Validate password 
-        if (!validatePassword(user.getPassword())) {
-            errors.add("Password must be at least 6 characters, including uppercase letters, "
-                    + "lowercase letters, numbers and some special characters.");
-        }
+//        if (!validatePassword(user.getPassword())) {
+//            errors.add("Password must be at least 6 characters, including uppercase letters, "
+//                    + "lowercase letters, numbers and some special characters.");
+//        }
 
         return errors;
     }

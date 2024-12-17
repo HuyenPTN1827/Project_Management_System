@@ -124,10 +124,24 @@ public class DashboardController extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private void issueList(HttpServletRequest request, HttpServletResponse response) {
-        IssueService issueService = new IssueService();
-        List<Issue> listIssue = issueService.get10LastestIssues();
-        request.setAttribute("listIssue", listIssue);
+    private void issueList(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession(false);
+
+        if (session != null) {
+            User user = (User) session.getAttribute("user");
+            if (user != null) {
+                IssueService issueService = new IssueService();
+                List<Issue> listIssue = issueService.get10LastestIssues(user.getId());
+                request.setAttribute("listIssue", listIssue);
+            } else {
+                // Nếu không có người dùng, chuyển đến trang đăng nhập
+                response.sendRedirect(request.getContextPath() + "/login");
+            }
+        } else {
+            // Nếu không có session, chuyển đến trang đăng nhập
+            response.sendRedirect(request.getContextPath() + "/login");
+        }
+
     }
 
     private void issueChart(HttpServletRequest request, HttpServletResponse response, Integer deptId, Integer bizTerm) {

@@ -58,7 +58,6 @@
                     <div class="card-body">
                         <c:if test="${milestone == null}">
                             <form action="insert-milestone" method="post" class="row">
-                                <input type="hidden" id="action" name="action" value="${action}"/>
 
                                 <!-- Created By -->
                                 <div class="col-md-6 mb-3" hidden>
@@ -128,7 +127,6 @@
                                     <!-- Trường ẩn để gửi projectId -->
                                     <input type="hidden" id="project_Id" name="project_Id" value="${projectId}">
                                     <input type="hidden" id="id" name="id" value="${milestone.id}"/>
-                                    <input type="hidden" id="action" name="action" value="${action}"/>
 
                                     <!-- Created By -->
                                     <div class="col-md-6 mb-3">
@@ -152,7 +150,7 @@
                                     <!-- Parent Milestone -->
                                     <div class="col-md-6 mb-3">
                                         <label for="parentMilestone" class="form-label"><strong>Parent Milestone</strong></label>
-                                        <select class="form-control" id="parentMilestoneId" name="parentMilestoneId">
+                                        <select class="form-select" id="parentMilestoneId" name="parentMilestoneId">
                                             <option value="">-- Select Parent Milestone --</option>
                                             <c:forEach var="parent" items="${parentMilestones}">
                                                 <option value="${parent.id}" <c:if test="${parent.id == milestone.parentMilestone}">selected</c:if>>
@@ -177,7 +175,7 @@
                                     <!-- Status -->
                                     <div class="col-md-6 mb-3">
                                         <label for="status" class="form-label"><strong>Status</strong></label>
-                                        <select class="form-control" id="status" name="status">
+                                        <select class="form-select" id="status" name="status">
                                             <option value="0" <c:if test="${milestone.status == 0}">selected</c:if>>Pending</option>
                                             <option value="1" <c:if test="${milestone.status == 1}">selected</c:if>>Doing</option>
                                             <option value="2" <c:if test="${milestone.status == 2}">selected</c:if>>Closed</option>
@@ -209,7 +207,6 @@
                                     <!-- Trường ẩn để gửi projectId -->
                                     <input type="hidden" id="project_Id" name="project_Id" value="${projectId}">
                                     <input type="hidden" id="id" name="id" value="${milestone.id}"/>
-                                    <input type="hidden" id="action" name="action" value="${action}"/>
 
                                     <!-- Created By -->
                                     <div class="col-md-6 mb-3">
@@ -291,26 +288,5 @@
 
         <script src="${pageContext.request.contextPath}/js/app.js"></script>
 
-        <script>
-                                        document.addEventListener("DOMContentLoaded", function (event) {
-                                            setTimeout(function () {
-                                                if (localStorage.getItem('popState') !== 'shown') {
-                                                    window.notyf.open({
-                                                        type: "success",
-                                                        message: "Get access to all 500+ components and 45+ pages with PMS PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
-                                                        duration: 10000,
-                                                        ripple: true,
-                                                        dismissible: false,
-                                                        position: {
-                                                            x: "left",
-                                                            y: "bottom"
-                                                        }
-                                                    });
-
-                                                    localStorage.setItem('popState', 'shown');
-                                                }
-                                            }, 15000);
-                                        });
-        </script>
     </body>
 </html>

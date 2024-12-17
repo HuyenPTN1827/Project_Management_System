@@ -253,9 +253,31 @@
                                                                     </c:if>
                                                                 </c:if>
 
-                                                            <c:if test="${user.role_id ne 5}">
+                                                            <c:if test="${user.role_id eq 2}">
                                                                 <a href="<%=request.getContextPath()%>/edit-issue?action=edit&id=${issue.id}&userId=${user.id}&projectId=${issue.project.id}" 
                                                                    class="btn btn-info"><i class="align-middle" data-feather="edit"></i></a>
+                                                                </c:if>
+
+                                                            <c:if test="${user.role_id eq 3}">
+                                                                <c:if test="${issue.deptManager eq user.id}">
+                                                                    <a href="<%=request.getContextPath()%>/edit-issue?action=edit&id=${issue.id}&userId=${user.id}&projectId=${issue.project.id}" 
+                                                                       class="btn btn-info"><i class="align-middle" data-feather="edit"></i></a>
+                                                                    </c:if>
+                                                                    <c:if test="${issue.deptManager ne user.id}">
+                                                                    <a href="<%=request.getContextPath()%>/edit-issue?action=view&id=${issue.id}&userId=${user.id}&projectId=${issue.project.id}" 
+                                                                       class="btn btn-info"><i class="align-middle" data-feather="eye"></i></a>
+                                                                    </c:if>
+                                                                </c:if>
+                                                            
+                                                            <c:if test="${user.role_id eq 4}">
+                                                                <c:if test="${issue.project.userId eq user.id}">
+                                                                    <a href="<%=request.getContextPath()%>/edit-issue?action=edit&id=${issue.id}&userId=${user.id}&projectId=${issue.project.id}" 
+                                                                       class="btn btn-info"><i class="align-middle" data-feather="edit"></i></a>
+                                                                    </c:if>
+                                                                    <c:if test="${issue.project.userId ne user.id}">
+                                                                    <a href="<%=request.getContextPath()%>/edit-issue?action=view&id=${issue.id}&userId=${user.id}&projectId=${issue.project.id}" 
+                                                                       class="btn btn-info"><i class="align-middle" data-feather="eye"></i></a>
+                                                                    </c:if>
                                                                 </c:if>
 
                                                         </td>

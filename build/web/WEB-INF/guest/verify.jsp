@@ -62,7 +62,7 @@
                                             </p>
                                             <div class="text-center mt-3 d-flex justify-content-between">
                                                 <button type="submit" class="btn btn-lg btn-success" style="border-radius: 50px;">Verify</button>
-                                                <button type="button" class="btn btn-secondary" style="margin-top: 10px;" onclick="openPopup()">Resend OTP</button>
+                                                <button type="button" class="btn btn-lg btn-secondary" style="border-radius: 50px; margin-top: 10px;" onclick="openPopup()">Resend OTP</button>
                                             </div>
 
                                             <c:if test="${not empty NOTIFICATION}">

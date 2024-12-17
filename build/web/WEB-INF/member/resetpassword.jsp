@@ -62,7 +62,7 @@
                                             <p style="color: red;">
                                                 ${ERROR}
                                             </p>
-                                            <div class="text-center mt-3">
+                                            <div class="mt-3">
                                                 <button type="submit" class="btn btn-lg btn-success" style="border-radius: 50px;">Update Password</button>
                                             </div>
                                             <c:if test="${not empty errorMessage}">

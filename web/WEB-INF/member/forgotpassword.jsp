@@ -64,8 +64,8 @@
                                         <!-- Hiển thị thông báo lỗi (nếu có) -->
                                         ${errorMessage}<br>
 
-                                        <div class="text-center mt-3">
-                                            <button type="submit" class="btn btn-lg btn-secondary" style="border-radius: 50px;">Send email</button>
+                                        <div>
+                                            <button type="submit" class="btn btn-lg btn-primary" style="border-radius: 50px;">Send email</button>
                                         </div>
                                     </form>
                                     <!-- Form kết thúc -->

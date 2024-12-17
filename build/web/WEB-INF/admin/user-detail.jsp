@@ -178,7 +178,7 @@
 
                                             <form action="update-user" method="post" class="row">
                                                 <input type="hidden" name="id" value="${userDetail.id}"/>
-                                                <input type="hidden" name="password" value="${userDetail.password}"/>
+                                                <!--<input type="hidden" name="password" value="${userDetail.password}"/>-->
 
                                                 <div class="mb-3 col-md-12">
                                                     <label class="form-label"><strong>Full Name</strong> <span style="color: red;">*</span></label>

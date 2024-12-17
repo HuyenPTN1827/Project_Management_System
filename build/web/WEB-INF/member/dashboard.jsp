@@ -63,10 +63,16 @@
                                     <h1>Dashboard</h1>
                                 </div>
 
-                                <div class="col-auto ms-auto text-end mt-n1">
-                                    <form action="member-dashboard" method="get" class="d-flex">
-                                        <select name="deptId" class="form-select me-2" onchange="this.form.submit()" hidden>
-                                            <option value="">All Departments</option>
+                            <c:if test="${empty project && empty listIssue}">
+                                <div class="d-flex justify-content-center align-items-center mt-4">
+                                    <h3 class="text-secondary">You have not participated in any projects</h3>
+                                </div>
+                            </c:if>
+
+                            <div class="col-auto ms-auto text-end mt-n1">
+                                <form action="member-dashboard" method="get" class="d-flex">
+                                    <select name="deptId" class="form-select me-2" onchange="this.form.submit()" hidden>
+                                        <option value="">All Departments</option>
                                         <c:forEach items="${dept}" var="d">
                                             <option 
                                                 <c:if test="${deptId eq d.id}">
@@ -77,17 +83,19 @@
                                         </c:forEach>
                                     </select>
 
-                                    <select name="bizTerm" class="form-select" onchange="this.form.submit()">
-                                        <option value="">All Business Terms</option>
-                                        <c:forEach items="${setting}" var="s">
-                                            <option 
-                                                <c:if test="${bizTerm eq s.id}">
-                                                    selected="selected"
-                                                </c:if>
-                                                value="${s.id}">${s.name}
-                                            </option>
-                                        </c:forEach>
-                                    </select>
+                                    <c:if test="${not empty project}">
+                                        <select name="bizTerm" class="form-select" onchange="this.form.submit()">
+                                            <option value="">All Business Terms</option>
+                                            <c:forEach items="${setting}" var="s">
+                                                <option 
+                                                    <c:if test="${bizTerm eq s.id}">
+                                                        selected="selected"
+                                                    </c:if>
+                                                    value="${s.id}">${s.name}
+                                                </option>
+                                            </c:forEach>
+                                        </select>
+                                    </c:if>
                                 </form>
                             </div>
                         </div>
@@ -133,6 +141,11 @@
                                             </c:if>
 
                                             <div class="mb-3">
+                                                <i class="align-middle" data-feather="layout"></i>
+                                                <strong> Department: </strong>
+                                                <span>${p.departmentName}</span>
+                                            </div>
+                                            <div class="mb-3">
                                                 <i class="align-middle" data-feather="user"></i>
                                                 <strong> Project Manager: </strong>
                                                 <span>${p.user.full_name} (${p.user.username})</span>
@@ -150,7 +163,7 @@
                                                         <span class="text-secondary">Pending</span>
                                                     </c:when>
                                                     <c:when test="${p.status == 1}">
-                                                        <span class="text-primary">Doing</span>
+                                                        <span class="text-primary">In Progress</span>
                                                     </c:when>
                                                     <c:when test="${p.status == 2}">
                                                         <span class="text-success">Closed</span>
@@ -161,185 +174,69 @@
                                                 </c:choose>
                                             </div>
                                         </div>
-
-                                        <!--                                        <div class="card-body d-flex">
-                                                                                    <div class="align-self-left w-100">
-                                                                                        <div class="py-3">
-                                                                                            <div>
-                                        
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    </a>
-                                                                                </div>-->
                                     </div>
                                 </div>
                             </c:forEach>
-                            <!--
-                                                        <div class="col-12 col-md-4 col-xxl-3 d-flex order-1 order-xxl-3">
-                                                            <div class="card flex-fill w-100">
-                                                                <div class="card-header">
-                                                                    <div class="card-actions float-end">
-                                                                        <div class="dropdown position-relative">
-                                                                            <a href="#" data-bs-toggle="dropdown" data-bs-display="static">
-                                                                                <i class="align-middle" data-feather="more-horizontal"></i>
-                                                                            </a>
-                            
-                                                                            <div class="dropdown-menu dropdown-menu-end">
-                                                                                <a class="dropdown-item" href="#">Action</a>
-                                                                                <a class="dropdown-item" href="#">Another action</a>
-                                                                                <a class="dropdown-item" href="#">Something else here</a>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <h5 class="card-title mb-0">Issues</h5>
-                                                                </div>
-                                                                <div class="card-body d-flex">
-                                                                    <div class="align-self-top w-100">
-                                                                        <div class="py-3">
-                                                                            <div class="chart chart-xs">
-                                                                                <canvas id="chartjs-dashboard-pie1"></canvas>
-                                                                            </div>
-                                                                        </div>
-                            
-                                                                        <table class="table mb-0">
-                                                                            <tbody>
-                            <%--<c:forEach items="${requestScope.issues}" var="issue">--%>
-                                <tr>
-                                    <td>
-                            <%--<c:if test="${issue.status eq 0}">--%>
-                                <i class="fas fa-circle text-secondary fa-fw"></i> Pending
-                            <%--</c:if>--%>
-                            <%--<c:if test="${issue.status eq 1}">--%>
-                                <i class="fas fa-circle text-primary fa-fw"></i> In Progress
-                            <%--</c:if>--%>
-                            <%--<c:if test="${issue.status eq 2}">--%>
-                                <i class="fas fa-circle text-success fa-fw"></i> Closed
-                            <%--</c:if>--%>
-                            <%--<c:if test="${issue.status eq 3}">--%>
-                                <i class="fas fa-circle text-danger fa-fw"></i> Cancelled
-                            <%--</c:if>--%>
-                        </td>
-                        <td class="text-end">${issue.count}</td>
-                    </tr>
-                            <%--</c:forEach>--%>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>-->
-
-                            <div class="col-xl-5" hidden>
-                                <div class="card flex-fill w-100">
-                                    <div class="card-header">
-                                        <div class="float-end">
-                                            <form class="row g-2">
-                                                <div class="col-auto">
-                                                    <select class="form-select form-select-sm bg-light border-0">
-                                                        <option>Jan</option>
-                                                        <option value="1">Feb</option>
-                                                        <option value="2">Mar</option>
-                                                        <option value="3">Apr</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-auto">
-                                                    <input type="text" class="form-control form-control-sm bg-light rounded-2 border-0" style="width: 100px;"
-                                                           placeholder="Search..">
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <h5 class="card-title mb-0">Recent Movement</h5>
-                                    </div>
-                                    <div class="card-body pt-2 pb-3">
-                                        <div class="chart chart-sm">
-                                            <canvas id="chartjs-dashboard-line"></canvas>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
                         <div class="row">
-                            <div class="col-12 col-lg-12 col-xxl-9 d-flex">
-                                <div class="card flex-fill">
-                                    <div class="card-header">
-                                        <div class="card-actions float-end">
-                                            <div class="dropdown position-relative">
-                                                <a href="#" data-bs-toggle="dropdown" data-bs-display="static">
-                                                    <i class="align-middle" data-feather="more-horizontal"></i>
-                                                </a>
+                            <c:if test="${not empty listIssue}">
+                                <div class="col-12 col-lg-12 col-xxl-9 d-flex">
+                                    <div class="card flex-fill">
+                                        <div class="card-header">
+                                            <div class="card-actions float-end">
+                                                <div class="dropdown position-relative">
+                                                    <a href="#" data-bs-toggle="dropdown" data-bs-display="static">
+                                                        <i class="align-middle" data-feather="more-horizontal"></i>
+                                                    </a>
 
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <a class="dropdown-item" href="<%=request.getContextPath()%>/issue-management?projectId=1">View all Issues</a>
-                                                    <a class="dropdown-item" href="<%=request.getContextPath()%>/add-issue?userId=${user.id}">Add new Issue</a>
+                                                    <div class="dropdown-menu dropdown-menu-end">
+                                                        <a class="dropdown-item" href="<%=request.getContextPath()%>/issue-management?projectId=1">View all Issues</a>
+                                                        <a class="dropdown-item" href="<%=request.getContextPath()%>/add-issue?userId=${user.id}">Add new Issue</a>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <h5 class="card-title mb-0">Latest Project Issues</h5>
                                         </div>
-                                        <h5 class="card-title mb-0">Latest Project Issues</h5>
+
+                                        <!--<div class="card-body">-->
+                                            <table class="table table-borderless my-0" id="datatables-multi" style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Project</th>
+                                                        <th>Issue</th>
+                                                        <th>Assigner</th>
+                                                        <th>Assignee</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <c:forEach items="${requestScope.listIssue}" var="issue">
+                                                        <tr>
+                                                            <td>${issue.id}</td>
+                                                            <td>${issue.project.name}</td>
+                                                            <td>${issue.name}</td>
+                                                            <td>${issue.created_by.full_name}</td>
+                                                            <td>${issue.assignee.full_name}</td>
+                                                            <td>
+                                                                <c:if test="${user.id eq issue.created_by.id || user.id eq issue.assignee.id}">
+                                                                    <a href="<%=request.getContextPath()%>/edit-issue?action=edit&id=${issue.id}&userId=${user.id}&projectId=${issue.project.id}" 
+                                                                       class="btn btn-info"><i class="align-middle" data-feather="eye"></i></a>
+                                                                    </c:if>
+                                                                    <c:if test="${user.id ne issue.created_by.id && user.id ne issue.assignee.id}">
+                                                                    <a href="<%=request.getContextPath()%>/edit-issue?action=view&id=${issue.id}&userId=${user.id}&projectId=${issue.project.id}" 
+                                                                       class="btn btn-info"><i class="align-middle" data-feather="eye"></i></a>
+                                                                    </c:if>
+                                                            </td>
+                                                        </tr>
+                                                    </c:forEach>
+                                                </tbody>
+                                            </table>
+                                        <!--</div>-->
                                     </div>
-                                    <table class="table table-borderless my-0">
-                                        <thead>
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>Project</th>
-                                                <th>Issue</th>
-                                                <th>Assigner</th>
-                                                <th>Assignee</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <c:forEach items="${requestScope.listIssue}" var="issue">
-                                                <tr>
-                                                    <td>${issue.id}</td>
-                                                    <td>${issue.project.name}</td>
-                                                    <td>${issue.name}</td>
-                                                    <td>${issue.created_by.full_name}</td>
-                                                    <td>${issue.assignee.full_name}</td>
-                                                    <td>
-                                                        <c:if test="${user.id eq issue.created_by.id || user.id eq issue.assignee.id}">
-                                                            <a href="<%=request.getContextPath()%>/edit-issue?action=edit&id=${issue.id}&userId=${user.id}&projectId=${issue.project.id}" 
-                                                               class="btn btn-info"><i class="align-middle" data-feather="eye"></i></a>
-                                                            </c:if>
-                                                            <c:if test="${user.id ne issue.created_by.id && user.id ne issue.assignee.id}">
-                                                            <a href="<%=request.getContextPath()%>/edit-issue?action=view&id=${issue.id}&userId=${user.id}&projectId=${issue.project.id}" 
-                                                               class="btn btn-info"><i class="align-middle" data-feather="eye"></i></a>
-                                                            </c:if>
-                                                    </td>
-                                                </tr>
-                                            </c:forEach>
-                                        </tbody>
-                                    </table>
                                 </div>
-                            </div>
-
-                            <!--                            <div class="col-12 col-lg-4 col-xxl-3 d-flex">
-                                                            <div class="card flex-fill w-100">
-                                                                <div class="card-header">
-                                                                    <div class="card-actions float-end">
-                                                                        <div class="dropdown position-relative">
-                                                                            <a href="#" data-bs-toggle="dropdown" data-bs-display="static">
-                                                                                <i class="align-middle" data-feather="more-horizontal"></i>
-                                                                            </a>
-                            
-                                                                            <div class="dropdown-menu dropdown-menu-end">
-                                                                                <a class="dropdown-item" href="#">Action</a>
-                                                                                <a class="dropdown-item" href="#">Another action</a>
-                                                                                <a class="dropdown-item" href="#">Something else here</a>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <h5 class="card-title mb-0">Monthly Sales</h5>
-                                                                </div>
-                                                                <div class="card-body d-flex w-100">
-                                                                    <div class="align-self-center chart chart-lg">
-                                                                        <canvas id="chartjs-dashboard-bar"></canvas>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>-->
-
+                            </c:if>
                         </div>
                     </div>
                 </main>
@@ -375,80 +272,81 @@
         </div>
 
         <script src="js/app.js"></script>
+        <script src="${pageContext.request.contextPath}/js/datatables.js"></script>
 
         <script>
-                                        document.addEventListener("DOMContentLoaded", function () {
-                                            var ctx = document.getElementById("chartjs-dashboard-line").getContext("2d");
-                                            var gradientLight = ctx.createLinearGradient(0, 0, 0, 225);
-                                            gradientLight.addColorStop(0, "rgba(215, 227, 244, 1)");
-                                            gradientLight.addColorStop(1, "rgba(215, 227, 244, 0)");
-                                            var gradientDark = ctx.createLinearGradient(0, 0, 0, 225);
-                                            gradientDark.addColorStop(0, "rgba(51, 66, 84, 1)");
-                                            gradientDark.addColorStop(1, "rgba(51, 66, 84, 0)");
-                                            // Line chart
-                                            new Chart(document.getElementById("chartjs-dashboard-line"), {
-                                                type: "line",
-                                                data: {
-                                                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                                                    datasets: [{
-                                                            label: "Sales ($)",
-                                                            fill: true,
-                                                            backgroundColor: window.theme.id === "light" ? gradientLight : gradientDark,
-                                                            borderColor: window.theme.primary,
-                                                            data: [
-                                                                2115,
-                                                                1562,
-                                                                1584,
-                                                                1892,
-                                                                1587,
-                                                                1923,
-                                                                2566,
-                                                                2448,
-                                                                2805,
-                                                                3438,
-                                                                2917,
-                                                                3327
-                                                            ]
-                                                        }]
-                                                },
-                                                options: {
-                                                    maintainAspectRatio: false,
-                                                    legend: {
-                                                        display: false
-                                                    },
-                                                    tooltips: {
-                                                        intersect: false
-                                                    },
-                                                    hover: {
-                                                        intersect: true
-                                                    },
-                                                    plugins: {
-                                                        filler: {
-                                                            propagate: false
-                                                        }
-                                                    },
-                                                    scales: {
-                                                        xAxes: [{
-                                                                reverse: true,
-                                                                gridLines: {
-                                                                    color: "rgba(0,0,0,0.0)"
-                                                                }
-                                                            }],
-                                                        yAxes: [{
-                                                                ticks: {
-                                                                    stepSize: 1000
-                                                                },
-                                                                display: true,
-                                                                borderDash: [3, 3],
-                                                                gridLines: {
-                                                                    color: "rgba(0,0,0,0.0)",
-                                                                    fontColor: "#fff"
-                                                                }
+                                            document.addEventListener("DOMContentLoaded", function () {
+                                                var ctx = document.getElementById("chartjs-dashboard-line").getContext("2d");
+                                                var gradientLight = ctx.createLinearGradient(0, 0, 0, 225);
+                                                gradientLight.addColorStop(0, "rgba(215, 227, 244, 1)");
+                                                gradientLight.addColorStop(1, "rgba(215, 227, 244, 0)");
+                                                var gradientDark = ctx.createLinearGradient(0, 0, 0, 225);
+                                                gradientDark.addColorStop(0, "rgba(51, 66, 84, 1)");
+                                                gradientDark.addColorStop(1, "rgba(51, 66, 84, 0)");
+                                                // Line chart
+                                                new Chart(document.getElementById("chartjs-dashboard-line"), {
+                                                    type: "line",
+                                                    data: {
+                                                        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                                                        datasets: [{
+                                                                label: "Sales ($)",
+                                                                fill: true,
+                                                                backgroundColor: window.theme.id === "light" ? gradientLight : gradientDark,
+                                                                borderColor: window.theme.primary,
+                                                                data: [
+                                                                    2115,
+                                                                    1562,
+                                                                    1584,
+                                                                    1892,
+                                                                    1587,
+                                                                    1923,
+                                                                    2566,
+                                                                    2448,
+                                                                    2805,
+                                                                    3438,
+                                                                    2917,
+                                                                    3327
+                                                                ]
                                                             }]
+                                                    },
+                                                    options: {
+                                                        maintainAspectRatio: false,
+                                                        legend: {
+                                                            display: false
+                                                        },
+                                                        tooltips: {
+                                                            intersect: false
+                                                        },
+                                                        hover: {
+                                                            intersect: true
+                                                        },
+                                                        plugins: {
+                                                            filler: {
+                                                                propagate: false
+                                                            }
+                                                        },
+                                                        scales: {
+                                                            xAxes: [{
+                                                                    reverse: true,
+                                                                    gridLines: {
+                                                                        color: "rgba(0,0,0,0.0)"
+                                                                    }
+                                                                }],
+                                                            yAxes: [{
+                                                                    ticks: {
+                                                                        stepSize: 1000
+                                                                    },
+                                                                    display: true,
+                                                                    borderDash: [3, 3],
+                                                                    gridLines: {
+                                                                        color: "rgba(0,0,0,0.0)",
+                                                                        fontColor: "#fff"
+                                                                    }
+                                                                }]
+                                                        }
                                                     }
-                                                }
+                                                });
                                             });
-                                        });
         </script>
 
         <script>
@@ -705,26 +603,6 @@
             });
         </script>
 
-        <script>
-            document.addEventListener("DOMContentLoaded", function (event) {
-                setTimeout(function () {
-                    if (localStorage.getItem('popState') !== 'shown') {
-                        window.notyf.open({
-                            type: "success",
-                            message: "Get access to all 500+ components and 45+ pages with PMS PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
-                            duration: 10000,
-                            ripple: true,
-                            dismissible: false,
-                            position: {
-                                x: "left",
-                                y: "bottom"
-                            }
-                        });
-
-                        localStorage.setItem('popState', 'shown');
-                    }
-                }, 15000);
-            });
-        </script></body>
+    </body>
 
 </html>

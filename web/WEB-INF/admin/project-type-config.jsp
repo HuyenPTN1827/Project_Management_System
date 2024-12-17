@@ -142,10 +142,9 @@
 
             function redirectToConfigPage() {
                 const selectedId = document.getElementById("projectTypeDropdown").value;
-                const action = document.getElementById("action").value;
                 if (selectedId) {
                     // Redirect to the project type config page with the selected ID
-                    window.location.href = 'project-type-config?id=' + selectedId + '&action=' + action;
+                    window.location.href = 'project-type-config?id=' + selectedId;
                 }
             }
 
@@ -172,7 +171,6 @@
 
                         <div class="mt-2 mb-3">
                             <h1 class="h1 d-inline align-middle">Project Type Configs</h1>
-                            <input type="hidden" id="action" value="${action}"/>
                         </div>
 
                         <div class="row">

@@ -438,14 +438,15 @@ public class ProjectDAO {
         List<Project> project = new ArrayList<>();
 
         String sql = """
-                 SELECT DISTINCT p.id, p.name, p.code, p.start_date, p.end_date, 
-                        p.status, p.department_id, p.biz_term, p.user_id, 
-                        u.full_name, u.username
-                 FROM project p 
-                 JOIN allocation a ON p.id = a.project_id 
-                 JOIN user u ON p.user_id = u.id
-                 WHERE a.user_id = ?
-                 """;
+                     SELECT DISTINCT p.id, p.name, p.code, p.start_date, p.end_date, 
+                     p.status, p.department_id, d.name, p.biz_term, p.user_id, 
+                     u.full_name, u.username
+                     FROM project p 
+                     LEFT JOIN department d ON p.department_id = d.id
+                     LEFT JOIN dept_user du ON p.department_id = du.dept_id
+                     JOIN allocation a ON p.id = a.project_id 
+                     JOIN user u ON p.user_id = u.id
+                     WHERE a.user_id = ? OR (du.user_id = ? AND du.role_id = 3)""";
 
         if (biz_term != null) {
             sql += " AND p.biz_term = ?";
@@ -454,6 +455,7 @@ public class ProjectDAO {
         sql += " ORDER BY p.id DESC;";
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
             stm.setInt(1, userId);
+            stm.setInt(2, userId);
             int index = 2;
             if (biz_term != null) {
                 stm.setInt(index++, biz_term);
@@ -468,6 +470,7 @@ public class ProjectDAO {
                 p.setEndDate(rs.getDate("end_date"));
                 p.setStatus(rs.getInt("status"));
                 p.setDepartmentId(rs.getInt("department_id"));
+                p.setDepartmentName(rs.getString("d.name"));
                 p.setBizTerm(rs.getInt("biz_term"));
 
                 User u = new User();

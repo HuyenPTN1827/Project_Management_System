@@ -222,7 +222,7 @@ public class DepartmentController extends HttpServlet {
         deptService.updateDepartment(d, parentId);
 //        request.setAttribute("message", "Department details updated successfully.");
         // Redirect to user-management url
-        response.sendRedirect("department-config?id=" + id + "&action=edit&update=success");
+        response.sendRedirect("department-config?id=" + id + "&update=success");
     }
 
 //    HuyenPTNHE160769 
@@ -252,7 +252,6 @@ public class DepartmentController extends HttpServlet {
         String keyword = request.getParameter("keyword");
         String statusStr = request.getParameter("status");
         String activeTab = request.getParameter("activeTab");
-        String action = request.getParameter("action");
 
         // Process the filter value, convert to number or null if not selected
         Boolean status = statusStr != null && !statusStr.isEmpty() ? Boolean.valueOf(statusStr) : null;
@@ -273,12 +272,11 @@ public class DepartmentController extends HttpServlet {
         request.setAttribute("keyword", keyword);
         request.setAttribute("statusUser", status);
 
-        // Nếu không có activeTab, mặc định là "detail"
+        // Nếu không có activeTab, mặc định là "dept-detail"
         if (activeTab == null || activeTab.isEmpty()) {
-            activeTab = (keyword != null || status != null) ? "manager" : "detail";
+            activeTab = (keyword != null || status != null) ? "manager" : "dept-detail";
         }
         request.setAttribute("activeTab", activeTab);
-        request.setAttribute("action", action);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/admin/dept-config.jsp");
         dispatcher.forward(request, response);
@@ -302,7 +300,7 @@ public class DepartmentController extends HttpServlet {
         du.setDept(d);
 
         deptService.changeStatusDepartmentUser(du);
-        response.sendRedirect("department-config?id=" + deptId + "&action=edit&activeTab=manager");
+        response.sendRedirect("department-config?id=" + deptId + "&activeTab=manager");
     }
 
 //    HuyenPTNHE160769 
@@ -353,7 +351,7 @@ public class DepartmentController extends HttpServlet {
         du.setSetting(setting);
 
         deptService.insertDepartmentUser(du);
-        response.sendRedirect("department-config?id=" + deptId + "&action=edit&activeTab=manager");
+        response.sendRedirect("department-config?id=" + deptId + "&activeTab=manager");
     }
 
 //    HuyenPTNHE160769 
@@ -398,7 +396,7 @@ public class DepartmentController extends HttpServlet {
         du.setSetting(setting);
 
         deptService.updateDepartmentUser(du);
-        response.sendRedirect("department-config?id=" + deptId + "&action=edit&activeTab=manager");
+        response.sendRedirect("department-config?id=" + deptId + "&activeTab=manager");
     }
 
 }

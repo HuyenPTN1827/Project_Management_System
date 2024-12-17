@@ -68,9 +68,10 @@ public class IssueDAO {
         String sql = """
                      SELECT DISTINCT i.id, i.created_by, u1.username, i.milestone_id, m.name, 
                      i.assignee, u2.username, i.deadline, i.status, i.name, 
-                     i.type, s.name, i.project_id, p.code, i.details
+                     i.type, s.name, i.project_id, p.code, i.details, p.user_id, du.user_id
                      FROM issue i 
                      JOIN project p ON i.project_id = p.id
+                     LEFT JOIN dept_user du ON p.department_id = du.dept_id AND du.role_id = 3
                      JOIN milestone m ON i.milestone_id = m.id
                      JOIN user u1 ON i.created_by = u1.id 
                      JOIN user u2 ON i.assignee = u2.id
@@ -140,6 +141,7 @@ public class IssueDAO {
                 i.setName(rs.getString("i.name"));
                 i.setDetails(rs.getString("i.details"));
                 i.setStatus(rs.getInt("i.status"));
+                i.setDeptManager(rs.getInt("du.user_id"));
                 // Handle potential null values for dates
                 Date deadline = rs.getDate("i.deadline");
                 if (deadline != null) {
@@ -154,6 +156,7 @@ public class IssueDAO {
                 Project p = new Project();
                 p.setId(rs.getInt("i.project_id"));
                 p.setCode(rs.getString("p.code"));
+                p.setUserId(rs.getInt("p.user_id"));
                 i.setProject(p);
 
                 Milestone m = new Milestone();
@@ -185,23 +188,27 @@ public class IssueDAO {
     }
 
     // Get 10 lastest issues
-    public List<Issue> select10LastestIssues() {
+    public List<Issue> select10LastestIssues(int userId) {
         List<Issue> issue = new ArrayList<>();
 
         String sql = """
                      SELECT DISTINCT i.id, i.created_by, u1.username, u1.full_name, i.milestone_id, m.name, 
-                                          i.assignee, u2.username, u2.full_name, i.deadline, i.status, i.name, 
-                                          i.type, s.name, i.project_id, p.code, p.name, i.details
-                                          FROM issue i 
-                                          JOIN project p ON i.project_id = p.id
-                                          JOIN milestone m ON i.milestone_id = m.id
-                                          JOIN user u1 ON i.created_by = u1.id 
-                                          JOIN user u2 ON i.assignee = u2.id
-                                          JOIN setting s ON i.type = s.id
-                                          JOIN allocation a ON i.project_id = a.project_id
-                                          ORDER BY i.id DESC LIMIT 10 OFFSET 0;""";
+                     i.assignee, u2.username, u2.full_name, i.deadline, i.status, i.name, 
+                     i.type, s.name, i.project_id, p.code, p.name, i.details
+                     FROM issue i 
+                     JOIN project p ON i.project_id = p.id
+                     JOIN milestone m ON i.milestone_id = m.id
+                     JOIN user u1 ON i.created_by = u1.id 
+                     JOIN user u2 ON i.assignee = u2.id
+                     JOIN setting s ON i.type = s.id
+                     JOIN allocation a ON i.project_id = a.project_id
+                     WHERE i.created_by = ? OR i.assignee = ?
+                     ORDER BY i.id DESC LIMIT 10 OFFSET 0;""";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            stm.setInt(1, userId);
+            stm.setInt(2, userId);
+            
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Issue i = new Issue();

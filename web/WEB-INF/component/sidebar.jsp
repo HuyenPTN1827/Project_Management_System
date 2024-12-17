@@ -62,11 +62,13 @@
                 </a>
             </li>
 
-            <li class="sidebar-item <c:if test="${activeTab == 'allocation'}">active</c:if>">
-                <a class="sidebar-link" href="<%= request.getContextPath() %>/projectconfig?activeTab=allocation">
-                    <i class="align-middle" data-feather="users"></i> <span class="align-middle">HR Allocations</span>
-                </a>
-            </li>
+            <c:if test="${user.role_id != 5}">
+                <li class="sidebar-item <c:if test="${activeTab == 'allocation'}">active</c:if>">
+                    <a class="sidebar-link" href="<%= request.getContextPath() %>/projectconfig?activeTab=allocation">
+                        <i class="align-middle" data-feather="users"></i> <span class="align-middle">HR Allocations</span>
+                    </a>
+                </li>
+            </c:if>
 
             <li class="sidebar-item" hidden>
                 <a data-bs-target="#evaluation" data-bs-toggle="collapse" class="sidebar-link collapsed">

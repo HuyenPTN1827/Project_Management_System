@@ -113,23 +113,11 @@
                                                            placeholder="Enter Project Type Name or Code" id="keyword" value="${keyword}">
                                                 </div>
 
-                                                <c:if test="${user == null}">
-                                                    <a class="btn btn-primary" href="<%=request.getContextPath()%>/logout">Search</a>
-                                                </c:if>
-
-                                                <c:if test="${user != null}">
-                                                    <button type="submit" class="btn btn-primary">Search</button>
-                                                </c:if>
+                                                <button type="submit" class="btn btn-primary">Search</button>
 
                                             </form>
 
-                                            <c:if test="${user == null}">
-                                                <a class="btn btn-primary" href="<%=request.getContextPath()%>/logout">Create new</a>
-                                            </c:if>
-
-                                            <c:if test="${user != null}">
-                                                <a class="btn btn-primary" href="javascript:void(0);" onclick="openProjectTypeModal();">Create new</a>
-                                            </c:if>
+                                            <a class="btn btn-primary" href="javascript:void(0);" onclick="openProjectTypeModal();">Create new</a>
                                         </div>
                                     </div>
                                 </div>
@@ -160,53 +148,27 @@
                                                             </c:if>
                                                         </td>
                                                         <td>
+                                                            <a href="javascript:void(0);" class="btn btn-info" 
+                                                               onclick="openProjectTypeModal(${type.id});"><i class="align-middle" data-feather="edit"></i></a>
 
-                                                            <c:if test="${user == null}">
-                                                                <a href="<%=request.getContextPath()%>/logout" class="btn btn-info">
-                                                                    <i class="align-middle" data-feather="edit"></i>
-                                                                </a>
-
-                                                                <c:if test="${type.status eq 'false'}">
-                                                                    <a href="<%=request.getContextPath()%>/logout" class="btn btn-success">
-                                                                        <i class="fas fa-check"></i>
-                                                                    </a>
-                                                                </c:if>
-
-                                                                <c:if test="${type.status eq 'true'}">
-                                                                    <a href="<%=request.getContextPath()%>/logout" class="btn btn-danger">
-                                                                        <i class="fas fa-times" style="padding-left: 2px; padding-right: 2px"></i>
-                                                                    </a>
-                                                                </c:if>
-                                                                <a href="<%=request.getContextPath()%>/logout" class="btn btn-secondary">
-                                                                    <i class="align-middle" data-feather="settings"></i>
+                                                            <c:if test="${type.status eq 'false'}">
+                                                                <a href="<%=request.getContextPath()%>/change-status-project-type?id=${type.id}&status=${type.status}"
+                                                                   class="btn btn-success"
+                                                                   onclick="return confirm('Are you sure you want to activate this project type?');">
+                                                                    <i class="fas fa-check"></i>
                                                                 </a>
                                                             </c:if>
 
-                                                            <c:if test="${user != null}">
-                                                                <a href="javascript:void(0);" class="btn btn-info" 
-                                                                   onclick="openProjectTypeModal(${type.id});"><i class="align-middle" data-feather="edit"></i></a>
-
-                                                                <c:if test="${type.status eq 'false'}">
-                                                                    <a href="<%=request.getContextPath()%>/change-status-project-type?id=${type.id}&status=${type.status}"
-                                                                       class="btn btn-success"
-                                                                       onclick="return confirm('Are you sure you want to activate this project type?');">
-                                                                        <i class="fas fa-check"></i>
-                                                                    </a>
-                                                                </c:if>
-
-                                                                <c:if test="${type.status eq 'true'}">
-                                                                    <a href="<%=request.getContextPath()%>/change-status-project-type?id=${type.id}&status=${type.status}"
-                                                                       class="btn btn-danger"
-                                                                       onclick="return confirm('Are you sure you want to deactivate this project type?');">
-                                                                        <i class="fas fa-times" style="padding-left: 2px; padding-right: 2px"></i>
-                                                                    </a>
-                                                                </c:if>
-
-                                                                <a href="<%=request.getContextPath()%>/project-type-config?id=${type.id}" 
-                                                                   class="btn btn-secondary"><i class="align-middle" data-feather="settings"></i></a>
-
+                                                            <c:if test="${type.status eq 'true'}">
+                                                                <a href="<%=request.getContextPath()%>/change-status-project-type?id=${type.id}&status=${type.status}"
+                                                                   class="btn btn-danger"
+                                                                   onclick="return confirm('Are you sure you want to deactivate this project type?');">
+                                                                    <i class="fas fa-times" style="padding-left: 2px; padding-right: 2px"></i>
+                                                                </a>
                                                             </c:if>
 
+                                                            <a href="<%=request.getContextPath()%>/project-type-config?id=${type.id}" 
+                                                               class="btn btn-secondary"><i class="align-middle" data-feather="settings"></i></a>
                                                         </td>
                                                     </tr>
                                                 </c:forEach>

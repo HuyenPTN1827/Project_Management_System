@@ -103,7 +103,7 @@
                                     <label class="form-label"><strong>Project Role</strong> <span style="color: red;">*</span></label>
                                     <select name="roleId" id="roleId" class="form-select" required>
                                         <option value="" hidden disable>Choose Project Role</option>
-                                        <!--<option value="1">Project Manager</option>-->
+                                        <option value="1">Project Manager</option>
                                         <c:forEach items="${listRole}" var="r">
                                             <option 
                                                 <c:if test="${roleId eq r.id}">
@@ -232,7 +232,12 @@
                                         <label class="form-label"><strong>Project Role</strong> <span style="color: red;">*</span></label>
                                         <select name="roleId" id="roleId" class="form-select" required>
                                             <option value="" hidden disable>Choose Project Role</option>
-                                            <!--<option value="1">Project Manager</option>-->
+                                            <option 
+                                                <c:if test="${al.role.id eq 1}">
+                                                    selected="selected"
+                                                </c:if>
+                                                value="1">Project Manager
+                                            </option>
                                             <c:forEach items="${listRole}" var="r">
                                                 <option 
                                                     <c:if test="${al.role.id eq r.id}">
@@ -360,7 +365,7 @@
                                         <input type="text" class="form-control" placeholder="Project Name (Project Code)" 
                                                value="${project.name}" readonly>
                                     </div>
-                                    
+
                                     <div class="mb-3 col-md-6">
                                         <label class="form-label"><strong>Project Role</strong> <span style="color: red;">*</span></label>
                                         <input type="text" class="form-control" placeholder="Choose Project Role" 
