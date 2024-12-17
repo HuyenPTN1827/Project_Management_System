@@ -56,162 +56,152 @@ public class ProjectListController extends HttpServlet {
             e.printStackTrace();
         }
     }
-private void listProjects(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    // Lấy các tham số từ request
-    String statusStr = request.getParameter("status");
-    String keyword = request.getParameter("keyword");
-    String projectTypeStr = request.getParameter("typeId");
-    String departmentStr = request.getParameter("deptId");
 
-    int status = -1; // Giá trị mặc định nếu không có status
-    int projectType = -1; // Giá trị mặc định nếu không có loại dự án
-    int department = -1; // Giá trị mặc định nếu không có phòng ban
+    private void listProjects(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // Lấy các tham số từ request
+        String statusStr = request.getParameter("status");
+        String keyword = request.getParameter("keyword");
+        String projectTypeStr = request.getParameter("typeId");
+        String departmentStr = request.getParameter("deptId");
 
-    // Chuyển đổi status từ String sang int
-    if (statusStr != null && !statusStr.isEmpty()) {
-        try {
-            status = Integer.parseInt(statusStr); // Chuyển đổi trạng thái từ chuỗi thành int
-        } catch (NumberFormatException e) {
-            System.out.println("Trạng thái không hợp lệ, mặc định là -1");
+        int status = -1; // Giá trị mặc định nếu không có status
+        int projectType = -1; // Giá trị mặc định nếu không có loại dự án
+        int department = -1; // Giá trị mặc định nếu không có phòng ban
+
+        // Chuyển đổi status từ String sang int
+        if (statusStr != null && !statusStr.isEmpty()) {
+            try {
+                status = Integer.parseInt(statusStr); // Chuyển đổi trạng thái từ chuỗi thành int
+            } catch (NumberFormatException e) {
+                System.out.println("Trạng thái không hợp lệ, mặc định là -1");
+            }
         }
-    }
 
-    // Chuyển đổi projectType và department từ String sang int nếu cần
-    if (projectTypeStr != null && !projectTypeStr.isEmpty()) {
-        try {
-            projectType = Integer.parseInt(projectTypeStr);
-        } catch (NumberFormatException e) {
-            System.out.println("Loại dự án không hợp lệ, mặc định là -1");
+        // Chuyển đổi projectType và department từ String sang int nếu cần
+        if (projectTypeStr != null && !projectTypeStr.isEmpty()) {
+            try {
+                projectType = Integer.parseInt(projectTypeStr);
+            } catch (NumberFormatException e) {
+                System.out.println("Loại dự án không hợp lệ, mặc định là -1");
+            }
         }
-    }
 
-    if (departmentStr != null && !departmentStr.isEmpty()) {
-        try {
-            department = Integer.parseInt(departmentStr);
-        } catch (NumberFormatException e) {
-            System.out.println("Phòng ban không hợp lệ, mặc định là -1");
+        if (departmentStr != null && !departmentStr.isEmpty()) {
+            try {
+                department = Integer.parseInt(departmentStr);
+            } catch (NumberFormatException e) {
+                System.out.println("Phòng ban không hợp lệ, mặc định là -1");
+            }
         }
+
+        // Lấy danh sách Manager, ProjectType và Department từ Service
+        List<User> managers = projectService.getAllManagers();
+        List<ProjectType> projectTypes = projectService.getAllProjectType();
+        List<Department> departments = projectService.getAllDepartment();
+
+        // Lấy danh sách tất cả dự án
+        List<Project> projects = projectService.getAllProjects(); // Lấy tất cả dự án trước
+
+        // Tìm kiếm theo các điều kiện
+        if (status >= 0 && status <= 5) {
+            projects = searchByStatus(status, projects); // Tìm kiếm theo trạng thái
+        }
+        if (keyword != null && !keyword.isEmpty()) {
+            projects = searchByKeyword(keyword, projects); // Tìm kiếm theo từ khóa
+        }
+        if (projectType >= 0) {
+            projects = searchByProjectType(projectType, projects); // Tìm kiếm theo loại dự án
+        }
+        if (department >= 0) {
+            projects = searchByDepartment(department, projects); // Tìm kiếm theo phòng ban
+        }
+
+        // Nếu không có kết quả, có thể thêm thông báo cho người dùng
+        if (projects.isEmpty()) {
+            request.setAttribute("message", "Không tìm thấy dự án nào.");
+        }
+
+        // Lưu danh sách vào request
+        request.setAttribute("listManagers", managers);
+        request.setAttribute("listProjectTypes", projectTypes);
+        request.setAttribute("listDepartments", departments);
+        request.setAttribute("listProjects", projects);
+        request.setAttribute("status", status);
+        request.setAttribute("keyword", keyword);
+        request.setAttribute("projectType", projectType);
+        request.setAttribute("department", department);
+
+        request.getRequestDispatcher("/WEB-INF/member/project-list.jsp").forward(request, response);
     }
-
-    // Lấy danh sách Manager, ProjectType và Department từ Service
-    List<User> managers = projectService.getAllManagers();
-    List<ProjectType> projectTypes = projectService.getAllProjectType();
-    List<Department> departments = projectService.getAllDepartment();
-
-    // Lấy danh sách tất cả dự án
-    List<Project> projects = projectService.getAllProjects(); // Lấy tất cả dự án trước
-
-    // Tìm kiếm theo các điều kiện
-    if (status >= 0 && status <= 5) {
-        projects = searchByStatus(status, projects); // Tìm kiếm theo trạng thái
-    }
-    if (keyword != null && !keyword.isEmpty()) {
-        projects = searchByKeyword(keyword, projects); // Tìm kiếm theo từ khóa
-    }
-    if (projectType >= 0) {
-        projects = searchByProjectType(projectType, projects); // Tìm kiếm theo loại dự án
-    }
-    if (department >= 0) {
-        projects = searchByDepartment(department, projects); // Tìm kiếm theo phòng ban
-    }
-
-    // Nếu không có kết quả, có thể thêm thông báo cho người dùng
-    if (projects.isEmpty()) {
-        request.setAttribute("message", "Không tìm thấy dự án nào.");
-    }
-
-    // Lưu danh sách vào request
-    request.setAttribute("listManagers", managers);
-    request.setAttribute("listProjectTypes", projectTypes);
-    request.setAttribute("listDepartments", departments);
-    request.setAttribute("listProjects", projects);
-    request.setAttribute("status", status);
-    request.setAttribute("keyword", keyword);
-    request.setAttribute("projectType", projectType);
-    request.setAttribute("department", department);
-
-    request.getRequestDispatcher("/WEB-INF/member/project-list.jsp").forward(request, response);
-}
-
-
-
-
 
     private List<Project> searchByStatus(int status, List<Project> projects) {
-    List<Project> filteredProjects = new ArrayList<>();
+        List<Project> filteredProjects = new ArrayList<>();
 
-    // Kiểm tra trạng thái có hợp lệ hay không (0 <= status <= 5)
-    if (status >= 0 && status <= 5) {
-        // Duyệt qua danh sách dự án và lọc theo trạng thái
-        for (Project project : projects) {
-            if (project.getStatus() == status) {
-                filteredProjects.add(project);
+        // Kiểm tra trạng thái có hợp lệ hay không (0 <= status <= 5)
+        if (status >= 0 && status <= 5) {
+            // Duyệt qua danh sách dự án và lọc theo trạng thái
+            for (Project project : projects) {
+                if (project.getStatus() == status) {
+                    filteredProjects.add(project);
+                }
             }
+        } else {
+            System.out.println("Trạng thái không hợp lệ.");
         }
-    } else {
-        System.out.println("Trạng thái không hợp lệ.");
+
+        return filteredProjects; // Trả về danh sách dự án đã lọc
     }
 
-    return filteredProjects; // Trả về danh sách dự án đã lọc
-}
+    private List<Project> searchByKeyword(String keyword, List<Project> projects) {
+        List<Project> filteredProjects = new ArrayList<>();
 
-
-   private List<Project> searchByKeyword(String keyword, List<Project> projects) {
-    List<Project> filteredProjects = new ArrayList<>();
-
-    if (keyword != null && !keyword.isEmpty()) {
-        // Duyệt qua danh sách dự án và lọc theo từ khóa
-        for (Project project : projects) {
-            if (project.getName().toLowerCase().contains(keyword.toLowerCase()) ||
-                project.getCode().toLowerCase().contains(keyword.toLowerCase())) {
-                filteredProjects.add(project);
+        if (keyword != null && !keyword.isEmpty()) {
+            // Duyệt qua danh sách dự án và lọc theo từ khóa
+            for (Project project : projects) {
+                if (project.getName().toLowerCase().contains(keyword.toLowerCase())
+                        || project.getCode().toLowerCase().contains(keyword.toLowerCase())) {
+                    filteredProjects.add(project);
+                }
             }
         }
+
+        return filteredProjects; // Trả về danh sách dự án đã lọc theo từ khóa
     }
 
-    return filteredProjects; // Trả về danh sách dự án đã lọc theo từ khóa
-}
+    private List<Project> searchByDepartment(int department, List<Project> projects) {
+        List<Project> filteredProjects = new ArrayList<>();
 
-    
-   private List<Project> searchByDepartment(int department, List<Project> projects) {
-    List<Project> filteredProjects = new ArrayList<>();
-
-    if (department >= 0) {
-        // Duyệt qua danh sách dự án và lọc theo phòng ban
-        for (Project project : projects) {
-            if (project.getDepartmentId() == department) {
-                filteredProjects.add(project);
+        if (department >= 0) {
+            // Duyệt qua danh sách dự án và lọc theo phòng ban
+            for (Project project : projects) {
+                if (project.getDepartmentId() == department) {
+                    filteredProjects.add(project);
+                }
             }
+        } else {
+            System.out.println("Department ID không hợp lệ.");
         }
-    } else {
-        System.out.println("Department ID không hợp lệ.");
+
+        return filteredProjects; // Trả về danh sách dự án đã lọc
     }
 
-    return filteredProjects; // Trả về danh sách dự án đã lọc
-}
+    private List<Project> searchByProjectType(int projectType, List<Project> projects) {
+        List<Project> filteredProjects = new ArrayList<>();
 
-
-  private List<Project> searchByProjectType(int projectType, List<Project> projects) {
-    List<Project> filteredProjects = new ArrayList<>();
-
-    if (projectType >= 0) {
-        // Duyệt qua danh sách dự án và lọc theo loại dự án
-        for (Project project : projects) {
-            if (project.getTypeId() == projectType) {
-                filteredProjects.add(project);
+        if (projectType >= 0) {
+            // Duyệt qua danh sách dự án và lọc theo loại dự án
+            for (Project project : projects) {
+                if (project.getTypeId() == projectType) {
+                    filteredProjects.add(project);
+                }
             }
+        } else {
+            System.out.println("Project type ID không hợp lệ.");
         }
-    } else {
-        System.out.println("Project type ID không hợp lệ.");
+
+        return filteredProjects; // Trả về danh sách dự án đã lọc
     }
-
-    return filteredProjects; // Trả về danh sách dự án đã lọc
-}
-
-
-
-
 
     private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Lấy danh sách Manager từ Service
@@ -246,8 +236,10 @@ private void listProjects(HttpServletRequest request, HttpServletResponse respon
 
         try {
             // Kiểm tra các trường bắt buộc
-            if (name == null || code == null || departmentIdString == null || typeIdString == null
-                    || startDateString == null || endDateString == null || projectManagerIdString == null || bizTermIdString == null) {
+            if (name == null || name.isEmpty() || code == null || code.isEmpty() || estimatedEffortString == null || estimatedEffortString.isEmpty()
+                    || departmentIdString == null || departmentIdString.isEmpty() || typeIdString == null || typeIdString.isEmpty()
+                    || startDateString == null || startDateString.isEmpty() || endDateString == null || endDateString.isEmpty()
+                    || projectManagerIdString == null || projectManagerIdString.isEmpty() || bizTermIdString == null || bizTermIdString.isEmpty()) {
 
                 request.setAttribute("errorMessage", "All required fields must be filled in completely.");
                 request.getRequestDispatcher("/WEB-INF/member/project-add.jsp").include(request, response);
@@ -314,6 +306,13 @@ private void listProjects(HttpServletRequest request, HttpServletResponse respon
             try {
                 if (estimatedEffortString != null && !estimatedEffortString.isEmpty()) {
                     int estimatedEffort = Integer.parseInt(estimatedEffortString);
+                    // Kiểm tra estimatedEffort phải là số dương lớn hơn 0
+                    if (estimatedEffort <= 0) {
+                        request.setAttribute("errorMessage", "Estimated Effort must be a positive number greater than 0.");
+                        request.getRequestDispatcher("/WEB-INF/member/project-add.jsp").forward(request, response);
+                        return;
+                    }
+
                     project.setEstimatedEffort(estimatedEffort);
                 }
             } catch (NumberFormatException e) {
