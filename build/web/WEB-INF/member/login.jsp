@@ -28,7 +28,7 @@
                     <div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
                         <div class="d-table-cell align-middle">
                             <div class="text-center mt-4">
-                                <h1 class="h2">Welcome back</h1>
+                                <h1 class="h2">Welcome</h1>
                                 <p class="lead">Sign in to your account to continue</p>
                             </div>
 
@@ -46,7 +46,7 @@
                                             <div class="mb-3">
                                                 <label class="form-label">Password</label>
                                                 <input type="password" class="form-control form-control-lg" id="password" placeholder="Enter your password" name="password" required />
-                                                <div class="form-check">
+                                                <div class="form-check mt-2">
                                                     <input class="form-check-input" type="checkbox" id="showPassword" onclick="togglePasswordVisibility()">
                                                     <label class="form-check-label" for="showPassword">Show Password</label>
                                                 </div>
@@ -80,7 +80,7 @@
                                                 <button type="submit" class="btn btn-lg btn-outline-primary" style="border-radius: 50px; width: 95%">Sign in</button>
                                             </div>
                                             <div style="display: flex; justify-content: space-between; margin: 10px 5px;">
-                                                <label class="form-check">
+                                                <label class="form-check mt-1">
                                                     <input class="form-check-input" type="checkbox" value="remember-me" name="remember-me" checked>
                                                     <span class="form-check-label">Remember me next time</span>
                                                 </label>
@@ -90,10 +90,10 @@
                                             </div>
                                             <div class="text-center mt-3">
                                                 <a href="register-form" class="btn btn-lg btn-outline-primary" style="margin-bottom: 10px; border-radius: 50px; width: 95%">Sign up</a>
-                                                <br>
-                                                <a href="#" class="btn btn-lg btn-outline-primary" style="border-radius: 50px; width: 95%">
+<!--                                                <br>-->
+<!--                                                <a href="#" class="btn btn-lg btn-outline-primary" style="border-radius: 50px; width: 95%">
                                                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png" width="23px" alt="alt" /> Continues with Google
-                                                </a>
+                                                </a>-->
                                             </div>
                                         </form>
                                     </div>

@@ -519,7 +519,7 @@ public class ProjectDAO {
                      LEFT JOIN dept_user du ON p.department_id = du.dept_id
                      JOIN allocation a ON p.id = a.project_id 
                      JOIN user u ON p.user_id = u.id
-                     WHERE a.user_id = ? OR (du.user_id = ? AND du.role_id = 3)""";
+                     WHERE a.user_id = ? OR (du.user_id = ? AND du.role_id = 3 AND du.end_date IS NULL)""";
 
         if (biz_term != null) {
             sql += " AND p.biz_term = ?";

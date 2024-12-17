@@ -61,8 +61,8 @@
                                                 ${ERROR}
                                             </p>
                                             <div class="text-center mt-3 d-flex justify-content-between">
-                                                <button type="submit" class="btn btn-lg btn-success" style="border-radius: 50px;">Verify</button>
-                                                <button type="button" class="btn btn-lg btn-secondary" style="border-radius: 50px; margin-top: 10px;" onclick="openPopup()">Resend OTP</button>
+                                                <button type="submit" class="btn btn-lg btn-success" style="border-radius: 50px; margin-bottom: 10px;">Verify</button>
+                                                <button type="button" class="btn btn-lg btn-secondary" style="border-radius: 50px; margin-bottom: 10px;" onclick="openPopup()">Resend OTP</button>
                                             </div>
 
                                             <c:if test="${not empty NOTIFICATION}">
@@ -92,9 +92,13 @@
                 <form id="resend-otp-form" action="<%=request.getContextPath()%>/resend-otp" method="post">
                     <label for="email" style="display: block; margin-bottom: 10px;">Enter your email:</label>
                     <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required style="width: 100%; margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
-                    <div style="text-align: right;">
-                        <button type="button" onclick="closePopup()" style="margin-right: 10px; padding: 10px 20px; border: none; background-color: #ccc; border-radius: 5px; cursor: pointer;">Close</button>
-                        <button type="submit" style="padding: 10px 20px; border: none; background-color: #28a745; color: white; border-radius: 5px; cursor: pointer;">Send OTP</button>
+                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <button type="button" onclick="closePopup()" class="btn btn-lg btn-secondary" style="border-radius: 50px; margin-bottom: 10px;">
+                            Close
+                        </button>
+                        <button type="submit" class="btn btn-lg btn-success" style="border-radius: 50px; margin-bottom: 10px;">
+                            Send OTP
+                        </button>
                     </div>
                 </form>
             </div>

@@ -392,6 +392,7 @@ public class UserController extends HttpServlet {
 //            message.setText("Your OTP code is: " + otp);
             message.setText("Dear " + fullname + ",\n\n"
                     + "Your account has been created successfully.\n"
+                    + "Email: " + email + "\n"
                     + "Username: " + username + "\n"
                     + "Password: " + password + "\n\n"
                     + "Please log in and change your password.\n\n"

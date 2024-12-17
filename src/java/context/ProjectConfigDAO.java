@@ -301,7 +301,7 @@ public class ProjectConfigDAO {
                 + "FROM project p "
                 + "LEFT JOIN project_type pt ON p.type_id = pt.id " // JOIN với bảng project_type
                 + "LEFT JOIN department d ON p.department_id = d.id "
-                + "LEFT JOIN dept_user du ON p.department_id = du.dept_id AND du.role_id = 3 " 
+                + "LEFT JOIN dept_user du ON p.department_id = du.dept_id AND du.role_id = 3 AND du.end_date IS NULL " 
                 + "LEFT JOIN user u ON p.user_id = u.id " 
                 + "LEFT JOIN setting s ON p.biz_term = s.id " // JOIN với bảng setting dựa trên bizterm
                 + "WHERE p.id = ?"; // Điều kiện WHERE để tìm dự án theo ID
