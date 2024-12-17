@@ -63,7 +63,7 @@
                                 <!-- Created By -->
                                 <div class="col-md-6 mb-3" hidden>
                                     <label for="createdBy" class="form-label">Created By</label>
-                                    <input type="text" class="form-control"  name="createdBy" value="${sessionScope.username}" readonly>
+                                    <input type="text" class="form-control"  name="createdBy" placeholder="Full Name (UserName)" value="${sessionScope.username}" readonly>
                                 </div>
 
                                 <!-- Last Updated -->
@@ -75,7 +75,7 @@
                                 <!-- Milestone Name -->
                                 <div class="col-md-6 mb-3">
                                     <label for="milestoneName" class="form-label"><strong>Milestone/Deliverable</strong> <span style="color: red;">*</span></label>
-                                    <input type="text" class="form-control"  name="milestoneName" required>
+                                    <input type="text" class="form-control" placeholder="Enter Milestone Name" name="milestoneName" required>
                                 </div>
 
                                 <!-- Parent Milestone -->
@@ -99,19 +99,19 @@
                                 <!-- Priority -->
                                 <div class="col-md-6 mb-3">
                                     <label for="priority" class="form-label"><strong>Priority</strong> <span style="color: red;">*</span></label>
-                                    <input type="number" class="form-control"  name="priority" required>
+                                    <input type="number" class="form-control" placeholder="Enter Milestone priority" name="priority" required>
                                 </div>
 
                                 <!-- Target Date -->
                                 <div class="col-md-6 mb-3">
                                     <label for="targetDate" class="form-label"><strong>Target Date</strong> <span style="color: red;">*</span></label>
-                                    <input type="date" class="form-control" id="targetDate" name="targetDate" required>
+                                    <input type="date" class="form-control" id="targetDate" name="targetDate" placeholder="dd/MM/yyyy" required>
                                 </div>
 
                                 <!-- Description -->
                                 <div class="col-md-12 mb-3">
                                     <label for="description" class="form-label"><strong>Description</strong></label>
-                                    <textarea class="form-control"  name="description" rows="3"></textarea>
+                                    <textarea class="form-control" placeholder="Enter Milestone description" name="description" rows="3"></textarea>
                                 </div>
 
                                 <div id="errorContainer" class="alert alert-danger pt-3 pe-3 ps-3 d-none">
@@ -147,14 +147,15 @@
                                     <!-- Milestone Name -->
                                     <div class="col-md-6 mb-3">
                                         <label for="milestoneName" class="form-label"><strong>Milestone/Deliverable</strong> <span style="color: red;">*</span></label>
-                                        <input type="text" class="form-control" id="milestoneName" name="milestonename" value="${milestone.name}" required>
+                                        <input type="text" class="form-control" id="milestoneName" name="milestonename" 
+                                               placeholder="Enter Milestone Name" value="${milestone.name}" required>
                                     </div>
 
                                     <!-- Parent Milestone -->
                                     <div class="col-md-6 mb-3">
                                         <label for="parentMilestone" class="form-label"><strong>Parent Milestone</strong></label>
                                         <select class="form-select" id="parentMilestoneId" name="parentMilestoneId">
-                                            <option value="">-- Select Parent Milestone --</option>
+                                            <option value="">Select Parent Milestone</option>
                                             <c:forEach var="parent" items="${parentMilestones}">
                                                 <option value="${parent.id}" <c:if test="${parent.id == milestone.parentMilestone}">selected</c:if>>
                                                     ${parent.name}
@@ -166,13 +167,15 @@
                                     <!-- Priority -->
                                     <div class="col-md-6 mb-3">
                                         <label for="priority" class="form-label"><strong>Priority</strong> <span style="color: red;">*</span></label>
-                                        <input type="number" class="form-control" id="priority" name="priority" value="${milestone.priority}" required>
+                                        <input type="number" class="form-control" id="priority" name="priority" 
+                                               placeholder="Enter Milestone priority" value="${milestone.priority}" required>
                                     </div>
 
                                     <!-- Target Date -->
                                     <div class="col-md-6 mb-3">
                                         <label for="targetDate" class="form-label"><strong>Target Date</strong> <span style="color: red;">*</span></label>
-                                        <input type="date" class="form-control" id="targetdate" name="targetdate" value="${milestone.targetDate}" required>
+                                        <input type="date" class="form-control" id="targetdate" name="targetdate" 
+                                               placeholder="dd/MM/yyyy" value="${milestone.targetDate}" required>
                                     </div>
 
                                     <!-- Status -->
@@ -189,13 +192,14 @@
                                         <!-- Actual Date -->
                                         <div class="col-md-6 mb-3">
                                             <label for="actualDate" class="form-label"><strong>Actual Date</strong></label>
-                                            <input type="date" class="form-control" id="actualDate" name="actualDate" value="${milestone.actualDate}">
+                                            <input type="date" class="form-control" id="actualDate" name="actualDate" 
+                                                   placeholder="dd/MM/yyyy" value="${milestone.actualDate}">
                                     </div>
 
                                     <!-- Description -->
                                     <div class="col-md-12 mb-3">
                                         <label for="detail" class="form-label"><strong>Description</strong></label>
-                                        <textarea class="form-control" id="detail" name="description" rows="3">${milestone.details}</textarea>
+                                        <textarea class="form-control" id="detail" placeholder="Enter Milestone description" name="description" rows="3">${milestone.details}</textarea>
                                     </div>
 
                                     <!-- Submit Button -->

@@ -63,13 +63,13 @@
                             <!-- Project Name Field -->
                             <div class="mb-3 col-md-6">
                                 <label class="form-label"><strong>Project Name</strong> <span style="color: red;">*</span></label>
-                                <input type="text" class="form-control" name="name" placeholder="Enter project Name" value="${name}" required>
+                                <input type="text" class="form-control" name="name" placeholder="Enter Project Name" value="${name}" required>
                             </div>
 
                             <!-- Project Code Field -->
                             <div class="mb-3 col-md-6">
                                 <label class="form-label"><strong>Project Code</strong> <span style="color: red;">*</span></label>
-                                <input type="text" class="form-control" name="code" id="code" placeholder="Enter project Code" value="${code}" required>
+                                <input type="text" class="form-control" name="code" id="code" placeholder="Enter Project Code" value="${code}" required>
                             </div>
 
                             <!--Type Field -->
@@ -149,7 +149,7 @@
                             <!-- Descriptions Field -->
                             <div class="mb-3 col-md-12">
                                 <label class="form-label"><strong>Description</strong></label>
-                                <textarea class="form-control" name="details" placeholder="Enter project type details" rows="3">${details}</textarea>
+                                <textarea class="form-control" name="details" placeholder="Enter Project details" rows="3">${details}</textarea>
                             </div>
 
                             ${errorMessage}

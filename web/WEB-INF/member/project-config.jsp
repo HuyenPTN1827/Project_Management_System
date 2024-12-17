@@ -183,7 +183,7 @@
 
                                                                 <div class="col-md-6 mb-3">
                                                                     <label for="projectCode" class="form-label"><strong>Code</strong> <span style="color: red;">*</span></label>
-                                                                    <input type="text" class="form-control" id="projectCode" name="projectCode" placeholder="PrjCode" value="${project.code}">
+                                                                    <input type="text" class="form-control" id="projectCode" name="projectCode" placeholder="Project Code" value="${project.code}">
                                                                 </div>
 
                                                                 <div class="col-md-6 mb-3">
@@ -204,7 +204,7 @@
 
                                                                 <div class="col-md-6 mb-3">
                                                                     <label for="estimatedEffort" class="form-label"><strong>Estimated Effort (man-days)</strong> <span style="color: red;">*</span></label>
-                                                                    <input type="number" class="form-control" id="estimatedEffort" name="estimatedEffort" value="${project.estimatedEffort}">
+                                                                    <input type="number" class="form-control" id="estimatedEffort" name="estimatedEffort" placeholder="Estimated Effort" value="${project.estimatedEffort}">
                                                                 </div>
 
                                                                 <div class="col-md-6 mb-3">
@@ -252,7 +252,7 @@
                                                                 <div class="col-md-6 mb-3">
                                                                     <label for="status" class="form-label"><strong>Status</strong></label>
                                                                     <select class="form-select" id="status" name="status">
-                                                                        <option value="">Status Name</option>
+                                                                        <option value="" hidden disable>Status Name</option>
                                                                         <option value="0" ${project.status == 0 ? 'selected' : ''}>Pending</option>
                                                                         <option value="1" ${project.status == 1 ? 'selected' : ''}>Doing</option>
                                                                         <option value="2" ${project.status == 2 ? 'selected' : ''}>Closed</option>
@@ -262,12 +262,12 @@
 
                                                                 <div class="col-md-6 mb-3">
                                                                     <label for="lastUpdated" class="form-label"><strong>Last Updated At</strong></label>
-                                                                    <input type="date" class="form-control" id="lastUpdated" value="${project.lastUpdated}" readonly>
+                                                                    <input type="date" class="form-control" id="lastUpdated" value="${project.lastUpdated}" placeholder="dd/MM/yyyy hh:mm:ss" readonly>
                                                                 </div>
 
                                                                 <div class="col-md-12 mb-3">
                                                                     <label for="description" class="form-label"><strong>Description</strong></label>
-                                                                    <textarea class="form-control" id="description" name="description" rows="3">${project.details}</textarea>
+                                                                    <textarea class="form-control" id="description" name="description" placeholder="Project description" rows="3">${project.details}</textarea>
                                                                 </div>
 
                                                                 <div>
@@ -285,7 +285,7 @@
                                                                 </div>
                                                                 <div class="col-md-6 mb-3">
                                                                     <label for="projectCode" class="form-label"><strong>Code</strong> <span style="color: red;">*</span></label>
-                                                                    <input type="text" class="form-control" id="projectCode" name="projectCode" placeholder="PrjCode" value="${project.code}" readonly>
+                                                                    <input type="text" class="form-control" id="projectCode" name="projectCode" placeholder="Project Code" value="${project.code}" readonly>
                                                                 </div>
 
                                                                 <div class="col-md-6 mb-3">
@@ -1119,6 +1119,66 @@
                     window.notyf.open({
                         type: "success",
                         message: "Allocation status changed successfully.",
+                        duration: 5000, // Adjust duration as needed
+                        ripple: true,
+                        dismissible: true,
+                        position: {
+                            x: "right",
+                            y: "top"
+                        }
+                    });
+                }
+                
+                if (urlParams.get('create-milestone') === 'success') {
+                    // Show success notification
+                    window.notyf.open({
+                        type: "success",
+                        message: "New Milestone created successfully.",
+                        duration: 5000, // Adjust duration as needed
+                        ripple: true,
+                        dismissible: true,
+                        position: {
+                            x: "right",
+                            y: "top"
+                        }
+                    });
+                }
+                
+                if (urlParams.get('create-milestone') === 'fail') {
+                    // Show success notification
+                    window.notyf.open({
+                        type: "error",
+                        message: "New Milestone created failed.",
+                        duration: 5000, // Adjust duration as needed
+                        ripple: true,
+                        dismissible: true,
+                        position: {
+                            x: "right",
+                            y: "top"
+                        }
+                    });
+                }
+                
+                if (urlParams.get('update-milestone') === 'success') {
+                    // Show success notification
+                    window.notyf.open({
+                        type: "success",
+                        message: "Milestone details updated successfully.",
+                        duration: 5000, // Adjust duration as needed
+                        ripple: true,
+                        dismissible: true,
+                        position: {
+                            x: "right",
+                            y: "top"
+                        }
+                    });
+                }
+                
+                if (urlParams.get('update-milestone') === 'fail') {
+                    // Show success notification
+                    window.notyf.open({
+                        type: "error",
+                        message: "Milestone details updated failed.",
                         duration: 5000, // Adjust duration as needed
                         ripple: true,
                         dismissible: true,

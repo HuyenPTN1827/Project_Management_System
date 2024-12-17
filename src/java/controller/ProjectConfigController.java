@@ -515,16 +515,15 @@ public class ProjectConfigController extends HttpServlet {
         List<Project> projectList = projectConfigService.getAllProjects();
         // Thông báo kết quả và chuyển hướng
         if (isAdded) {
-            request.setAttribute("message", "Milestone added successfully.");
+//            request.setAttribute("message", "Milestone added successfully.");
             request.setAttribute("projectList", projectList);
-            request.setAttribute("projectList", projectList);
-
+//            request.getRequestDispatcher("/projectconfig?id=" + projectId + "&activeTab=milestone&create-milestone=success").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/projectconfig?id=" + projectId + "&activeTab=milestone&create-milestone=success");
         } else {
             request.setAttribute("error", "Failed to add milestone.");
+//            request.getRequestDispatcher("/projectconfig?id=" + projectId + "&activeTab=milestone&create-milestone=fail").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/projectconfig?id=" + projectId + "&activeTab=milestone&create-milestone=fail");
         }
-
-        // Chuyển hướng về trang config project hoặc trang cần thiết
-        request.getRequestDispatcher("/projectconfig?id=" + projectId + "&activeTab=milestone").forward(request, response);
     }
 
     private void getMilestoneById(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -639,7 +638,7 @@ public class ProjectConfigController extends HttpServlet {
         // Nếu có lỗi, trả về trang với thông báo lỗi
         if (errors.length() > 0) {
             request.setAttribute("errors", errors.toString());
-            request.getRequestDispatcher("/projectconfig?id=" + projectId + "&activeTab=milestone").forward(request, response);
+            request.getRequestDispatcher("/projectconfig?id=" + projectId + "&activeTab=milestone&update-milestone=fail").forward(request, response);
             return;
         }
 
@@ -659,10 +658,12 @@ public class ProjectConfigController extends HttpServlet {
         boolean success = projectConfigService.updateMilestone(milestone);
 
         if (success) {
-            request.getRequestDispatcher("/projectconfig?id=" + projectId + "&activeTab=milestone").forward(request, response);
+//            request.getRequestDispatcher("/projectconfig?id=" + projectId + "&activeTab=milestone&update-milestone=success").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/projectconfig?id=" + projectId + "&activeTab=milestone&update-milestone=success");
         } else {
             request.setAttribute("error", "Failed to update the milestone. Please try again.");
-            request.getRequestDispatcher("/projectconfig?id=" + projectId + "&activeTab=milestone").forward(request, response);
+//            request.getRequestDispatcher("/projectconfig?id=" + projectId + "&activeTab=milestone&update-milestone=fail").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/projectconfig?id=" + projectId + "&activeTab=milestone&update-milestone=fail");
         }
     }
 
