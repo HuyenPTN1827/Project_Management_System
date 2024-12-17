@@ -10,10 +10,19 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.security.SecureRandom;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import model.Department;
 import model.Setting;
 import model.User;
@@ -165,10 +174,10 @@ public class UserController extends HttpServlet {
         String username = request.getParameter("username");
         String email = request.getParameter("email");
         String mobile = request.getParameter("mobile");
-        String password = request.getParameter("password");
         String notes = request.getParameter("notes");
         String dept = request.getParameter("dept");
         String role = request.getParameter("role");
+        String password = generatePassword();
 
         // Process the filter value, convert to number or null if not selected
         Integer deptId = dept != null && !dept.isEmpty() ? Integer.valueOf(dept) : null;
@@ -202,6 +211,8 @@ public class UserController extends HttpServlet {
         if (errors.isEmpty()) {
             // No validation errors, proceed to insert the user
             userService.insertUser(u, deptId, roleId);
+            // Send email with account details
+            sendEmail(email, fullname, username, password);
             // Redirect to user-management url
             response.sendRedirect("user-management");
         } else {
@@ -315,6 +326,82 @@ public class UserController extends HttpServlet {
         userService.changeStatusUser(u);
         // Redirect to user-management url
         response.sendRedirect("user-management");
+    }
+
+    private String generatePassword() {
+        final String UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        final String LOWERCASE = "abcdefghijklmnopqrstuvwxyz";
+        final String DIGITS = "0123456789";
+        final String SPECIAL_CHARS = "!@#$%^&*()-_+=<>?";
+        final String ALL_CHARS = UPPERCASE + LOWERCASE + DIGITS + SPECIAL_CHARS;
+
+        SecureRandom random = new SecureRandom();
+        StringBuilder password = new StringBuilder();
+
+        // Ensure password includes at least one of each type
+        password.append(UPPERCASE.charAt(random.nextInt(UPPERCASE.length())));
+        password.append(LOWERCASE.charAt(random.nextInt(LOWERCASE.length())));
+        password.append(DIGITS.charAt(random.nextInt(DIGITS.length())));
+        password.append(SPECIAL_CHARS.charAt(random.nextInt(SPECIAL_CHARS.length())));
+
+        // Fill the rest of the password
+        for (int i = 4; i < 8; i++) { // Password length = 8
+            password.append(ALL_CHARS.charAt(random.nextInt(ALL_CHARS.length())));
+        }
+
+        return shuffleString(password.toString());
+    }
+
+    private String shuffleString(String input) {
+        SecureRandom random = new SecureRandom();
+        char[] array = input.toCharArray();
+        for (int i = array.length - 1; i > 0; i--) {
+            int j = random.nextInt(i + 1);
+            char temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+        return new String(array);
+    }
+
+    private void sendEmail(String email, String fullname, String username, String password) {
+        // Tham số cấu hình email có thể được lấy từ file cấu hình
+        String host = "smtp.gmail.com";
+        final String user = "haduybachbn@gmail.com";
+        final String passwordEmail = "iifq izgj dupx ivyy";
+
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(props,
+                new javax.mail.Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(user, passwordEmail);
+            }
+        });
+
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(user));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
+            message.setSubject("PMS account information");
+//            message.setText("Your OTP code is: " + otp);
+            message.setText("Dear " + fullname + ",\n\n"
+                    + "Your account has been created successfully.\n"
+                    + "Username: " + username + "\n"
+                    + "Password: " + password + "\n\n"
+                    + "Please log in and change your password.\n\n"
+                    + "Best regards,\nSEP490-G88");
+            Transport.send(message);
+            System.out.println("OTP has been sent to email: " + email);
+        } catch (MessagingException e) {
+            System.out.println("Email sending failed. Error: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 
 }

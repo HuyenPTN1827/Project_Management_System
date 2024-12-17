@@ -76,8 +76,7 @@
                                                 </div>
                                             </c:if>
 
-
-                                            <div class="text-center mt-3">
+                                            <div class="mt-3">
                                                 <button type="submit" class="btn btn-lg btn-primary" style="border-radius: 50px;">Register Account</button>
                                             </div>
                                         </form>

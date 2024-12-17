@@ -20,6 +20,7 @@ public class Issue {
     private LocalDate deadline;
     private int status;
     private int count;
+    private int deptManager;
 
     private User created_by;
     private User assignee;
@@ -31,13 +32,15 @@ public class Issue {
     public Issue() {
     }
 
-    public Issue(int id, LocalDateTime last_updated, String name, String details, LocalDate deadline, int status, User created_by, User assignee, Milestone milestone, WorkPackage scope, Project project, Setting type) {
+    public Issue(int id, LocalDateTime last_updated, String name, String details, LocalDate deadline, int status, int count, int deptManager, User created_by, User assignee, Milestone milestone, WorkPackage scope, Project project, Setting type) {
         this.id = id;
         this.last_updated = last_updated;
         this.name = name;
         this.details = details;
         this.deadline = deadline;
         this.status = status;
+        this.count = count;
+        this.deptManager = deptManager;
         this.created_by = created_by;
         this.assignee = assignee;
         this.milestone = milestone;
@@ -100,6 +103,14 @@ public class Issue {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public int getDeptManager() {
+        return deptManager;
+    }
+
+    public void setDeptManager(int deptManager) {
+        this.deptManager = deptManager;
     }
 
     public User getCreated_by() {

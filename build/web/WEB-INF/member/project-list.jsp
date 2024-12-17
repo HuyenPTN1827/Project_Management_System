@@ -135,23 +135,13 @@
                                                 </div>
 
                                                 <div class="col-md-2">
-                                                    <c:if test="${user == null}">
-                                                        <a class="btn btn-primary" href="<%=request.getContextPath()%>/logout">Search</a>
-                                                    </c:if>
-
-                                                    <c:if test="${user != null}">
-                                                        <button type="submit" class="btn btn-primary">Search</button>
-                                                    </c:if>
+                                                    <button type="submit" class="btn btn-primary">Search</button>
                                                 </div>
                                             </form>
 
                                             <div class="col-md-2 d-flex justify-content-end align-items-end">
 
-                                                <c:if test="${user == null}">
-                                                    <a class="btn btn-primary" href="<%=request.getContextPath()%>/logout">Create new</a>
-                                                </c:if>
-
-                                                <c:if test="${user != null && user.role_id == 2}">
+                                                <c:if test="${user.role_id == 2 || user.role_id == 3}">
                                                     <a class="btn btn-primary" href="javascript:void(0);" onclick="openProjectModal();">Create new</a>
                                                 </c:if>
 
@@ -199,24 +189,9 @@
                                                         </td>
 
                                                         <td>
-                                                            <c:if test="${user == null}">
-                                                                <a href="<%=request.getContextPath()%>/login" class="btn btn-secondary">
-                                                                    <i class="align-middle" data-feather="settings"></i>
-                                                                </a>
-                                                            </c:if>
-
-                                                            <c:if test="${user != null}">
-                                                                <c:if test="${user.role_id == 5}">
-                                                                    <a href="<%=request.getContextPath()%>/projectconfig?id=${project.id}&action=view" class="btn btn-secondary">
-                                                                        <i class="align-middle" data-feather="settings"></i>
-                                                                    </a>
-                                                                </c:if>
-                                                                <c:if test="${user.role_id != 5}">
-                                                                    <a href="<%=request.getContextPath()%>/projectconfig?id=${project.id}&action=edit" class="btn btn-secondary">
-                                                                        <i class="align-middle" data-feather="settings"></i>
-                                                                    </a>
-                                                                </c:if>
-                                                            </c:if>
+                                                            <a href="<%=request.getContextPath()%>/projectconfig?id=${project.id}" class="btn btn-secondary">
+                                                                <i class="align-middle" data-feather="settings"></i>
+                                                            </a>
                                                         </td>
                                                     </tr>
                                                 </c:forEach>

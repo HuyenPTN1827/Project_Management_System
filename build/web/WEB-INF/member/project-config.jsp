@@ -100,7 +100,6 @@
 
                         <div class="mt-2 mb-3">
                             <h1 class="h1 d-inline align-middle">Project Configs</h1>
-                            <input type="hidden" id="action" value="${action}"/>
                         </div>
                         <div class="row">
                             <div class="col-md-12 col-xl-12">
@@ -121,7 +120,7 @@
                                                 </a>
                                             </li>
 
-                                            <li class="nav-item">
+                                            <li class="nav-item" <c:if test="${user.role_id == 5}">hidden</c:if>>
                                                 <a class="nav-link ${activeTab == 'allocation' ? 'active' : ''}" id="allocation-tab" data-bs-toggle="tab" 
                                                    href="#allocation" role="tab" aria-controls="allocation" aria-selected="false">
                                                     Allocations
@@ -138,7 +137,6 @@
                                             <li class="nav-item col-md-3 ms-auto">
                                                 <form action="${pageContext.request.contextPath}/projectconfig" method="get">
                                                     <input type="hidden" name="activeTab" value="${activeTab}">
-                                                    <input type="hidden" name="action" value="${action}"/>
                                                     <select name="id" class="form-select" onchange="this.form.submit()">
                                                         <option value="" hidden disable>Select Project</option>
                                                         <c:forEach var="project" items="${projectList}">
@@ -174,7 +172,7 @@
                                                         ${errors}
 
                                                         <form action="updateproject" method="post" class="row">
-                                                            <c:if test="${action == 'edit'}">
+                                                            <c:if test="${user.role_id == 2 || user.id == project.deptManager}">
                                                                 <!-- Hidden input to include project ID -->
                                                                 <input type="hidden" name="projectId" value="${project.id}" />
 
@@ -245,7 +243,7 @@
                                                                         <!-- Duyệt qua danh sách userList -->
                                                                         <c:forEach var="user" items="${listManagers}">
                                                                             <option value="${user.id}" ${user.id == project.userId ? 'selected' : ''}>
-                                                                                ${user.full_name} 
+                                                                                ${user.full_name} (${user.username})
                                                                             </option>
                                                                         </c:forEach>
                                                                     </select>
@@ -277,7 +275,7 @@
                                                                 </div>
                                                             </c:if>
 
-                                                            <c:if test="${action == 'view'}">
+                                                            <c:if test="${user.role_id != 2 && user.id != project.deptManager}">
                                                                 <!-- Hidden input to include project ID -->
                                                                 <input type="hidden" name="projectId" value="${project.id}" />
 
@@ -307,7 +305,7 @@
 
                                                                 <div class="col-md-6 mb-3">
                                                                     <label for="projectManager" class="form-label"><strong>Project Manager</strong> <span style="color: red;">*</span></label>
-                                                                    <input type="tex6" class="form-control" id="projectManager" name="projectManager" value="${user.full_name}" readonly>
+                                                                    <input type="tex6" class="form-control" id="projectManager" name="projectManager" value="${project.user.full_name}" readonly>
                                                                 </div>
 
                                                                 <div class="col-md-6 mb-3">
@@ -391,7 +389,7 @@
                                                                                                         </div>-->
 
                                                     <h3 class="h3 d-inline align-middle">Milestones List</h3>
-                                                    <c:if test="${action == 'edit'}">
+                                                    <c:if test="${user.role_id == 2 || user.id == project.deptManager || user.id == project.userId}">
                                                         <a class="btn btn-primary" href="javascript:void(0);" onclick="openMilestoneModal(${param.id});">Create new</a>
                                                     </c:if>
                                                 </div>
@@ -428,15 +426,15 @@
                                                                         </c:choose>
                                                                     </td>
                                                                     <td>
-                                                                        <c:if test="${action == 'edit'}">
+                                                                        <c:if test="${user.role_id == 2 || user.id == project.deptManager || user.id == project.userId}">
                                                                             <a href="javascript:void(0);" class="btn btn-info" 
-                                                                               onclick="openMilestoneModal(${param.id}, ${milestone.id});">
+                                                                               onclick="openMilestoneModal(${param.id}, ${milestone.id}, 'edit');">
                                                                                 <i class="align-middle" data-feather="edit"></i>
                                                                             </a>
                                                                         </c:if>
-                                                                        <c:if test="${action == 'view'}">
+                                                                        <c:if test="${user.role_id != 2 && user.id != project.deptManager && user.id != project.userId}">
                                                                             <a href="javascript:void(0);" class="btn btn-info" 
-                                                                               onclick="openMilestoneModal(${param.id}, ${milestone.id});">
+                                                                               onclick="openMilestoneModal(${param.id}, ${milestone.id}, 'view');">
                                                                                 <i class="align-middle" data-feather="eye"></i>
                                                                             </a>
                                                                         </c:if>
@@ -465,15 +463,15 @@
                                                                         </c:choose>
                                                                     </td>
                                                                     <td>
-                                                                        <c:if test="${action == 'edit'}">
+                                                                        <c:if test="${user.role_id == 2 || user.id == project.deptManager || user.id == project.userId}">
                                                                             <a href="javascript:void(0);" class="btn btn-info" 
-                                                                               onclick="openMilestoneModal(${param.id}, ${milestone.id});">
+                                                                               onclick="openMilestoneModal(${param.id}, ${milestone.id}, 'edit');">
                                                                                 <i class="align-middle" data-feather="edit"></i>
                                                                             </a>
                                                                         </c:if>
-                                                                        <c:if test="${action == 'view'}">
+                                                                        <c:if test="${user.role_id != 2 && user.id != project.deptManager && user.id != project.userId}">
                                                                             <a href="javascript:void(0);" class="btn btn-info" 
-                                                                               onclick="openMilestoneModal(${param.id}, ${milestone.id});">
+                                                                               onclick="openMilestoneModal(${param.id}, ${milestone.id}, 'view');">
                                                                                 <i class="align-middle" data-feather="eye"></i>
                                                                             </a>
                                                                         </c:if>
@@ -509,7 +507,7 @@
                                                         info: true,
                                                         order: [[0, 'desc']], // Default sort by ID column in descending order
                                                         columnDefs: [
-                                                            {orderable: false, targets: 7} // Disable sorting on the 'Action' column
+                                                            {orderable: false, targets: 6} // Disable sorting on the 'Action' column
                                                         ],
                                                         language: {
                                                             paginate: {
@@ -536,8 +534,7 @@
                                                     });
                                                 });
 
-                                                function openMilestoneModal(projectId, id = null) {
-                                                    const action = document.getElementById("action").value;
+                                                function openMilestoneModal(projectId, id = null, action) {
                                                     if (!projectId) {
                                                         const errorMessage = "Please select a Project first!";
                                                         localStorage.setItem('errorNotification', errorMessage); // Lưu thông báo lỗi
@@ -545,7 +542,7 @@
                                                         return; // Thoát hàm nếu projectId không hợp lệ
                                                     }
 
-                                                    let url = '<%=request.getContextPath()%>/add-milestone?projectId=' + projectId + '&action=' + action; // Default cho Create New
+                                                    let url = '<%=request.getContextPath()%>/add-milestone?projectId=' + projectId; // Default cho Create New
                                                     if (id) {
                                                         url = '<%=request.getContextPath()%>/edit-milestone?projectId=' + projectId + '&id=' + id + '&action=' + action; // Cho Edit
                                                     }
@@ -565,12 +562,12 @@
                                             </script>
 
                                             <!--Allocations Tab-->
-                                            <div class="tab-pane fade ${activeTab == 'allocation' ? 'show active' : ''}" id="allocation" role="tabpanel" aria-labelledby="allocation-tab">
+                                            <div class="tab-pane fade ${activeTab == 'allocation' ? 'show active' : ''}" id="allocation" role="tabpanel" aria-labelledby="allocation-tab"
+                                                 <c:if test="${user.role_id == 5}">hidden</c:if>>
                                                 <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 15px;">
                                                     <form action="projectconfig" method="post" class="d-flex align-items-center" style="gap: 10px;">
                                                         <input type="hidden" name="id" value="${param.id}" />
                                                         <input type="hidden" name="activeTab" value="allocation">
-                                                        <input type="hidden" name="action" value="${action}">
 
                                                         <div class="col-md-2">
                                                             <select name="deptId" class="form-select">
@@ -634,7 +631,7 @@
 
                                                     </form>
 
-                                                    <c:if test="${action == 'edit'}">
+                                                    <c:if test="${user.role_id == 2 || user.id == project.deptManager}">
                                                         <div class="col-md-2 d-flex justify-content-end align-items-end">
                                                             <a class="btn btn-primary" href="javascript:void(0);" onclick="openAllocationModal(${param.id});">Create new</a>
                                                         </div>
@@ -674,9 +671,9 @@
                                                                     </c:if>
                                                                 </td>
                                                                 <td>
-                                                                    <c:if test="${action == 'edit'}">
+                                                                    <c:if test="${user.role_id == 2 || user.id == project.deptManager}">
                                                                         <a href="javascript:void(0);" class="btn btn-info" 
-                                                                           onclick="openAllocationModal(${param.id}, ${al.id});">
+                                                                           onclick="openAllocationModal(${param.id}, ${al.id}, 'edit');">
                                                                             <i class="align-middle" data-feather="edit"></i>
                                                                         </a>
 
@@ -697,9 +694,9 @@
                                                                         </c:if>
                                                                     </c:if>
 
-                                                                    <c:if test="${action == 'view'}">
+                                                                    <c:if test="${user.role_id != 2 && user.id != project.deptManager}">
                                                                         <a href="javascript:void(0);" class="btn btn-info" 
-                                                                           onclick="openAllocationModal(${param.id}, ${al.id});">
+                                                                           onclick="openAllocationModal(${param.id}, ${al.id}, 'view');">
                                                                             <i class="align-middle" data-feather="eye"></i>
                                                                         </a>
                                                                     </c:if>
@@ -763,8 +760,7 @@
                                                     });
                                                 });
 
-                                                function openAllocationModal(projectId, id = null) {
-                                                    const action = document.getElementById("action").value;
+                                                function openAllocationModal(projectId, id = null, action) {
                                                     if (!projectId) {
                                                         const errorMessage = "Please select a Project first!";
                                                         localStorage.setItem('errorNotification', errorMessage); // Lưu thông báo lỗi
@@ -774,7 +770,7 @@
 
                                                     let url = '<%=request.getContextPath()%>/add-allocation?projectId=' + projectId; // Default cho Create New
                                                     if (id) {
-                                                        url = '<%=request.getContextPath()%>/edit-allocation?projectId=' + projectId + '&id=' + id + '&action=' + action; // Cho Edit
+                                                        url = '<%=request.getContextPath()%>/edit-allocation?projectId=' + projectId + '&id=' + id + '&action=' + action ; // Cho Edit
                                                     }
 
                                                     fetch(url)

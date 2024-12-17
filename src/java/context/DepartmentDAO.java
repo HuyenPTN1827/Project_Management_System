@@ -355,7 +355,7 @@ public class DepartmentDAO {
         Department_User du = null;
 
         String sql = """
-                     SELECT du.id, du.user_id, u.full_name, u.email, u.mobile, du.dept_id, d.code, 
+                     SELECT du.id, du.user_id, u.full_name, u.username, u.email, u.mobile, du.dept_id, d.code, 
                      du.role_id, s.name, du.start_date, du.end_date, du.status
                      FROM dept_user du
                      INNER JOIN user u ON du.user_id = u.id
@@ -387,6 +387,7 @@ public class DepartmentDAO {
                 User u = new User();
                 u.setId(rs.getInt("du.user_id"));
                 u.setFull_name(rs.getString("u.full_name"));
+                u.setUsername(rs.getString("u.username"));
                 u.setEmail(rs.getString("u.email"));
                 u.setMobile(rs.getString("u.mobile"));
                 du.setUser(u);
