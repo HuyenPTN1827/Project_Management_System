@@ -57,25 +57,25 @@
             <div class="col-md-12 col-xl-12">
                 <div class="card">
                     <div class="card-body">
-                        <form action="insert-project" method="get" class="row"
+                        <form action="insert-project" method="post" class="row"
                               id="projectForm" onsubmit="return validateForm(event)">
 
                             <!-- Project Name Field -->
                             <div class="mb-3 col-md-6">
                                 <label class="form-label"><strong>Project Name</strong> <span style="color: red;">*</span></label>
-                                <input type="text" class="form-control" name="name" placeholder="Enter project Name" value="${name}">
+                                <input type="text" class="form-control" name="name" placeholder="Enter project Name" value="${name}" required>
                             </div>
 
                             <!-- Project Code Field -->
                             <div class="mb-3 col-md-6">
                                 <label class="form-label"><strong>Project Code</strong> <span style="color: red;">*</span></label>
-                                <input type="text" class="form-control" name="code" id="code" placeholder="Enter project Code" value="${code}">
+                                <input type="text" class="form-control" name="code" id="code" placeholder="Enter project Code" value="${code}" required>
                             </div>
 
                             <!--Type Field -->
                             <div class="mb-3 col-md-6">
                                 <label class="form-label"><strong>Project Type</strong> <span style="color: red;">*</span></label>
-                                <select class="form-select" name="type">
+                                <select class="form-select" name="type" required>
                                     <option value="" hidden disable>Select Type</option>
                                     <c:forEach var="projecttype" items="${listProjectTypes}">
                                         <option value="${projecttype.id}" <c:if test="${projecttype.id == type}">selected</c:if>>
@@ -88,8 +88,8 @@
                             <!-- Biz term Field -->
                             <div class="mb-3 col-md-6">
                                 <label class="form-label"><strong>Project Business Term</strong> <span style="color: red;">*</span></label>
-                                <select class="form-select" name="bizterm">
-                                    <option value="">Select Biz Term</option>
+                                <select class="form-select" name="bizterm" required>
+                                    <option value="" hidden disable>Select Biz Term</option>
                                     <!-- Lặp qua danh sách bizTerms -->
                                     <c:forEach var="bizterm" items="${listBizTerms}">
                                         <option value="${bizterm.id}" 
@@ -104,15 +104,15 @@
                             <!-- Estimated Effort Field -->
                             <div class="mb-3 col-md-6">
                                 <label class="form-label"><strong>Estimated Effort (man-days)</strong> <span style="color: red;">*</span></label>
-                                <input type="number" class="form-control" name="estimatedEffort" placeholder="Enter estimated effort" value="${estimatedEffort}" >
+                                <input type="number" class="form-control" name="estimatedEffort" id="estimatedEffort" placeholder="Enter estimated effort" value="${estimatedEffort}" required>
                             </div>
 
 
                             <!-- Department Field -->
                             <div class="mb-3 col-md-6">
                                 <label class="form-label"><strong>Department</strong> <span style="color: red;">*</span></label>
-                                <select class="form-select" name="department" >
-                                    <option value="">Select Department</option>
+                                <select class="form-select" name="department" required>
+                                    <option value="" hidden disable>Select Department</option>
                                     <c:forEach var="projectdepartment" items="${listDepartments}">
                                         <option value="${projectdepartment.id}" <c:if test="${projectdepartment.id == department}">selected</c:if>>
                                             ${projectdepartment.name}
@@ -122,20 +122,20 @@
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label class="form-label"><strong>Start Date</strong> <span style="color: red;">*</span> <strong>- End Date</strong> </label>
+                                <label class="form-label"><strong>Start Date</strong> <span style="color: red;">*</span> <strong>- End Date</strong> <span style="color: red;">*</span></label>
                                 <div class="input-group">
                                     <input type="date" class="form-control" placeholder="dd/MM/yyyy"
-                                           id="startDate" name="startDate" value="${startDate}">
+                                           id="startDate" name="startDate" value="${startDate}" required>
                                     <span class="input-group-text">to</span>
                                     <input type="date" class="form-control" placeholder="dd/MM/yyyy"
-                                           id="endDate" name="endDate" value="${endDate}">
+                                           id="endDate" name="endDate" value="${endDate}" required>
                                 </div>
                             </div>
 
                             <!-- Project Manager Field -->
                             <div class="mb-3 col-md-6">
                                 <label class="form-label"><strong>Project Manager</strong> <span style="color: red;">*</span></label>
-                                <select class="form-select" name="projectManagerId" >
+                                <select class="form-select" name="projectManagerId" required>
                                     <option value="" hidden disable>Select Project Manager</option>
                                     <!-- Populate options dynamically -->
                                     <c:forEach var="manager" items="${listManagers}">

@@ -238,7 +238,7 @@ public class IssueController extends HttpServlet {
 
             if (errors.isEmpty()) {
                 issueService.insertIssue(i);
-                response.sendRedirect("issue-management?projectId=" + projectId + "&create=success");
+                response.sendRedirect("issue-management?projectId=" + projectId + "&create-issue=success");
             } else {
                 request.setAttribute("errorMessages", errors);
 //            request.setAttribute("userId", userId);
@@ -321,7 +321,7 @@ public class IssueController extends HttpServlet {
             i.setAssignee(u);
 
             issueService.updateIssue(i);
-            response.sendRedirect("issue-management?projectId=" + project + "&update=success");
+            response.sendRedirect("issue-management?projectId=" + project + "&update-issue=success");
         } else {
             response.sendRedirect("logout");
         }

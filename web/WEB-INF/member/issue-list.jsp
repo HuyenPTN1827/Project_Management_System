@@ -366,7 +366,7 @@
             document.addEventListener("DOMContentLoaded", function (event) {
                 // Check URL for 'success' parameter
                 const urlParams = new URLSearchParams(window.location.search);
-                if (urlParams.get('update') === 'success') {
+                if (urlParams.get('update-issue') === 'success') {
                     // Show success notification
                     window.notyf.open({
                         type: "success",
@@ -380,11 +380,11 @@
                         }
                     });
                 }
-                if (urlParams.get('create') === 'success') {
+                if (urlParams.get('create-issue') === 'success') {
                     // Show success notification
                     window.notyf.open({
                         type: "success",
-                        message: "Add new Issue successfully.",
+                        message: "New Issue created successfully.",
                         duration: 5000, // Adjust duration as needed
                         ripple: true,
                         dismissible: true,

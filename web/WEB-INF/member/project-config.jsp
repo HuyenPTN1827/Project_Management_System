@@ -226,20 +226,20 @@
                                                                 </div>
 
                                                                 <div class="mb-3 col-md-6">
-                                                                    <label class="form-label"><strong>Start Date</strong> <span style="color: red;">*</span> <strong>- End Date</strong> </label>
+                                                                    <label class="form-label"><strong>Start Date</strong> <span style="color: red;">*</span> <strong>- End Date</strong> <span style="color: red;">*</span></label>
                                                                     <div class="input-group">
                                                                         <input type="date" class="form-control" placeholder="dd/MM/yyyy"
                                                                                id="startDate" name="startDate" value="${project.startDate}" required>
                                                                         <span class="input-group-text">&nbsp;&nbsp;&nbsp;&nbsp; to &nbsp;&nbsp;&nbsp;&nbsp;</span>
                                                                         <input type="date" class="form-control" placeholder="dd/MM/yyyy"
-                                                                               id="endDate" name="endDate" value="${project.endDate}">
+                                                                               id="endDate" name="endDate" value="${project.endDate}" required>
                                                                     </div>
                                                                 </div>
 
                                                                 <div class="col-md-6 mb-3">
                                                                     <label for="projectManager" class="form-label"><strong>Project Manager</strong> <span style="color: red;">*</span></label>
                                                                     <select class="form-select" id="projectManager" name="projectManager">
-                                                                        <option value="${project.userId}">Full Name (UserName)</option>
+                                                                        <option value="${project.userId}" hidden disable>Full Name (UserName)</option>
                                                                         <!-- Duyệt qua danh sách userList -->
                                                                         <c:forEach var="user" items="${listManagers}">
                                                                             <option value="${user.id}" ${user.id == project.userId ? 'selected' : ''}>
@@ -355,7 +355,7 @@
                                                 function validateAndSubmitForm(event, projectId) {
                                                     // Kiểm tra nếu projectId là null hoặc undefined
                                                     if (!projectId) {
-                                                        const errorMessage = "Please select a project first!";
+                                                        const errorMessage = "Please select a Project first!";
 
                                                         // Lưu thông báo lỗi vào localStorage để đồng bộ giữa các tab
                                                         localStorage.setItem('errorNotification', errorMessage);
@@ -559,152 +559,182 @@
                                                 function closeMilestoneModal() {
                                                     document.getElementById('milestoneModal').style.display = 'none';
                                                 }
+
+                                                function validateMilestoneForm(event) {
+                                                    event.preventDefault(); // Ngăn không gửi form ngay lập tức
+                                                    const errorContainer = document.getElementById("errorContainer");
+                                                    const errorList = document.getElementById("errorList");
+                                                    errorList.innerHTML = ""; // Xóa thông báo lỗi cũ
+                                                    errorContainer.classList.add("d-none");
+
+                                                    const targetDate = document.getElementById("targetDate").value;
+                                                    const today = new Date().toISOString().split("T")[0];
+                                                    let hasError = false;
+
+                                                    // Kiểm tra fromDate
+                                                    if (!targetDate) {
+                                                        hasError = true;
+                                                        errorList.innerHTML += "<li>Target Date is required.</li>";
+                                                    } else if (targetDate < today) {
+                                                        hasError = true;
+                                                        errorList.innerHTML += "<li>Target Date cannot be earlier than today.</li>";
+                                                    }
+
+                                                    // Hiển thị lỗi nếu có
+                                                    if (hasError) {
+                                                        errorContainer.classList.remove("d-none");
+                                                        return false; // Ngăn gửi form
+                                                    }
+
+                                                    // Không có lỗi, gửi form
+                                                    document.getElementById("milestoneForm").submit();
+                                                }
                                             </script>
 
                                             <!--Allocations Tab-->
                                             <div class="tab-pane fade ${activeTab == 'allocation' ? 'show active' : ''}" id="allocation" role="tabpanel" aria-labelledby="allocation-tab"
                                                  <c:if test="${user.role_id == 5}">hidden</c:if>>
-                                                <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 15px;">
-                                                    <form action="projectconfig" method="post" class="d-flex align-items-center" style="gap: 10px;">
-                                                        <input type="hidden" name="id" value="${param.id}" />
-                                                        <input type="hidden" name="activeTab" value="allocation">
+                                                     <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 15px;">
+                                                         <form action="projectconfig" method="post" class="d-flex align-items-center" style="gap: 10px;">
+                                                             <input type="hidden" name="id" value="${param.id}" />
+                                                         <input type="hidden" name="activeTab" value="allocation">
 
-                                                        <div class="col-md-2">
-                                                            <select name="deptId" class="form-select">
-                                                                <option value="">All Departments</option>
-                                                                <c:forEach items="${listDept}" var="d">
-                                                                    <option 
-                                                                        <c:if test="${deptId eq d.id}">
-                                                                            selected="selected"
-                                                                        </c:if>
-                                                                        value="${d.id}">${d.name}
-                                                                    </option>
-                                                                </c:forEach>
-                                                            </select>
-                                                        </div>
+                                                         <div class="col-md-2">
+                                                             <select name="deptId" class="form-select">
+                                                                 <option value="">All Departments</option>
+                                                                 <c:forEach items="${listDept}" var="d">
+                                                                     <option 
+                                                                         <c:if test="${deptId eq d.id}">
+                                                                             selected="selected"
+                                                                         </c:if>
+                                                                         value="${d.id}">${d.name}
+                                                                     </option>
+                                                                 </c:forEach>
+                                                             </select>
+                                                         </div>
 
-                                                        <div class="col-md-2">
-                                                            <select name="roleId" class="form-select">
-                                                                <option value="">All Roles</option>
-                                                                <option  
-                                                                    <c:if test="${roleId eq 1}">
-                                                                        selected="selected"
-                                                                    </c:if>
-                                                                    value="1">Project Manager
-                                                                </option>
-                                                                <c:forEach items="${listRole}" var="s">
-                                                                    <option 
-                                                                        <c:if test="${roleId eq s.id}">
-                                                                            selected="selected"
-                                                                        </c:if>
-                                                                        value="${s.id}">${s.name}
-                                                                    </option>
-                                                                </c:forEach>
-                                                            </select>
-                                                        </div>
+                                                         <div class="col-md-2">
+                                                             <select name="roleId" class="form-select">
+                                                                 <option value="">All Roles</option>
+                                                                 <option  
+                                                                     <c:if test="${roleId eq 1}">
+                                                                         selected="selected"
+                                                                     </c:if>
+                                                                     value="1">Project Manager
+                                                                 </option>
+                                                                 <c:forEach items="${listRole}" var="s">
+                                                                     <option 
+                                                                         <c:if test="${roleId eq s.id}">
+                                                                             selected="selected"
+                                                                         </c:if>
+                                                                         value="${s.id}">${s.name}
+                                                                     </option>
+                                                                 </c:forEach>
+                                                             </select>
+                                                         </div>
 
-                                                        <div class="col-md-2">
-                                                            <select name="statusUser" class="form-select">
-                                                                <option value="">All Statuses</option>
-                                                                <option 
-                                                                    <c:if test="${statusUser eq 'true'}">
-                                                                        selected="selected"
-                                                                    </c:if>
-                                                                    value="true">Active
-                                                                </option>
-                                                                <option 
-                                                                    <c:if test="${statusUser eq 'false'}">
-                                                                        selected="selected"
-                                                                    </c:if>
-                                                                    value="false">Inactive
-                                                                </option>
-                                                            </select>
-                                                        </div>
+                                                         <div class="col-md-2">
+                                                             <select name="statusUser" class="form-select">
+                                                                 <option value="">All Statuses</option>
+                                                                 <option 
+                                                                     <c:if test="${statusUser eq 'true'}">
+                                                                         selected="selected"
+                                                                     </c:if>
+                                                                     value="true">Active
+                                                                 </option>
+                                                                 <option 
+                                                                     <c:if test="${statusUser eq 'false'}">
+                                                                         selected="selected"
+                                                                     </c:if>
+                                                                     value="false">Inactive
+                                                                 </option>
+                                                             </select>
+                                                         </div>
 
-                                                        <div class="col-md-4">
-                                                            <input type="search" name="keywordUser" class="form-control"
-                                                                   placeholder="Full Name/Username/Email" id="keywordUser" value="${keywordUser}">
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <button type="submit" class="btn btn-primary">Search</button>
-                                                        </div>
+                                                         <div class="col-md-4">
+                                                             <input type="search" name="keywordUser" class="form-control"
+                                                                    placeholder="Full Name/Username/Email" id="keywordUser" value="${keywordUser}">
+                                                         </div>
+                                                         <div class="col-md-2">
+                                                             <button type="submit" class="btn btn-primary">Search</button>
+                                                         </div>
 
-                                                    </form>
+                                                     </form>
 
-                                                    <c:if test="${user.role_id == 2 || user.id == project.deptManager}">
-                                                        <div class="col-md-2 d-flex justify-content-end align-items-end">
-                                                            <a class="btn btn-primary" href="javascript:void(0);" onclick="openAllocationModal(${param.id});">Create new</a>
-                                                        </div>
-                                                    </c:if>
-                                                </div>
+                                                     <c:if test="${user.role_id == 2 || user.id == project.deptManager}">
+                                                         <div class="col-md-2 d-flex justify-content-end align-items-end">
+                                                             <a class="btn btn-primary" href="javascript:void(0);" onclick="openAllocationModal(${param.id});">Create new</a>
+                                                         </div>
+                                                     </c:if>
+                                                 </div>
 
-                                                <table id="datatables-multi2" class="table table-striped" style="width:100%">
-                                                    <thead>
-                                                        <tr style="text-align: center">
-                                                            <th>ID</th>
-                                                            <th>Member</th>
-                                                            <th>Department</th>
-                                                            <th>From Date</th>
-                                                            <th>To Date</th>
-                                                            <th>Role</th>
-                                                            <th>Effort Rate</th>
-                                                            <th>Status</th>
-                                                            <th>Action</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <c:forEach items="${requestScope.allocation}" var="al">
-                                                            <tr style="text-align: center">
-                                                                <td>${al.id}</td>
-                                                                <td>${al.user.full_name} (${al.user.username})</td>
-                                                                <td>${al.dept.code}</td>
-                                                                <td>${al.startDate}</td>
-                                                                <td>${al.endDate}</td>
-                                                                <td>${al.role.name}</td>
-                                                                <td>${al.effortRate}</td>
-                                                                <td>
-                                                                    <c:if test="${al.status eq 'true'}">
-                                                                        <span class="badge bg-success">Active</span>
-                                                                    </c:if>
-                                                                    <c:if test="${al.status eq 'false'}">
-                                                                        <span class="badge bg-danger">Inactive</span>
-                                                                    </c:if>
-                                                                </td>
-                                                                <td>
-                                                                    <c:if test="${user.role_id == 2 || user.id == project.deptManager}">
-                                                                        <a href="javascript:void(0);" class="btn btn-info" 
-                                                                           onclick="openAllocationModal(${param.id}, ${al.id}, 'edit');">
-                                                                            <i class="align-middle" data-feather="edit"></i>
-                                                                        </a>
+                                                 <table id="datatables-multi2" class="table table-striped" style="width:100%">
+                                                     <thead>
+                                                         <tr style="text-align: center">
+                                                             <th>ID</th>
+                                                             <th>Member</th>
+                                                             <th>Department</th>
+                                                             <th>From Date</th>
+                                                             <th>To Date</th>
+                                                             <th>Role</th>
+                                                             <th>Effort Rate</th>
+                                                             <th>Status</th>
+                                                             <th>Action</th>
+                                                         </tr>
+                                                     </thead>
+                                                     <tbody>
+                                                         <c:forEach items="${requestScope.allocation}" var="al">
+                                                             <tr style="text-align: center">
+                                                                 <td>${al.id}</td>
+                                                                 <td>${al.user.full_name} (${al.user.username})</td>
+                                                                 <td>${al.dept.code}</td>
+                                                                 <td>${al.startDate}</td>
+                                                                 <td>${al.endDate}</td>
+                                                                 <td>${al.role.name}</td>
+                                                                 <td>${al.effortRate}</td>
+                                                                 <td>
+                                                                     <c:if test="${al.status eq 'true'}">
+                                                                         <span class="badge bg-success">Active</span>
+                                                                     </c:if>
+                                                                     <c:if test="${al.status eq 'false'}">
+                                                                         <span class="badge bg-danger">Inactive</span>
+                                                                     </c:if>
+                                                                 </td>
+                                                                 <td>
+                                                                     <c:if test="${user.role_id == 2 || user.id == project.deptManager}">
+                                                                         <a href="javascript:void(0);" class="btn btn-info" 
+                                                                            onclick="openAllocationModal(${param.id}, ${al.id}, 'edit');">
+                                                                             <i class="align-middle" data-feather="edit"></i>
+                                                                         </a>
 
-                                                                        <c:if test="${al.status eq 'false'}">
-                                                                            <a href="<%=request.getContextPath()%>/change-status-allocation?id=${al.id}&status=${al.status}&projectId=${param.id}&userId=${user.id}"
-                                                                               class="btn btn-success"
-                                                                               onclick="return confirm('Are you sure you want to activate this allocation?');">
-                                                                                <i class="fas fa-check"></i>
-                                                                            </a>
-                                                                        </c:if>
+                                                                         <c:if test="${al.status eq 'false'}">
+                                                                             <a href="<%=request.getContextPath()%>/change-status-allocation?id=${al.id}&status=${al.status}&projectId=${param.id}&userId=${user.id}"
+                                                                                class="btn btn-success"
+                                                                                onclick="return confirm('Are you sure you want to activate this allocation?');">
+                                                                                 <i class="fas fa-check"></i>
+                                                                             </a>
+                                                                         </c:if>
 
-                                                                        <c:if test="${al.status eq 'true'}">
-                                                                            <a href="<%=request.getContextPath()%>/change-status-allocation?id=${al.id}&status=${al.status}&projectId=${param.id}&userId=${user.id}"
-                                                                               class="btn btn-danger"
-                                                                               onclick="return confirm('Are you sure you want to deactivate this allocation?');">
-                                                                                <i class="fas fa-times" style="padding-left: 2px; padding-right: 2px"></i>
-                                                                            </a>
-                                                                        </c:if>
-                                                                    </c:if>
+                                                                         <c:if test="${al.status eq 'true'}">
+                                                                             <a href="<%=request.getContextPath()%>/change-status-allocation?id=${al.id}&status=${al.status}&projectId=${param.id}&userId=${user.id}"
+                                                                                class="btn btn-danger"
+                                                                                onclick="return confirm('Are you sure you want to deactivate this allocation?');">
+                                                                                 <i class="fas fa-times" style="padding-left: 2px; padding-right: 2px"></i>
+                                                                             </a>
+                                                                         </c:if>
+                                                                     </c:if>
 
-                                                                    <c:if test="${user.role_id != 2 && user.id != project.deptManager}">
-                                                                        <a href="javascript:void(0);" class="btn btn-info" 
-                                                                           onclick="openAllocationModal(${param.id}, ${al.id}, 'view');">
-                                                                            <i class="align-middle" data-feather="eye"></i>
-                                                                        </a>
-                                                                    </c:if>
-                                                                </td>
-                                                            </tr>
-                                                        </c:forEach>
-                                                    </tbody>
-                                                </table>
+                                                                     <c:if test="${user.role_id != 2 && user.id != project.deptManager}">
+                                                                         <a href="javascript:void(0);" class="btn btn-info" 
+                                                                            onclick="openAllocationModal(${param.id}, ${al.id}, 'view');">
+                                                                             <i class="align-middle" data-feather="eye"></i>
+                                                                         </a>
+                                                                     </c:if>
+                                                                 </td>
+                                                             </tr>
+                                                         </c:forEach>
+                                                     </tbody>
+                                                 </table>
                                             </div>
 
                                             <!--Allocation Modal--> 
@@ -770,7 +800,7 @@
 
                                                     let url = '<%=request.getContextPath()%>/add-allocation?projectId=' + projectId; // Default cho Create New
                                                     if (id) {
-                                                        url = '<%=request.getContextPath()%>/edit-allocation?projectId=' + projectId + '&id=' + id + '&action=' + action ; // Cho Edit
+                                                        url = '<%=request.getContextPath()%>/edit-allocation?projectId=' + projectId + '&id=' + id + '&action=' + action; // Cho Edit
                                                     }
 
                                                     fetch(url)
@@ -1048,6 +1078,57 @@
 
         <script>
                                                                                            window.notyf = new Notyf();
+        </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function (event) {
+                // Check URL for 'success' parameter
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('create-allocation') === 'success') {
+                    // Show success notification
+                    window.notyf.open({
+                        type: "success",
+                        message: "New Allocation created successfully.",
+                        duration: 5000, // Adjust duration as needed
+                        ripple: true,
+                        dismissible: true,
+                        position: {
+                            x: "right",
+                            y: "top"
+                        }
+                    });
+                }
+
+                if (urlParams.get('update-allocation') === 'success') {
+                    // Show success notification
+                    window.notyf.open({
+                        type: "success",
+                        message: "Allocation details updated successfully.",
+                        duration: 5000, // Adjust duration as needed
+                        ripple: true,
+                        dismissible: true,
+                        position: {
+                            x: "right",
+                            y: "top"
+                        }
+                    });
+                }
+
+                if (urlParams.get('change-status-allocation') === 'success') {
+                    // Show success notification
+                    window.notyf.open({
+                        type: "success",
+                        message: "Allocation status changed successfully.",
+                        duration: 5000, // Adjust duration as needed
+                        ripple: true,
+                        dismissible: true,
+                        position: {
+                            x: "right",
+                            y: "top"
+                        }
+                    });
+                }
+            });
         </script>
     </body>
 </html>

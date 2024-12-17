@@ -360,7 +360,7 @@ public class ProjectListController extends HttpServlet {
             boolean success = projectService.insertProject(project, allocation, milestone);
 
             if (success) {
-                response.sendRedirect(request.getContextPath() + "/projectlist");
+                response.sendRedirect(request.getContextPath() + "/projectlist?create-project=success");
             } else {
 
                 request.setAttribute("errorMessage", "There was an error adding the project.");

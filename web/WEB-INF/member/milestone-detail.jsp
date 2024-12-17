@@ -57,7 +57,8 @@
                 <div class="card">
                     <div class="card-body">
                         <c:if test="${milestone == null}">
-                            <form action="insert-milestone" method="post" class="row">
+                            <form action="insert-milestone" method="post" class="row"
+                                  id="milestoneForm" onsubmit="return validateMilestoneForm(event)">
 
                                 <!-- Created By -->
                                 <div class="col-md-6 mb-3" hidden>
@@ -101,12 +102,10 @@
                                     <input type="number" class="form-control"  name="priority" required>
                                 </div>
 
-
-
                                 <!-- Target Date -->
                                 <div class="col-md-6 mb-3">
                                     <label for="targetDate" class="form-label"><strong>Target Date</strong> <span style="color: red;">*</span></label>
-                                    <input type="date" class="form-control"  name="targetDate" required>
+                                    <input type="date" class="form-control" id="targetDate" name="targetDate" required>
                                 </div>
 
                                 <!-- Description -->
@@ -115,6 +114,10 @@
                                     <textarea class="form-control"  name="description" rows="3"></textarea>
                                 </div>
 
+                                <div id="errorContainer" class="alert alert-danger pt-3 pe-3 ps-3 d-none">
+                                    <ul id="errorList"></ul>
+                                </div>
+                                
                                 <div class="d-flex justify-content-end">
                                     <button type="submit" class="btn btn-lg btn-success">Submit</button>
                                 </div>
