@@ -326,7 +326,7 @@
                             //Kiểm tra estimatedEffort
                             if (estimatedEffort <= 0) {
                                 hasError = true;
-                                errorList.innerHTML += "<li>Estimated Effort must be greater than 0.</li>";
+                                errorList.innerHTML += "<li>Estimated Effort must be a positive number greater than 0.</li>";
                             }
 
                             // Kiểm tra startDate

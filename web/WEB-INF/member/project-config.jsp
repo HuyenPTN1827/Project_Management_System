@@ -239,7 +239,7 @@
                                                                 <div class="col-md-6 mb-3">
                                                                     <label for="projectManager" class="form-label"><strong>Project Manager</strong> <span style="color: red;">*</span></label>
                                                                     <select class="form-select" id="projectManager" name="projectManager">
-                                                                        <option value="${project.userId}">Full Name (UserName)</option>
+                                                                        <option value="${project.userId}" hidden disable>Full Name (UserName)</option>
                                                                         <!-- Duyệt qua danh sách userList -->
                                                                         <c:forEach var="user" items="${listManagers}">
                                                                             <option value="${user.id}" ${user.id == project.userId ? 'selected' : ''}>
@@ -558,6 +558,36 @@
 
                                                 function closeMilestoneModal() {
                                                     document.getElementById('milestoneModal').style.display = 'none';
+                                                }
+
+                                                function validateMilestoneForm(event) {
+                                                    event.preventDefault(); // Ngăn không gửi form ngay lập tức
+                                                    const errorContainer = document.getElementById("errorContainer");
+                                                    const errorList = document.getElementById("errorList");
+                                                    errorList.innerHTML = ""; // Xóa thông báo lỗi cũ
+                                                    errorContainer.classList.add("d-none");
+
+                                                    const targetDate = document.getElementById("targetDate").value;
+                                                    const today = new Date().toISOString().split("T")[0];
+                                                    let hasError = false;
+
+                                                    // Kiểm tra fromDate
+                                                    if (!targetDate) {
+                                                        hasError = true;
+                                                        errorList.innerHTML += "<li>Target Date is required.</li>";
+                                                    } else if (targetDate < today) {
+                                                        hasError = true;
+                                                        errorList.innerHTML += "<li>Target Date cannot be earlier than today.</li>";
+                                                    }
+
+                                                    // Hiển thị lỗi nếu có
+                                                    if (hasError) {
+                                                        errorContainer.classList.remove("d-none");
+                                                        return false; // Ngăn gửi form
+                                                    }
+
+                                                    // Không có lỗi, gửi form
+                                                    document.getElementById("milestoneForm").submit();
                                                 }
                                             </script>
 
@@ -1068,7 +1098,7 @@
                         }
                     });
                 }
-                
+
                 if (urlParams.get('update-allocation') === 'success') {
                     // Show success notification
                     window.notyf.open({
@@ -1083,7 +1113,7 @@
                         }
                     });
                 }
-                
+
                 if (urlParams.get('change-status-allocation') === 'success') {
                     // Show success notification
                     window.notyf.open({
