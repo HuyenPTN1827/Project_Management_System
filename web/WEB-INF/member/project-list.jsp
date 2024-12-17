@@ -92,35 +92,37 @@
                                             <div class="d-flex justify-content-between align-items-center" style="margin: 10px;">
                                                 <form action="projectlist" method="post" class="d-flex align-items-center" style="gap: 10px;">
                                                     <div class="col-md-2">
-                                                        <select name="typeId" class="form-select " >
+                                                        <select name="typeId" class="form-select">
                                                             <option value="">All Project Types</option>
-                                                        <c:forEach items="${type}" var="t">
+                                                        <c:forEach items="${listProjectTypes}" var="type">
                                                             <option 
-                                                                <c:if test="${typeId eq t.id}">
+                                                                <c:if test="${projectType eq type.id}">
                                                                     selected="selected"
                                                                 </c:if>
-                                                                value="${t.id}">${t.name}
+                                                                value="${type.id}">${type.name}
                                                             </option>
                                                         </c:forEach>
                                                     </select>
                                                 </div>
+
 
                                                 <div class="col-md-2">
                                                     <select name="deptId" class="form-select">
                                                         <option value="">All Departments</option>
-                                                        <c:forEach items="${dept}" var="d">
+                                                        <c:forEach items="${listDepartments}" var="dept">
                                                             <option 
-                                                                <c:if test="${deptId eq d.id}">
+                                                                <c:if test="${department eq dept.id}">
                                                                     selected="selected"
                                                                 </c:if>
-                                                                value="${d.id}">${d.name}
+                                                                value="${dept.id}">${dept.name}
                                                             </option>
                                                         </c:forEach>
                                                     </select>
                                                 </div>
 
+
                                                 <div class="col-md-2">
-                                                    <select name="status" class="form-select" onchange="this.form.submit();">
+                                                    <select name="status" class="form-select">
                                                         <option value="">All Status</option>
                                                         <option value="0" <c:if test="${status == 0}">selected="selected"</c:if>>Pending</option>
                                                         <option value="1" <c:if test="${status == 1}">selected="selected"</c:if>>Doing</option>
