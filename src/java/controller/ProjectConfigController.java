@@ -351,30 +351,33 @@ public class ProjectConfigController extends HttpServlet {
         String startDateStr = request.getParameter("startDate");
         String endDateStr = request.getParameter("endDate");
 
-        // Kiểm tra các trường bắt buộc
+// Kiểm tra các trường bắt buộc
         if (startDateStr == null || startDateStr.isEmpty()
                 || endDateStr == null || endDateStr.isEmpty()) {
-
             request.setAttribute("error", "All required fields must be filled in completely.");
             request.getRequestDispatcher("/projectconfig?id=" + projectId + "&activeTab=detail").forward(request, response);
             return;
         }
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate = null;
         Date endDate = null;
 
         try {
-            if (startDateStr != null && !startDateStr.isEmpty()) {
-                startDate = dateFormat.parse(startDateStr);  // Chuyển chuỗi startDate thành Date
-            }
-            if (endDateStr != null && !endDateStr.isEmpty()) {
-                endDate = dateFormat.parse(endDateStr);  // Chuyển chuỗi endDate thành Date
+            startDate = dateFormat.parse(startDateStr); // Chuyển chuỗi startDate thành Date
+            endDate = dateFormat.parse(endDateStr); // Chuyển chuỗi endDate thành Date
+
+            // Kiểm tra endDate không được nhỏ hơn startDate
+            if (endDate.before(startDate)) {
+                request.setAttribute("error", "End date must not be earlier than start date.");
+                request.getRequestDispatcher("/projectconfig?id=" + projectId + "&activeTab=detail").forward(request, response);
+                return; // Dừng lại nếu endDate nhỏ hơn startDate
             }
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Invalid date format. Please use yyyy-MM-dd.");
             request.getRequestDispatcher("/projectconfig?id=" + projectId + "&activeTab=detail").forward(request, response);
-            return;  // Dừng lại nếu có lỗi
+            return; // Dừng lại nếu có lỗi
         }
 
         // Lấy giá trị của lastUpdated từ form (nếu có)
