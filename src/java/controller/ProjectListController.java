@@ -236,8 +236,10 @@ public class ProjectListController extends HttpServlet {
 
         try {
             // Kiểm tra các trường bắt buộc
-            if (name == null || code == null || departmentIdString == null || typeIdString == null
-                    || startDateString == null || endDateString == null || projectManagerIdString == null || bizTermIdString == null) {
+            if (name == null || name.isEmpty() || code == null || code.isEmpty() || estimatedEffortString == null || estimatedEffortString.isEmpty()
+                    || departmentIdString == null || departmentIdString.isEmpty() || typeIdString == null || typeIdString.isEmpty()
+                    || startDateString == null || startDateString.isEmpty() || endDateString == null || endDateString.isEmpty()
+                    || projectManagerIdString == null || projectManagerIdString.isEmpty() || bizTermIdString == null || bizTermIdString.isEmpty()) {
 
                 request.setAttribute("errorMessage", "All required fields must be filled in completely.");
                 request.getRequestDispatcher("/WEB-INF/member/project-add.jsp").include(request, response);
@@ -304,6 +306,13 @@ public class ProjectListController extends HttpServlet {
             try {
                 if (estimatedEffortString != null && !estimatedEffortString.isEmpty()) {
                     int estimatedEffort = Integer.parseInt(estimatedEffortString);
+                    // Kiểm tra estimatedEffort phải là số dương lớn hơn 0
+                    if (estimatedEffort <= 0) {
+                        request.setAttribute("errorMessage", "Estimated Effort must be a positive number greater than 0.");
+                        request.getRequestDispatcher("/WEB-INF/member/project-add.jsp").forward(request, response);
+                        return;
+                    }
+
                     project.setEstimatedEffort(estimatedEffort);
                 }
             } catch (NumberFormatException e) {

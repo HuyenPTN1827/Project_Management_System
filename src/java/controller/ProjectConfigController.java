@@ -302,8 +302,31 @@ public class ProjectConfigController extends HttpServlet {
 
         String projectName = request.getParameter("projectName");
         String projectCode = request.getParameter("projectCode");
-        int estimatedEffort = Integer.parseInt(request.getParameter("estimatedEffort"));
+        String estimatedEffortStr = request.getParameter("estimatedEffort");
         int bizTermId = Integer.parseInt(request.getParameter("bizTerm"));
+
+        // Kiểm tra các trường bắt buộc
+        if (projectName == null || projectName.isEmpty()
+                || projectCode == null || projectCode.isEmpty()
+                || estimatedEffortStr == null || estimatedEffortStr.isEmpty()) {
+
+            request.setAttribute("error", "All required fields must be filled in completely.");
+            request.getRequestDispatcher("/projectconfig?id=" + projectId + "&activeTab=detail").forward(request, response);
+            return;
+        }
+
+        // Kiểm tra giá trị của estimatedEffort
+        int estimatedEffort;
+        try {
+            estimatedEffort = Integer.parseInt(estimatedEffortStr);
+            if (estimatedEffort <= 0) {
+                throw new NumberFormatException("Estimated Effort must be greater than 0.");
+            }
+        } catch (NumberFormatException e) {
+            request.setAttribute("error", "Estimated Effort must be a positive integer.");
+            request.getRequestDispatcher("/projectconfig?id=" + projectId + "&activeTab=detail").forward(request, response);
+            return;
+        }
 
         // Kiểm tra mã code đã tồn tại
         if (projectConfigService.isCodeExists(projectCode, projectId)) {
@@ -328,6 +351,14 @@ public class ProjectConfigController extends HttpServlet {
         String startDateStr = request.getParameter("startDate");
         String endDateStr = request.getParameter("endDate");
 
+        // Kiểm tra các trường bắt buộc
+        if (startDateStr == null || startDateStr.isEmpty()
+                || endDateStr == null || endDateStr.isEmpty()) {
+
+            request.setAttribute("error", "All required fields must be filled in completely.");
+            request.getRequestDispatcher("/projectconfig?id=" + projectId + "&activeTab=detail").forward(request, response);
+            return;
+        }
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate = null;
         Date endDate = null;
