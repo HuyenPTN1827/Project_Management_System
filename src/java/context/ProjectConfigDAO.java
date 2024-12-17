@@ -784,7 +784,8 @@ public class ProjectConfigDAO {
     }
 
     public List<Setting> getAllBizTerms() {
-        String query = "SELECT DISTINCT id, name FROM setting ";
+        // Sửa lại câu truy vấn SQL để chỉ lấy những bản ghi có type = 'Business Term'
+        String query = "SELECT DISTINCT id, name FROM setting WHERE type = 'Business Term'";
 
         List<Setting> bizTerms = new ArrayList<>();
 
