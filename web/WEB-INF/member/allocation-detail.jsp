@@ -103,7 +103,7 @@
                                     <label class="form-label"><strong>Project Role</strong> <span style="color: red;">*</span></label>
                                     <select name="roleId" id="roleId" class="form-select" required>
                                         <option value="" hidden disable>Choose Project Role</option>
-                                        <option value="1">Project Manager</option>
+                                        <!--<option value="1">Project Manager</option>-->
                                         <c:forEach items="${listRole}" var="r">
                                             <option 
                                                 <c:if test="${roleId eq r.id}">
@@ -232,7 +232,7 @@
                                         <label class="form-label"><strong>Project Role</strong> <span style="color: red;">*</span></label>
                                         <select name="roleId" id="roleId" class="form-select" required>
                                             <option value="" hidden disable>Choose Project Role</option>
-                                            <option 
+                                            <option hidden disable
                                                 <c:if test="${al.role.id eq 1}">
                                                     selected="selected"
                                                 </c:if>

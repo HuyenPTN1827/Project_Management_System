@@ -182,7 +182,7 @@
                                                                     <span class="badge bg-primary">Doing</span>
                                                                 </c:when>
                                                                 <c:when test="${project.status == 2}">
-                                                                    <span class="badge bg-secondary-light">Closed</span>
+                                                                    <span class="badge bg-success">Closed</span>
                                                                 </c:when>
                                                                 <c:when test="${project.status == 3}">
                                                                     <span class="badge bg-danger">Cancelled</span>

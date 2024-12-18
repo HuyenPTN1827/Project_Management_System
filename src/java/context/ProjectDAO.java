@@ -529,9 +529,8 @@ public class ProjectDAO {
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql)) {
             stm.setInt(1, userId);
             stm.setInt(2, userId);
-            int index = 2;
             if (biz_term != null) {
-                stm.setInt(index++, biz_term);
+                stm.setInt(3, biz_term);
             }
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
