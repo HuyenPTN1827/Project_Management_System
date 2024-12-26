@@ -27,7 +27,7 @@
                    href="WorkPackageController" hidden>Requirements</a>
 
                     <a class="dropdown-item <c:if test="${currentPage == 'issue-management'}">active</c:if>" 
-                   href="<%=request.getContextPath()%>/issue-management?projectId=1">Issues</a>
+                   href="<%=request.getContextPath()%>/issue-management">Issues</a>
 
                 <a class="dropdown-item <c:if test="${currentPage == 'defect-management'}">active</c:if>" 
                    href="#" hidden>Defects</a>
@@ -57,7 +57,7 @@
                 </c:if>
                 <c:if test="${user.id != null}">
                     <a class="nav-link <c:if test="${currentPage == 'issue-management'}">active</c:if>" 
-                       href="<%=request.getContextPath()%>/issue-management?projectId=1">Issues</a>
+                       href="<%=request.getContextPath()%>/issue-management">Issues</a>
                 </c:if>
 
             </li> 

@@ -808,7 +808,7 @@ public class ProjectConfigController extends HttpServlet {
         Project project = projectConfigService.getProjectById(projectId);
         List<Department> listDept = deptService.getAllDepartments(null, true);
         List<ProjectTypeSetting> listRole = pjTypeService.getProjectRoleList(projectId);
-        List<User> listMem = userService.getAllUsers(null, deptId, null, 1);
+        List<User> listMem = userService.getAllUsers(null, deptId, 5, 1);
 
         request.setAttribute("project", project);
         request.setAttribute("listDept", listDept);
@@ -865,7 +865,7 @@ public class ProjectConfigController extends HttpServlet {
         Allocation al = projectConfigService.getAllocationById(id);
         List<Department> listDept = deptService.getAllDepartments(null, true);
         List<ProjectTypeSetting> listRole = pjTypeService.getProjectRoleList(projectId);
-        List<User> listMem = userService.getAllUsers(null, al.getDept().getId(), null, 1);
+        List<User> listMem = userService.getAllUsers(null, al.getDept().getId(), 5, 1);
 
         request.setAttribute("project", project);
         request.setAttribute("al", al);

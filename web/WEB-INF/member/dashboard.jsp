@@ -63,16 +63,10 @@
                                     <h1>Dashboard</h1>
                                 </div>
 
-                            <c:if test="${empty project && empty listIssue}">
-                                <div class="d-flex justify-content-center align-items-center mt-4">
-                                    <h3 class="text-secondary">You have not participated in any projects</h3>
-                                </div>
-                            </c:if>
-
-                            <div class="col-auto ms-auto text-end mt-n1">
-                                <form action="member-dashboard" method="get" class="d-flex">
-                                    <select name="deptId" class="form-select me-2" onchange="this.form.submit()" hidden>
-                                        <option value="">All Departments</option>
+                                <div class="col-auto ms-auto text-end mt-n1">
+                                    <form action="member-dashboard" method="get" class="d-flex">
+                                        <select name="deptId" class="form-select me-2" onchange="this.form.submit()" hidden>
+                                            <option value="">All Departments</option>
                                         <c:forEach items="${dept}" var="d">
                                             <option 
                                                 <c:if test="${deptId eq d.id}">
@@ -83,23 +77,27 @@
                                         </c:forEach>
                                     </select>
 
-                                    <c:if test="${not empty project}">
-                                        <select name="bizTerm" class="form-select" onchange="this.form.submit()">
-                                            <option value="">All Business Terms</option>
-                                            <c:forEach items="${setting}" var="s">
-                                                <option 
-                                                    <c:if test="${bizTerm eq s.id}">
-                                                        selected="selected"
-                                                    </c:if>
-                                                    value="${s.id}">${s.name}
-                                                </option>
-                                            </c:forEach>
-                                        </select>
-                                    </c:if>
+                                    <select name="bizTerm" class="form-select" onchange="this.form.submit()">
+                                        <option value="">All Business Terms</option>
+                                        <c:forEach items="${setting}" var="s">
+                                            <option 
+                                                <c:if test="${bizTerm eq s.id}">
+                                                    selected="selected"
+                                                </c:if>
+                                                value="${s.id}">${s.name}
+                                            </option>
+                                        </c:forEach>
+                                    </select>
                                 </form>
                             </div>
                         </div>
 
+                        <c:if test="${empty project && empty listIssue}">
+                            <div class="d-flex justify-content-center align-items-center mt-4">
+                                <h3 class="text-secondary">You have not participated in any projects</h3>
+                            </div>
+                        </c:if>
+                            
                         <div class="row">
                             <c:forEach items="${project}" var="p">
                                 <div class="col-12 col-md-4 col-xxl-3 d-flex order-1 order-xxl-3">
@@ -200,39 +198,39 @@
                                         </div>
 
                                         <!--<div class="card-body">-->
-                                            <table class="table table-borderless my-0" id="datatables-multi" style="width:100%">
-                                                <thead>
+                                        <table class="table table-borderless my-0" id="datatables-multi" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Project</th>
+                                                    <th>Issue</th>
+                                                    <th>Assigner</th>
+                                                    <th>Assignee</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach items="${requestScope.listIssue}" var="issue">
                                                     <tr>
-                                                        <th>ID</th>
-                                                        <th>Project</th>
-                                                        <th>Issue</th>
-                                                        <th>Assigner</th>
-                                                        <th>Assignee</th>
-                                                        <th>Action</th>
+                                                        <td>${issue.id}</td>
+                                                        <td>${issue.project.name}</td>
+                                                        <td>${issue.name}</td>
+                                                        <td>${issue.created_by.full_name}</td>
+                                                        <td>${issue.assignee.full_name}</td>
+                                                        <td>
+                                                            <c:if test="${user.id eq issue.created_by.id || user.id eq issue.assignee.id}">
+                                                                <a href="<%=request.getContextPath()%>/edit-issue?action=edit&id=${issue.id}&userId=${user.id}&projectId=${issue.project.id}" 
+                                                                   class="btn btn-info"><i class="align-middle" data-feather="eye"></i></a>
+                                                                </c:if>
+                                                                <c:if test="${user.id ne issue.created_by.id && user.id ne issue.assignee.id}">
+                                                                <a href="<%=request.getContextPath()%>/edit-issue?action=view&id=${issue.id}&userId=${user.id}&projectId=${issue.project.id}" 
+                                                                   class="btn btn-info"><i class="align-middle" data-feather="eye"></i></a>
+                                                                </c:if>
+                                                        </td>
                                                     </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <c:forEach items="${requestScope.listIssue}" var="issue">
-                                                        <tr>
-                                                            <td>${issue.id}</td>
-                                                            <td>${issue.project.name}</td>
-                                                            <td>${issue.name}</td>
-                                                            <td>${issue.created_by.full_name}</td>
-                                                            <td>${issue.assignee.full_name}</td>
-                                                            <td>
-                                                                <c:if test="${user.id eq issue.created_by.id || user.id eq issue.assignee.id}">
-                                                                    <a href="<%=request.getContextPath()%>/edit-issue?action=edit&id=${issue.id}&userId=${user.id}&projectId=${issue.project.id}" 
-                                                                       class="btn btn-info"><i class="align-middle" data-feather="eye"></i></a>
-                                                                    </c:if>
-                                                                    <c:if test="${user.id ne issue.created_by.id && user.id ne issue.assignee.id}">
-                                                                    <a href="<%=request.getContextPath()%>/edit-issue?action=view&id=${issue.id}&userId=${user.id}&projectId=${issue.project.id}" 
-                                                                       class="btn btn-info"><i class="align-middle" data-feather="eye"></i></a>
-                                                                    </c:if>
-                                                            </td>
-                                                        </tr>
-                                                    </c:forEach>
-                                                </tbody>
-                                            </table>
+                                                </c:forEach>
+                                            </tbody>
+                                        </table>
                                         <!--</div>-->
                                     </div>
                                 </div>
@@ -275,78 +273,78 @@
         <script src="${pageContext.request.contextPath}/js/datatables.js"></script>
 
         <script>
-                                            document.addEventListener("DOMContentLoaded", function () {
-                                                var ctx = document.getElementById("chartjs-dashboard-line").getContext("2d");
-                                                var gradientLight = ctx.createLinearGradient(0, 0, 0, 225);
-                                                gradientLight.addColorStop(0, "rgba(215, 227, 244, 1)");
-                                                gradientLight.addColorStop(1, "rgba(215, 227, 244, 0)");
-                                                var gradientDark = ctx.createLinearGradient(0, 0, 0, 225);
-                                                gradientDark.addColorStop(0, "rgba(51, 66, 84, 1)");
-                                                gradientDark.addColorStop(1, "rgba(51, 66, 84, 0)");
-                                                // Line chart
-                                                new Chart(document.getElementById("chartjs-dashboard-line"), {
-                                                    type: "line",
-                                                    data: {
-                                                        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                                                        datasets: [{
-                                                                label: "Sales ($)",
-                                                                fill: true,
-                                                                backgroundColor: window.theme.id === "light" ? gradientLight : gradientDark,
-                                                                borderColor: window.theme.primary,
-                                                                data: [
-                                                                    2115,
-                                                                    1562,
-                                                                    1584,
-                                                                    1892,
-                                                                    1587,
-                                                                    1923,
-                                                                    2566,
-                                                                    2448,
-                                                                    2805,
-                                                                    3438,
-                                                                    2917,
-                                                                    3327
-                                                                ]
-                                                            }]
+                                        document.addEventListener("DOMContentLoaded", function () {
+                                            var ctx = document.getElementById("chartjs-dashboard-line").getContext("2d");
+                                            var gradientLight = ctx.createLinearGradient(0, 0, 0, 225);
+                                            gradientLight.addColorStop(0, "rgba(215, 227, 244, 1)");
+                                            gradientLight.addColorStop(1, "rgba(215, 227, 244, 0)");
+                                            var gradientDark = ctx.createLinearGradient(0, 0, 0, 225);
+                                            gradientDark.addColorStop(0, "rgba(51, 66, 84, 1)");
+                                            gradientDark.addColorStop(1, "rgba(51, 66, 84, 0)");
+                                            // Line chart
+                                            new Chart(document.getElementById("chartjs-dashboard-line"), {
+                                                type: "line",
+                                                data: {
+                                                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                                                    datasets: [{
+                                                            label: "Sales ($)",
+                                                            fill: true,
+                                                            backgroundColor: window.theme.id === "light" ? gradientLight : gradientDark,
+                                                            borderColor: window.theme.primary,
+                                                            data: [
+                                                                2115,
+                                                                1562,
+                                                                1584,
+                                                                1892,
+                                                                1587,
+                                                                1923,
+                                                                2566,
+                                                                2448,
+                                                                2805,
+                                                                3438,
+                                                                2917,
+                                                                3327
+                                                            ]
+                                                        }]
+                                                },
+                                                options: {
+                                                    maintainAspectRatio: false,
+                                                    legend: {
+                                                        display: false
                                                     },
-                                                    options: {
-                                                        maintainAspectRatio: false,
-                                                        legend: {
-                                                            display: false
-                                                        },
-                                                        tooltips: {
-                                                            intersect: false
-                                                        },
-                                                        hover: {
-                                                            intersect: true
-                                                        },
-                                                        plugins: {
-                                                            filler: {
-                                                                propagate: false
-                                                            }
-                                                        },
-                                                        scales: {
-                                                            xAxes: [{
-                                                                    reverse: true,
-                                                                    gridLines: {
-                                                                        color: "rgba(0,0,0,0.0)"
-                                                                    }
-                                                                }],
-                                                            yAxes: [{
-                                                                    ticks: {
-                                                                        stepSize: 1000
-                                                                    },
-                                                                    display: true,
-                                                                    borderDash: [3, 3],
-                                                                    gridLines: {
-                                                                        color: "rgba(0,0,0,0.0)",
-                                                                        fontColor: "#fff"
-                                                                    }
-                                                                }]
+                                                    tooltips: {
+                                                        intersect: false
+                                                    },
+                                                    hover: {
+                                                        intersect: true
+                                                    },
+                                                    plugins: {
+                                                        filler: {
+                                                            propagate: false
                                                         }
+                                                    },
+                                                    scales: {
+                                                        xAxes: [{
+                                                                reverse: true,
+                                                                gridLines: {
+                                                                    color: "rgba(0,0,0,0.0)"
+                                                                }
+                                                            }],
+                                                        yAxes: [{
+                                                                ticks: {
+                                                                    stepSize: 1000
+                                                                },
+                                                                display: true,
+                                                                borderDash: [3, 3],
+                                                                gridLines: {
+                                                                    color: "rgba(0,0,0,0.0)",
+                                                                    fontColor: "#fff"
+                                                                }
+                                                            }]
                                                     }
-                                                });
+                                                }
                                             });
+                                        });
         </script>
 
         <script>

@@ -47,39 +47,38 @@ public class UserDAO {
         return result; // Trả về 1 nếu đăng ký thành công
     }
 
-   public User loginValidate(User user) throws ClassNotFoundException {
-    User foundUser = null;
-    String query = """
+    public User loginValidate(User user) throws ClassNotFoundException {
+        User foundUser = null;
+        String query = """
                SELECT u.id, u.full_name, u.username, u.email, u.mobile, u.password, u.role_id, u.status, s.name, u.avatar
                FROM user u 
                JOIN setting s ON u.role_id = s.id
                WHERE u.email = ? AND u.password = ?;
                """;
 
-    try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(query)) {
-        stm.setString(1, user.getEmail());
-        stm.setString(2, user.getPassword());
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(query)) {
+            stm.setString(1, user.getEmail());
+            stm.setString(2, user.getPassword());
 
-        ResultSet rs = stm.executeQuery();
-        if (rs.next()) {
-            foundUser = new User();
-            foundUser.setId(rs.getInt("id"));
-            foundUser.setFull_name(rs.getString("full_name"));
-            foundUser.setUsername(rs.getString("username"));
-            foundUser.setEmail(rs.getString("email"));
-            foundUser.setMobile(rs.getString("mobile"));
-            foundUser.setPassword(rs.getString("password"));
-            foundUser.setRole_id(rs.getInt("role_id")); // Set role_id vào user
-            foundUser.setRole_name(rs.getString("name")); // Set role_name vào user
-            foundUser.setStatus(rs.getInt("status")); // Set status vào user
-            foundUser.setAvatar(rs.getString("avatar"));
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                foundUser = new User();
+                foundUser.setId(rs.getInt("id"));
+                foundUser.setFull_name(rs.getString("full_name"));
+                foundUser.setUsername(rs.getString("username"));
+                foundUser.setEmail(rs.getString("email"));
+                foundUser.setMobile(rs.getString("mobile"));
+                foundUser.setPassword(rs.getString("password"));
+                foundUser.setRole_id(rs.getInt("role_id")); // Set role_id vào user
+                foundUser.setRole_name(rs.getString("name")); // Set role_name vào user
+                foundUser.setStatus(rs.getInt("status")); // Set status vào user
+                foundUser.setAvatar(rs.getString("avatar"));
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
         }
-    } catch (SQLException e) {
-        BaseDAO.printSQLException(e);
+        return foundUser; // Trả về người dùng đã tìm thấy hoặc null
     }
-    return foundUser; // Trả về người dùng đã tìm thấy hoặc null
-}
-
 
     public User selectUserByEmail(String email) {
         User user = null;
@@ -114,27 +113,26 @@ public class UserDAO {
 //updateMember
 // Phương thức cập nhật thông tin người dùng vào cơ sở dữ liệu
     public boolean updateMember(User user) {
-    String query = "UPDATE user SET full_name = ?, email = ?, mobile = ?, username = ? WHERE id = ?";
+        String query = "UPDATE user SET full_name = ?, email = ?, mobile = ?, username = ? WHERE id = ?";
 
-    try (Connection conn = BaseDAO.getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
+        try (Connection conn = BaseDAO.getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
 
-        ps.setString(1, user.getFull_name());
-        ps.setString(2, user.getEmail());
-        ps.setString(3, user.getMobile());
-        ps.setString(4, user.getUsername()); // Thiết lập giá trị cho username
-        ps.setInt(5, user.getId());
-        System.out.println("User ID: " + user.getId());
+            ps.setString(1, user.getFull_name());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getMobile());
+            ps.setString(4, user.getUsername()); // Thiết lập giá trị cho username
+            ps.setInt(5, user.getId());
+            System.out.println("User ID: " + user.getId());
 
-        int rowsUpdated = ps.executeUpdate();
-        return rowsUpdated > 0;  // Nếu có ít nhất 1 dòng bị ảnh hưởng thì trả về true
+            int rowsUpdated = ps.executeUpdate();
+            return rowsUpdated > 0;  // Nếu có ít nhất 1 dòng bị ảnh hưởng thì trả về true
 
-    } catch (SQLException e) {
-        BaseDAO.printSQLException(e);
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+
+        return false;  // Trả về false nếu có lỗi
     }
-
-    return false;  // Trả về false nếu có lỗi
-}
-
 
 //BachHD
 //28/9
@@ -287,8 +285,8 @@ public class UserDAO {
                          INSERT INTO user (full_name, username, email, mobile, password, notes, role_id)
                          VALUES (?, ?, ?, ?, ?, ?, ?);""";
         String deptUserSql = """
-                            INSERT INTO dept_user (user_id, dept_id, status)
-                            VALUES (?, ?, 0);""";
+                            INSERT INTO dept_user (user_id, dept_id, role_id, status)
+                            VALUES (?, ?, ?, 0);""";
 
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement userStm = cnt.prepareStatement(userSql); PreparedStatement deptUserStm = cnt.prepareStatement(deptUserSql);) {
             userStm.setString(1, user.getFull_name());
@@ -315,6 +313,12 @@ public class UserDAO {
             if (deptId != null) {
                 deptUserStm.setInt(1, userId);
                 deptUserStm.setInt(2, deptId);
+                // Set role_id (allow null)
+                if (roleId != null) {
+                    userStm.setInt(3, roleId);
+                } else {
+                    userStm.setNull(3, Types.INTEGER);
+                }
 
                 result += deptUserStm.executeUpdate();
             }
@@ -357,10 +361,16 @@ public class UserDAO {
 
                     if (deptId != null) {
                         // Update current record in dept_user
-                        String updateDeptUserSql = "UPDATE dept_user SET dept_id = ? WHERE user_id = ? AND end_date IS NULL";
+                        String updateDeptUserSql = "UPDATE dept_user SET dept_id = ?, role_id = ? WHERE user_id = ? AND end_date IS NULL";
                         try (PreparedStatement updateDeptUserStm = cnt.prepareStatement(updateDeptUserSql)) {
                             updateDeptUserStm.setInt(1, user.getDept().getId());
-                            updateDeptUserStm.setInt(2, user.getId());
+                            // Set role_id (allow null)
+                            if (roleId != null) {
+                                updateDeptUserStm.setInt(2, roleId);
+                            } else {
+                                updateDeptUserStm.setNull(2, Types.INTEGER);
+                            }
+                            updateDeptUserStm.setInt(3, user.getId());
                             updateDeptUserStm.executeUpdate();
 
                             updateDeptUserStm.executeUpdate();
@@ -368,8 +378,8 @@ public class UserDAO {
 
                         // Insert new record in dept_user if record of this user not exist
                         String insertDeptUserSql = """
-                                               INSERT INTO dept_user (user_id, dept_id) 
-                                               SELECT ?, ?
+                                               INSERT INTO dept_user (user_id, dept_id, role_id) 
+                                               SELECT ?, ?, ?
                                                WHERE NOT EXISTS (
                                                    SELECT 1 FROM dept_user 
                                                    WHERE user_id = ? AND end_date IS NULL
@@ -377,7 +387,13 @@ public class UserDAO {
                         try (PreparedStatement insertDeptUserStm = cnt.prepareStatement(insertDeptUserSql)) {
                             insertDeptUserStm.setInt(1, user.getId());
                             insertDeptUserStm.setInt(2, user.getDept().getId());
-                            insertDeptUserStm.setInt(3, user.getId());
+                            // Set role_id (allow null)
+                            if (roleId != null) {
+                                insertDeptUserStm.setInt(3, roleId);
+                            } else {
+                                insertDeptUserStm.setNull(3, Types.INTEGER);
+                            }
+                            insertDeptUserStm.setInt(4, user.getId());
 
                             insertDeptUserStm.executeUpdate();
                         }
@@ -433,10 +449,16 @@ public class UserDAO {
                             }
 
                             // Insert new record in dept_user
-                            String insertDeptUserSql = "INSERT INTO dept_user (user_id, dept_id, start_date, status) VALUES (?, ?, CURDATE(), 1)";
+                            String insertDeptUserSql = "INSERT INTO dept_user (user_id, dept_id, start_date, status, role_id) VALUES (?, ?, CURDATE(), 1, ?)";
                             try (PreparedStatement insertDeptUserStm = cnt.prepareStatement(insertDeptUserSql)) {
                                 insertDeptUserStm.setInt(1, user.getId());
                                 insertDeptUserStm.setInt(2, user.getDept().getId());
+                                // Set role_id (allow null)
+                                if (roleId != null) {
+                                    insertDeptUserStm.setInt(3, roleId);
+                                } else {
+                                    insertDeptUserStm.setNull(3, Types.INTEGER);
+                                }
 
                                 insertDeptUserStm.executeUpdate();
                             }
@@ -448,7 +470,7 @@ public class UserDAO {
                 case 0 -> {
                     // Update user
                     String updateUserSql = "UPDATE user SET full_name = ?, username = ?, email = ?, "
-                            + "mobile = ?, notes = ?, status = ? WHERE id = ?;";
+                            + "mobile = ?, notes = ?, status = ?, role_id = ? WHERE id = ?;";
                     try (PreparedStatement updateUserStm = cnt.prepareStatement(updateUserSql)) {
                         updateUserStm.setString(1, user.getFull_name());
                         updateUserStm.setString(2, user.getUsername());
@@ -456,7 +478,13 @@ public class UserDAO {
                         updateUserStm.setString(4, user.getMobile());
                         updateUserStm.setString(5, user.getNotes());
                         updateUserStm.setInt(6, user.getStatus());
-                        updateUserStm.setInt(7, user.getId());
+                        // Set role_id (allow null)
+                        if (roleId != null) {
+                            updateUserStm.setInt(7, roleId);
+                        } else {
+                            updateUserStm.setNull(7, Types.INTEGER);
+                        }
+                        updateUserStm.setInt(8, user.getId());
 
                         rowUpdated = updateUserStm.executeUpdate() > 0;
                     }
@@ -617,24 +645,21 @@ public class UserDAO {
         }
         return user;
     }
-    
- public void updateUserStatus(String email, int status) {
-    String sql = "UPDATE user SET status = ? WHERE email = ?";
-    try (Connection connection = BaseDAO.getConnection();
-         PreparedStatement statement = connection.prepareStatement(sql)) {
-        
-        statement.setInt(1, status); // Trạng thái (0, 1, hoặc 2)
-        statement.setString(2, email); // Email người dùng
 
-        int rowsUpdated = statement.executeUpdate();
-        if (rowsUpdated > 0) {
-            System.out.println("User status updated successfully for email: " + email);
+    public void updateUserStatus(String email, int status) {
+        String sql = "UPDATE user SET status = ? WHERE email = ?";
+        try (Connection connection = BaseDAO.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, status); // Trạng thái (0, 1, hoặc 2)
+            statement.setString(2, email); // Email người dùng
+
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("User status updated successfully for email: " + email);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
     }
-}
-
-
 
 }

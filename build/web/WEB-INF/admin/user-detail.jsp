@@ -82,7 +82,7 @@
                                             </c:if>
 
                                             <form action="insert-user" method="post" class="row">
-                                                <div class="mb-3 col-md-6">
+                                                <div class="mb-3 col-md-12">
                                                     <label class="form-label"><strong>Full Name</strong> <span style="color: red;">*</span></label>
                                                     <input type="text" class="form-control" name="fullname" placeholder="Enter the Full name" 
                                                            value="${fullname}" required>
@@ -100,11 +100,11 @@
                                                            value="${email}" required>
                                                 </div>
 
-<!--                                                <div class="mb-3 col-md-6">
-                                                    <label class="form-label"><strong>Password</strong> <span style="color: red;">*</span></label>
-                                                    <input type="password" class="form-control" name="password" placeholder="Enter the Password" required>
-                                                    <small style="color: gray">Password must be at least 6 characters, including uppercase letters, lowercase letters, numbers and some special characters.</small>
-                                                </div>-->
+                                                <!--                                                <div class="mb-3 col-md-6">
+                                                                                                    <label class="form-label"><strong>Password</strong> <span style="color: red;">*</span></label>
+                                                                                                    <input type="password" class="form-control" name="password" placeholder="Enter the Password" required>
+                                                                                                    <small style="color: gray">Password must be at least 6 characters, including uppercase letters, lowercase letters, numbers and some special characters.</small>
+                                                                                                </div>-->
 
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label"><strong>Phone</strong></label>
@@ -127,7 +127,7 @@
                                                     </select>
                                                 </div>
 
-                                                <div class="mb-3 col-md-6">
+                                                <div class="mb-3 col-md-6" hidden>
                                                     <label class="form-label"><strong>Department</strong></label>
                                                     <select name="dept" class="form-select">
                                                         <option value="">Choose Department</option>
@@ -222,17 +222,22 @@
 
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label"><strong>Department</strong></label>
-                                                    <select name="dept" class="form-select">
-                                                        <option value="">Choose Department</option>
-                                                        <c:forEach items="${dept}" var="d">
-                                                            <option 
-                                                                <c:if test="${userDetail.dept.id eq d.id}">
-                                                                    selected="selected"
-                                                                </c:if>
-                                                                value=${d.id}>${d.name}
-                                                            </option>
-                                                        </c:forEach>
-                                                    </select>
+                                                    <c:if test="${userDetail.status eq '2'}">
+                                                        <input type="text" class="form-control" value="Department" readonly>
+                                                    </c:if>
+                                                    <c:if test="${userDetail.status ne '2'}">
+                                                        <select name="dept" class="form-select">
+                                                            <option value="">Choose Department</option>
+                                                            <c:forEach items="${dept}" var="d">
+                                                                <option 
+                                                                    <c:if test="${userDetail.dept.id eq d.id}">
+                                                                        selected="selected"
+                                                                    </c:if>
+                                                                    value=${d.id}>${d.name}
+                                                                </option>
+                                                            </c:forEach>
+                                                        </select>
+                                                    </c:if>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
