@@ -74,7 +74,7 @@
 
                                 <!-- Milestone Name -->
                                 <div class="col-md-6 mb-3">
-                                    <label for="milestoneName" class="form-label"><strong>Milestone/Deliverable</strong> <span style="color: red;">*</span></label>
+                                    <label for="milestoneName" class="form-label"><strong>Milestone</strong> <span style="color: red;">*</span></label>
                                     <input type="text" class="form-control" placeholder="Enter Milestone Name" name="milestoneName" required>
                                 </div>
 
@@ -146,7 +146,7 @@
 
                                     <!-- Milestone Name -->
                                     <div class="col-md-6 mb-3">
-                                        <label for="milestoneName" class="form-label"><strong>Milestone/Deliverable</strong> <span style="color: red;">*</span></label>
+                                        <label for="milestoneName" class="form-label"><strong>Milestone</strong> <span style="color: red;">*</span></label>
                                         <input type="text" class="form-control" id="milestoneName" name="milestonename" 
                                                placeholder="Enter Milestone Name" value="${milestone.name}" required>
                                     </div>
@@ -230,7 +230,7 @@
 
                                     <!-- Milestone Name -->
                                     <div class="col-md-6 mb-3">
-                                        <label for="milestoneName" class="form-label"><strong>Milestone/Deliverable</strong> <span style="color: red;">*</span></label>
+                                        <label for="milestoneName" class="form-label"><strong>Milestone</strong> <span style="color: red;">*</span></label>
                                         <input type="text" class="form-control" id="milestoneName" name="milestonename" value="${milestone.name}" readonly>
                                     </div>
 
