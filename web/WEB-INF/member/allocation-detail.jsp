@@ -115,26 +115,14 @@
                                     </select>
                                 </div>
 
-                                <!--                                <div class="mb-3 col-md-6">
-                                                                    <label class="form-label">Form Date <span style="color: red;">*</span></label>
-                                                                    <input type="date" class="form-control" name="fromDate" placeholder="dd/MM/yyyy" 
-                                                                           value="${fromDate}" id="fromDate" required>
-                                                                </div>
-                                
-                                                                <div class="mb-3 col-md-6">
-                                                                    <label class="form-label">To Date</label>
-                                                                    <input type="date" class="form-control" name="toDate" placeholder="dd/MM/yyyy" 
-                                                                           value="${toDate}" id="toDate">
-                                                                </div>-->
-
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label"><strong>From Date</strong> <span style="color: red;">*</span> <strong>- To Date</strong> </label>
+                                    <label class="form-label"><strong>From Date</strong> <span style="color: red;">*</span> <strong>- To Date</strong> <span style="color: red;">*</span></label>
                                     <div class="input-group">
                                         <input type="date" class="form-control" name="fromDate" placeholder="dd/MM/yyyy" 
                                                value="${fromDate}" id="fromDate" required>
                                         <span class="input-group-text">to</span>
                                         <input type="date" class="form-control" name="toDate" placeholder="dd/MM/yyyy" 
-                                               value="${toDate}" id="toDate">
+                                               value="${toDate}" id="toDate" required>
                                     </div>
                                 </div>
 
@@ -256,9 +244,9 @@
                                     </div>
 
                                     <div class="mb-3 col-md-6">
-                                        <label class="form-label"><strong>To Date</strong></label>
+                                        <label class="form-label"><strong>To Date</strong> <span style="color: red;">*</span></label>
                                         <input type="date" class="form-control" name="toDate" placeholder="dd/MM/yyyy" 
-                                               value="${al.endDate}" id="toDate">
+                                               value="${al.endDate}" id="toDate" required>
                                     </div>
 
                                     <div class="mb-3 col-md-6">

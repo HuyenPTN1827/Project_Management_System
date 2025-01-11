@@ -54,7 +54,7 @@ public class BaseServive {
         return (startDate != null && !startDate.isBefore(today));
     }
     
-    //End date cannot be before start date
+    //End date cannot be before the project start date and after the project end date.
     public boolean validateEndDates(LocalDate startDate, LocalDate endDate) {
         if (endDate == null) {
             return true; // Accept empty endDate

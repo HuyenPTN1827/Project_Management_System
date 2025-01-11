@@ -100,14 +100,24 @@
                             <a href="<%=request.getContextPath()%>/issue-management?projectId=${projectId}">Issue Management ></a>
                         </c:if>
 
-                        <c:if test="${issue == null}">
+                        <h1 class="h1 mt-2 mb-3"> Create New Issue</h1>
+                        <div class="row">
 
-                            <h1 class="h1 mt-2 mb-3"> Create New Issue</h1>
-                            <div class="row">
+                            <div class="col-md-12 col-xl-12">
+                                <div class="card">
+                                    <div class="card-body">
 
-                                <div class="col-md-12 col-xl-12">
-                                    <div class="card">
-                                        <div class="card-body">
+                                        <c:if test="${not empty errorMessages}">
+                                            <div class="alert alert-danger pt-3 pe-3 ps-3">
+                                                <ul>
+                                                    <c:forEach items="${errorMessages}" var="error" >
+                                                        <li>${error}</li>
+                                                        </c:forEach>
+                                                </ul>
+                                            </div>
+                                        </c:if>
+
+                                        <c:if test="${issue == null}">
                                             <form action="insert-issue" method="post" class="row">
                                                 <input type="hidden" name="userId" value="${user.id}">
 
@@ -233,37 +243,18 @@
                                                               placeholder="Enter the Description" rows="3">${description}</textarea>
                                                 </div>
 
-                                                <c:if test="${not empty errorMessages}">
-                                                    <div class="alert alert-danger pt-3 pe-3 ps-3">
-                                                        <ul>
-                                                            <c:forEach items="${errorMessages}" var="error" >
-                                                                <li>${error}</li>
-                                                                </c:forEach>
-                                                        </ul>
-                                                    </div>
-                                                </c:if>
-
                                                 <div>
                                                     <button type="submit" class="btn btn-lg btn-success">Submit</button>
                                                 </div>
                                             </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </c:if> 
+                                        </c:if> 
 
-                        <c:if test="${issue != null}">
-                            <h1 class="h1 mt-2 mb-3">Issue Details</h1>
-                            <div class="row">
-
-                                <div class="col-md-12 col-xl-12">
-                                    <div class="card">
-                                        <div class="card-body">
+                                        <c:if test="${issue != null}">
                                             <form action="update-issue" method="post" class="row">
                                                 <c:if test="${action == 'edit' && user.role_id ne 5 || user.role_id eq 5 && user.id eq issue.created_by.id}">
                                                     <input type="hidden" name="id" value="${issue.id}"/>
                                                     <input type="hidden" name="userId" value="${user.id}"/>
+                                                    <input type="hidden" name="action" value="edit"/>
 
                                                     <div class="mb-3 col-md-6">
                                                         <label class="form-label"><strong>Created By</strong></label>
@@ -299,20 +290,9 @@
 
                                                     <div class="mb-3 col-md-6">
                                                         <label class="form-label"><strong>Project</strong></label>
-                                                        <!--                                                    <select name="project" class="form-select" required>
-                                                        <%--<c:forEach items="${listPj}" var="p">--%>
-                                                            <option 
-                                                        <%--<c:if test="${issue.project.id eq p.id}">--%>
-                                                            selected="selected"
-                                                        <%--</c:if>--%>
-                                                        value=${p.id}>${p.name} (${p.code})
-                                                    </option>
-                                                        <%--</c:forEach>--%>
-                                                    </select>-->
-
                                                         <input type="text" class="form-control" placeholder="Project Name (Project Code)"
                                                                value="${issue.project.name} (${issue.project.code})" readonly>
-                                                        <input type="hidden" class="form-control" name="project" value="${issue.project.id}">
+                                                        <input type="hidden" class="form-control" name="projectId" value="${issue.project.id}">
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
@@ -393,6 +373,7 @@
                                                 <c:if test="${action == 'edit' && user.role_id eq 5 && user.id eq issue.assignee.id}">
                                                     <input type="hidden" name="id" value="${issue.id}"/>
                                                     <input type="hidden" name="userId" value="${user.id}"/>
+                                                    <input type="hidden" name="action" value="edit"/>
 
                                                     <div class="mb-3 col-md-6">
                                                         <label class="form-label"><strong>Created By</strong></label>
@@ -408,32 +389,36 @@
 
                                                     <div class="mb-3 col-md-12">
                                                         <label class="form-label"><strong>Issue</strong> <span style="color: red;">*</span></label>
-                                                        <input type="text" class="form-control" name="name" placeholder="Issue Name"
+                                                        <input type="text" class="form-control" name="name" placeholder="Enter the Issue name"
                                                                value="${issue.name}" readonly>
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
                                                         <label class="form-label"><strong>Issue Type</strong></label>
-                                                        <input type="text" class="form-control" name="type" placeholder="Issue type"
+                                                        <input type="text" class="form-control" placeholder="Issue type"
                                                                value="${issue.type.name}" readonly>
+                                                        <input type="hidden" class="form-control" name="type" value="${issue.type.id}">
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
                                                         <label class="form-label"><strong>Project</strong></label>
                                                         <input type="text" class="form-control" placeholder="Project Name (Project Code)"
                                                                value="${issue.project.name} (${issue.project.code})" readonly>
+                                                        <input type="hidden" class="form-control" name="projectId" value="${issue.project.id}">
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
                                                         <label class="form-label"><strong>Milestone</strong></label>
-                                                        <input type="text" class="form-control" placeholder="Milestone Name"
+                                                        <input type="text" class="form-control" placeholder="Milestone Name" 
                                                                value="${issue.milestone.name}" readonly>
+                                                        <input type="hidden" class="form-control" name="milestone" value="${issue.milestone.id}">
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
                                                         <label class="form-label"><strong>Assignee</strong></label>
                                                         <input type="text" class="form-control" placeholder="Full Name (Username)"
                                                                value="${issue.assignee.full_name} (${issue.assignee.username})" readonly>
+                                                        <input type="hidden" class="form-control" name="assignee" value="${issue.assignee.id}">
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
@@ -475,7 +460,7 @@
                                                     <div class="mb-3 col-md-12">
                                                         <label class="form-label"><strong>Description</strong></label>
                                                         <textarea class="form-control" name="description" readonly
-                                                                  placeholder="Enter the Description" rows="3">${issue.details}</textarea>
+                                                                  placeholder="Enter the Description" rows="3" >${issue.details}</textarea>
                                                     </div>
 
                                                     <div>
@@ -560,17 +545,13 @@
                                                         <textarea class="form-control" name="description" readonly
                                                                   placeholder="Enter the Description" rows="3">${issue.details}</textarea>
                                                     </div>
-
-                                                    <!--                                                    <div>
-                                                                                                            <button type="submit" class="btn btn-lg btn-success">Submit</button>
-                                                                                                        </div>-->
                                                 </c:if>
                                             </form>
-                                        </div>
+                                        </c:if> 
                                     </div>
                                 </div>
                             </div>
-                        </c:if> 
+                        </div>
                     </div>
                 </main>
 

@@ -325,8 +325,8 @@ public class ProjectDAO {
 
         // Chuỗi SQL để chèn vào bảng allocation (dữ liệu liên quan đến phân bổ)
         String allocationSql = "INSERT INTO allocation (created_by, created_at, last_updated, start_date, "
-                + "status, dept_id, user_id, project_id, project_role) "
-                + "VALUES (?, NOW(), NOW(), CURDATE(), 1, ?, ?, ?, ?)"; // 'active' là giá trị cố định cho cột status
+                + "status, dept_id, user_id, project_id, project_role, effort_rate) "
+                + "VALUES (?, NOW(), NOW(), CURDATE(), 1, ?, ?, ?, ?, 80)"; // 'active' là giá trị cố định cho cột status
 
         // Chuỗi SQL để chèn vào bảng milestone
         String sqlMilestone = "INSERT INTO milestone (project_id, name, status, created_by, last_updated, parent_milestone, priority, target_date, actual_date) "

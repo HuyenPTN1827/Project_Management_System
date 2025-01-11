@@ -11,7 +11,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +25,7 @@ import model.Setting;
 import model.User;
 import model.WorkPackage;
 import service.IssueService;
+import service.ProjectConfigService;
 import service.ProjectService;
 import service.SettingService;
 import service.WorkPackageService;
@@ -35,6 +39,7 @@ public class IssueController extends HttpServlet {
     private IssueService issueService;
     private SettingService settingService;
     private ProjectService pjService;
+    private ProjectConfigService pjConfigService;
     private WorkPackageService scopeService;
 
     @Override
@@ -42,6 +47,7 @@ public class IssueController extends HttpServlet {
         this.issueService = new IssueService();
         this.settingService = new SettingService();
         this.pjService = new ProjectService();
+        this.pjConfigService = new ProjectConfigService();
         this.scopeService = new WorkPackageService();
     }
 
@@ -234,7 +240,7 @@ public class IssueController extends HttpServlet {
             i.setAssignee(u2);
 
             // Validate dates
-            List<String> errors = issueService.validateDeadline(i);
+            List<String> errors = issueService.validateDeadline(i, pjConfigService.getProjectById(projectId));
 
             if (errors.isEmpty()) {
                 issueService.insertIssue(i);
@@ -283,14 +289,15 @@ public class IssueController extends HttpServlet {
         }
     }
 
-    private void updateIssue(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+    private void updateIssue(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
+        String action = request.getParameter("action");
         String user = request.getParameter("userId");
         if (user != null && !user.isEmpty()) {
             int userId = Integer.parseInt(user);
             int id = Integer.parseInt(request.getParameter("id"));
             String name = request.getParameter("name");
             int type = Integer.parseInt(request.getParameter("type"));
-            int project = Integer.parseInt(request.getParameter("project"));
+            int projectId = Integer.parseInt(request.getParameter("projectId"));
             int milestone = Integer.parseInt(request.getParameter("milestone"));
             int assignee = Integer.parseInt(request.getParameter("assignee"));
             LocalDate deadline = LocalDate.parse(request.getParameter("deadline"));
@@ -309,7 +316,7 @@ public class IssueController extends HttpServlet {
             i.setType(s);
 
             Project p = new Project();
-            p.setId(project);
+            p.setId(projectId);
             i.setProject(p);
 
             Milestone m = new Milestone();
@@ -320,8 +327,24 @@ public class IssueController extends HttpServlet {
             u.setId(assignee);
             i.setAssignee(u);
 
-            issueService.updateIssue(i);
-            response.sendRedirect("issue-management?projectId=" + project + "&update-issue=success");
+            List<String> errors = issueService.validateDeadline(i, pjConfigService.getProjectById(projectId));
+
+            if (errors.isEmpty()) {
+                issueService.updateIssue(i);
+                response.sendRedirect("issue-management?projectId=" + projectId + "&update-issue=success");
+            } else {
+                request.setAttribute("action", action);
+                request.setAttribute("errorMessages", errors);
+//            request.setAttribute("userId", userId);
+//            request.setAttribute("name", name);
+//            request.setAttribute("type", type);
+//            request.setAttribute("projectId", projectId);
+//                request.setAttribute("milestone", milestone);
+//                request.setAttribute("assignee", assignee);
+//            request.setAttribute("deadline", deadline);
+//            request.setAttribute("description", description);
+                showEditForm(request, response);
+            }
         } else {
             response.sendRedirect("logout");
         }
