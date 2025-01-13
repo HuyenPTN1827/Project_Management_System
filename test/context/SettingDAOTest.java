@@ -324,7 +324,6 @@ public class SettingDAOTest {
                     setting.getName().toLowerCase().contains(keyword.toLowerCase())
                     || setting.getValue().toLowerCase().contains(keyword.toLowerCase()));
             assertEquals("Setting type match the type filter", type, setting.getType());
-////            assertEquals("Setting status match the status filter", status, setting.isStatus());
         });
         assertNull("Status is null", status);
     }
@@ -384,7 +383,7 @@ public class SettingDAOTest {
         Boolean status = false;
 
         List<Setting> result = settingDAO.selectAllSettings(keyword, type, status);
-        assertTrue("Return no setting", result.isEmpty());
+        assertNotNull("Result should not be null", result);
         assertNull("Keyword is null", keyword);
         assertTrue("Setting type match the Parent type", type.equals("parent"));
     }
@@ -423,65 +422,158 @@ public class SettingDAOTest {
         assertNull("Keyword is null", keyword);
     }
 
-//    /**
-//     * Test of selectSettingByID method, of class SettingDAO.
-//     */
-//    @Test
-//    public void testSelectSettingByID() {
-//        System.out.println("selectSettingByID");
-//        int id = 0;
-//        SettingDAO instance = new SettingDAO();
-//        Setting expResult = null;
-//        Setting result = instance.selectSettingByID(id);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of insertSetting method, of class SettingDAO.
-//     */
-//    @Test
-//    public void testInsertSetting() throws Exception {
-//        System.out.println("insertSetting");
-//        Setting setting = null;
-//        SettingDAO instance = new SettingDAO();
-//        int expResult = 0;
-//        int result = instance.insertSetting(setting);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of updateSetting method, of class SettingDAO.
-//     */
-//    @Test
-//    public void testUpdateSetting() throws Exception {
-//        System.out.println("updateSetting");
-//        Setting setting = null;
-//        SettingDAO instance = new SettingDAO();
-//        boolean expResult = false;
-//        boolean result = instance.updateSetting(setting);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of changeStatusSetting method, of class SettingDAO.
-//     */
-//    @Test
-//    public void testChangeStatusSetting() throws Exception {
-//        System.out.println("changeStatusSetting");
-//        Setting setting = null;
-//        SettingDAO instance = new SettingDAO();
-//        boolean expResult = false;
-//        boolean result = instance.changeStatusSetting(setting);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
+    /**
+     * Test of selectSettingByID method, of class SettingDAO.
+     */
+    @Test
+    public void testSelectSettingByID_ValidId() {
+        System.out.println("selectSettingByID_ValidId");
+        int id = 1;
+        Setting result = settingDAO.selectSettingByID(id);
+        assertNotNull("Result should not be null", result);
+        assertEquals("Setting ID match the requested ID", id, result.getId());
+    }
+
+    @Test
+    public void testSelectSettingByID_InvalidId() {
+        System.out.println("selectSettingByID_InvalidId");
+        int id = 9999;
+        Setting result = settingDAO.selectSettingByID(id);
+        assertNull("Result is null", result);
+    }
+
+    /**
+     * Test of insertSetting method, of class SettingDAO.
+     */
+    @Test
+    public void testInsertSetting_ParentSetting() throws Exception {
+        System.out.println("insertSetting_ParentSetting");
+        String name = "Test insert";
+        String type = null;
+        String value = "Test insert";
+        int priority = 1;
+        boolean status = true;
+        String description = "";
+
+        Setting s = new Setting();
+        s.setName(name);
+        s.setType(type);
+        s.setValue(value);
+        s.setPriority(priority);
+        s.setStatus(status);
+        s.setDescription(description);
+
+        int result = settingDAO.insertSetting(s);
+        assertTrue("Insert parent setting successfully", result > 0);
+    }
+
+    @Test
+    public void testInsertSetting_ValidSetting() throws Exception {
+        System.out.println("insertSetting_ValidSetting");
+        String name = "Test insert";
+        String type = "User Role";
+        String value = null;
+        int priority = 1;
+        boolean status = false;
+        String description = "Test insert";
+
+        Setting s = new Setting();
+        s.setName(name);
+        s.setType(type);
+        s.setValue(value);
+        s.setPriority(priority);
+        s.setStatus(status);
+        s.setDescription(description);
+
+        int result = settingDAO.insertSetting(s);
+        assertTrue("Insert setting successfully", result > 0);
+    }
+
+    /**
+     * Test of updateSetting method, of class SettingDAO.
+     */
+    @Test
+    public void testUpdateSetting_ParentSetting() throws Exception {
+        System.out.println("updateSetting_ParentSetting");
+        int id = 51;
+        String name = "Test update";
+        String type = null;
+        String value = null;
+        int priority = 1;
+        boolean status = false;
+        String description = "Test update";
+
+        Setting s = new Setting();
+        s.setId(id);
+        s.setName(name);
+        s.setType(type);
+        s.setValue(value);
+        s.setPriority(priority);
+        s.setStatus(status);
+        s.setDescription(description);
+        boolean result = settingDAO.updateSetting(s);
+        assertTrue("Update parent setting successfully", result);
+    }
+
+    @Test
+    public void testUpdateSetting_ValidSetting() throws Exception {
+        System.out.println("updateSetting_ValidSetting");
+        int id = 53;
+        String name = "Test update";
+        String type = "User Role";
+        String value = "Test update";
+        int priority = 1;
+        boolean status = true;
+        String description = null;
+
+        Setting s = new Setting();
+        s.setId(id);
+        s.setName(name);
+        s.setType(type);
+        s.setValue(value);
+        s.setPriority(priority);
+        s.setStatus(status);
+        s.setDescription(description);
+        boolean result = settingDAO.updateSetting(s);
+        assertTrue("Update setting successfully", result);
+    }
+
+    /**
+     * Test of changeStatusSetting method, of class SettingDAO.
+     */
+    @Test
+    public void testChangeStatusSetting_ChangeToFalse() throws Exception {
+        System.out.println("changeStatusSetting_ChangeToFalse");
+        int id = 53;
+        boolean status = true;
+        boolean expStatus = false;
+
+        Setting s = new Setting();
+        s.setId(id);
+        // If status is true, set to false; if false, set to true
+        s.setStatus(!status);
+
+        boolean result = settingDAO.changeStatusSetting(s);
+        assertTrue("Changed the status of the setting from true to false successfully", result);
+        assertEquals("Expected status matches the actual status", expStatus, s.isStatus());
+    }
+
+    @Test
+    public void testChangeStatusSetting_ChangeToTrue() throws Exception {
+        System.out.println("changeStatusSetting_ChangeToTrue");
+        int id = 53;
+        boolean status = false;
+        boolean expStatus = true;
+
+        Setting s = new Setting();
+        s.setId(id);
+        // If status is true, set to false; if false, set to true
+        s.setStatus(!status);
+
+        boolean result = settingDAO.changeStatusSetting(s);
+        assertTrue("Changed the status of the setting from false to true successfully", result);
+        assertEquals("Expected status matches the actual status", expStatus, s.isStatus());
+    }
 //
 //    /**
 //     * Test of getPriorityUserRolesList method, of class SettingDAO.

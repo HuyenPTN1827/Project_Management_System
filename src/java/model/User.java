@@ -27,6 +27,7 @@ public class User implements Serializable {
     private String department;
     private String avatar;
     
+    private Allocation allocation;
     private Department dept;
     private Setting setting;
     private ArrayList<Department> depts = new ArrayList<>();
@@ -35,7 +36,7 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(int id, String full_name, String email, String mobile, String password, String notes, int status, int role_id, String role_name, String username, String department, String avatar, Department dept, Setting setting) {
+    public User(int id, String full_name, String email, String mobile, String password, String notes, int status, int role_id, String role_name, String username, String department, String avatar, Allocation allocation, Department dept, Setting setting) {
         this.id = id;
         this.full_name = full_name;
         this.email = email;
@@ -48,6 +49,7 @@ public class User implements Serializable {
         this.username = username;
         this.department = department;
         this.avatar = avatar;
+        this.allocation = allocation;
         this.dept = dept;
         this.setting = setting;
     }
@@ -130,6 +132,14 @@ public class User implements Serializable {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public Allocation getAllocation() {
+        return allocation;
+    }
+
+    public void setAllocation(Allocation allocation) {
+        this.allocation = allocation;
     }
 
     public Department getDept() {

@@ -864,28 +864,38 @@
                                                     const effort = document.getElementById("effort").value;
                                                     const fromDate = document.getElementById("fromDate").value;
                                                     const toDate = document.getElementById("toDate").value;
-                                                    const today = new Date().toISOString().split("T")[0];
+//                                                    const today = new Date().toISOString().split("T")[0];
+
+                                                    const projectStartDate = document.getElementById("startDate").value;
+                                                    const projectEndDate = document.getElementById("endDate").value;
+
                                                     let hasError = false;
 
                                                     //Kiểm tra Effort Rate
-                                                    if (effort < 0 || effort > 100) {
+                                                    if (effort <= 0 || effort > 80) {
                                                         hasError = true;
-                                                        errorList.innerHTML += "<li>Effort rate must be between 0% and 100%.</li>";
+                                                        errorList.innerHTML += "<li>Effort rate must be greater than 0% and less than or equal to 80%.</li>";
                                                     }
 
                                                     // Kiểm tra fromDate
                                                     if (!fromDate) {
                                                         hasError = true;
                                                         errorList.innerHTML += "<li>From Date is required.</li>";
-                                                    } else if (fromDate < today) {
+                                                    } else if (fromDate < projectStartDate) {
                                                         hasError = true;
-                                                        errorList.innerHTML += "<li>From Date cannot be earlier than today.</li>";
+                                                        errorList.innerHTML += "<li>From Date cannot be earlier than the project start date (" + projectStartDate + ").</li>";
                                                     }
 
                                                     // Kiểm tra toDate
-                                                    if (toDate && toDate < fromDate) {
+                                                    if (!toDate) {
+                                                        hasError = true;
+                                                        errorList.innerHTML += "<li>To Date is required.</li>";
+                                                    } else if (toDate < fromDate) {
                                                         hasError = true;
                                                         errorList.innerHTML += "<li>To Date cannot be earlier than From Date.</li>";
+                                                    } else if (toDate > projectEndDate) {
+                                                        hasError = true;
+                                                        errorList.innerHTML += "<li>To Date cannot be later than the project end date(" + projectEndDate + ").</li>";
                                                     }
 
                                                     // Hiển thị lỗi nếu có
@@ -908,25 +918,38 @@
                                                     const effort = document.getElementById("effort").value;
                                                     const fromDate = document.getElementById("fromDate").value;
                                                     const toDate = document.getElementById("toDate").value;
-                                                    const today = new Date().toISOString().split("T")[0];
+//                                                    const today = new Date().toISOString().split("T")[0];
+
+                                                    const projectStartDate = document.getElementById("startDate").value;
+                                                    const projectEndDate = document.getElementById("endDate").value;
+
                                                     let hasError = false;
 
                                                     //Kiểm tra Effort Rate
-                                                    if (effort < 0 || effort > 100) {
+                                                    if (effort <= 0 || effort > 80) {
                                                         hasError = true;
-                                                        errorList.innerHTML += "<li>Effort Rate must be between 0% and 100%.</li>";
+                                                        errorList.innerHTML += "<li>Effort rate must be greater than 0% and less than or equal to 80%.</li>";
                                                     }
 
                                                     // Kiểm tra fromDate
                                                     if (!fromDate) {
                                                         hasError = true;
                                                         errorList.innerHTML += "<li>From Date is required.</li>";
+                                                    } else if (fromDate < projectStartDate) {
+                                                        hasError = true;
+                                                        errorList.innerHTML += "<li>From Date cannot be earlier than the project start date (" + projectStartDate + ").</li>";
                                                     }
 
                                                     // Kiểm tra toDate
-                                                    if (toDate && toDate < fromDate) {
+                                                    if (!toDate) {
+                                                        hasError = true;
+                                                        errorList.innerHTML += "<li>To Date is required.</li>";
+                                                    } else if (toDate < fromDate) {
                                                         hasError = true;
                                                         errorList.innerHTML += "<li>To Date cannot be earlier than From Date.</li>";
+                                                    } else if (toDate > projectEndDate) {
+                                                        hasError = true;
+                                                        errorList.innerHTML += "<li>To Date cannot be later than the project end date(" + projectEndDate + ").</li>";
                                                     }
 
                                                     // Hiển thị lỗi nếu có
@@ -1128,7 +1151,7 @@
                         }
                     });
                 }
-                
+
                 if (urlParams.get('create-milestone') === 'success') {
                     // Show success notification
                     window.notyf.open({
@@ -1143,7 +1166,7 @@
                         }
                     });
                 }
-                
+
                 if (urlParams.get('create-milestone') === 'fail') {
                     // Show success notification
                     window.notyf.open({
@@ -1158,7 +1181,7 @@
                         }
                     });
                 }
-                
+
                 if (urlParams.get('update-milestone') === 'success') {
                     // Show success notification
                     window.notyf.open({
@@ -1173,7 +1196,7 @@
                         }
                     });
                 }
-                
+
                 if (urlParams.get('update-milestone') === 'fail') {
                     // Show success notification
                     window.notyf.open({

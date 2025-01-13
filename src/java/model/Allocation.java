@@ -24,6 +24,7 @@ public class Allocation {
     private int userId;
     private int projectId;
     private int projectRole;
+    private int total_projects;
     
     private Department dept;
     private User user;
@@ -35,7 +36,7 @@ public class Allocation {
     public Allocation() {
     }
 
-    public Allocation(int id, int createdBy, LocalDateTime createdAt, int updateBy, LocalDateTime lastUpdated, LocalDate startDate, LocalDate endDate, double effortRate, String description, boolean status, int deptId, int userId, int projectId, int projectRole, Department dept, User user, User created_by, User updated_by, Project project, ProjectTypeSetting role) {
+    public Allocation(int id, int createdBy, LocalDateTime createdAt, int updateBy, LocalDateTime lastUpdated, LocalDate startDate, LocalDate endDate, double effortRate, String description, boolean status, int deptId, int userId, int projectId, int projectRole, int total_projects, Department dept, User user, User created_by, User updated_by, Project project, ProjectTypeSetting role) {
         this.id = id;
         this.createdBy = createdBy;
         this.createdAt = createdAt;
@@ -50,6 +51,7 @@ public class Allocation {
         this.userId = userId;
         this.projectId = projectId;
         this.projectRole = projectRole;
+        this.total_projects = total_projects;
         this.dept = dept;
         this.user = user;
         this.created_by = created_by;
@@ -168,6 +170,14 @@ public class Allocation {
 
     public void setProjectRole(int projectRole) {
         this.projectRole = projectRole;
+    }
+
+    public int getTotal_projects() {
+        return total_projects;
+    }
+
+    public void setTotal_projects(int total_projects) {
+        this.total_projects = total_projects;
     }
 
     public Department getDept() {

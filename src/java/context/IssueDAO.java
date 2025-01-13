@@ -265,7 +265,7 @@ public class IssueDAO {
         String sql = """
                      SELECT i.id, i.created_by, u1.username, i.last_updated, i.milestone_id, m.name, 
                      i.assignee, u2.username, i.deadline, i.status, i.name, i.type, s.name, 
-                     i.project_id, p.name, p.code, i.details, u1.full_name, u2.full_name
+                     i.project_id, p.name, p.code, p.start_date, p.end_date, i.details, u1.full_name, u2.full_name
                      FROM issue i 
                      JOIN project p ON i.project_id = p.id
                      JOIN milestone m ON i.milestone_id = m.id
@@ -301,6 +301,8 @@ public class IssueDAO {
                 p.setId(rs.getInt("i.project_id"));
                 p.setCode(rs.getString("p.code"));
                 p.setName(rs.getString("p.name"));
+                p.setStartDate(rs.getDate("p.start_date"));
+                p.setEndDate(rs.getDate("p.end_date"));
                 i.setProject(p);
 
                 Milestone m = new Milestone();

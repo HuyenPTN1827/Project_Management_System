@@ -9,6 +9,7 @@ import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,7 +22,6 @@ public class BaseDAO {
     private static final String jdbcURL = "jdbc:mysql://localhost:3306/pms";
     private static final String jdbcUsername = "root";
     private static final String jdbcPassword = "11102001";
-
 
     public static Connection getConnection() {
         Connection connection = null;
@@ -52,12 +52,18 @@ public class BaseDAO {
 
     public class MyDateUtil {
 
-        public static LocalDate getUtilDate(Date sqlDate) {
+        public static LocalDate getUtilDate(java.sql.Date sqlDate) {
             return sqlDate != null ? sqlDate.toLocalDate() : null;
         }
 
         public static Date getSQLDate(LocalDate date) {
             return date != null ? java.sql.Date.valueOf(date) : null;
+        }
+
+        public static LocalDate getLocalDate(java.util.Date utilDate) {
+            return utilDate != null
+                    ? utilDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+                    : null;
         }
     }
 }
