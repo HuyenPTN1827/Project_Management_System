@@ -90,7 +90,7 @@ public class UserService extends BaseServive {
     public List<User> getAllUsers(String keyword, Integer deptId, Integer roleId, Integer status) {
         return userDAO.selectAllUsers(keyword, deptId, roleId, status);
     }
-    
+
     public List<User> getAllDeptManagers() {
         return userDAO.selectAllDeptManagers();
     }
@@ -165,7 +165,7 @@ public class UserService extends BaseServive {
     public User getUserBySessionId(int userId) {
         return userDAO.getUserBySessionId(userId);
     }
-     
+
     // HuyenPTNHE160769
     // Change avatar
     public boolean changeAvatar(User user) throws SQLException {
@@ -212,21 +212,22 @@ public class UserService extends BaseServive {
 
         return errors;
     }
-    
-public void updateUserStatus(String email, int status) {
-    try {
-        // Kiểm tra kết nối và thực hiện cập nhật
-        System.out.println("Updating user status for User ID: " + email + " to status: " + status);
-        userDAO.updateUserStatus(email, status);
-        System.out.println("User status updated successfully.");
-    } catch (Exception e) {
-        // In ra lỗi nếu có
-        System.err.println("Error updating user status: " + e.getMessage());
-        e.printStackTrace();
+
+    public void updateUserStatus(String email, int status) {
+        try {
+            // Kiểm tra kết nối và thực hiện cập nhật
+            System.out.println("Updating user status for User ID: " + email + " to status: " + status);
+            userDAO.updateUserStatus(email, status);
+            System.out.println("User status updated successfully.");
+        } catch (Exception e) {
+            // In ra lỗi nếu có
+            System.err.println("Error updating user status: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
-}
 
-
-
+    public List<User> getAllMembers(Integer deptId) {
+        return userDAO.selectAllMembers(deptId);
+    }
 
 }

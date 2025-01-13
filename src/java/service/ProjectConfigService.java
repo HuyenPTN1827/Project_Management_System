@@ -130,7 +130,6 @@ public class ProjectConfigService extends BaseServive {
         return projectConfigDAO.isCodeExists(code, id);
     }
 
-    
     public List<Setting> getAllBizTerms() {
         return projectConfigDAO.getAllBizTerms();
     }

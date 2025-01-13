@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+import model.Allocation;
 import model.User;
 import model.Department;
 import model.Setting;
@@ -662,4 +663,58 @@ public class UserDAO {
         }
     }
 
+    public List<User> selectAllMembers(Integer deptId) {
+        List<User> user = new ArrayList<>();
+
+        String sql = """
+                     SELECT u.id, u.full_name, u.username, u.email, u.mobile, 
+                     d.id, d.code, s.id, s.name, u.status, COUNT(DISTINCT a.project_id) AS total_projects
+                     FROM user u
+                     LEFT JOIN dept_user du ON u.id = du.user_id AND du.end_date IS NULL
+                     LEFT JOIN department d ON du.dept_id = d.id
+                     LEFT JOIN setting s ON u.role_id = s.id   
+                     LEFT JOIN allocation a ON u.id = a.user_id
+                     WHERE u.status = 1 AND u.role_id = 5""";
+        // Add search conditions if any
+        if (deptId != null) {
+            sql += " AND d.id = ?";
+        }
+        sql += " GROUP BY u.id, u.full_name, u.username, u.email, u.mobile, d.id, d.code, s.id, s.name, u.status;";
+
+        try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
+            if (deptId != null) {
+                stm.setInt(1, deptId);
+            }
+
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                User u = new User();
+                u.setId(rs.getInt("u.id"));
+                u.setFull_name(rs.getString("u.full_name"));
+                u.setUsername(rs.getString("u.username"));
+                u.setEmail(rs.getString("u.email"));
+                u.setMobile(rs.getString("u.mobile"));
+                u.setStatus(rs.getInt("u.status"));
+
+                Department d = new Department();
+                d.setId(rs.getInt("d.id"));
+                d.setCode(rs.getString("d.code"));
+                u.getDepts().add(d);
+
+                Setting r = new Setting();
+                r.setId(rs.getInt("s.id"));
+                r.setName(rs.getString("s.name"));
+                u.getSettings().add(r);
+
+                Allocation a = new Allocation();
+                a.setTotal_projects(rs.getInt("total_projects"));
+                u.setAllocation(a);
+
+                user.add(u);
+            }
+        } catch (SQLException e) {
+            BaseDAO.printSQLException(e);
+        }
+        return user;
+    }
 }

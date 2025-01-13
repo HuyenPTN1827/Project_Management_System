@@ -84,14 +84,26 @@
                                         <option value="" hidden disable>Choose Member</option>
                                         <c:forEach items="${listMem}" var="m">
                                             <option 
+                                                value="${m.id}"
+                                                <c:if test="${m.allocation.total_projects == 0}">
+                                                    style="color: green;"
+                                                </c:if>
+                                                <c:if test="${m.allocation.total_projects > 1 && m.allocation.total_projects < 3}">
+                                                    style="color: yellow;"
+                                                </c:if>
+                                                <c:if test="${m.allocation.total_projects >= 3}">
+                                                    style="color: red;" disabled
+                                                </c:if>
                                                 <c:if test="${memId eq m.id}">
                                                     selected="selected"
                                                 </c:if>
-                                                value="${m.id}">${m.full_name} (${m.username})
+                                                >
+                                                ${m.full_name} (${m.username}) - ${m.allocation.total_projects}
                                             </option>
                                         </c:forEach>
                                     </select>
                                 </div>
+
 
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label"><strong>Project</strong></label>
@@ -221,10 +233,10 @@
                                         <select name="roleId" id="roleId" class="form-select" required>
                                             <option value="" hidden disable>Choose Project Role</option>
                                             <option hidden disable
-                                                <c:if test="${al.role.id eq 1}">
-                                                    selected="selected"
-                                                </c:if>
-                                                value="1">Project Manager
+                                                    <c:if test="${al.role.id eq 1}">
+                                                        selected="selected"
+                                                    </c:if>
+                                                    value="1">Project Manager
                                             </option>
                                             <c:forEach items="${listRole}" var="r">
                                                 <option 
