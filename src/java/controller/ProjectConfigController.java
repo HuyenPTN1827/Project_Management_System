@@ -435,7 +435,7 @@ public class ProjectConfigController extends HttpServlet {
             request.setAttribute("projectListName", projectListName);
             request.setAttribute("departments", departments);
             request.setAttribute("bizTerms", bizTerms); // Thêm danh sách BizTerm
-            request.setAttribute("message", "Project updated successfully.");
+            request.setAttribute("message", "Project details updated successfully.");
             request.getRequestDispatcher("/projectconfig?id=" + projectId + "&activeTab=detail").forward(request, response);
         } else {
             // Sau khi cập nhật thành công, lấy lại thông tin dự án và các dữ liệu liên quan

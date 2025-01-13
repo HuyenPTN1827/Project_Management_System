@@ -261,7 +261,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <form action="update-issue" method="post" class="row">
-                                                <c:if test="${action == 'edit'}">
+                                                <c:if test="${action == 'edit' && user.role_id ne 5 || user.role_id eq 5 && user.id eq issue.created_by.id}">
                                                     <input type="hidden" name="id" value="${issue.id}"/>
                                                     <input type="hidden" name="userId" value="${user.id}"/>
 
@@ -382,6 +382,99 @@
                                                     <div class="mb-3 col-md-12">
                                                         <label class="form-label"><strong>Description</strong></label>
                                                         <textarea class="form-control" name="description" 
+                                                                  placeholder="Enter the Description" rows="3">${issue.details}</textarea>
+                                                    </div>
+
+                                                    <div>
+                                                        <button type="submit" class="btn btn-lg btn-success">Submit</button>
+                                                    </div>
+                                                </c:if>
+
+                                                <c:if test="${action == 'edit' && user.role_id eq 5 && user.id eq issue.assignee.id}">
+                                                    <input type="hidden" name="id" value="${issue.id}"/>
+                                                    <input type="hidden" name="userId" value="${user.id}"/>
+
+                                                    <div class="mb-3 col-md-6">
+                                                        <label class="form-label"><strong>Created By</strong></label>
+                                                        <input type="text" class="form-control" placeholder="Full Name (Username)" 
+                                                               value="${issue.created_by.full_name} (${issue.created_by.username})" readonly>
+                                                    </div>
+
+                                                    <div class="mb-3 col-md-6">
+                                                        <label class="form-label"><strong>Last Updated</strong></label>
+                                                        <input type="datetime-local" class="form-control" name="last_updated" placeholder="dd/MM/yyyy hh:mm:ss" 
+                                                               value="${issue.last_updated}" readonly>
+                                                    </div>
+
+                                                    <div class="mb-3 col-md-12">
+                                                        <label class="form-label"><strong>Issue</strong> <span style="color: red;">*</span></label>
+                                                        <input type="text" class="form-control" name="name" placeholder="Issue Name"
+                                                               value="${issue.name}" readonly>
+                                                    </div>
+
+                                                    <div class="mb-3 col-md-6">
+                                                        <label class="form-label"><strong>Issue Type</strong></label>
+                                                        <input type="text" class="form-control" name="type" placeholder="Issue type"
+                                                               value="${issue.type.name}" readonly>
+                                                    </div>
+
+                                                    <div class="mb-3 col-md-6">
+                                                        <label class="form-label"><strong>Project</strong></label>
+                                                        <input type="text" class="form-control" placeholder="Project Name (Project Code)"
+                                                               value="${issue.project.name} (${issue.project.code})" readonly>
+                                                    </div>
+
+                                                    <div class="mb-3 col-md-6">
+                                                        <label class="form-label"><strong>Milestone</strong></label>
+                                                        <input type="text" class="form-control" placeholder="Milestone Name"
+                                                               value="${issue.milestone.name}" readonly>
+                                                    </div>
+
+                                                    <div class="mb-3 col-md-6">
+                                                        <label class="form-label"><strong>Assignee</strong></label>
+                                                        <input type="text" class="form-control" placeholder="Full Name (Username)"
+                                                               value="${issue.assignee.full_name} (${issue.assignee.username})" readonly>
+                                                    </div>
+
+                                                    <div class="mb-3 col-md-6">
+                                                        <label class="form-label"><strong>Deadline</strong></label>
+                                                        <input type="date" class="form-control" name="deadline" placeholder="dd/MM/yyyy" 
+                                                               value="${issue.deadline}" readonly>
+                                                    </div>
+
+                                                    <div class="mb-3 col-md-6">
+                                                        <label class="form-label"><strong>Status</strong></label>
+                                                        <select name="status" class="form-select">
+                                                            <option 
+                                                                <c:if test="${issue.status eq '0'}">
+                                                                    selected="selected"
+                                                                </c:if>
+                                                                value="0">Pending
+                                                            </option>
+                                                            <option 
+                                                                <c:if test="${issue.status eq '1'}">
+                                                                    selected="selected"
+                                                                </c:if>
+                                                                value="1">In progress
+                                                            </option>
+                                                            <option 
+                                                                <c:if test="${issue.status eq '2'}">
+                                                                    selected="selected"
+                                                                </c:if>
+                                                                value="2">Closed
+                                                            </option>
+                                                            <option 
+                                                                <c:if test="${issue.status eq '3'}">
+                                                                    selected="selected"
+                                                                </c:if>
+                                                                value="3">Cancelled
+                                                            </option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="mb-3 col-md-12">
+                                                        <label class="form-label"><strong>Description</strong></label>
+                                                        <textarea class="form-control" name="description" readonly
                                                                   placeholder="Enter the Description" rows="3">${issue.details}</textarea>
                                                     </div>
 
@@ -512,29 +605,6 @@
         </div>
 
         <script src="${pageContext.request.contextPath}/js/app.js"></script>
-
-        <script>
-                                                                document.addEventListener("DOMContentLoaded", function (event) {
-                                                                    setTimeout(function () {
-                                                                        if (localStorage.getItem('popState') !== 'shown') {
-                                                                            window.notyf.open({
-                                                                                type: "success",
-                                                                                message: "Get access to all 500+ components and 45+ pages with PMS PRO. <u><a class=\"text-white\" href=\"https://adminkit.io/pricing\" target=\"_blank\">More info</a></u> 🚀",
-                                                                                duration: 10000,
-                                                                                ripple: true,
-                                                                                dismissible: false,
-                                                                                position: {
-                                                                                    x: "left",
-                                                                                    y: "bottom"
-                                                                                }
-                                                                            });
-
-                                                                            localStorage.setItem('popState', 'shown');
-                                                                        }
-                                                                    }, 15000);
-                                                                });
-        </script>
-
 
     </body>
 
