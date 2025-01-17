@@ -114,8 +114,8 @@
                                     <textarea class="form-control" placeholder="Enter Milestone description" name="description" rows="3"></textarea>
                                 </div>
 
-                                <div id="errorContainer" class="alert alert-danger pt-3 pe-3 ps-3 d-none">
-                                    <ul id="errorList"></ul>
+                                <div id="errorMilestoneContainer" class="alert alert-danger pt-3 pe-3 ps-3 d-none">
+                                    <ul id="errorMilestone"></ul>
                                 </div>
 
                                 <div class="d-flex justify-content-end">
@@ -203,8 +203,8 @@
                                         <textarea class="form-control" id="detail" placeholder="Enter Milestone description" name="description" rows="3">${milestone.details}</textarea>
                                     </div>
 
-                                    <div id="errorContainer" class="alert alert-danger pt-3 pe-3 ps-3 d-none">
-                                        <ul id="errorList"></ul>
+                                    <div id="errorMilestoneContainer" class="alert alert-danger pt-3 pe-3 ps-3 d-none">
+                                        <ul id="errorMilestone"></ul>
                                     </div>
 
                                     <!-- Submit Button -->

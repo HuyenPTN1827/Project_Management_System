@@ -150,8 +150,8 @@
                                               placeholder="Enter the Description" rows="3">${descriptionAllocation}</textarea>
                                 </div>
 
-                                <div id="errorContainer" class="alert alert-danger pt-3 pe-3 ps-3 d-none">
-                                    <ul id="errorList"></ul>
+                                <div id="errorAllocationContainer" class="alert alert-danger pt-3 pe-3 ps-3 d-none">
+                                    <ul id="errorAllocation"></ul>
                                 </div>
 
                                 <div class="d-flex justify-content-end">
@@ -289,8 +289,8 @@
                                                   placeholder="Enter the Description" rows="3">${al.description}</textarea>
                                     </div>
 
-                                    <div id="errorContainer" class="alert alert-danger pt-3 pe-3 ps-3 d-none">
-                                        <ul id="errorList"></ul>
+                                    <div id="errorAllocationContainer" class="alert alert-danger pt-3 pe-3 ps-3 d-none">
+                                        <ul id="errorAllocation"></ul>
                                     </div>
 
                                     <div class="d-flex justify-content-end">

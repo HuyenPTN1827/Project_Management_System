@@ -270,8 +270,8 @@
                                                                     <textarea class="form-control" id="description" name="description" placeholder="Project description" rows="3">${project.details}</textarea>
                                                                 </div>
 
-                                                                <div id="errorContainer" class="alert alert-danger pt-3 pe-3 ps-3 d-none">
-                                                                    <ul id="errorList"></ul>
+                                                                <div id="errorList" class="alert alert-danger pt-3 pe-3 ps-3 d-none">
+                                                                    <ul id="error"></ul>
                                                                 </div>
 
                                                                 <div>
@@ -359,10 +359,10 @@
                                                 function validateAndSubmitForm(event, projectId) {
                                                     event.preventDefault(); // Prevent immediate form submission
 
-                                                    const errorContainer = document.getElementById("errorContainer");
                                                     const errorList = document.getElementById("errorList");
-                                                    errorList.innerHTML = ""; // Clear old error messages
-                                                    errorContainer.classList.add("d-none");
+                                                    const error = document.getElementById("error");
+                                                    error.innerHTML = ""; // Clear old error messages
+                                                    errorList.classList.add("d-none");
 
                                                     let hasError = false;
 
@@ -387,21 +387,21 @@
                                                     //Kiểm tra estimatedEffort
                                                     if (!estimatedEffort || !startDate || !endDate) {
                                                         hasError = true;
-                                                        errorList.innerHTML += "<li>The * field is required.</li>";
+                                                        error.innerHTML += "<li>The * field is required.</li>";
                                                     } else if (estimatedEffort <= 0) {
                                                         hasError = true;
-                                                        errorList.innerHTML += "<li>Estimated Effort must be a positive number greater than 0.</li>";
+                                                        error.innerHTML += "<li>Estimated Effort must be a positive number greater than 0.</li>";
                                                     }
 
                                                     //Kiểm tra endDate
                                                     if (endDate < startDate) {
                                                         hasError = true;
-                                                        errorList.innerHTML += "<li>End Date cannot be earlier than Start Date.</li>";
+                                                        error.innerHTML += "<li>End Date cannot be earlier than Start Date.</li>";
                                                     }
 
                                                     // Show errors if any
                                                     if (hasError) {
-                                                        errorContainer.classList.remove("d-none");
+                                                        errorList.classList.remove("d-none");
                                                         return false; // Prevent form submission
                                                     }
 
@@ -600,10 +600,10 @@
 
                                                 function validateMilestoneForm(event) {
                                                     event.preventDefault(); // Ngăn không gửi form ngay lập tức
-                                                    const errorContainer = document.getElementById("errorContainer");
-                                                    const errorList = document.getElementById("errorList");
-                                                    errorList.innerHTML = ""; // Xóa thông báo lỗi cũ
-                                                    errorContainer.classList.add("d-none");
+                                                    const errorMilestoneContainer = document.getElementById("errorMilestoneContainer");
+                                                    const errorMilestone = document.getElementById("errorMilestone");
+                                                    errorMilestone.innerHTML = ""; // Xóa thông báo lỗi cũ
+                                                    errorMilestoneContainer.classList.add("d-none");
 
                                                     const targetDate = document.getElementById("targetDate").value;
 //                                                    const today = new Date().toISOString().split("T")[0];
@@ -615,18 +615,18 @@
                                                     // Kiểm tra fromDate
                                                     if (!targetDate) {
                                                         hasError = true;
-                                                        errorList.innerHTML += "<li>The * field is required.</li>";
+                                                        errorMilestone.innerHTML += "<li>The * field is required.</li>";
                                                     } else if (targetDate < projectStartDate) {
                                                         hasError = true;
-                                                        errorList.innerHTML += "<li>Target Date cannot be earlier than the project start date (" + projectStartDate + ").</li>";
+                                                        errorMilestone.innerHTML += "<li>Target Date cannot be earlier than the project start date (" + projectStartDate + ").</li>";
                                                     } else if (targetDate > projectEndDate) {
                                                         hasError = true;
-                                                        errorList.innerHTML += "<li>Target Date cannot be later than the project end date (" + projectEndDate + ").</li>";
+                                                        errorMilestone.innerHTML += "<li>Target Date cannot be later than the project end date (" + projectEndDate + ").</li>";
                                                     }
 
                                                     // Hiển thị lỗi nếu có
                                                     if (hasError) {
-                                                        errorContainer.classList.remove("d-none");
+                                                        errorMilestoneContainer.classList.remove("d-none");
                                                         return false; // Ngăn gửi form
                                                     }
 
@@ -636,13 +636,13 @@
 
                                                 function validateMilestoneFormEdit(event) {
                                                     event.preventDefault(); // Ngăn không gửi form ngay lập tức
-                                                    const errorContainer = document.getElementById("errorContainer");
-                                                    const errorList = document.getElementById("errorList");
-                                                    errorList.innerHTML = ""; // Xóa thông báo lỗi cũ
-                                                    errorContainer.classList.add("d-none");
+                                                    const errorMilestoneContainer = document.getElementById("errorMilestoneContainer");
+                                                    const errorMilestone = document.getElementById("errorMilestone");
+                                                    errorMilestone.innerHTML = ""; // Xóa thông báo lỗi cũ
+                                                    errorMilestoneContainer.classList.add("d-none");
 
                                                     const targetDate = document.getElementById("targetDate").value;
-//                                                    const today = new Date().toISOString().split("T")[0];
+                                                    const actualDate = document.getElementById("actualDate").value;
                                                     const projectStartDate = document.getElementById("startDate").value;
                                                     const projectEndDate = document.getElementById("endDate").value;
 
@@ -651,18 +651,29 @@
                                                     // Kiểm tra fromDate
                                                     if (!targetDate) {
                                                         hasError = true;
-                                                        errorList.innerHTML += "<li>The * field is required.</li>";
+                                                        errorMilestone.innerHTML += "<li>The * field is required.</li>";
                                                     } else if (targetDate < projectStartDate) {
                                                         hasError = true;
-                                                        errorList.innerHTML += "<li>Target Date cannot be earlier than the project start date (" + projectStartDate + ").</li>";
+                                                        errorMilestone.innerHTML += "<li>Target Date cannot be earlier than the project start date (" + projectStartDate + ").</li>";
                                                     } else if (targetDate > projectEndDate) {
                                                         hasError = true;
-                                                        errorList.innerHTML += "<li>Target Date cannot be later than the project end date (" + projectEndDate + ").</li>";
+                                                        errorMilestone.innerHTML += "<li>Target Date cannot be later than the project end date (" + projectEndDate + ").</li>";
+                                                    }
+
+                                                    // Kiểm tra actualDate (nếu không null)
+                                                    if (actualDate) {
+                                                        if (actualDate < projectStartDate) {
+                                                            hasError = true;
+                                                            errorMilestone.innerHTML += "<li>Actual Date cannot be earlier than the project start date (" + projectStartDate + ").</li>";
+                                                        } else if (actualDate > projectEndDate) {
+                                                            hasError = true;
+                                                            errorMilestone.innerHTML += "<li>Actual Date cannot be later than the project end date (" + projectEndDate + ").</li>";
+                                                        }
                                                     }
 
                                                     // Hiển thị lỗi nếu có
                                                     if (hasError) {
-                                                        errorContainer.classList.remove("d-none");
+                                                        errorMilestoneContainer.classList.remove("d-none");
                                                         return false; // Ngăn gửi form
                                                     }
 
@@ -936,10 +947,10 @@
 
                                                 function validateForm(event) {
                                                     event.preventDefault(); // Ngăn không gửi form ngay lập tức
-                                                    const errorContainer = document.getElementById("errorContainer");
-                                                    const errorList = document.getElementById("errorList");
-                                                    errorList.innerHTML = ""; // Xóa thông báo lỗi cũ
-                                                    errorContainer.classList.add("d-none");
+                                                    const errorAllocationContainer = document.getElementById("errorAllocationContainer");
+                                                    const errorAllocation = document.getElementById("errorAllocation");
+                                                    errorAllocation.innerHTML = ""; // Xóa thông báo lỗi cũ
+                                                    errorAllocationContainer.classList.add("d-none");
 
                                                     const effort = document.getElementById("effort").value;
                                                     const fromDate = document.getElementById("fromDate").value;
@@ -954,33 +965,33 @@
                                                     //Kiểm tra Effort Rate
                                                     if (effort <= 0 || effort > 80) {
                                                         hasError = true;
-                                                        errorList.innerHTML += "<li>Effort rate must be greater than 0% and less than or equal to 80%.</li>";
+                                                        errorAllocation.innerHTML += "<li>Effort rate must be greater than 0% and less than or equal to 80%.</li>";
                                                     }
 
                                                     // Kiểm tra fromDate
                                                     if (!fromDate) {
                                                         hasError = true;
-                                                        errorList.innerHTML += "<li>From Date is required.</li>";
+                                                        errorAllocation.innerHTML += "<li>From Date is required.</li>";
                                                     } else if (fromDate < projectStartDate) {
                                                         hasError = true;
-                                                        errorList.innerHTML += "<li>From Date cannot be earlier than the project start date (" + projectStartDate + ").</li>";
+                                                        errorAllocation.innerHTML += "<li>From Date cannot be earlier than the project start date (" + projectStartDate + ").</li>";
                                                     }
 
                                                     // Kiểm tra toDate
                                                     if (!toDate) {
                                                         hasError = true;
-                                                        errorList.innerHTML += "<li>To Date is required.</li>";
+                                                        errorAllocation.innerHTML += "<li>To Date is required.</li>";
                                                     } else if (toDate < fromDate) {
                                                         hasError = true;
-                                                        errorList.innerHTML += "<li>To Date cannot be earlier than From Date.</li>";
+                                                        errorAllocation.innerHTML += "<li>To Date cannot be earlier than From Date.</li>";
                                                     } else if (toDate > projectEndDate) {
                                                         hasError = true;
-                                                        errorList.innerHTML += "<li>To Date cannot be later than the project end date (" + projectEndDate + ").</li>";
+                                                        errorAllocation.innerHTML += "<li>To Date cannot be later than the project end date (" + projectEndDate + ").</li>";
                                                     }
 
                                                     // Hiển thị lỗi nếu có
                                                     if (hasError) {
-                                                        errorContainer.classList.remove("d-none");
+                                                        errorAllocationContainer.classList.remove("d-none");
                                                         return false; // Ngăn gửi form
                                                     }
 
@@ -990,10 +1001,10 @@
 
                                                 function validateFormEdit(event) {
                                                     event.preventDefault(); // Ngăn không gửi form ngay lập tức
-                                                    const errorContainer = document.getElementById("errorContainer");
-                                                    const errorList = document.getElementById("errorList");
-                                                    errorList.innerHTML = ""; // Xóa thông báo lỗi cũ
-                                                    errorContainer.classList.add("d-none");
+                                                    const errorAllocationContainer = document.getElementById("errorAllocationContainer");
+                                                    const errorAllocation = document.getElementById("errorAllocation");
+                                                    errorAllocation.innerHTML = ""; // Xóa thông báo lỗi cũ
+                                                    errorAllocationContainer.classList.add("d-none");
 
                                                     const effort = document.getElementById("effort").value;
                                                     const fromDate = document.getElementById("fromDate").value;
@@ -1008,33 +1019,33 @@
                                                     //Kiểm tra Effort Rate
                                                     if (effort <= 0 || effort > 80) {
                                                         hasError = true;
-                                                        errorList.innerHTML += "<li>Effort rate must be greater than 0% and less than or equal to 80%.</li>";
+                                                        errorAllocation.innerHTML += "<li>Effort rate must be greater than 0% and less than or equal to 80%.</li>";
                                                     }
 
                                                     // Kiểm tra fromDate
                                                     if (!fromDate) {
                                                         hasError = true;
-                                                        errorList.innerHTML += "<li>From Date is required.</li>";
+                                                        errorAllocation.innerHTML += "<li>From Date is required.</li>";
                                                     } else if (fromDate < projectStartDate) {
                                                         hasError = true;
-                                                        errorList.innerHTML += "<li>From Date cannot be earlier than the project start date (" + projectStartDate + ").</li>";
+                                                        errorAllocation.innerHTML += "<li>From Date cannot be earlier than the project start date (" + projectStartDate + ").</li>";
                                                     }
 
                                                     // Kiểm tra toDate
                                                     if (!toDate) {
                                                         hasError = true;
-                                                        errorList.innerHTML += "<li>To Date is required.</li>";
+                                                        errorAllocation.innerHTML += "<li>To Date is required.</li>";
                                                     } else if (toDate < fromDate) {
                                                         hasError = true;
-                                                        errorList.innerHTML += "<li>To Date cannot be earlier than From Date.</li>";
+                                                        errorAllocation.innerHTML += "<li>To Date cannot be earlier than From Date.</li>";
                                                     } else if (toDate > projectEndDate) {
                                                         hasError = true;
-                                                        errorList.innerHTML += "<li>To Date cannot be later than the project end date (" + projectEndDate + ").</li>";
+                                                        errorAllocation.innerHTML += "<li>To Date cannot be later than the project end date (" + projectEndDate + ").</li>";
                                                     }
 
                                                     // Hiển thị lỗi nếu có
                                                     if (hasError) {
-                                                        errorContainer.classList.remove("d-none");
+                                                        errorAllocationContainer.classList.remove("d-none");
                                                         return false; // Ngăn gửi form
                                                     }
 
