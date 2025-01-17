@@ -45,7 +45,7 @@ public class SettingDAO {
     public List<Setting> getBizTermsList() {
         List<Setting> setting = new ArrayList<>();
 
-        String sql = "SELECT * FROM setting WHERE type = 'Business Term' ORDER BY id ASC;";
+        String sql = "SELECT * FROM setting WHERE type = 'Business Term' AND status = 1 ORDER BY id ASC;";
         
         try (Connection cnt = BaseDAO.getConnection(); PreparedStatement stm = cnt.prepareStatement(sql);) {
             ResultSet rs = stm.executeQuery();

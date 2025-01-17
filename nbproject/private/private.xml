@@ -3,24 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/AuthenticationController.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/ResetPasswordController.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/test/context/SettingDAOTest.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/src/java/service/UserService.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/test/context/UserDAOTest.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/web/WEB-INF/member/milestone-detail.jsp</file>
-            <file>file:/D:/Do%20An/Project_Management_System/test/context/ProjectDAOTest.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/test/context/ProjectConfigDAOTest.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/ProjectConfigController.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/web/WEB-INF/member/project-config.jsp</file>
-            <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/ProjectListController.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/src/java/context/UserDAO.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/SettingController.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/src/java/context/BaseDAO.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/src/java/context/ProjectConfigDAO.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/src/java/context/ProjectDAO.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/src/java/controller/ProfileController.java</file>
-            <file>file:/D:/Do%20An/Project_Management_System/src/java/context/SettingDAO.java</file>
+            <file>file:/D:/Git/Project/Project_Management_System/src/java/service/IssueService.java</file>
+            <file>file:/D:/Git/Project/Project_Management_System/src/java/context/IssueDAO.java</file>
+            <file>file:/D:/Git/Project/Project_Management_System/src/java/context/SettingDAO.java</file>
+            <file>file:/D:/Git/Project/Project_Management_System/src/java/controller/IssueController.java</file>
+            <file>file:/D:/Git/Project/Project_Management_System/src/java/model/Issue.java</file>
         </group>
     </open-files>
 </project-private>
