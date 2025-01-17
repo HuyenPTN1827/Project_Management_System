@@ -117,7 +117,7 @@
                                 <div id="errorContainer" class="alert alert-danger pt-3 pe-3 ps-3 d-none">
                                     <ul id="errorList"></ul>
                                 </div>
-                                
+
                                 <div class="d-flex justify-content-end">
                                     <button type="submit" class="btn btn-lg btn-success">Submit</button>
                                 </div>
@@ -126,7 +126,8 @@
 
                         <c:if test="${milestone != null}">
                             <c:if test="${action == 'edit'}">
-                                <form id="editMilestoneForm" action="/PMS/updatemilestone" method="POST" class="row">
+                                <form id="milestoneForm" action="update-milestone" method="POST" 
+                                      class="row" onsubmit="return validateMilestoneFormEdit(event)">
                                     <!-- Trường ẩn để gửi projectId -->
                                     <input type="hidden" id="project_Id" name="project_Id" value="${projectId}">
                                     <input type="hidden" id="id" name="id" value="${milestone.id}"/>
@@ -174,7 +175,7 @@
                                     <!-- Target Date -->
                                     <div class="col-md-6 mb-3">
                                         <label for="targetDate" class="form-label"><strong>Target Date</strong> <span style="color: red;">*</span></label>
-                                        <input type="date" class="form-control" id="targetdate" name="targetdate" 
+                                        <input type="date" class="form-control" id="targetDate" name="targetdate" 
                                                placeholder="dd/MM/yyyy" value="${milestone.targetDate}" required>
                                     </div>
 
@@ -202,6 +203,10 @@
                                         <textarea class="form-control" id="detail" placeholder="Enter Milestone description" name="description" rows="3">${milestone.details}</textarea>
                                     </div>
 
+                                    <div id="errorContainer" class="alert alert-danger pt-3 pe-3 ps-3 d-none">
+                                        <ul id="errorList"></ul>
+                                    </div>
+
                                     <!-- Submit Button -->
                                     <div class="d-flex justify-content-end">
                                         <button type="submit" class="btn btn-lg btn-success">Submit</button>
@@ -210,7 +215,7 @@
                             </c:if>
 
                             <c:if test="${action == 'view'}">
-                                <form id="editMilestoneForm" action="/PMS/updatemilestone" method="POST" class="row">
+                                <form id="milestoneForm" action="update-milestone" method="POST" class="row">
                                     <!-- Trường ẩn để gửi projectId -->
                                     <input type="hidden" id="project_Id" name="project_Id" value="${projectId}">
                                     <input type="hidden" id="id" name="id" value="${milestone.id}"/>

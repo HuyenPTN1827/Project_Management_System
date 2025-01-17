@@ -311,7 +311,7 @@
                 const estimatedEffort = document.getElementById("estimatedEffort").value;
                 const startDate = document.getElementById("startDate").value;
                 const endDate = document.getElementById("endDate").value;
-                const today = new Date().toISOString().split("T")[0];
+//                const today = new Date().toISOString().sp1lit("T")[0];
                 let hasError = false;
 
                 // Perform AJAX check for existing project code
@@ -324,22 +324,16 @@
                             }
 
                             //Kiểm tra estimatedEffort
-                            if (estimatedEffort <= 0) {
+                            if (!estimatedEffort || !startDate || !endDate) {
+                                hasError = true;
+                                errorList.innerHTML += "<li>The * field is required.</li>";
+                            } else if (estimatedEffort <= 0) {
                                 hasError = true;
                                 errorList.innerHTML += "<li>Estimated Effort must be a positive number greater than 0.</li>";
                             }
 
-                            // Kiểm tra startDate
-                            if (!startDate) {
-                                hasError = true;
-                                errorList.innerHTML += "<li>Start Date is required.</li>";
-                            } else if (startDate < today) {
-                                hasError = true;
-                                errorList.innerHTML += "<li>Start Date cannot be earlier than today.</li>";
-                            }
-
-                            // Kiểm tra toDate
-                            if (endDate && endDate < startDate) {
+                            //Kiểm tra endDate
+                            if (endDate < startDate) {
                                 hasError = true;
                                 errorList.innerHTML += "<li>End Date cannot be earlier than Start Date.</li>";
                             }
