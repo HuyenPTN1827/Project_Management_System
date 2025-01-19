@@ -324,7 +324,7 @@
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
-                                                        <label class="form-label"><strong>Deadline</strong></label>
+                                                        <label class="form-label"><strong>Deadline</strong> <span style="color: red;">*</span></label>
                                                         <input type="date" class="form-control" name="deadline" placeholder="dd/MM/yyyy" 
                                                                value="${issue.deadline}">
                                                     </div>
@@ -422,7 +422,7 @@
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
-                                                        <label class="form-label"><strong>Deadline</strong></label>
+                                                        <label class="form-label"><strong>Deadline</strong> <span style="color: red;">*</span></label>
                                                         <input type="date" class="form-control" name="deadline" placeholder="dd/MM/yyyy" 
                                                                value="${issue.deadline}" readonly>
                                                     </div>
@@ -515,7 +515,7 @@
                                                     </div>
 
                                                     <div class="mb-3 col-md-6">
-                                                        <label class="form-label"><strong>Deadline</strong></label>
+                                                        <label class="form-label"><strong>Deadline</strong> <span style="color: red;">*</span></label>
                                                         <input type="date" class="form-control" name="deadline" placeholder="dd/MM/yyyy" 
                                                                value="${issue.deadline}" readonly>
                                                     </div>
